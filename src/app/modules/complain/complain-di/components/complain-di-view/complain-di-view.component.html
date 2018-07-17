@@ -1,0 +1,254 @@
+<div class="page-container">
+  <ol class="breadcrumb">
+    <li class="breadcrumb-item">
+      <a href="#/home">Home</a>
+    </li>
+    <li class="breadcrumb-item active">{{title}}</li>
+  </ol>
+
+  <!-- Write Your Code -->
+  <!-- start div for container -->
+  <div class="container col-lg-12 col-md-12 col-sm-12 col-xs-12" style="width:100%;">
+
+    <!--start search div -->
+    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+      <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+        <div class="input-group" style="width:100%;">
+          &nbsp;
+        </div>
+      </div>
+      <div [formGroup]="searchFormGroup" class="input-group col-lg-6 col-md-6 col-sm-6 col-xs-12" style="float: right;">
+        <input type="search" class="form-control search-input" formControlName="gridSearch" placeholder="Search">
+        <span class="input-group-addon">
+          <i class="fa fa-search"></i>
+        </span>
+      </div>
+    </div>
+    <!-- end of search div -->
+
+
+    <!--start div for row-->
+    <div class="row col-lg-12 col-md-12 col-sm-12 col-xs-12" style="padding-top: 15px;">
+
+      <!--start div for faceted nav-->
+      <div class="col-lg-2 col-md-2 col-sm-2 col-xs-2 faceted-nav" *ngIf="facetedDataDetails && facetedDataDetails.length > 0">
+
+        <!--start div for status-->
+        <ng-container *ngFor="let facetedheader of facetedDataDetails">
+          <div class="row faceted-header" style="height:33px;">
+            <span class="label-faceted-header">{{facetedheader.groupDisp}}</span>
+          </div>
+          <div *ngFor="let facetedData of facetedheader.groupFacets">
+            <div style="padding: 5px;">
+              <input type="checkbox" [checked]="facetedData.facetChecked" (click)="onClickFilter(facetedheader.groupName,facetedData.facetName,facetedData.facetChecked)"
+              />
+              <span>
+                {{facetedData.facetName}}
+              </span>
+            </div>
+          </div>
+        </ng-container>
+        <!--end div for status-->
+      </div>
+      <!-- end div for faceted nav -->
+
+      <!--start div for actn btn and table grid (col-md-10)-->
+      <div class="col-lg-10 col-md-10 col-sm-10 col-xs-10">
+
+        <!--start div for row for actn btn n table grid-->
+        <div class="row">
+
+          <!--start div for showing faceted data-->
+
+          <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" *ngIf="facetedArray.length!=0">
+            <div class="faceted-data-div" *ngFor="let fecetedNode of facetedArray" style="display:inline-block;margin: 4px;">
+              {{fecetedNode.facetedData}}
+            </div>
+            <br/>
+            <br/>
+          </div>
+
+          <!--end of div for showing faceted data-->
+
+          <!--start div for actn btn and faceted nav -->
+          <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" style="padding-left: 10px;">
+
+            <!--start div for action button-->
+            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" style="padding-top: 15px;padding-bottom: 0px;">
+              <!-- <button type="button" class="btn btn-style1 cursor-pointer" (click)="addComplaint();">
+                <i class="fa fa-plus" style="font-size: 13px; color: #FFFFFF"></i> Add
+              </button> -->
+              <button *ngIf="viewEditParam === 'Modify'" type="button" class="btn btn-style2 cursor-pointer" (click)="editComplaint()"
+                [disabled]="selectedData.length !== 1">
+                <i class="fa fa-pencil-square-o" style="font-size: 13px; color: #FFFFFF"></i> Edit
+              </button>
+              <!-- <button *ngIf="viewEditParam === 'View' || dashboardParameter" type="button" class="btn btn-style2 cursor-pointer" (click)="viewComplaintDetails()" [disabled]="selectedData.length !== 1">
+                <i class="fa fa-pencil-square-o" style="font-size: 13px; color: #FFFFFF"></i> View
+              </button> -->
+            </div>
+            <!--end of div for action button-->
+
+            <!-- start table div -->
+            <div class="col-lg-12 col-md-12 col-xs-12" style="margin-bottom: 15px; margin-top: 5px;">
+              <table class="table-style">
+                <thead>
+                  <tr class="th-style">
+                    <td class="header-style-first">
+                      <!--<input type="checkbox" [checked]="checkAll" (click)="selectAllCheck()" />-->
+                    </td>
+
+                    <td class="header-style hideextra" (click)="onClick(complaintDIViewDetails.header.complaintReferenceNo)">
+                      {{complaintDIViewDetails.header?.complaintReferenceNo}}
+                      <i *ngIf="sortSelection.sortData == complaintDIViewDetails.header?.complaintReferenceNo && sortSelection.orderType == 'ASC'"
+                        class="fa fa-sort-asc"></i>
+                      <i *ngIf="sortSelection.sortData == complaintDIViewDetails.header?.complaintReferenceNo && sortSelection.orderType == 'DESC'"
+                        class="fa fa-sort-desc"></i>
+                      <i *ngIf="sortSelection.orderType == ''" class="fa fa-sort"></i>
+                    </td>
+                    <td class="header-style hideextra" (click)="onClick(complaintDIViewDetails.header.complaintReferenceDt)">
+                      {{complaintDIViewDetails.header?.complaintReferenceDt}}
+
+                      <i *ngIf="sortSelection.sortData == complaintDIViewDetails.header?.complaintReferenceDt && sortSelection.orderType == 'ASC'"
+                        class="fa fa-sort-asc"></i>
+                      <i *ngIf="sortSelection.sortData == complaintDIViewDetails.header?.complaintReferenceDt && sortSelection.orderType == 'DESC'"
+                        class="fa fa-sort-desc"></i>
+                      <i *ngIf="sortSelection.orderType == ''" class="fa fa-sort"></i>
+                    </td>
+
+                    <td class="header-style hideextra" (click)="onClick(complaintDIViewDetails.header.customerName)">
+                      {{complaintDIViewDetails.header?.customerName}}
+                      <i *ngIf="sortSelection.sortData == complaintDIViewDetails.header?.customerName && sortSelection.orderType == 'ASC'" class="fa fa-sort-asc"></i>
+                      <i *ngIf="sortSelection.sortData == complaintDIViewDetails.header?.customerName && sortSelection.orderType == 'DESC'" class="fa fa-sort-desc"></i>
+                      <i *ngIf="sortSelection.orderType == ''" class="fa fa-sort"></i>
+                    </td>
+
+                    <td class="header-style hideextra" (click)="onClick(complaintDIViewDetails.header.complaintTypeDesc)">
+                      {{complaintDIViewDetails.header?.complaintTypeDesc}}
+                      <i *ngIf="sortSelection.sortData == complaintDIViewDetails.header?.complaintTypeDesc && sortSelection.orderType == 'ASC'"
+                        class="fa fa-sort-asc"></i>
+                      <i *ngIf="sortSelection.sortData == complaintDIViewDetails.header?.complaintTypeDesc && sortSelection.orderType == 'DESC'"
+                        class="fa fa-sort-desc"></i>
+                      <i *ngIf="sortSelection.orderType == ''" class="fa fa-sort"></i>
+                    </td>
+
+                    <td class="header-style hideextra" (click)="onClick(complaintDIViewDetails.header.natureOfComplaintDesc)">
+                      {{complaintDIViewDetails.header?.natureOfComplaintDesc}}
+                      <i *ngIf="sortSelection.sortData == complaintDIViewDetails.header?.natureOfComplaintDesc && sortSelection.orderType == 'ASC'"
+                        class="fa fa-sort-asc"></i>
+                      <i *ngIf="sortSelection.sortData == complaintDIViewDetails.header?.natureOfComplaintDesc && sortSelection.orderType == 'DESC'"
+                        class="fa fa-sort-desc"></i>
+                      <i *ngIf="sortSelection.orderType == ''" class="fa fa-sort"></i>
+                    </td>
+                    <td class="header-style hideextra" (click)="onClick(complaintDIViewDetails.header.status)">
+                      {{complaintDIViewDetails.header?.status}}
+                      <i *ngIf="sortSelection.sortData == complaintDIViewDetails.header?.status && sortSelection.orderType == 'ASC'" class="fa fa-sort-asc"></i>
+                      <i *ngIf="sortSelection.sortData == complaintDIViewDetails.header?.status && sortSelection.orderType == 'DESC'" class="fa fa-sort-desc"></i>
+                      <i *ngIf="sortSelection.orderType == ''" class="fa fa-sort"></i>
+                    </td>
+                    <td class="header-style-last" (click)="onClick(complaintDIViewDetails.header.files)">
+                      {{complaintDIViewDetails.header?.files}}
+                      <i *ngIf="sortSelection.sortData == complaintDIViewDetails.header?.files && sortSelection.orderType == 'ASC'" class="fa fa-sort-asc">
+                      </i>
+                      <i *ngIf="sortSelection.sortData == complaintDIViewDetails.header?.files && sortSelection.orderType == 'DESC'" class="fa fa-sort-desc">
+                      </i>
+                      <i *ngIf="sortSelection.orderType == ''" class="fa fa-sort">
+                      </i>
+                    </td>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr class="tr-style" *ngFor="let complaintViewValue of complaintDIViewDetails.details
+              | isplSearch: searchFormGroup.value.gridSearch : complaintDIViewDetails.header;
+              let odd = odd; let even = even;" [ngClass]="{even: even, odd: odd }">
+                    <!-- start ng-container for view or edit checkbox -->
+                    <ng-container *ngIf="viewEditParam === 'Modify' then thenBlockOfModifyCheckbox; else elseBlockOfModifyCheckbox"></ng-container>
+                    <!-- end of ng-container for view or edit checkbox -->
+                    <!-- start ng-template for Modify Checkbox -->
+                    <ng-template #thenBlockOfModifyCheckbox>
+                      <ng-container *ngIf="complaintViewValue.siteVisit==='Y' then thenBlockOfCheckboxForSiteVisit; else elseBlockOfCheckboxForSiteVisit"></ng-container>
+                      <ng-template #thenBlockOfCheckboxForSiteVisit>
+                        <ng-container *ngIf="complaintViewValue.activityId==complaintLoggedActivityId then thenBlockOfCheckboxForActivityId; else elseBlockOfCheckboxForActivityId"></ng-container>
+                        <ng-template #thenBlockOfCheckboxForActivityId>
+                          <td class="td-style-first">
+                            <input type="checkbox" [checked]="otherCheck" (click)="complaintDetailsByCheckbox(complaintViewValue)" />
+                          </td>
+                        </ng-template>
+                        <ng-template #elseBlockOfCheckboxForActivityId>
+                          <td class="td-style-first"></td>
+                        </ng-template>
+                      </ng-template>
+                      <ng-template #elseBlockOfCheckboxForSiteVisit>
+                        <ng-container *ngIf="complaintViewValue.activityId==complaintLoggedActivityId then thenBlockOfCheckboxForActivityIdSiteVisit; else elseBlockOfCheckboxForActivityIdSiteVisit"></ng-container>
+                        <ng-template #thenBlockOfCheckboxForActivityIdSiteVisit>
+                          <td class="td-style-first">
+                            <input type="checkbox" [checked]="otherCheck" (click)="complaintDetailsByCheckbox(complaintViewValue)" />
+                          </td>
+                        </ng-template>
+                        <ng-template #elseBlockOfCheckboxForActivityIdSiteVisit>
+                          <td class="td-style-first"></td>
+                        </ng-template>
+                      </ng-template>
+                    </ng-template>
+                    <!-- end of ng-template for modify checkbox -->
+                    <!-- start ng-template for view checkbox -->
+                    <ng-template #elseBlockOfModifyCheckbox>
+                      <td class="td-style-first">
+                        <!-- <input type="checkbox" [checked]="otherCheck" (click)="complaintDetailsByCheckbox(complaintViewValue)"/> -->
+                      </td>
+                    </ng-template>
+                    <!-- end of ng-template for view checkbox -->
+                    <td class="td-style" *ngIf="viewEditParam === 'Modify'">
+                      {{complaintViewValue.complaintReferenceNo}}
+                    </td>
+                    <td class="td-style" *ngIf="viewEditParam === 'View'">
+                      <span class="custom-link" title="Click here" (click)="complaintDetailsByCheckbox(complaintViewValue,'View')">
+                        {{complaintViewValue.complaintReferenceNo}}
+                      </span>
+                    </td>
+                    <td class="td-style">{{complaintViewValue.complaintReferenceDt|date: 'dd-MMM-yyyy'}}</td>
+                    <td class="td-style">{{complaintViewValue.customerDetails.customerName}}</td>
+                    <td class="td-style">{{complaintViewValue.complaintTypeDesc}}</td>
+                    <td class="td-style">{{complaintViewValue.natureOfComplaintDesc}}</td>
+                    <td class="td-style">{{complaintViewValue.status}}</td>
+                    <ng-container *ngIf="complaintViewValue.files.length==0 then thenBlock; else elseBlock"></ng-container>
+                    <ng-template #thenBlock>
+                      <td class="td-style-last"></td>
+                    </ng-template>
+                    <ng-template #elseBlock>
+                      <td class="td-style-last">
+                        <input id="{{complaintViewValue.complaintReferenceNo}}" class="toggle input-checkbox" type="checkbox">
+                        <label for="{{complaintViewValue.complaintReferenceNo}}">Files</label>
+                        <div id="{{complaintViewValue.complaintReferenceNo}}" class="expand">
+                          <section>
+                            <ng-container *ngFor="let file of complaintViewValue.files">
+                              <a class="file-url" href="{{file.fileUrl}}" target="_blank">{{file.fileName}}</a>
+                              <br/>
+                            </ng-container>
+                          </section>
+                        </div>
+                      </td>
+                    </ng-template>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            <!-- end of table div -->
+
+          </div>
+          <!--end of div for actn btn n faceted nav-->
+
+        </div>
+        <!--end of div row for actn btn n table grid-->
+      </div>
+      <!--end of div for actn btn n table(col-md-10)-->
+
+    </div>
+    <!--end of div row-->
+
+  </div>
+  <!-- end of div container -->
+</div>
+<!-- end of div page-container -->
+
+<ispl-busy-spinner *ngIf="busySpinner.busy">
+</ispl-busy-spinner>
