@@ -1,0 +1,238 @@
+.page-container {
+  /* margin-top: 54px; */
+  overflow-x: hidden;
+}
+
+.manage-profile-title {
+  width: 100%;
+  height: 40px;
+  padding-left: 15px;
+  color: black;
+}
+
+h1.manage-profile-title {
+  font-size: 30px;
+}
+
+.manage-profile-form {
+  padding: 30px 30px;
+}
+
+.compliant-submit-button-div{
+  padding-left: 15px;
+}
+
+.button-holder {
+  float: left;
+}
+
+.compliant-submit-button-size{
+  width: 100%;
+  position: relative;
+  margin-left: -15px;
+}
+
+.button-gaps {
+  height: 10px;
+  width: 100%;
+}
+
+input:focus {
+  border: 1px solid #0098DF;
+  border-left: 5px solid #0098DF;
+  box-shadow: 0 0 6px #78ABC4;
+}
+
+.ng-valid[required], .ng-valid.required  {
+  border-left: 5px solid #42A948; /* green */
+}
+
+.breadcrumb-custom {
+  border-bottom: 1px solid #DADADA;
+  box-shadow: 0px 2px 2px #E7E7E7;
+}
+
+.primary-button-style {
+  width: 100%;
+  height: 40px;
+  box-shadow: 0px 0px 10px #A5A5A5;
+  background-color: #0085BE;
+  cursor: pointer;
+  margin-left: -15px;
+}
+
+.primary-button-style:hover {
+  background-color: #0073B0;
+}
+
+.default-button-style {
+  width: 100%;
+  height: 40px;
+  box-shadow: 0px 0px 10px #A5A5A5;
+  background-color: #666666;
+  color: #FFFFFF;
+  cursor: pointer;
+  margin-left: -15px;
+}
+
+.default-button-style:hover {
+  background-color: #514E4E;
+}
+
+/* scroll ul style and li style */
+.ul-style{
+    height:150px;
+    overflow-y:scroll;
+    border:1px solid #DADADA;
+}
+.li-style{
+  border:none;
+}
+/* end of scroll ul style and li style */
+
+/*complaintRefNo search style*/
+.complaintRefNo-search-button {
+    background-color: #0275d8;
+    border-color: #0275d8;
+    height: 42px;
+}
+
+.complaintRefNo-alert {
+  padding-top: 52px!important;
+}
+/* end of complaintRefNo search style*/
+
+
+
+/*table grid style*/
+.table-style {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0 8px;
+  border: 1px solid #FEFEFE !important;
+  background-color: #FFFFFF;
+}
+
+.th-style {
+  background-color: #dbdada;
+  font-family: sans-serif;
+  font-size: 15px;
+  color: #000000;
+  letter-spacing: 1px;
+  padding-left: 10px;
+  border: 1px solid #7B7B7B;
+  box-shadow: 0px 1px 5px #D1D1D1;
+  height: 34px;
+}
+
+.tr-style {
+  font-size: 15px;
+  font-family: sans-serif;
+  color : #69696B;
+  height: 50px;
+  box-shadow: 0px 1px 5px #CBCBCB;
+  border: 1px solid #BCBCBC;
+}
+
+.td-style {
+  padding-left: 10px;
+  border-bottom: 1px solid #CACACA;
+  border-top: 1px solid #CACACA;
+  /*border-left: 1px solid #EFEFEF;*/
+}
+
+.td-style-first {
+  padding-left: 10px;
+  border-bottom: 1px solid #CACACA;
+  border-top: 1px solid #CACACA;
+  border-left: 3px solid #0098DF;
+}
+
+.td-style-last {
+  padding-left: 10px;
+  padding-right: 6px;
+  border-bottom: 1px solid #CACACA;
+  border-top: 1px solid #CACACA;
+  border-right: 1px solid #CACACA;
+}
+
+.header-style {
+  padding-left: 10px;
+  border-bottom: 1px solid #BCBCBC;
+  border-top: 1px solid #BCBCBC;
+}
+
+.header-style-first {
+  padding-left: 10px;
+  border-bottom: 1px solid #BCBCBC;
+  border-top: 1px solid #BCBCBC;
+  border-left: 1px solid #BCBCBC;
+}
+
+.header-style-last {
+  padding-left: 10px;
+  border-bottom: 1px solid #BCBCBC;
+  border-top: 1px solid #BCBCBC;
+  border-right: 1px solid #BCBCBC;
+}
+
+.even {
+  background-color: #FFFFFF;
+}
+
+.even:hover {
+  background-color: #0098DF;
+  color: #FFFFFF;
+  cursor: pointer;
+}
+
+.odd {
+  /*background-color: #F4F4F4;*/
+  background-color: #FFFFFF;
+}
+.odd:hover {
+  background-color: #0098DF;
+  color: #FFFFFF;
+  cursor: pointer;
+}
+
+.table-hover {
+  background-color: #E9E9E9;
+  cursor: pointer;
+}
+   
+/*end of style div for faceted-data-div*/
+
+.scroll-bar{
+  overflow: auto;
+  overflow-y: hidden;
+}
+.wrap-style{
+  word-wrap: break-word;
+  width: 288px;
+}
+.hideextra { 
+  white-space: nowrap; 
+  overflow: hidden;
+   text-overflow:ellipsis;
+ }
+ .red-coloured-label{
+    color: #cc100c;
+}
+
+/* start style for alert danger  */
+.alert-danger {
+  cursor: pointer;
+}
+.alert-danger:hover .close {
+  opacity: 1;
+  color: #000;
+}
+/* end of div for alert danger */
+/* start hide horizontal scroll */
+.hide-horizontal-scroll{
+  overflow-x: hidden;
+}
+/* end of hide horizontal scroll */
+
+

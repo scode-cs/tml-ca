@@ -1,0 +1,213 @@
+<div class="page-container">
+  <ol class="breadcrumb">
+    <li class="breadcrumb-item"><a href="#/home">Home</a></li>
+    <li class="breadcrumb-item active">
+      <span *ngIf="viewEditParam === 'modify'">
+        Modify Site Visit Report
+      </span>
+      <span *ngIf="viewEditParam === 'view'">
+        View Site Visit Report
+      </span>
+    </li>
+  </ol>
+
+  <!-- Write Your Code -->
+  <!-- start div for container -->
+  <div class="container col-lg-12 col-md-12 col-sm-12 col-xs-12" style="width:100%;">
+
+    <!--start search div -->
+    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+      <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+        <div class="input-group" style="width:100%;">
+          &nbsp;
+        </div>
+      </div>
+      <div [formGroup]="searchFormGroup" class="input-group col-lg-6 col-md-6 col-sm-6 col-xs-12" style="float: right;">
+        <input type="search" class="form-control search-input" formControlName="gridSearch" placeholder="Search">
+        <span class="input-group-addon"><i class="fa fa-search"></i></span>
+      </div>
+    </div>
+    <!-- end of search div -->
+
+    <!--start div for action button-->
+    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" style="padding-top: 60px; padding-bottom: 0px;">
+      <!-- <button type="button" class="btn btn-style1 cursor-pointer" (click)="addComplaint();">
+        <i class="fa fa-plus" style="font-size: 13px; color: #FFFFFF"></i> Add
+      </button> -->
+
+      <button *ngIf="viewEditParam === 'modify'" type="button" class="btn btn-style2 cursor-pointer" (click)="editComplaint()" [disabled]="selectedData.length !== 1">
+        <i class="fa fa-pencil-square-o" style="font-size: 13px; color: #FFFFFF"></i> Edit
+      </button>
+      <!-- <button *ngIf="viewEditParam === 'view'" type="button" class="btn btn-style2 cursor-pointer" (click)="viewComplaint()" [disabled]="selectedData.length !== 1">
+        <i class="fa fa-street-view" style="font-size: 13px; color: #FFFFFF"></i> View
+      </button> -->
+    </div>
+    <!--end of div for action button-->
+
+    <!-- start table div -->
+    <div class="col-lg-12 col-md-12 col-xs-12" style="margin-bottom: 15px; margin-top: 5px;">
+      <table class="table-style">
+        <thead>
+          <tr class="th-style">
+            <td class="header-style-first">
+              <!--<input type="checkbox" [checked]="checkAll" (click)="selectAllCheck()" />-->
+            </td>
+
+            <td class="header-style hideextra" (click)="onClick(preliInvReportDIViewDetails.header.complaintRefNo)">
+              {{preliInvReportDIViewDetails.header?.complaintRefNo}}
+              <i *ngIf="sortSelection.sortData == preliInvReportDIViewDetails.header?.complaintRefNo && sortSelection.orderType == 'ASC'"
+                class="fa fa-sort-asc">
+            </i>
+              <i *ngIf="sortSelection.sortData == preliInvReportDIViewDetails.header?.complaintRefNo && sortSelection.orderType == 'DESC'"
+                class="fa fa-sort-desc">
+            </i>
+              <i *ngIf="sortSelection.orderType == ''" class="fa fa-sort">
+            </i>
+            </td>
+            <td class="header-style hideextra" (click)="onClick(preliInvReportDIViewDetails.header.complaintReferenceDt)">
+              {{preliInvReportDIViewDetails.header?.complaintReferenceDt}}
+
+              <i *ngIf="sortSelection.sortData == preliInvReportDIViewDetails.header?.complaintReferenceDt && sortSelection.orderType == 'ASC'"
+                class="fa fa-sort-asc">
+            </i>
+              <i *ngIf="sortSelection.sortData == preliInvReportDIViewDetails.header?.complaintReferenceDt && sortSelection.orderType == 'DESC'"
+                class="fa fa-sort-desc">
+            </i>
+              <i *ngIf="sortSelection.orderType == ''" class="fa fa-sort">
+            </i>
+            </td>
+
+            <td class="header-style hideextra" (click)="onClick(preliInvReportDIViewDetails.header.customerName)">
+              {{preliInvReportDIViewDetails.header?.customerName}}
+              <i *ngIf="sortSelection.sortData == preliInvReportDIViewDetails.header?.customerName && sortSelection.orderType == 'ASC'"
+                class="fa fa-sort-asc">
+            </i>
+              <i *ngIf="sortSelection.sortData == preliInvReportDIViewDetails.header?.customerName && sortSelection.orderType == 'DESC'"
+                class="fa fa-sort-desc">
+            </i>
+              <i *ngIf="sortSelection.orderType == ''" class="fa fa-sort">
+            </i>
+            </td>
+            <td class="header-style hideextra" (click)="onClick(preliInvReportDIViewDetails.header.preliDate)">
+              {{preliInvReportDIViewDetails.header?.preliDate}}
+              <i *ngIf="sortSelection.sortData == preliInvReportDIViewDetails.header?.preliDate && sortSelection.orderType == 'ASC'"
+                class="fa fa-sort-asc">
+            </i>
+              <i *ngIf="sortSelection.sortData == preliInvReportDIViewDetails.header?.preliDate && sortSelection.orderType == 'DESC'"
+                class="fa fa-sort-desc">
+            </i>
+              <i *ngIf="sortSelection.orderType == ''" class="fa fa-sort">
+            </i>
+            </td>
+
+            <td class="header-style hideextra" (click)="onClick(preliInvReportDIViewDetails.header.areaSalesManager)">
+              {{preliInvReportDIViewDetails.header?.areaSalesManager}}
+              <i *ngIf="sortSelection.sortData == preliInvReportDIViewDetails.header?.areaSalesManager && sortSelection.orderType == 'ASC'"
+                class="fa fa-sort-asc">
+            </i>
+              <i *ngIf="sortSelection.sortData == preliInvReportDIViewDetails.header?.areaSalesManager && sortSelection.orderType == 'DESC'"
+                class="fa fa-sort-desc">
+            </i>
+              <i *ngIf="sortSelection.orderType == ''" class="fa fa-sort">
+            </i>
+            </td>
+
+            <td class="header-style hideextra" (click)="onClick(preliInvReportDIViewDetails.header.actionTakenByASM)">
+              {{preliInvReportDIViewDetails.header?.actionTakenByASM}}
+              <i *ngIf="sortSelection.sortData == preliInvReportDIViewDetails.header?.actionTakenByASM && sortSelection.orderType == 'ASC'"
+                class="fa fa-sort-asc">
+            </i>
+              <i *ngIf="sortSelection.sortData == preliInvReportDIViewDetails.header?.actionTakenByASM && sortSelection.orderType == 'DESC'"
+                class="fa fa-sort-desc">
+            </i>
+              <i *ngIf="sortSelection.orderType == ''" class="fa fa-sort">
+            </i>
+            </td>
+
+            <td class="header-style-last" (click)="onClick(preliInvReportDIViewDetails.header.files)">
+              {{preliInvReportDIViewDetails.header?.files}}
+              <i *ngIf="sortSelection.sortData == preliInvReportDIViewDetails.header?.files && sortSelection.orderType == 'ASC'" class="fa fa-sort-asc">
+            </i>
+              <i *ngIf="sortSelection.sortData == preliInvReportDIViewDetails.header?.files && sortSelection.orderType == 'DESC'" class="fa fa-sort-desc">
+            </i>
+              <i *ngIf="sortSelection.orderType == ''" class="fa fa-sort">
+            </i>
+            </td>
+
+
+
+
+          </tr>
+        </thead>
+        <tbody>
+          <tr class="tr-style" *ngFor="let preliInvReportDIValue of preliInvReportDIViewDetails.details
+        | isplSearch: searchFormGroup.value.gridSearch : preliInvReportDIViewDetails.header;
+              let odd = odd; let even = even;" [ngClass]="{even: even, odd: odd }">
+          <ng-container *ngIf="viewEditParam === 'modify' then thenBlockOfEditCheckbox; else elseBlockOfviewCheckbox"></ng-container>
+            <!-- ng template to enable checkbox for editsite visit -->
+            <ng-template #thenBlockOfEditCheckbox>
+              <ng-container *ngIf="preliInvReportDIValue.activityId<resoActivityId then thenBlockOfCheckbox; else elseBlockOfCheckbox"></ng-container>
+                <ng-template #thenBlockOfCheckbox>
+                  <td class="td-style-first">
+                    <input type="checkbox" [checked]="otherCheck" (click)="preliInvReportDIDetailsByCheckbox(preliInvReportDIValue)"/>
+                  </td>
+                </ng-template>
+                <ng-template #elseBlockOfCheckbox>
+                  <td class="td-style-first">
+                  </td>
+                </ng-template>
+            </ng-template>
+            <!-- end of ng template to enable edit checkbox for site visit -->
+            <!-- start ng-template to enable view checkbox for site visit -->
+            <ng-template #elseBlockOfviewCheckbox>
+              <td class="td-style-first">
+                <!-- <input type="checkbox" [checked]="otherCheck" (click)="preliInvReportDIDetailsByCheckbox(preliInvReportDIValue)"/> -->
+              </td>
+            </ng-template>
+            <!-- end of ng-template to enable view checkbox for site cisit -->
+            <td class="td-style" *ngIf="viewEditParam === 'modify'">
+                {{preliInvReportDIValue.complaintRefNo}}
+              </td>
+              <td class="td-style" *ngIf="viewEditParam === 'view'">
+                <span class="custom-link" title="Click here"  (click)="preliInvReportDIDetailsByCheckbox(preliInvReportDIValue,'view')">
+                  {{preliInvReportDIValue.complaintRefNo}}
+                </span>
+              </td>        
+            <td class="td-style">{{preliInvReportDIValue.complaintReferenceDt|date: 'dd-MMM-yyyy'}}</td>
+            <td class="td-style">{{preliInvReportDIValue.customerName}}</td>
+            <td class="td-style">{{preliInvReportDIValue.preliDate|date: 'dd-MMM-yyyy'}}</td>
+            <td class="td-style">{{preliInvReportDIValue.areaSalesManagerName}}</td>
+            <td class="td-style">{{preliInvReportDIValue.actionTakenByASM}}</td>
+            <!--<td class="td-style-last">{{preliInvReportDIValue.actionTakenByASM}}</td>-->
+            <ng-container *ngIf="preliInvReportDIValue.files.length==0 then thenBlock; else elseBlock"></ng-container>
+            <ng-template #thenBlock>
+              <td class="td-style-last"></td>
+            </ng-template>
+            <ng-template #elseBlock>
+              <td class="td-style-last">
+                <input id="{{preliInvReportDIValue.complaintRefNo}}" class="toggle input-checkbox" type="checkbox">
+                <label for="{{preliInvReportDIValue.complaintRefNo}}">Files</label>
+                <div id="{{preliInvReportDIValue.complaintRefNo}}" class="expand">
+                  <section>
+                    <ng-container *ngFor="let file of preliInvReportDIValue.files">
+                      <a class="file-url" href="{{file.fileUrl}}" target="_blank">{{file.fileName}}</a>
+                      <br/>
+                    </ng-container>
+                  </section>
+                </div>
+              </td>
+            </ng-template>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <!-- end of table div -->
+
+  </div>
+  <!-- end of div container -->
+</div>
+<!-- end of div page-container -->
+
+<ispl-busy-spinner *ngIf="!preliInvReportDIViewDetails.header && !preliInvReportDIViewDetails.details">
+
+</ispl-busy-spinner>

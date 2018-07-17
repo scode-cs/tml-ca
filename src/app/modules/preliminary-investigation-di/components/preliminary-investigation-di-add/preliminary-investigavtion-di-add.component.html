@@ -1,0 +1,990 @@
+<div class="page-container">
+  <div>
+    <ol class="breadcrumb breadcrumb-custom">
+      <li class="breadcrumb-item">
+        <a href="#/home">
+          <i class="fa fa-home"></i> Home </a>
+      </li>
+      <li class="breadcrumb-item active">{{title}}</li>
+    </ol>
+  </div>
+    
+  <!-- main div -->
+  <div>
+
+    <!--start form -->
+    <form [formGroup]="preliInvestFormGroup" autocomplete="off" (ngSubmit)="onClickPreliInvestigationReportDISubmit()">
+      <!--start div of row manage profile form-->
+      <div class="row manage-profile-form">
+
+        <!-- start div for Complaint Reference No -->
+        <div class="form-group col-xs-12 col-sm-6 col-md-6 col-lg-4" *ngIf="complaintRefNoForUpdate==''">
+          <label for="complaintRefNo">Complaint Reference No</label>
+          <select class="custom-select col-xs-12 col-sm-6 col-md-6 col-lg-4" formControlName="complaintRefNo" (change)="onChangeComplaintRefNo($event.target.value)"
+            required>
+            <option *ngFor="let compRefNo of complaintRefNoVal.details" value="{{compRefNo.Key}}">{{compRefNo.Value}}</option>
+          </select>
+          <!--start div for complaintRefNo alert-->
+          <div class="alert alert-danger" *ngIf="preliInvestFormGroup.get('complaintRefNo').hasError('required') && preliInvestFormGroup.get('complaintRefNo').touched">
+            <i class="fa fa-exclamation-circle"></i> Complaint Reference No is required!
+          </div>
+          <!--end div for complaintRefNo alert-->
+        </div>
+        <!-- end div for Complaint Reference No -->
+
+        <!-- start div for Complaint Reference No [modify] -->
+        <div class="form-group col-xs-12 col-sm-6 col-md-6 col-lg-4" *ngIf="complaintRefNoForUpdate">
+          <label for="complaintRefNo">Complaint Reference No </label>
+          <input type="text" class="form-control" formControlName="complaintRefNoForModify" value="{{complaintRefNoForModify}}" readonly>
+        </div>
+        <!-- end div for Complaint Reference No [modify] -->
+
+        <!-- start div for site visit Date -->
+        <div class="form-group col-xs-12 col-sm-6 col-md-6 col-lg-4">
+          <label for="siteVisitDate">Site Visit Date</label>
+          <input type="text" class="form-control" [value]="siteVisitDt|date: 'dd-MMM-yyyy'" formControlName="siteVisitDate" readonly>
+        </div>
+        <!-- end div for site visit Date -->
+
+        <!-- start div for Date -->
+        <div class="form-group col-xs-12 col-sm-6 col-md-6 col-lg-4">
+          <label for="preliDate">Date</label>
+          <input type="text" class="form-control" formControlName="preliDate" [value]="preliDate|date: 'dd-MMM-yyyy'" readonly>
+        </div>
+        <!-- end div for Date -->
+
+
+        <!-- start table div -->
+        <div class="col-lg-12 col-md-12 col-xs-12 scroll-bar" style="margin-bottom: 15px; margin-top: 5px;" *ngIf="complaintReferenceDetailsForModify.itemsHeader">
+          <table class="table-style">
+            <thead>
+              <tr class="th-style">
+                <td class="header-style-first hideextra">
+                  {{complaintReferenceDetailsForModify.itemsHeader?.invoiceNo}}
+                </td>
+                <td class="header-style hideextra">
+                  {{complaintReferenceDetailsForModify.itemsHeader?.invoiceDate}}
+                </td>
+                <td class="header-style hideextra">
+                  {{complaintReferenceDetailsForModify.itemsHeader?.itemCode}}
+                </td>
+                <td class="header-style hideextra">
+                  {{complaintReferenceDetailsForModify.itemsHeader?.itemName}}
+                </td>
+                <td class="header-style hideextra">
+                  {{complaintReferenceDetailsForModify.itemsHeader?.customerCode}}
+                </td>
+                <td class="header-style hideextra">
+                  {{complaintReferenceDetailsForModify.itemsHeader?.customerName}}
+                </td>
+                <td class="header-style hideextra">
+                  {{complaintReferenceDetailsForModify.itemsHeader?.projectName}}
+                </td>
+                <td class="header-style hideextra">
+                  {{complaintReferenceDetailsForModify.itemsHeader?.projectLocation}}
+                </td>
+                <td class="header-style hideextra">
+                  {{complaintReferenceDetailsForModify.itemsHeader?.poNo}}
+                </td>
+                <td class="header-style-last hideextra">
+                  {{complaintReferenceDetailsForModify.itemsHeader?.soNo}}
+                </td>
+              </tr>
+            </thead>
+            <tbody>
+              <ng-container>
+                <tr class="tr-style" *ngFor=" let invoiceDet of complaintReferenceDetailsForModify.itemNos?.items
+              let odd = odd; let even = even;" [ngClass]="{even: even, odd: odd }">
+                  <td class="td-style-first">
+                    {{invoiceDet.invoiceNo}}
+                  </td>
+                  <td class="td-style hideextra">
+                    {{invoiceDet.invoiceDate|date: 'dd-MMM-yyyy'}}
+                  </td>
+                  <td class="td-style hideextra">
+                    {{invoiceDet.itemCode}}
+                  </td>
+                  <td class="td-style hideextra">
+                    {{invoiceDet.itemName}}
+                  </td>
+                  <td class="td-style hideextra">
+                    {{invoiceDet.customerCode}}
+                  </td>
+                  <td class="td-style hideextra">
+                    {{invoiceDet.customerName}}
+                  </td>
+                  <td class="td-style hideextra">
+                    {{invoiceDet.projectName}}
+                  </td>
+                  <td class="td-style hideextra">
+                    {{invoiceDet.projectLocation}}
+                  </td>
+                  <td class="td-style hideextra">
+                    {{invoiceDet.poNo}}
+                  </td>
+                  <td class="td-style-last hideextra">
+                    {{invoiceDet.soNo}}
+                  </td>
+                </tr>
+              </ng-container>
+            </tbody>
+          </table>
+        </div>
+        <!--end table div-->
+
+
+        <!-- start div for concerned person name-->
+        <div class="form-group col-xs-12 col-sm-6 col-md-6 col-lg-4">
+          <label for="concernedPersonName">Customer's Contact Person</label>
+          <input type="text" class="form-control" formControlName="concernedPersonName" [value]="concernedPersonName" readonly>
+        </div>
+        <!-- end div for Concerned person name-->
+
+        <!-- start div for concerned person contact no-->
+        <div class="form-group col-xs-12 col-sm-6 col-md-6 col-lg-4">
+          <label for="concernedPersonContactNo">Phone No</label>
+          <input type="text" class="form-control" formControlName="concernedPersonContactNo" [value]="concernedPersonContactNo" readonly>
+        </div>
+        <!-- end div for Concerned person contact no-->
+
+        <!--start div of supply commencement date-->
+        <div class="form-group col-xs-12 col-sm-6 col-md-6 col-lg-4">
+          <label for="supplyCommencementDate">Supply Commencement Date</label>
+          <input type="date" class="form-control" formControlName="supplyCommencementDate">
+        </div>
+        <!--end div for supply commencement date-->
+
+        <!--start div for total no of pipes-->
+        <!-- <div class="form-group col-xs-12 col-sm-6 col-md-6 col-lg-4">
+          <label for="totalNoOfPipes">Total Number of Pipes(in nos)</label>
+          <input type="number" class="form-control" [value]="totalNoOfPipes" formControlName="totalNoOfPipes" readonly>
+        </div> -->
+        <!--end of div for total no of pipes-->
+         <!--start div for total qty in tons-->
+         <div class="form-group col-xs-12 col-sm-6 col-md-6 col-lg-4">
+          <label for="totalQtyInTons">Total Qty in Tons(only for DI Pipe)</label>
+          <input type="number" class="form-control" style="text-align: right;" [value]="totalQtyInTons" formControlName="totalQtyInTons" readonly>
+        </div>
+        <!--end div for total qty in tons-->
+
+        <!--start div for total qty in mtrs-->
+        <div class="form-group col-xs-12 col-sm-6 col-md-6 col-lg-4">
+          <label for="totalQtyInMtrs">Total Qty in Mtrs(only for DI Pipe)</label>
+          <input type="number" class="form-control" style="text-align: right;" [value]="totalQtyInMtrs" formControlName="totalQtyInMtrs"  readonly>
+        </div>
+        <!--end div for total qty in mtrs-->
+
+        <!--start div of Last date of supply-->
+        <div class="form-group col-xs-12 col-sm-6 col-md-6 col-lg-4">
+          <label for="lastDateOfSupply">Last Date of Supply</label>
+          <input type="date" class="form-control" formControlName="lastDateOfSupply">
+        </div>
+        <!--end div for last date of supply-->
+
+        <!--start div for area sales manager-->
+        <div class="form-group col-xs-12 col-sm-6 col-md-6 col-lg-4">
+          <label for="areaSalesManager">Customer Account Manager</label>
+          <select class="custom-select col-xs-12 col-sm-6 col-md-6 col-lg-4" formControlName="areaSalesManager" required>
+            <option *ngFor="let asm of areaSalesManagerDetails.details" value="{{asm.Key}}">{{asm.Value}}</option>
+          </select>
+          <!--start div for alert-->
+          <div class="alert alert-danger" *ngIf="preliInvestFormGroup.get('areaSalesManager').hasError('required') && preliInvestFormGroup.get('areaSalesManager').touched">
+            <i class="fa fa-exclamation-circle"></i>Customer Account Manager Name is required!
+          </div>
+          <!--end div for alert-->
+        </div>
+        <!--end of div for area sales manager-->
+
+        <!--start div for test certificate/Inspection certificate-->
+        <div class="form-group col-xs-12 col-sm-6 col-md-6 col-lg-4">
+          <label for="testCertificate">Ref. No of Test Certificate/Inspection Certificate<span class="red-coloured-label">(max length {{testCertificateLength}})</span></label>
+          <!-- <label ></label> -->
+          <input type="text" [maxlength]="testCertificateLength" class="form-control" formControlName="testCertificate">
+        </div>
+        <!--end div for test Certificate/Inspection certificate-->
+
+        <br/>
+
+        <!--start div of heading nature of complaint-->
+        <div class="form-group col-xs-12 col-sm-12 col-md-12 col-lg-12">
+          <label for="natureOfcomplaint">
+            <b>Nature of Complaint</b>
+          </label>
+        </div>
+        <!--end div of nature of complaint-->
+
+        <!--start div of product related-->
+        <div class="form-group col-xs-12 col-sm-6 col-md-6 col-lg-4">
+          <label for="natureOfcomplaintProductRelated">Product Related</label>
+          <select class="custom-select col-xs-12 col-sm-6 col-md-6 col-lg-4" formControlName="natureOfcomplaintProductRelated">
+            <option value="Y">Yes</option>
+            <option value="N">No</option>
+          </select>
+        </div>
+        <!--end of div of product related-->
+
+        <!--start div of service related-->
+        <div class="form-group col-xs-12 col-sm-6 col-md-6 col-lg-4">
+          <label for="natureOfcomplaintServiceRelated">Service Related</label>
+          <select class="custom-select col-xs-12 col-sm-6 col-md-6 col-lg-4" formControlName="natureOfcomplaintServiceRelated">
+            <option value="Y">Yes</option>
+            <option value="N">No</option>
+          </select>
+        </div>
+        <!--end div of service related-->
+
+        <br/>
+
+        <!--start div for heading Specific Issue-->
+        <div class="form-group col-xs-12 col-sm-12 col-md-12 col-lg-12">
+          <label for="projectLocation">
+            <b>Specific Issue</b>
+          </label>
+        </div>
+        <!--end of div heading specific Issue-->
+
+        <!--start div of complaint description-->
+        <div class="form-group col-xs-12 col-sm-6 col-md-6 col-lg-4">
+          <label for="complaintDescription">Complaint Descriptions</label>
+          <textarea class="form-control hide-horizontal-scroll" [maxlength]="complaintDescriptionLength" rows="5" formControlName="complaintDescription"></textarea>
+        </div>
+        <!--end div of complaint descriptions-->
+
+        <!--start div for observations-->
+        <div class="form-group col-xs-12 col-sm-6 col-md-6 col-lg-4">
+          <label for="observations">Key Observation</label>
+          <textarea class="form-control hide-horizontal-scroll" [maxlength]="observationsLength" rows="5" formControlName="observations" required></textarea>
+          <!--start div for observations alert-->
+          <div class="alert alert-danger" *ngIf="preliInvestFormGroup.get('observations').hasError('required') && preliInvestFormGroup.get('observations').touched">
+            <i class="fa fa-exclamation-circle"></i> Key Observation is required!
+          </div>
+          <!--end div for observations alert-->
+        </div>
+        <!--end div for Observations-->
+
+        <!--start div of dia-->
+        <div class="form-group col-xs-12 col-sm-6 col-md-6 col-lg-4">
+          <label for="dia">Dia</label>
+          <select class="custom-select col-xs-12 col-sm-6 col-md-6 col-lg-4" formControlName="dia" required>
+            <option *ngFor="let d of diaVal.details" value="{{ d.Key }}">{{ d.Value }}</option>
+          </select>
+
+          <!--start div for complaintRefNo alert-->
+          <div class="alert alert-danger" *ngIf="preliInvestFormGroup.get('dia').hasError('required') && preliInvestFormGroup.get('dia').touched">
+            <i class="fa fa-exclamation-circle"></i> Dia is required!
+          </div>
+          <!--end div for complaintRefNo alert-->
+        </div>
+        <!--end of div dia-->
+
+        <!--start div of clasification-->
+        <div class="form-group col-xs-12 col-sm-6 col-md-6 col-lg-4">
+          <label for="classification">Classification</label>
+          <select class="custom-select col-xs-12 col-sm-6 col-md-6 col-lg-4" formControlName="classification" required>
+            <option *ngFor="let classi of classificationVal.details" value="{{ classi.Key }}">{{ classi.Value }}</option>
+          </select>
+
+          <!--start div for complaintRefNo alert-->
+          <div class="alert alert-danger" *ngIf="preliInvestFormGroup.get('classification').hasError('required') && preliInvestFormGroup.get('classification').touched">
+            <i class="fa fa-exclamation-circle"></i> Classification is required!
+          </div>
+          <!--end div for complaintRefNo alert-->
+
+
+        </div>
+        <!--end of div Classification-->
+
+        <!--start div for batch no-->
+        <div class="form-group col-xs-12 col-sm-6 col-md-6 col-lg-4">
+          <label for="batchNo">Batch No</label>
+          <input type="text" [maxlength]="batchNoLength" class="form-control" formControlName="batchNo" required>
+          <!--start div for alert-->
+          <div class="alert alert-danger" *ngIf="preliInvestFormGroup.get('batchNo').hasError('required') && preliInvestFormGroup.get('batchNo').touched">
+            <i class="fa fa-exclamation-circle"></i>Batch No is required!
+          </div>
+          <!--end div for alert-->
+        </div>        
+        <!--end div for batch no-->
+
+        <!--start div of marking-->
+        <div class="form-group col-xs-12 col-sm-6 col-md-6 col-lg-4">
+          <label for="marking">Marking</label>
+          <input type="text" [maxlength]="markingLength" class="form-control" formControlName="marking">
+        </div>
+        <!--end div of marking-->
+
+        <!--start div of inspection marking -->
+        <div class="form-group col-xs-12 col-sm-6 col-md-6 col-lg-4">
+          <label for="inspectionMarking">Inspection Marking(Punch)</label>
+          <input type="text" [maxlength]="inspectionMarkingLength" class="form-control" formControlName="inspectionMarking">
+        </div>
+        <!--end of div inspection marking-->
+
+        <!--start div for stencil-->
+        <div class="form-group col-xs-12 col-sm-6 col-md-6 col-lg-4" *ngIf="complaintRefNoForUpdate==''">
+          <label for="stencil">Stencil</label>
+          <ul class="list-group ul-style">
+            <li class="list-group-item li-style" *ngFor="let stencil of stencilVal.details">
+              <label class="custom-control custom-checkbox">
+                <input type="checkbox" class="custom-control-input" formControlName="stencil" (click)="onclickStencilCheck(stencil.Key)"
+                />
+                <span class="custom-control-indicator"></span>
+                <span class="custom-control-description">
+                  {{ stencil.Value }}
+                </span>
+              </label>
+            </li>
+          </ul>
+        </div>
+        <!--end div for stencil-->
+
+        <!--start div for stencil [modify]-->
+        <div class="form-group col-xs-12 col-sm-6 col-md-6 col-lg-4" *ngIf="complaintRefNoForUpdate">
+          <label for="stencil">Stencil</label>
+          <ul class="list-group ul-style">
+            <li class="list-group-item li-style" *ngFor="let stencil of complaintReferenceDetailsForModify.stencil">
+              <label class="custom-control custom-checkbox">
+                <input type="checkbox" class="custom-control-input" formControlName="stencil" [checked]="stencil.Checked" (click)="onclickStencilCheck(stencil.Key)"
+                />
+                <span class="custom-control-indicator"></span>
+                <span class="custom-control-description">
+                  {{ stencil.Value }}
+                </span>
+              </label>
+            </li>
+          </ul>
+        </div>
+        <!--end div for stencil [modify]-->
+
+
+        <!--start div of length of pipe-->
+        <div class="form-group col-xs-12 col-sm-6 col-md-6 col-lg-4">
+          <label for="lengthOfPipe">Length of pipe(mtr)</label>
+          <input type="number" class="form-control" formControlName="lengthOfPipe">
+        </div>
+        <!--end of div length of pipe-->
+
+        <!--start div no of pieces-->
+        <div class="form-group col-xs-12 col-sm-6 col-md-6 col-lg-4">
+          <label for="noOfPieces">Number of pieces</label>
+          <input type="number" class="form-control" formControlName="noOfPieces">
+        </div>
+        <!--end of div no of pieces-->
+
+        <!--start div for Socket-->
+        <div class="form-group col-xs-12 col-sm-6 col-md-6 col-lg-4" *ngIf="complaintRefNoForUpdate==''">
+          <label for="items">Socket</label>
+          <ul class="list-group ul-style">
+            <li class="list-group-item li-style" *ngFor="let socket of socketVal.details">
+              <label class="custom-control custom-checkbox">
+                <input type="checkbox" class="custom-control-input" formControlName="socket" (click)="onclickSocketCheck(socket.Key)" />
+                <span class="custom-control-indicator"></span>
+                <span class="custom-control-description">
+                  {{ socket.Value }}
+                </span>
+              </label>
+            </li>
+          </ul>
+        </div>
+        <!--end div for Socket-->
+
+        <!--start div for socket [modify]-->
+        <div class="form-group col-xs-12 col-sm-6 col-md-6 col-lg-4" *ngIf="complaintRefNoForUpdate">
+          <label for="stencil">Socket</label>
+          <ul class="list-group ul-style">
+            <li class="list-group-item li-style" *ngFor="let socket of complaintReferenceDetailsForModify.socket">
+              <label class="custom-control custom-checkbox">
+                <input type="checkbox" class="custom-control-input" formControlName="socket" [checked]="socket.Checked" (click)="onclickSocketCheck(socket.Key)"
+                />
+                <span class="custom-control-indicator"></span>
+                <span class="custom-control-description">
+                  {{ socket.Value }}
+                </span>
+              </label>
+            </li>
+          </ul>
+        </div>
+        <!--end div for socket [modify]-->
+
+
+        <!--start div for Spigot-->
+        <div class="form-group col-xs-12 col-sm-6 col-md-6 col-lg-4" *ngIf="complaintRefNoForUpdate==''">
+          <label for="items">Spigot</label>
+          <ul class="list-group ul-style">
+            <li class="list-group-item li-style" *ngFor="let spigot of spigotVal.details">
+              <label class="custom-control custom-checkbox">
+                <input type="checkbox" class="custom-control-input" formControlName="spigot" (click)="onclickSpigotCheck(spigot.Key)" />
+                <span class="custom-control-indicator"></span>
+                <span class="custom-control-description">
+                  {{ spigot.Value }}
+                </span>
+              </label>
+            </li>
+          </ul>
+        </div>
+        <!--end div for Spigot-->
+
+        <!--start div for spigot [modify]-->
+        <div class="form-group col-xs-12 col-sm-6 col-md-6 col-lg-4" *ngIf="complaintRefNoForUpdate">
+          <label for="stencil">Spigot</label>
+          <ul class="list-group ul-style">
+            <li class="list-group-item li-style" *ngFor="let spigot of complaintReferenceDetailsForModify.spigot">
+              <label class="custom-control custom-checkbox">
+                <input type="checkbox" class="custom-control-input" formControlName="spigot" [checked]="spigot.Checked" (click)="onclickSpigotCheck(spigot.Key)"
+                />
+                <span class="custom-control-indicator"></span>
+                <span class="custom-control-description">
+                  {{ spigot.Value }}
+                </span>
+              </label>
+            </li>
+          </ul>
+        </div>
+        <!--end div for spigot [modify]-->
+
+        <!--start div for Surface(Outer) Nature of Defect-->
+        <div class="form-group col-xs-12 col-sm-6 col-md-6 col-lg-4" *ngIf="complaintRefNoForUpdate==''">
+          <label for="items">Surface(Outer) Nature of Defect</label>
+          <ul class="list-group ul-style">
+            <li class="list-group-item li-style" *ngFor="let surOut of surfaceOuterVal.details">
+              <label class="custom-control custom-checkbox">
+                <input type="checkbox" class="custom-control-input" formControlName="surfaceOuter" (click)="onclickSurfaceOuterCheck(surOut.Key)"
+                />
+                <span class="custom-control-indicator"></span>
+                <span class="custom-control-description">
+                  {{ surOut.Value }}
+                </span>
+              </label>
+            </li>
+          </ul>
+        </div>
+        <!--end div for Surface(Outer) Nature of Defect-->
+
+        <!--start div for  Surface(Outer) Nature of Defect [modify]-->
+        <div class="form-group col-xs-12 col-sm-6 col-md-6 col-lg-4" *ngIf="complaintRefNoForUpdate">
+          <label for="stencil">Surface(Outer) Nature of Defect</label>
+          <ul class="list-group ul-style">
+            <li class="list-group-item li-style" *ngFor="let surfaceOuter of complaintReferenceDetailsForModify.surfaceOuter">
+              <label class="custom-control custom-checkbox">
+                <input type="checkbox" class="custom-control-input" formControlName="surfaceOuter" [checked]="surfaceOuter.Checked" (click)="onclickSurfaceOuterCheck(surfaceOuter.Key)"
+                />
+                <span class="custom-control-indicator"></span>
+                <span class="custom-control-description">
+                  {{ surfaceOuter.Value }}
+                </span>
+              </label>
+            </li>
+          </ul>
+        </div>
+        <!--end div for  Surface(Outer) Nature of Defect [modify]-->
+
+        <!--start div for Coating-Bitumen/Epoxy-->
+        <div class="form-group col-xs-12 col-sm-6 col-md-6 col-lg-4" *ngIf="complaintRefNoForUpdate==''">
+          <label for="items">Coating-Bitumen/Epoxy</label>
+          <ul class="list-group ul-style">
+            <li class="list-group-item li-style" *ngFor="let coatingBit of coatingBitVal.details">
+              <label class="custom-control custom-checkbox">
+                <input type="checkbox" class="custom-control-input" formControlName="coating" (click)="onclickCoatingBitCheck(coatingBit.Key)"
+                />
+                <span class="custom-control-indicator"></span>
+                <span class="custom-control-description">
+                  {{ coatingBit.Value }}
+                </span>
+              </label>
+            </li>
+          </ul>
+        </div>
+        <!--end div for Coating-Bitumen/Epoxy-->
+
+        <!--start div for Coating-Bitumen/Epoxy [modify]-->
+        <div class="form-group col-xs-12 col-sm-6 col-md-6 col-lg-4" *ngIf="complaintRefNoForUpdate">
+          <label for="stencil">Coating-Bitumen/Epoxy</label>
+          <ul class="list-group ul-style">
+            <li class="list-group-item li-style" *ngFor="let coating of complaintReferenceDetailsForModify.coating">
+              <label class="custom-control custom-checkbox">
+                <input type="checkbox" class="custom-control-input" formControlName="coating" [checked]="coating.Checked" (click)="onclickCoatingBitCheck(coating.Key)"
+                />
+                <span class="custom-control-indicator"></span>
+                <span class="custom-control-description">
+                  {{ coating.Value }}
+                </span>
+              </label>
+            </li>
+          </ul>
+        </div>
+        <!--end div for Coating-Bitumen/Epoxy [modify]-->
+
+        <!--start div for Inner(CML) Nature of Defect-->
+        <div class="form-group col-xs-12 col-sm-6 col-md-6 col-lg-4" *ngIf="complaintRefNoForUpdate==''">
+          <label for="items">Inner(CML) Nature of Defect</label>
+          <ul class="list-group ul-style">
+            <li class="list-group-item li-style" *ngFor="let innerCML of innerCMLVal.details">
+              <label class="custom-control custom-checkbox">
+                <input type="checkbox" class="custom-control-input" formControlName="innerCML" (click)="onclicInnerCMLCheck(innerCML.Key)"
+                />
+                <span class="custom-control-indicator"></span>
+                <span class="custom-control-description">
+                  {{ innerCML.Value }}
+                </span>
+              </label>
+            </li>
+          </ul>
+        </div>
+        <!--end div for Inner(CML) Nature of Defect-->
+
+        <!--start div for Inner(CML) Nature of Defect [modify]-->
+        <div class="form-group col-xs-12 col-sm-6 col-md-6 col-lg-4" *ngIf="complaintRefNoForUpdate">
+          <label for="stencil">Inner(CML) Nature of Defect</label>
+          <ul class="list-group ul-style">
+            <li class="list-group-item li-style" *ngFor="let innerCML of complaintReferenceDetailsForModify.innerCML">
+              <label class="custom-control custom-checkbox">
+                <input type="checkbox" class="custom-control-input" formControlName="innerCML" [checked]="innerCML.Checked" (click)="onclicInnerCMLCheck(innerCML.Key)"
+                />
+                <span class="custom-control-indicator"></span>
+                <span class="custom-control-description">
+                  {{ innerCML.Value }}
+                </span>
+              </label>
+            </li>
+          </ul>
+        </div>
+        <!--end div for Inner(CML) Nature of Defect [modify]-->
+
+        <!--start div of thickness(wall)-->
+        <div class="form-group col-xs-12 col-sm-6 col-md-6 col-lg-4">
+          <label for="thicknessWall">Thickness(wall)</label>
+          <input type="text" [maxlength]="thicknessWallLength" class="form-control" formControlName="thicknessWall">
+        </div>
+        <!--end of div Thickness(Wall)-->
+
+        <!--start div ovality-->
+        <div class="form-group col-xs-12 col-sm-6 col-md-6 col-lg-4">
+          <label for="ovality">Ovality</label>
+          <input type="text" [maxlength]="ovalityLength" class="form-control" formControlName="ovality">
+        </div>
+        <!--end of div ovality-->
+
+        <!--start div of straightness-->
+        <div class="form-group col-xs-12 col-sm-6 col-md-6 col-lg-4">
+          <label for="straigtness">Straightness</label>
+          <input type="text" [maxlength]="straigtnessLength" class="form-control" formControlName="straigtness">
+        </div>
+        <!--end of div Straightness-->
+
+        <br/>
+
+        <!--start div for heading pipe cutting-->
+        <div class="form-group col-xs-12 col-sm-12 col-md-12 col-lg-12">
+          <label for="pipeCutting">
+            <b>Pipe Cutting</b>
+          </label>
+        </div>
+        <!--end div for heading pipe cutting-->
+
+        <!--start div for tools used-->
+        <div class="form-group col-xs-12 col-sm-6 col-md-6 col-lg-4">
+          <label for="pipeCuttingToolsUsed">Tools used</label>
+          <input type="text" [maxlength]="pipeCuttingToolsUsedLength" class="form-control" formControlName="pipeCuttingToolsUsed">
+        </div>
+        <!--end of div for tools used-->
+
+        <!--start div for method applied-->
+        <div class="form-group col-xs-12 col-sm-6 col-md-6 col-lg-4">
+          <label for="pipeCuttingMethodApplied">Method Applied</label>
+          <input type="text"  [maxlength]="pipeCuttingMethodAppliedLength" class="form-control" formControlName="pipeCuttingMethodApplied">
+        </div>
+        <!--end of div for method applied-->
+
+        <br/>
+
+        <!-- start div for heading Rubber Gasket -->
+        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+          <label for="rubberGasket">
+            <b>Rubber Gasket</b>
+          </label>
+        </div>
+        <!--end of div for heading Rubber Gasket-->
+
+        <!--start div for rubberGasketMake-->
+        <div class="form-group col-xs-12 col-sm-6 col-md-6 col-lg-4">
+          <label for="rubberGasketMake">Make</label>
+          <input type="text"  [maxlength]="rubberGasketMakeLength" class="form-control" formControlName="rubberGasketMake">
+        </div>
+        <!--end of div rubberGasketMake-->
+
+        <!--start div of rubber gasket batch no-->
+        <div class="form-group col-xs-12 col-sm-6 col-md-6 col-lg-4">
+          <label for="rubberGasketBatchNo">Batch No</label>
+          <input type="text" [maxlength]="rubberGasketBatchNoLength" class="form-control" formControlName="rubberGasketBatchNo">
+          <!--start div for alert-->
+          <div class="alert alert-danger" *ngIf="preliInvestFormGroup.get('rubberGasketBatchNo').hasError('required') && preliInvestFormGroup.get('rubberGasketBatchNo').touched">
+            <i class="fa fa-exclamation-circle"></i>Batch No is required!
+          </div>
+          <!--end div for alert-->
+        </div>
+        <!--end of div rubber gasket batch no-->
+
+        <!--start div rubber gasket test certificate-->
+        <div class="form-group col-xs-12 col-sm-6 col-md-6 col-lg-4">
+          <label for="rubberGasketTestCertificate">Ref. No of Test Certificate/Inspection Certificate</label>
+          <input type="text" [maxlength]="rubberGasketTestCertificateLength" class="form-control" formControlName="rubberGasketTestCertificate">
+        </div>
+        <!--end of div rubber gasket test certificate-->
+
+        <!--start div bulb-->
+        <div class="form-group col-xs-12 col-sm-6 col-md-6 col-lg-4">
+          <label for="rubberGasketBulb">Bulb</label>
+          <input type="text" [maxlength]="rubberGasketBulbLength" class="form-control" formControlName="rubberGasketBulb">
+        </div>
+        <!--end of div bulb-->
+
+        <!--start div heal-->
+        <div class="form-group col-xs-12 col-sm-6 col-md-6 col-lg-4">
+          <label for="rubberGasketHeal">Heal</label>
+          <input type="text" [maxlength]="rubberGasketHealLength" class="form-control" formControlName="rubberGasketHeal">
+        </div>
+        <!--end of div heal-->
+
+        <br/>
+        <!--start div heading PE sleeve-->
+        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+          <label for="peSleeve">
+            <b>PE Sleeve</b>
+          </label>
+        </div>
+        <!--end of div heading pe sleeve-->
+
+        <!--start div pe Sleeve dimention subheading-->
+        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+          <label for="dimention">
+            <b>Dimension</b>
+          </label>
+        </div>
+        <!--end of div pe Sleeve dimention subheading-->
+
+        <!--start div for pe sleeve width-->
+        <div class="form-group col-xs-12 col-sm-6 col-md-6 col-lg-4">
+          <label for="peSleeveDimensionWidth">Width</label>
+          <input type="number" class="form-control" formControlName="peSleeveDimensionWidth">
+        </div>
+        <!--end of div for pe sleeve width-->
+
+        <!--start div pe sleeve thickness-->
+        <div class="form-group col-xs-12 col-sm-6 col-md-6 col-lg-4">
+          <label for="peSleeveDimensionThickness">Thickness</label>
+          <input type="number" class="form-control" formControlName="peSleeveDimensionThickness">
+        </div>
+        <!--end of div pe sleeve thickness-->
+
+        <!--start div pe sleeve strength-->
+        <div class="form-group col-xs-12 col-sm-6 col-md-6 col-lg-4">
+          <label for="peSleeveDimensionStrength">Strength</label>
+          <input type="number" class="form-control" formControlName="peSleeveDimensionStrength">
+        </div>
+        <!--end of div pe sleeve strength-->
+
+        <!-- start div for Pipe Jointing -->
+        <div class="form-group col-xs-12 col-sm-6 col-md-6 col-lg-4">
+          <label for="pipeJointing">Pipe Jointing</label>
+          <input type="text" class="form-control" [maxlength]="pipeJointingLength" formControlName="pipeJointing">
+        </div>
+        <!--end of div for Pipe Jointing -->
+
+        <!--start div for Lubrication Used-->
+        <div class="form-group col-xs-12 col-sm-6 col-md-6 col-lg-4" *ngIf="complaintRefNoForUpdate==''">
+          <label for="items">Lubrication Used</label>
+          <ul class="list-group ul-style">
+            <li class="list-group-item li-style" *ngFor="let lubrication of lubricationVal.details">
+              <label class="custom-control custom-checkbox">
+                <input type="checkbox" class="custom-control-input" formControlName="lubricationUsed" (click)="onclicLubricationCheck(lubrication.Key)"
+                />
+                <span class="custom-control-indicator"></span>
+                <span class="custom-control-description">
+                  {{ lubrication.Value }}
+                </span>
+              </label>
+            </li>
+          </ul>
+        </div>
+        <!--end div for Lubrication Used-->
+
+        <!--start div for Lubrication Used [modify]-->
+        <div class="form-group col-xs-12 col-sm-6 col-md-6 col-lg-4" *ngIf="complaintRefNoForUpdate">
+          <label for="stencil">Lubrication Used</label>
+          <ul class="list-group ul-style">
+            <li class="list-group-item li-style" *ngFor="let lubricationUsed of complaintReferenceDetailsForModify.lubricationUsed">
+              <label class="custom-control custom-checkbox">
+                <input type="checkbox" class="custom-control-input" formControlName="lubricationUsed" [checked]="lubricationUsed.Checked"
+                  (click)="onclicLubricationCheck(lubricationUsed.Key)" />
+                <span class="custom-control-indicator"></span>
+                <span class="custom-control-description">
+                  {{ lubricationUsed.Value }}
+                </span>
+              </label>
+            </li>
+          </ul>
+        </div>
+        <!--end div for Lubrication Used [modify]-->
+
+        <!--start div for Pipe Laying-->
+        <div class="form-group col-xs-12 col-sm-6 col-md-6 col-lg-4" *ngIf="complaintRefNoForUpdate==''">
+          <label for="items">Pipe Laying</label>
+          <ul class="list-group ul-style">
+            <li class="list-group-item li-style" *ngFor="let pipeLaying of pipeLayingVal.details">
+              <label class="custom-control custom-checkbox">
+                <input type="checkbox" class="custom-control-input" formControlName="pipeLaying" (click)="onclickPipeLayingCheck(pipeLaying.Key)"
+                />
+                <span class="custom-control-indicator"></span>
+                <span class="custom-control-description">
+                  {{ pipeLaying.Value }}
+                </span>
+              </label>
+            </li>
+          </ul>
+        </div>
+        <!--end div for Pipe Laying-->
+
+        <!--start div for Pipe Laying [modify]-->
+        <div class="form-group col-xs-12 col-sm-6 col-md-6 col-lg-4" *ngIf="complaintRefNoForUpdate">
+          <label for="stencil">Pipe Laying</label>
+          <ul class="list-group ul-style">
+            <li class="list-group-item li-style" *ngFor="let pipeLaying of complaintReferenceDetailsForModify.pipeLaying">
+              <label class="custom-control custom-checkbox">
+                <input type="checkbox" class="custom-control-input" formControlName="pipeLaying" [checked]="pipeLaying.Checked" (click)="onclickPipeLayingCheck(pipeLaying.Key)"
+                />
+                <span class="custom-control-indicator"></span>
+                <span class="custom-control-description">
+                  {{ pipeLaying.Value }}
+                </span>
+              </label>
+            </li>
+          </ul>
+        </div>
+        <!--end div for Pipe Laying [modify]-->
+
+        <br/>
+        <!-- start div of heading for Pipe Testing -->
+        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+          <label for="pipeTesting">
+            <b>Pipe Testing</b>
+          </label>
+        </div>
+        <!-- end div of heading for Pipe Testing -->
+
+        <!-- start div of heading for HydroTest Pressure -->
+        <div class="form-group col-xs-12 col-sm-6 col-md-6 col-lg-4">
+          <label for="pipeTestingHydrotestPressure">HydroTest Pressure</label>
+          <input type="number" class="form-control" formControlName="pipeTestingHydrotestPressure">
+        </div>
+        <!-- end of div for HydroTest Pressure -->
+
+        <!--start div for Fittings Jointing-->
+        <div class="form-group col-xs-12 col-sm-6 col-md-6 col-lg-4" *ngIf="complaintRefNoForUpdate==''">
+          <label for="items">Fittings Jointing</label>
+          <ul class="list-group ul-style">
+            <li class="list-group-item li-style" *ngFor="let fittingsJointing of fittingsJointingVal.details">
+              <label class="custom-control custom-checkbox">
+                <input type="checkbox" class="custom-control-input" formControlName="fittingsJointing" (click)="onclickFittingsJointingCheck(fittingsJointing.Key)"
+                />
+                <span class="custom-control-indicator"></span>
+                <span class="custom-control-description">
+                  {{ fittingsJointing.Value }}
+                </span>
+              </label>
+            </li>
+          </ul>
+        </div>
+        <!--end div for Fittings Jointing-->
+
+        <!--start div for Fittings Jointing [modify]-->
+        <div class="form-group col-xs-12 col-sm-6 col-md-6 col-lg-4" *ngIf="complaintRefNoForUpdate">
+          <label for="stencil">Fittings Jointing</label>
+          <ul class="list-group ul-style">
+            <li class="list-group-item li-style" *ngFor="let fittingsJointing of complaintReferenceDetailsForModify.fittingsJointing">
+              <label class="custom-control custom-checkbox">
+                <input type="checkbox" class="custom-control-input" formControlName="fittingsJointing" [checked]="fittingsJointing.Checked"
+                  (click)="onclickFittingsJointingCheck(fittingsJointing.Key)" />
+                <span class="custom-control-indicator"></span>
+                <span class="custom-control-description">
+                  {{ fittingsJointing.Value }}
+                </span>
+              </label>
+            </li>
+          </ul>
+        </div>
+        <!--end div for Fittings Jointing [modify]-->
+
+        <br/>
+        <!--start div for heading Ferul Connection-->
+        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+          <label for="ferulConnection">
+            <b>Ferul Connection</b>
+          </label>
+        </div>
+        <!--end div for heading Ferul Connection-->
+
+        <!--start div for ferul connection method-->
+        <div class="form-group col-xs-12 col-sm-6 col-md-6 col-lg-4">
+          <label for="ferulConnectionMethod">Method</label>
+          <input type="text" [maxlength]="ferulConnectionMethodLength" class="form-control" formControlName="ferulConnectionMethod">
+        </div>
+        <!--end of div for ferul connection method-->
+
+
+        <!--start div for Loading Related-->
+        <div class="form-group col-xs-12 col-sm-6 col-md-6 col-lg-4" *ngIf="complaintRefNoForUpdate==''">
+          <label for="items">Loading Related</label>
+          <ul class="list-group ul-style">
+            <li class="list-group-item li-style" *ngFor="let loadingRelated of loadingRelatedVal.details">
+              <label class="custom-control custom-checkbox">
+                <input type="checkbox" class="custom-control-input" formControlName="loadingRelated" (click)="onclickLoadingRelatedCheck(loadingRelated.Key)"
+                />
+                <span class="custom-control-indicator"></span>
+                <span class="custom-control-description">
+                  {{ loadingRelated.Value }}
+                </span>
+              </label>
+            </li>
+          </ul>
+        </div>
+        <!--end div for Loading Related-->
+
+        <!--start div for Loading Related [modify]-->
+        <div class="form-group col-xs-12 col-sm-6 col-md-6 col-lg-4" *ngIf="complaintRefNoForUpdate">
+          <label for="stencil">Loading Related</label>
+          <ul class="list-group ul-style">
+            <li class="list-group-item li-style" *ngFor="let loadingRelated of complaintReferenceDetailsForModify.loadingRelated">
+              <label class="custom-control custom-checkbox">
+                <input type="checkbox" class="custom-control-input" formControlName="loadingRelated" [checked]="loadingRelated.Checked" (click)="onclickLoadingRelatedCheck(loadingRelated.Key)"
+                />
+                <span class="custom-control-indicator"></span>
+                <span class="custom-control-description">
+                  {{ loadingRelated.Value }}
+                </span>
+              </label>
+            </li>
+          </ul>
+        </div>
+        <!--end div for Loading Related [modify]-->
+
+        <br/>
+        <!--start div for heading Unloading Related-->
+        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+          <label for="unloadingRelated">
+            <b>Unloading Related</b>
+          </label>
+        </div>
+        <!--end div for heading Unloading Related-->
+
+        <!--start div for unloading related toolsUsed-->
+        <div class="form-group col-xs-12 col-sm-6 col-md-6 col-lg-4">
+          <label for="unloadingRelatedToolsUsed">Tools Used</label>
+          <input type="text" [maxlength]="unloadingRelatedToolsUsedLength" class="form-control" formControlName="unloadingRelatedToolsUsed">
+        </div>
+        <!--end div for unloading related toolsUsed-->
+
+        <!--start div for unloading related method applied-->
+        <div class="form-group col-xs-12 col-sm-6 col-md-6 col-lg-4">
+          <label for="unloadingRelatedMethodApplied">Method Applied</label>
+          <input type="text" [maxlength]="unloadingRelatedMethodAppliedLength" class="form-control" formControlName="unloadingRelatedMethodApplied">
+        </div>
+        <!--end div for unloading related method applied-->
+
+        <!--start div for Action Taken By ASM-->
+        <div class="form-group col-xs-12 col-sm-6 col-md-6 col-lg-4">
+          <label for="actionTakenByASM">Action Taken By Customer Account Manager</label>
+          <textarea class="form-control hide-horizontal-scroll" [maxlength]="actionTakenByASMLength" rows="5" formControlName="actionTakenByASM"></textarea>
+        </div>
+        <!--end of div for Action Taken By ASM-->
+
+        <!--start div for What is the present status-->
+        <div class="form-group col-xs-12 col-sm-6 col-md-6 col-lg-4">
+          <label for="presentStatus">What is the present status</label>
+          <textarea class="form-control hide-horizontal-scroll" [maxlength]="presentStatusLength" rows="5" formControlName="presentStatus"></textarea>
+        </div>
+        <!--end of div for What is the present status-->
+
+        <!--start div for What is the expectation of the customer-->
+        <div class="form-group col-xs-12 col-sm-6 col-md-6 col-lg-4">
+          <label for="expectationOfCustomer">What is the expectation of the customer</label>
+          <textarea class="form-control hide-horizontal-scroll"  [maxlength]="expectationOfCustomerLength" rows="5" formControlName="expectationOfCustomer"></textarea>
+        </div>
+        <!--end of div for What is the expectation of the customer-->
+
+        <!--start div for Outstanding with the customer if any-->
+        <div class="form-group col-xs-12 col-sm-6 col-md-6 col-lg-4">
+          <label for="outstandingWithCustomer">Outstanding with the customer if any</label>
+          <textarea class="form-control hide-horizontal-scroll" [maxlength]="outstandingWithCustomerLength" rows="5" formControlName="outstandingWithCustomer"></textarea>
+        </div>
+        <!--end of div for Outstanding with the customer if any-->
+
+        <!--start Div for Resolution / Rectification Action(If any)-->
+        <div class="form-group col-xs-12 col-sm-6 col-md-6 col-lg-4">
+          <label for="resolutionRectificationAction">Resolution / Rectification Action(If any)</label>
+          <textarea class="form-control hide-horizontal-scroll" [maxlength]="resolutionRectificationActionLength" rows="5" formControlName="resolutionRectificationAction"></textarea>
+        </div>
+        <!--end of div for Resolution / Rectification Action(If any)-->
+
+        <!--start div for show files-->
+        <!--files-->
+        <div class="form-group col-xs-12 col-sm-6 col-md-6 col-lg-4" *ngIf="complaintRefNoForUpdate">
+          <label>Uploaded file(s)</label>
+          <div *ngFor="let file of complaintReferenceDetailsForModify.files">
+            <a href="{{file.fileUrl}}" target="_blank">{{file.fileName}}</a>
+            <br/>
+          </div>
+        </div>
+        <!--end div for show files-->
+
+        <!--start fle upload div-->
+        <div class="form-group col-xs-12 col-sm-6 col-md-6 col-lg-6">
+          <label for="imageFile">File(s) Upload</label>
+          <label class="red-coloured-label">(max size 100 mb)</label>
+          <input type="file" (change)="fileChange($event)" multiple/>
+        </div>
+        <!--end of file upload div-->
+
+
+
+        <!--start button div-->
+        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+          <div class="col-xs-12 col-sm-4 col-md-4 col-lg-2 button-holder">
+            <button type="submit" class="btn btn-primary primary-button-style" [disabled]="!preliInvestFormGroup.valid">Submit
+            </button>
+          </div>
+          <div class="col-xs-12 col-sm-4 col-md-4 col-lg-2 button-holder">
+            <button type="submit" class="btn default-button-style" (click)="onCancel()">
+              Cancel
+            </button>
+          </div>
+        </div>
+        <!--end of button div-->
+
+
+      </div>
+      <!--end of div row manage profile form-->
+    </form>
+    <!--end form -->
+
+    <!-- error msg div -->
+    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" *ngIf="resMsgType == errorConst">
+      <div class="alert alert-danger">
+        {{resErrorMsg}}&nbsp;
+        <button aria-label="Close" class="close" type="button" (click)="deleteResErrorMsgOnClick(resMsgType)">
+          <span aria-hidden="true">×</span>
+        </button>
+      </div>
+      <br/>
+      <br/>
+    </div>
+    <!-- end of error msg div -->
+
+  </div>
+  <!-- end of main div -->
+</div>
+<!--end of page-container-->
+
+<!--spinner-->
+<ispl-busy-spinner *ngIf="busySpinner.busy">
+
+</ispl-busy-spinner>
