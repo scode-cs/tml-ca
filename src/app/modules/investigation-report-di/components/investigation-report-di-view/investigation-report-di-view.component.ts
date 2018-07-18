@@ -175,7 +175,7 @@ export class InvestigationReportDIViewComponent implements OnInit {
     console.log("preli investigation report for view details : ",this.viewEditParam,this.modifyPreliInvReport);
         
      // Not authenticated
-    this.router.navigate([ROUTE_PATHS.RouterViewDetailsInvestigationReportDi,this.viewEditParam,this.modifyPreliInvReport]);
+    this.router.navigate([ROUTE_PATHS.RouteViewDetailsInvestigationReportDi,this.viewEditParam,this.modifyPreliInvReport]);
 
   }//end of method for view preli
 

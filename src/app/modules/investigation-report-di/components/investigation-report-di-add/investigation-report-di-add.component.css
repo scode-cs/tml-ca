@@ -235,4 +235,18 @@ input:focus {
 }
 /* end of hide horizontal scroll */
 
+/*invoice search style*/
+.invoice-search-button {
+  background-color: #0275d8;
+  border-color: #0275d8;
+  height: 38px;
+  cursor: pointer;
+}
+
+.invoice-no-alert {
+padding-top: 52px!important;
+}
+/* end of invoice search style*/
+
+
 

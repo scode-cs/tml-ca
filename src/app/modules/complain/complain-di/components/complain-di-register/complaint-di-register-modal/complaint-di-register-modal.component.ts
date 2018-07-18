@@ -51,6 +51,7 @@ export class NgbdComplaintDIRegisterModalComponent implements OnInit {
   }//end of constructor
 
   ngOnInit(): void {
+    console.log(" invoiceNo=======",this.invoiceNo);
     if (this.invoiceNo != '') {
       this.complaintDIInvoiceDetails = [];
       this.getItemsVal(this.invoiceNo);

@@ -96,6 +96,10 @@ const ROUTE_MODIFY_INVESTIGATION_REPORT_DI_FULL: string = ROUTE_HOME_FULL + "/" 
 const ROUTE_VIEW_DETAILS_INVESTIGATION_REPORT_DI: string =  ROUTE_INVESTIGATION_REPORT_DI_VIEW + "/" + ':viewEditParam' + '/' + ':complaintReferenceNo';
 const ROUTE_VIEW_DETAILS_INVESTIGATION_REPORT_DI_FULL: string = ROUTE_HOME_FULL + "/" + ROUTE_INVESTIGATION_REPORT_DI_VIEW;
 
+//complaint reference no search for di
+const ROUTE_COMPLAINT_REFERENCE_NO_SEARCH: string ="complaintReferenceNoSearch";
+const ROUTE_COMPLAINT_REFERENCE_NO_SEARCH_FULL: string = ROUTE_HOME_FULL + "/"+ ROUTE_COMPLAINT_REFERENCE_NO_SEARCH;
+
 
 
 //new add for allocate complaint add
@@ -182,6 +186,7 @@ const ROUTE_MIS_REPORTS_VIEW_FULL: string =  ROUTE_HOME_FULL + "/" + ROUTE_MIS_R
 const ROUTE_MIS_REPORTS_VIEW_DETAILS: string = ROUTE_MIS_REPORTS + "/" + ':plantType' + "/" + ':complaintReferenceNo';
 const ROUTE_MIS_REPORT_VIEW_DETAILS_FULL: string = ROUTE_HOME_FULL + "/" + ROUTE_MIS_REPORTS;
 
+
 // Full route path (/login, /home/dashboard etc.)
 export const ROUTE_PATHS = {
     RouteLogin: ROUTE_LOGIN_FULL,
@@ -210,7 +215,8 @@ export const ROUTE_PATHS = {
     //RouteModifyPreliminaryInvestigationDi: ROUTE_MODIFY_PRELIMINRY_INVESTIGATION_DI_FULL,//preli modify
     RouteModifyInvestigationReportDi: ROUTE_MODIFY_INVESTIGATION_REPORT_DI_FULL,//preli modify
     //RouterViewDetailsPreliminaryInvestigationDi: ROUTE_VIEW_DETAILS_PRELIMINRY_INVESTIGATION_DI_FULL,//preli view details for single view
-    RouterViewDetailsInvestigationReportDi: ROUTE_VIEW_DETAILS_INVESTIGATION_REPORT_DI_FULL,//preli view details for single view
+    RouteViewDetailsInvestigationReportDi: ROUTE_VIEW_DETAILS_INVESTIGATION_REPORT_DI_FULL,//preli view details for single view
+    RouteComplaintReferenceNoSearch: ROUTE_COMPLAINT_DI_CUSTOMER_SEARCH_FULL,//complaint reference no search
     RouteComplainPIView: ROUTE_COMP_PI_VIEW_FULL,//for complaint pi view
     RouteModifyPIComplaint: ROUTE_MODIFY_COMPLAINT_PI_FULL,//for complain pi modify
     RouteAllocateComplaint: ROUTE_ALLOCATE_COMPLAINT_FULL,//allocate complaint full
@@ -266,6 +272,7 @@ export const ROUTER_PATHS = {
     ModifyInvestigationReportDiRouter: ROUTE_MODIFY_INVESTIGATION_REPORT_DI,//preli modify 
     //ViewDetailsPreliminaryInvestigationDiRouter:ROUTE_VIEW_DETAILS_PRELIMINRY_INVESTIGATION_DI,//single view of preli   
     ViewDetailsInvestigationReportDiRouter:ROUTE_VIEW_DETAILS_INVESTIGATION_REPORT_DI,//single view of preli    
+    ComplaintReferenceNoSearch: ROUTE_COMPLAINT_REFERENCE_NO_SEARCH,//for complaint reference no search
     PIViewComplaintWithParameterRouter: ROUTE_COMP_PI_VIEW_WITH_PARAMETER,//PI view comp with parameter
     ComplainPIViewRouter: ROUTE_COMP_PI_VIEW,//for complaint pi view
     modifyPIComplaintRouter: ROUTE_MODIFY_COMPLAINT_PI_REFERENCE_NO,//modify pi complain

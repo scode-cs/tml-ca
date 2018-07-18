@@ -18,19 +18,35 @@
       <div class="row manage-profile-form">
 
         <!-- start div for Complaint Reference No -->
-        <div class="form-group col-xs-12 col-sm-6 col-md-6 col-lg-4" *ngIf="complaintRefNoForUpdate==''">
+        <!-- <div class="form-group col-xs-12 col-sm-6 col-md-6 col-lg-4" *ngIf="complaintRefNoForUpdate==''">
           <label for="complaintRefNo">Complaint Reference No</label>
           <select class="custom-select col-xs-12 col-sm-6 col-md-6 col-lg-4" formControlName="complaintRefNo" (change)="onChangeComplaintRefNo($event.target.value)"
             required>
             <option *ngFor="let compRefNo of complaintRefNoVal.details" value="{{compRefNo.Key}}">{{compRefNo.Value}}</option>
           </select>
           <!--start div for complaintRefNo alert-->
-          <div class="alert alert-danger" *ngIf="preliInvestFormGroup.get('complaintRefNo').hasError('required') && preliInvestFormGroup.get('complaintRefNo').touched">
+          <!-- <div class="alert alert-danger" *ngIf="preliInvestFormGroup.get('complaintRefNo').hasError('required') && preliInvestFormGroup.get('complaintRefNo').touched">
             <i class="fa fa-exclamation-circle"></i> Complaint Reference No is required!
-          </div>
+          </div> -->
           <!--end div for complaintRefNo alert-->
-        </div>
+        <!-- </div>  -->
         <!-- end div for Complaint Reference No -->
+
+        <!-- start div for Official Document No-->
+        <div class="form-group col-xs-12 col-sm-6 col-md-6 col-lg-4">
+          <label for="invoiceNo">Complaint Reference No</label>
+          <div class="input-group input-group-sm search-div" style="float: left;">
+            <input type="text" class="form-control" [maxlength]="invoiveNoLength" formControlName="complaintRefNo" #complaintRefNo placeholder="Enter Your Complaint Reference No" style="font-size:16px"
+            />
+            <span class="input-group-btn">
+              <button class="btn btn-primary invoice-search-button" type="button" (click)="onComplaintRefNoOpenModal(complaintRefNo.value);complaintRefNo.value=''">
+                <i class="fa fa-search" aria-hidden="true"></i>
+              </button>
+            </span>
+          </div>
+        </div>
+        <!--end div for Complaint Reference No-->
+
 
         <!-- start div for Complaint Reference No [modify] -->
         <div class="form-group col-xs-12 col-sm-6 col-md-6 col-lg-4" *ngIf="complaintRefNoForUpdate">

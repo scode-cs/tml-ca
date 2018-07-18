@@ -849,6 +849,7 @@ export class ComplaintDIRegisterComponent implements OnInit {
 
   //onOpenModal for opening modal from modalService
   public onInvoiceNoOpenModal(invoiceNo: string) {
+    console.log("invoiceNo======== ",invoiceNo);
     const modalRef = this.modalService.open(NgbdComplaintDIRegisterModalComponent);
     modalRef.componentInstance.modalTitle = this.title;
     modalRef.componentInstance.invoiceNo = invoiceNo;

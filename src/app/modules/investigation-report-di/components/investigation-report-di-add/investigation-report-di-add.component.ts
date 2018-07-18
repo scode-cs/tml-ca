@@ -14,6 +14,7 @@ import { NgbdModalComponent } from '../../../widget/modal/components/modal-compo
 import { AppUrlsConst, WebServiceConst } from '../../../app-config';
 import { DatePipe } from '@angular/common';
 import { SessionErrorService } from "../../../shared/services/session-error.service";
+import { NgbdComplaintReferenceNoModalComponent } from "app/modules/investigation-report-di/components/investigation-report-di-add/complaint-reference-no-modal/complaint-reference-no-modal.component";
 
 @Component({
   selector: 'ispl-investigation-report-di-add-form',
@@ -253,9 +254,9 @@ export class InvestigationReportDiComponent implements OnInit {
   private buildForm(): void {
     this.preliInvestFormGroup = this.formBuilder.group({
       'complaintRefNo': [''
-        , [
-          Validators.required
-        ]
+        // , [
+        //   Validators.required
+        // ]
       ],
       'complaintRefNoForModify': [''
       ],
@@ -1142,6 +1143,13 @@ export class InvestigationReportDiComponent implements OnInit {
         this.sessionErrorService.routeToLogin(err._body);
       });
   }//end of method getPreliViewReportDetailsByCompRefNo
+
+  public onComplaintRefNoOpenModal(complaintRefNo: string){
+    console.log("complaintRefNo====",complaintRefNo);
+    const modalRef = this.modalService.open(NgbdComplaintReferenceNoModalComponent);
+    modalRef.componentInstance.modalTitle = this.title;
+    modalRef.componentInstance.complaintReferenceNo = complaintRefNo;
+  }
 
 
 }//end of class
