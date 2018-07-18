@@ -1,0 +1,23 @@
+<div class="modal-header">
+  <h4 class="modal-title">Complaint Reference Search</h4>
+  <button type="button" class="close" aria-label="Close" (click)="activeModal.dismiss('Cross click')">
+    <span aria-hidden="true">&times;</span>
+  </button>
+</div>
+<div class="modal-body">
+  <!-- start div for searching through blank Complaint Reference No-->
+  <div class="form-group col-xs-12 col-sm-12 col-md-12 col-lg-12" *ngIf="complaintReferenceNo===''">
+    Do you want to search Complaint Reference No?
+  </div>
+  <!-- end div for searching through blank Complaint Reference No -->
+
+<div class="modal-footer">
+  <!-- <button type="button" class="btn btn-primary" (click)="chooseItem()" *ngIf="msgType!='Error' && customerCodeError==false" [disabled]="checkedItemArr.length==0">Choose</button>
+  <button type="button" class="btn btn-secondary" (click)="activeModal.close('Close click')" *ngIf="invoiceNo!=''">Cancel</button> -->
+  <button type="button" class="btn btn-primary" (click)=" onRedirectComplaintReferenceNoSearch()" *ngIf="complaintReferenceNo==''">Yes</button>
+  <button type="button" class="btn btn-secondary" (click)="activeModal.close('Close click')" *ngIf="complaintReferenceNo==''">No</button>
+</div>
+<!-- spinner -->
+<ispl-busy-spinner *ngIf="busySpinner.busy">
+</ispl-busy-spinner>
+<!-- end of spinner-->

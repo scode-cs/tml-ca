@@ -51,6 +51,7 @@ import { ComplaintDIViewDetailsComponent } from '../complain/complain-di/compone
 import { ReportsDIViewComponent } from "../report/report-di/components/report-di-view/report-di-view.component";
 import { ReportDIViewDetailsComponent } from "../report/report-di/components/report-di-view-details/report-di-view-details.component";
 import { RCADIAddEditComponent } from "../rca/rca-di/components/rca-di-add-edit/rca-di-add-edit.component";
+import { ComplaintReferenceNoSearchComponent } from "../investigation-report-di/components/investigation-report-di-add/complaint-reference-no-search/complaint-reference-no-search.component";
 
 export const HOME_ROUTES: Routes = [
   {
@@ -196,6 +197,10 @@ export const HOME_ROUTES: Routes = [
       {//preli modify
         path: ROUTER_PATHS.ModifyInvestigationReportDiRouter,//modify user
         component: InvestigationReportDiComponent
+      },
+      {
+        path: ROUTER_PATHS.ComplaintReferenceNoSearchRouter,//complaint ref no search of investigation report
+        component: ComplaintReferenceNoSearchComponent
       },
       {//add allocate complaint route
         path: ROUTER_PATHS.AddAllocateComplaint,//allocate complaint route
