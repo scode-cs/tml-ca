@@ -44,6 +44,7 @@ export class MenuWsMapModel{
     SSM0000022: '#'+ROUTE_PATHS.RouteAddRole,
     SSM0000024: '#'+ROUTE_PATHS.RouteViewRole,
     SSM0000030: '#'+ROUTE_PATHS.RouteMisReportView+"/di",//mis report di grid view
+    rcadiadd: '#'+ROUTE_PATHS.RouteAddRCADI,//route add rca di
    };
 
    get userMenu(): any {
