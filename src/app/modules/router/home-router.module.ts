@@ -50,6 +50,7 @@ import { InvestigationReportDiViewDetailsComponent } from "../investigation-repo
 import { ComplaintDIViewDetailsComponent } from '../complain/complain-di/components/complain-di-view-details/complaint-di-view-details.component';
 import { ReportsDIViewComponent } from "../report/report-di/components/report-di-view/report-di-view.component";
 import { ReportDIViewDetailsComponent } from "../report/report-di/components/report-di-view-details/report-di-view-details.component";
+import { RCADIAddEditComponent } from "../rca/rca-di/components/rca-di-add-edit/rca-di-add-edit.component";
 
 export const HOME_ROUTES: Routes = [
   {
@@ -255,7 +256,15 @@ export const HOME_ROUTES: Routes = [
       {
         path: ROUTER_PATHS.ModifyCloseComplaintDI,
         component: CloseComplaintDIAddComponent
-      }
+      },
+      {
+        path: ROUTER_PATHS.AddRCADIRouter,//add rca di
+        component: RCADIAddEditComponent
+      },
+      {
+        path: ROUTER_PATHS.ModifyRCADIRouter,//modify rca di
+        component: RCADIAddEditComponent
+      },
 
 
 
