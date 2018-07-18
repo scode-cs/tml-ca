@@ -9,6 +9,8 @@ import { InvestigationReportDIViewDataService } from "app/modules/investigation-
 import { BusySpinnerModule } from "app/modules/widget/busy-spinner/busy-spinner.module";
 import { InvestigationReportDIViewComponent } from "app/modules/investigation-report-di/components/investigation-report-di-view/investigation-report-di-view.component";
 import { SharedModule } from "app/modules/shared/shared.module";
+import { NgbdComplaintReferenceNoModalComponent } from "app/modules/investigation-report-di/components/investigation-report-di-add/complaint-reference-no-modal/complaint-reference-no-modal.component";
+import { ComplaintReferenceNoSearchComponent } from "app/modules/investigation-report-di/components/investigation-report-di-add/complaint-reference-no-search/complaint-reference-no-search.component";
 
 @NgModule({
   imports:      [
@@ -21,7 +23,9 @@ import { SharedModule } from "app/modules/shared/shared.module";
   declarations: [
     InvestigationReportDiComponent,//preli add
     InvestigationReportDIViewComponent,//preli view
-    InvestigationReportDiViewDetailsComponent//preli view details
+    InvestigationReportDiViewDetailsComponent,//preli view details
+    NgbdComplaintReferenceNoModalComponent,//comp ref no modal
+    ComplaintReferenceNoSearchComponent//comp no search
   ],
   exports: [
     InvestigationReportDiComponent,//preli add
@@ -31,6 +35,9 @@ import { SharedModule } from "app/modules/shared/shared.module";
   providers: [
     InvestigationReportDIDataService,//preli add
     InvestigationReportDIViewDataService,//preli view
+  ],
+  entryComponents: [
+    NgbdComplaintReferenceNoModalComponent//comp ref no modal
   ]
   
 })
