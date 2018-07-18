@@ -47,7 +47,7 @@ export class RCADIService {
     
         //method to capasubmit with file upload
         rcaDIAddEditSubmitWithFileUpload(rcaFormData: any) {        
-            this.actionUrl = AppUrlsConst.DI_PI_CLOSE_COMPLAINT_UPLOAD_URL;        
+            this.actionUrl = AppUrlsConst.RCA_ADD_EDIT_URL;        
             return this.http.patch(this.actionUrl, rcaFormData)
             .map(this.successCallback)
             .catch(this.errorCallBack);
