@@ -93,9 +93,9 @@ import { RCADIService } from "../../services/rca-di-add-edit.service";
   private getSystemDate(){
     //formatting the current date
     let date = new Date();
-    this.currentDate = this.datePipe.transform(date, 'dd-MMM-yyyy');
+    this.currentDate = this.datePipe.transform(date, 'yyyy-MM-dd');
     this.rcaDIAddEditFormGroup.controls["rcaAddEditDate"].setValue(this.currentDate);
-    this.rcaAddEditDate = this.datePipe.transform(this.currentDate, 'dd-MMM-yyyy');
+    this.rcaAddEditDate = this.datePipe.transform(this.currentDate, 'yyyy-MM-dd');
     console.log("  rca::: this.rcaAddEditDate   ", this.rcaAddEditDate);    
   }//end of method
 
@@ -141,7 +141,7 @@ import { RCADIService } from "../../services/rca-di-add-edit.service";
     } else {
       let jsonArr: any[] = [];//json arr to convert obj toString
       jsonArr.push(JSON.stringify(rcaDIAddEditSubmitDet));
-      this.formData.append("rcaDIAddEditDet", jsonArr.toString());
+      this.formData.append("rcaDet", jsonArr.toString());
       //method to add or update preli
       if (this.fileData != undefined) {
         for (let i: number = 0; i < this.fileList.length; i++) {
