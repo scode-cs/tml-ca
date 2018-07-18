@@ -19,14 +19,14 @@
         <!-- start div for active step -->
         <div class="step-active step-col" style="display:inline-block;width: 16%;" *ngIf="i == processFlowPageIndex">
           <p style="padding-top: 8px;text-align:center;color: white;font-size: 20px;" *ngIf="i == processFlowPageIndex">
-            {{processData}}
+            <a style="color:white" [href]="processData.processUrl">{{processData.processName}}</a>
           </p>
         </div>
         <!-- end of div for active step -->
         <!-- start div for inactive step -->
         <div class="step-inactive step-col" style="display:inline-block;width: 16%;" *ngIf="i > processFlowPageIndex">
           <p style="padding-top: 8px;text-align:center;color: #5a5d5f;font-size: 20px;" *ngIf="i > processFlowPageIndex">
-            {{processData}}
+            <a [href]="processData.processUrl">{{processData.processName}}</a>
           </p>
         </div>
       </ng-container>
