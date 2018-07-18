@@ -2,10 +2,10 @@ export class DIPolygonModel {
 
     private _requiredSiteVisit: string[] = [ 
      'Registration',
-     'Site Visit Allocation',
-     'Preli Investigation',
-     'Complaint Resolution',
-     'CAPA' ,
+     'Investigation Report',
+     'RCA',
+     'CA',
+     'PA' ,
      'Close'
     ]
 
