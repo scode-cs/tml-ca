@@ -28,6 +28,7 @@ import { RoleModule } from "../role/role.module";//role module
 import { HomeDataService } from "./services/home.services"; 
 import { ReportDIModule } from "../report/report-di/report-di.module";
 import { InvestigationReportDiModule } from "app/modules/investigation-report-di/investigavtion-report-di.module";
+import { RCADIModule } from "app/modules/rca/rca-di/rca-di.module";
 
 @NgModule({
   imports: [
@@ -52,7 +53,8 @@ import { InvestigationReportDiModule } from "app/modules/investigation-report-di
     CloseComplaintDIModule,//for close complaint di
     CloseComplaintPIModule, //for close complaint pi
     RoleModule,// roleModule
-    ReportDIModule//report di module
+    ReportDIModule,//report di module
+    RCADIModule//rca di module
   ],
   declarations: [
     HomeComponent

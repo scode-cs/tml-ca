@@ -175,6 +175,12 @@ const ROUTE_ADD_ROLE_FULL: string = ROUTE_HOME_FULL + "/" + ROUTE_ADD_ROLE;//add
 const ROUTE_VIEW_ROLE: string = "viewrole";
 const ROUTE_VIEW_ROLE_FULL: string = ROUTE_HOME_FULL + "/" + ROUTE_VIEW_ROLE;
 
+//rca
+const ROUTE_ADD_RCA_DI: string = "addrcadi";
+const ROUTE_MODIFY_RCA_DI: string = ROUTE_ADD_RCA_DI + '/' + ':complaintReferenceNo';
+const ROUTE_MODIFY_RCA_DI_FULL: string = ROUTE_HOME_FULL + "/" + ROUTE_ADD_RCA_DI;//modify
+const ROUTE_ADD_RCA_DI_FULL: string = ROUTE_HOME_FULL + "/" + ROUTE_ADD_RCA_DI;//add
+
 //for mis report
 const ROUTE_MIS_REPORTS: string = "misreport";
 const ROUTE_MIS_REPORTS_VIEW: string = ROUTE_MIS_REPORTS + "/" + ':plantType';
@@ -237,6 +243,8 @@ export const ROUTE_PATHS = {
     RouteViewRole: ROUTE_VIEW_ROLE_FULL,
     RouteMisReportView: ROUTE_MIS_REPORTS_VIEW_FULL,//for mis report grid view full
     RouteMisReportViewDetails: ROUTE_MIS_REPORT_VIEW_DETAILS_FULL,//for mis report details full
+    RouteAddRCADI: ROUTE_ADD_RCA_DI_FULL,//add rca di
+    RouteModifyRCADI: ROUTE_MODIFY_RCA_DI_FULL,//modify rca di
 }
 
 // Router names (like login, home, dashboard etc.)
@@ -294,4 +302,6 @@ export const ROUTER_PATHS = {
     ViewRoleRouter: ROUTE_VIEW_ROLE,
     MisReportViewRouter: ROUTE_MIS_REPORTS_VIEW,//for grid view of mis report
     MisReportViewDetailsRouter: ROUTE_MIS_REPORTS_VIEW_DETAILS,//for mis reports view details
+    AddRCADIRouter: ROUTE_ADD_RCA_DI,//add rca di
+    ModifyRCADIRouter: ROUTE_MODIFY_RCA_DI,//modify rca di
 }
