@@ -30,6 +30,7 @@ import { ReportDIModule } from "../report/report-di/report-di.module";
 import { InvestigationReportDiModule } from "app/modules/investigation-report-di/investigavtion-report-di.module";
 import { RCADIModule } from "app/modules/rca/rca-di/rca-di.module";
 import { CADIModule } from "app/modules/ca/ca-di/ca-di.module";
+import { PADIModule } from "app/modules/pa/pa-di/pa-di.module";
 
 @NgModule({
   imports: [
@@ -56,7 +57,8 @@ import { CADIModule } from "app/modules/ca/ca-di/ca-di.module";
     RoleModule,// roleModule
     ReportDIModule,//report di module
     RCADIModule,//rca di module
-    CADIModule
+    CADIModule,//for ca module
+    PADIModule//for pa module
   ],
   declarations: [
     HomeComponent
