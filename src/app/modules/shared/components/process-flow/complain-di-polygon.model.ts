@@ -1,12 +1,13 @@
+import { ROUTE_PATHS } from '../../../router/router-paths';
 export class DIPolygonModel {
 
-    private _requiredSiteVisit: string[] = [ 
-     'Registration',
-     'Investigation Report',
-     'RCA',
-     'CA',
-     'PA' ,
-     'Close'
+    private _requiredSiteVisit: any[] = [ 
+     {processName:'Registration', processUrl:'#'+ROUTE_PATHS.RouteComplainDIRegister},
+     {processName:'Investigation Report',processUrl:'#'+ROUTE_PATHS.RouteInvestigationReportDiAdd},
+     {processName:'RCA',processUrl:""},
+     {processName:'CA',processUrl:""},
+     {processName:'PA' ,processUrl:""},
+     {processName:'Close',processUrl:'#'+ROUTE_PATHS.RouteCloseComplaintDI}
     ]
 
     private _notRequiredSiteVisit: string[] = [ 
