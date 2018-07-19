@@ -146,7 +146,9 @@ export const AppUrlsConst: any = {
     //get mis report url
     MIS_REPORT_DETAILS_URL: URL_PATH + 'api/excel/mis',
     //rca add/edit
-    RCA_ADD_EDIT_URL: URL_PATH + 'api/util/rca/rca_det'
+    RCA_ADD_EDIT_URL: URL_PATH + 'api/util/rca/rca_det',
+    //rca reject url
+    RCA_REJECT_URL: URL_PATH + 'api/util/rca/rca_cncl'
 
 }
 
