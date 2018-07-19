@@ -42,6 +42,7 @@ export class ComplaintDIRegisterComponent implements OnInit {
   public items: any[] = [];
   public complaintTypeId: string;
   public complaintTypeName: string;
+  public natureCmpName: string;
   //Array for selected Item
   public checkedItemIdArr: any[] = [];
   public selectedItems: any = {};
@@ -944,6 +945,18 @@ export class ComplaintDIRegisterComponent implements OnInit {
       this.complaintDetailsEnable = false;
     }
   }//end of the method onComplaintTypeSelect
+
+  // start method of onNatureTypeSelect
+  public onNatureTypeSelect(args) {
+    this.complaintDetailsEnable = false;
+    this.natureCmpName = args.target.options[args.target.selectedIndex].text;
+    console.log("natureCmpIdParam", this.natureCmpName);
+    if (this.natureCmpName == "Others") {
+      this.complaintDetailsEnable = true;
+      this.complaintRegisterFormGroup.controls['complaintDetails'].markAsTouched();
+    }
+  }
+  // end method of onNatureTypeSelect
 
   //method for Complaint Logged On and Compliant Reference Date validation 
   public compareTwoDates(controlName) {
