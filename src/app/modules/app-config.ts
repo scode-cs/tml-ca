@@ -1,15 +1,8 @@
 // Ctrl S
 const URL_IP: string =
-    // 'http://14.141.110.139';
     'http://45.114.142.125';
-// 'http://192.168.1.2';
-// 
 // // for production
 const URL_PORT: string = '90';
-// const URL_PORT: string = '81';
-// const URL_PATH: string = URL_IP + ':' + URL_PORT + '/';
-// for testing
-//const URL_PORT: string = '91';
 const URL_PATH: string = URL_IP + ':' + URL_PORT + '/';
 
 export const AppUrlsConst: any = {
