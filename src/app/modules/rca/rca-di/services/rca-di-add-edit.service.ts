@@ -46,8 +46,13 @@ export class RCADIService {
         
     
         //method to capasubmit with file upload
-        rcaDIAddEditSubmitWithFileUpload(rcaFormData: any) {        
-            this.actionUrl = AppUrlsConst.RCA_ADD_EDIT_URL;        
+        onRCADIAddEditRejectSubmit(rcaFormData: any,rcaAcceptOrReject: string) {   
+            if(rcaAcceptOrReject === "Accept") {
+                this.actionUrl = AppUrlsConst.RCA_ADD_EDIT_URL;   
+
+            }else if(rcaAcceptOrReject === "Reject") {
+                this.actionUrl = AppUrlsConst.RCA_REJECT_URL;
+            }  
             return this.http.patch(this.actionUrl, rcaFormData)
             .map(this.successCallback)
             .catch(this.errorCallBack);
