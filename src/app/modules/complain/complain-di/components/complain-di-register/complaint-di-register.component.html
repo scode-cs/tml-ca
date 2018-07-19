@@ -355,7 +355,7 @@
         <!--start div for Nature of Complaint-->
         <fieldset class="form-group col-xs-12 col-sm-6 col-md-6 col-lg-4" [disabled]="complaintReferenceNo!=''">
           <label for="natureOfcomplaint col-xs-12 col-sm-6 col-md-6 col-lg-4">Nature of Complaint</label>
-          <select class="custom-select col-xs-12 col-sm-6 col-md-6 col-lg-4" formControlName="natureOfComplaintId" required>
+          <select class="custom-select col-xs-12 col-sm-6 col-md-6 col-lg-4" formControlName="natureOfComplaintId" (change)="onNatureTypeSelect($event)" required>
             <option *ngFor="let natureCmp of natureOfComDropDownList" value="{{ natureCmp.Key }}">{{ natureCmp.Value }}</option>
           </select>
           <!--start div for Nature of Complaint alert-->
