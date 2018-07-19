@@ -562,7 +562,7 @@
 
           <!-- start div for Submit Button-->
           <div class="col-xs-12 col-sm-4 col-md-4 col-lg-2 button-holder">
-            <button type="submit" class="btn btn-primary primary-button-style" [disabled]="!(complaintRegisterFormGroup.valid && submitButtonEnable && selectedItemDetails.length > 0 && complaintQtyInMtrsError == false)">Submit
+            <button type="submit" class="btn btn-primary primary-button-style" [disabled]="!(complaintRegisterFormGroup.valid && submitButtonEnable && complaintDetailsEnable===false && selectedItemDetails.length > 0 && complaintQtyInMtrsError == false)">Submit
                 <!-- <button type="submit" class="btn btn-primary primary-button-style" [disabled]="!(complaintRegisterFormGroup.valid && selectedItemDetails.length > 0 && complaintQtyInMtrsError == false)">Submit -->
             </button>
           </div>

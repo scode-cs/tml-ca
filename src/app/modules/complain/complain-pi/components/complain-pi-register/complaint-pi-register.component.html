@@ -457,7 +457,7 @@
             <textarea id="detailOfComplaint" rows="5" [maxlength]="complaintDetailsLength" class="form-control hide-horizontal-scroll" #complaintDetails formControlName="complaintDetails" [value]="complaintDetailsForModify"
               (keyup)="comDetsOnkeyup(complaintDetails.value)"></textarea>
             <!--start div for Detail of Complaint alert-->
-            <div class="alert alert-danger" *ngIf="complaintRegisterFormGroup.get('complaintDetails').touched && complaintDetailsEnable==true && (complaintDetailsForModify == undefined || complaintDetailsForModify == '' )">
+            <div class="alert alert-danger" *ngIf="complaintRegisterFormGroup.get('complaintDetails').touched && complaintDetailsEnable===true && (complaintDetailsForModify == undefined || complaintDetailsForModify == '' )">
               <i class="fa fa-exclamation-circle"></i> Detail of Complaint is required!
             </div>
             <!--end div for Detail of Complaint alert-->

@@ -1362,7 +1362,12 @@ export class ComplaintDIRegisterComponent implements OnInit {
     if ((complaintDetails == "" || complaintDetails == " ") && this.complaintTypeName == "Others(CAT C)") {
       this.complaintRegisterFormGroup.controls['natureOfComplaintId'].markAsUntouched();
       this.complaintDetailsEnable = true;
-    }//end of if
+    }else if((complaintDetails == "" || complaintDetails == " ") && this.complaintTypeName != "Others(CAT C)"){
+      if (this.natureCmpName == "Others") {
+        this.complaintDetailsEnable = true;
+        this.complaintRegisterFormGroup.controls['complaintDetails'].markAsTouched();
+      }
+    }
   }//end of method comDetsOnkeyup
 
   //start method onKeyupComplaintQty
