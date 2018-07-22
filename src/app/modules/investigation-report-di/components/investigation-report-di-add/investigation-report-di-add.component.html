@@ -8,6 +8,26 @@
       <li class="breadcrumb-item active">{{title}}</li>
     </ol>
   </div>
+
+   <!--start process flow div-->
+   <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 step-row" style="padding-left: 30px;padding-right: 30px;">
+    <ng-container *ngFor="let processData of processFlowData;let i = index;">
+      <!-- start div for active step -->
+      <div class="step-active step-col" style="display:inline-block;width: 16%;" *ngIf="i == processFlowPageIndex">
+        <p style="padding-top: 8px;text-align:center;color: white;font-size: 20px;" *ngIf="i == processFlowPageIndex">
+          <a style="color:white" [href]="processData.processUrl">{{processData.processName}}</a>
+        </p>
+      </div>
+      <!-- end of div for active step -->
+      <!-- start div for inactive step -->
+      <div class="step-inactive step-col" style="display:inline-block;width: 16%;" *ngIf="i > processFlowPageIndex">
+        <p style="padding-top: 8px;text-align:center;color: #5a5d5f;font-size: 20px;" *ngIf="i > processFlowPageIndex">
+          <a [href]="processData.processUrl">{{processData.processName}}</a>
+        </p>
+      </div>
+    </ng-container>
+  </div>  
+  <!-- end div of process flow  -->
     
   <!-- main div -->
   <div>
