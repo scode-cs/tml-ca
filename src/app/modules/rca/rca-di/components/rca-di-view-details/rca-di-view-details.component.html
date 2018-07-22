@@ -8,9 +8,9 @@
             <li class="breadcrumb-item active">{{title}}</li>
         </ol>
     </div>
-    <div class="title-style">
-        <h1 class="title-style">{{ title }}{{complaintStatus}}</h1>
-    </div>
+    <!--start process flow div-->
+    <app-flowmangement [complianStatus]="complaintStatus" [pageType]="'view'"></app-flowmangement>
+    <!-- end div of process flow  -->
     <!--start form for rcaDIAddEditFormGroup-->
     <form [formGroup]="rcaDIAddEditFormGroup" autocomplete="off">
         <!-- start div for row form-style class-->
@@ -26,15 +26,16 @@
             <!--start div closeDate-->
             <div class="form-group col-xs-12 col-sm-6 col-md-6 col-lg-4">
                 <label>Date</label>
-                <input type="text" class="form-control" formControlName="rcaAddEditDate" [value]="rcaAddEditDate| date: 'dd-MMM-YYYY'"
-                readonly="readonly"/>
+                <input type="text" class="form-control" formControlName="rcaAddEditDate" [value]="rcaAddEditDate| date: 'dd-MMM-YYYY'" readonly="readonly"
+                />
             </div>
             <!--end of div for closeDate-->
 
             <!-- start div for rca details -->
             <div class="form-group col-xs-12 col-sm-6 col-md-6 col-lg-4">
                 <label>RCA Details</label>
-                <textarea rows="5" formControlName="rcaAddEditDetails" [value]="rcaAddEditDetails" class="form-control hide-horizontal-scroll" readonly="readonly"></textarea>
+                <textarea rows="5" formControlName="rcaAddEditDetails" [value]="rcaAddEditDetails" class="form-control hide-horizontal-scroll"
+                    readonly="readonly"></textarea>
             </div>
             <!-- end of div for rca details -->
 
@@ -48,7 +49,7 @@
                 </div>
             </div>
             <!--end div for show files-->
-           
+
             <!-- start div for Submit  and Cancel Button-->
             <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
                 <!-- start div for Cancel Button-->
@@ -65,14 +66,14 @@
         <!-- error msg div -->
         <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" *ngIf="errMsgShowFlag">
             <div class="alert alert-danger">
-              {{errorMsg}}&nbsp;
-              <button aria-label="Close" class="close" type="button" (click)="deleteResErrorMsgOnClick()">
-                <span aria-hidden="true">×</span>
-              </button>
+                {{errorMsg}}&nbsp;
+                <button aria-label="Close" class="close" type="button" (click)="deleteResErrorMsgOnClick()">
+                    <span aria-hidden="true">×</span>
+                </button>
             </div>
             <br/>
             <br/>
-          </div>
+        </div>
         <!-- end of error msg div -->
     </form>
     <!--end form for rcaDIAddEditFormGroup-->
