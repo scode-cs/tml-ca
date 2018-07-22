@@ -37,6 +37,7 @@ import { PADIService } from "../../services/pa-di-add-edit.service";
     public selectedComplaintReferenceDetails: any = {};//to get selected complaint values  
     public paAddEditDetails: string = "";//text area value for rca details
 
+    public complaintStatus: string = "";//to fetch complaint status from route
     //for error msg
     public errMsgShowFlag: boolean = false;//to show the error msg div
     public errorMsg: string;//to store the error msg
@@ -85,8 +86,10 @@ import { PADIService } from "../../services/pa-di-add-edit.service";
     let routeSubscription: Subscription;
     routeSubscription = this.activatedroute.params.subscribe(params => {
       this.complaintReferenceNo = params.complaintReferenceNo ? params.complaintReferenceNo : '';
+      this.complaintStatus = params.complaintStatus ? params.complaintStatus : ''; 
     });
     console.log("complaintReferenceNo for pa di add/edit: ", this.complaintReferenceNo);  
+    console.log("this.complaintStatus for pa di view::",this.complaintStatus);
   }//end of method
 
   //method to get system date

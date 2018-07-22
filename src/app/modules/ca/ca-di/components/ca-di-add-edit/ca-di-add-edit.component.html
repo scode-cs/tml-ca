@@ -9,7 +9,7 @@
         </ol>
     </div>
     <div class="title-style">
-        <h1 class="title-style">{{ title }}</h1>
+        <h1 class="title-style">{{ title }}{{complaintStatus}}</h1>
     </div>
     <!--start form for caDIAddEditFormGroup-->
     <form [formGroup]="caDIAddEditFormGroup" autocomplete="off" (ngSubmit)="onCADIAddEditSubmit()">
