@@ -52,6 +52,9 @@ import { ReportsDIViewComponent } from "../report/report-di/components/report-di
 import { ReportDIViewDetailsComponent } from "../report/report-di/components/report-di-view-details/report-di-view-details.component";
 import { RCADIAddEditComponent } from "../rca/rca-di/components/rca-di-add-edit/rca-di-add-edit.component";
 import { ComplaintReferenceNoSearchComponent } from "../investigation-report-di/components/investigation-report-di-add/complaint-reference-no-search/complaint-reference-no-search.component";
+import { CADIAddEditComponent } from "../ca/ca-di/components/ca-di-add-edit/ca-di-add-edit.component";//ca
+import { PADIAddEditComponent } from "../pa/pa-di/components/pa-di-add-edit/pa-di-add-edit.component";
+
 
 export const HOME_ROUTES: Routes = [
   {
@@ -132,10 +135,8 @@ export const HOME_ROUTES: Routes = [
       {
         //pi customer search
         path: ROUTER_PATHS.ComplaintPICustomerSearch,
-        component: ComplaintPICustomerSearchComponent
-      
-      },
-      
+        component: ComplaintPICustomerSearchComponent      
+      },      
       {
         path: ROUTER_PATHS.AddUserRouter,//add user
         component: AddUserComponent
@@ -270,6 +271,23 @@ export const HOME_ROUTES: Routes = [
         path: ROUTER_PATHS.ModifyRCADIRouter,//modify rca di
         component: RCADIAddEditComponent
       },
+      {
+        path: ROUTER_PATHS.AddCADIRouter,//add ca di
+        component: CADIAddEditComponent
+      },
+      {
+        path: ROUTER_PATHS.ModifyCADIRouter,//modify ca di
+        component: CADIAddEditComponent
+      },
+      {
+        path: ROUTER_PATHS.AddPADIRouter,//add pa di
+        component: PADIAddEditComponent
+      },
+      {
+        path: ROUTER_PATHS.ModifyPADIRouter,//modify pa di
+        component: PADIAddEditComponent
+      },
+
 
 
 

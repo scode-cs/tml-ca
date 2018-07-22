@@ -23,7 +23,7 @@ import { PADIService } from "../../services/pa-di-add-edit.service";
     private fileData: FormData;
 
     public fileList: FileList;
-    public title: string = "RCA";//to show titlee on html page
+    public title: string = "PA";//to show titlee on html page
     public complaintReferenceNo: string;//to get complaint reference no from route param
     public paDIAddEditFormGroup: FormGroup;
     //for busy spinner
