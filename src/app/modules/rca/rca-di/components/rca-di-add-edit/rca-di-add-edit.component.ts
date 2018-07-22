@@ -39,6 +39,7 @@ export class RCADIAddEditComponent implements OnInit {
   public rcaAddEditDate: string;//close date
   public selectedComplaintReferenceDetails: any = {};//to get selected complaint values  
   public rcaAddEditDetails: string = "";//text area value for rca details
+  public complaintStatus: string = "";//to fetch complaint status from route
 
   //for error msg
   public errMsgShowFlag: boolean = false;//to show the error msg div
@@ -89,8 +90,10 @@ export class RCADIAddEditComponent implements OnInit {
     let routeSubscription: Subscription;
     routeSubscription = this.activatedroute.params.subscribe(params => {
       this.complaintReferenceNo = params.complaintReferenceNo ? params.complaintReferenceNo : '';
+      this.complaintStatus = params.complaintStatus ? params.complaintStatus : ''; 
     });
     console.log("complaintReferenceNo for rca di add/edit: ", this.complaintReferenceNo);
+    console.log("this.complaintStatus for rca di view::",this.complaintStatus);
   }//end of method
 
   //method to get system date
