@@ -14,6 +14,7 @@ import { NgbdModalComponent } from '../../../widget/modal/components/modal-compo
 import { AppUrlsConst, WebServiceConst } from '../../../app-config';
 import { DatePipe } from '@angular/common';
 import { SessionErrorService } from "../../../shared/services/session-error.service";
+import { InvestigationReportDIConfigModel } from 'app/modules/investigation-report-di/models/investigation-report-di-config.model';
 
 @Component({
   selector: 'ispl-investigation-report-di-view-details-form',
@@ -91,7 +92,7 @@ export class InvestigationReportDiViewDetailsComponent implements OnInit {
   //for file
   public fileActivityId: number = this.localStorageService.appSettings.preliminaryInvestigationActivityId;//to get uploaded file for DI edit
   
-
+  public invReportTable: any[] = [];
 
   constructor(
     private activatedroute: ActivatedRoute,
@@ -111,13 +112,14 @@ export class InvestigationReportDiViewDetailsComponent implements OnInit {
     routeSubscription = this.activatedroute.params.subscribe(params => {
       this.complaintRefNoForUpdate = params.complaintReferenceNo ? params.complaintReferenceNo : '';
     });
+    this.invReportTable = new InvestigationReportDIConfigModel().prevInvReportHeader;
     console.log("complaintReferenceNo for view in preliminary-investigation-di-add-component: ",
       this.complaintRefNoForUpdate);
       this.buildForm();   
     this.getListAndOptionValues();//method to get list val from service class
     this.title = this.complaintRefNoForUpdate ?
-      'View Site Visit Report'
-      : 'Site Visit Report';//set the title according to the complaintRefNoForModify
+      'View Investigation Report'
+      : 'Investigation Report';//set the title according to the complaintRefNoForModify
     //method to get preli view det for view
     this.preliReportViewByComplaintRefNo(this.complaintRefNoForUpdate);
 

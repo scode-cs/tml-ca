@@ -12,10 +12,84 @@
   <!-- main div -->
   <div>
 
+    <!-- main div -->
+  <div class="form-div-style">
+      <!-- start table div -->
+      <div class="col-lg-12 col-md-12 col-xs-12 scroll-bar prev-inv-report-table-style">
+         <table class="table-style">
+           <thead>
+             <tr class="th-style">
+               <td class="hideextra" *ngFor="let invRprt of  invReportTable" [ngClass]="invRprt.headerClass" >
+                   {{ invRprt.headerDesc }}
+               </td>
+             </tr>
+           </thead>
+           <tbody>
+             <ng-container>
+               <!-- <tr class="tr-style" *ngFor=" let invoiceDet of complaintReferenceDetailsForModify.itemNos?.items
+             let odd = odd; let even = even;" [ngClass]="{even: even, odd: odd }">
+                 <td class="td-style-first">
+                   {{invoiceDet.invoiceNo}}
+                 </td>
+                 <td class="td-style hideextra">
+                   {{invoiceDet.invoiceDate|date: 'dd-MMM-yyyy'}}
+                 </td>
+                 <td class="td-style hideextra">
+                   {{invoiceDet.itemCode}}
+                 </td>
+                 <td class="td-style hideextra">
+                   {{invoiceDet.itemName}}
+                 </td>
+                 <td class="td-style hideextra">
+                   {{invoiceDet.customerCode}}
+                 </td>
+                 <td class="td-style hideextra">
+                   {{invoiceDet.customerName}}
+                 </td>
+                 <td class="td-style hideextra">
+                   {{invoiceDet.projectName}}
+                 </td>
+                 <td class="td-style hideextra">
+                   {{invoiceDet.projectLocation}}
+                 </td>
+                 <td class="td-style hideextra">
+                   {{invoiceDet.poNo}}
+                 </td>
+                 <td class="td-style-last hideextra">
+                   {{invoiceDet.soNo}}
+                 </td>
+               </tr> -->
+               <tr class="tr-style">
+                   <td class="td-style-first hideextra">
+                     &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Add Item(s)
+                     <i style="font-size:16px;cursor: pointer;" title="Click here" class="fa fa-plus-circle" (click)="onAddItemOpenModal()"></i>
+                   </td>
+                   <td class="td-style">
+ 
+                   </td>
+                   <td class="td-style">
+ 
+                   </td>
+                   <td class="td-style">
+ 
+                   </td>
+                   <td class="td-style">
+ 
+                   </td>
+                   <td class="td-style-last">
+ 
+                   </td>
+                 </tr>
+             </ng-container>
+           </tbody>
+         </table>
+       </div>
+       <!--end table div-->
+
     <!--start form -->
     <form [formGroup]="preliInvestFormGroup" autocomplete="off" (ngSubmit)="onClickPreliInvestigationReportDISubmit()">
       <!--start div of row manage profile form-->
-      <div class="row manage-profile-form">
+      <div class="row inv-report-form-style">
         <!-- start div for Complaint Reference No [View] -->
         <div class="form-group col-xs-12 col-sm-6 col-md-6 col-lg-4" *ngIf="complaintRefNoForUpdate">
           <label for="complaintRefNo">Complaint Reference No </label>
