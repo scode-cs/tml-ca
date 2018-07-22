@@ -3,6 +3,8 @@ import { RouterModule } from '@angular/router';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { GridSearchPipe } from "./components/pipe/datagrid-search.pipe";
+import { FlowmangementComponent } from './components/flowmangement/flowmangement.component';
+
 
 @NgModule({
   imports: [
@@ -10,10 +12,11 @@ import { GridSearchPipe } from "./components/pipe/datagrid-search.pipe";
     ReactiveFormsModule,
   ],
   declarations: [
-    GridSearchPipe
+    GridSearchPipe,
+    FlowmangementComponent
   ],
   exports:[
-    GridSearchPipe
+    GridSearchPipe,FlowmangementComponent
   ],
   providers: [
 

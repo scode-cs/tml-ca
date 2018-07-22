@@ -287,6 +287,29 @@ export class ComplainDIViewComponent implements OnInit {
     console.log("this.processFlowStatusDet======",this.processFlowStatusDet);
     console.log("param to check the click from view::",viewParam);
 
+    let complainStatusId: string = complaintDetail['statusId'];
+
+    switch(complainStatusId) {
+      case '10': {
+
+      };
+      case '40': {
+
+      };
+      case '50': {
+
+      };
+      case '60': {
+
+      };
+      case '70': {
+
+      };
+      case '80': {
+
+      }
+    }
+
     //TODO: Need to add route logic
 
   }//end of method of getcomplaintDetailByCheckbox
