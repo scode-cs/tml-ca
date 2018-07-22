@@ -85,7 +85,7 @@ export class InvestigationReportDiComponent implements OnInit {
   public processFlowPageIndex: number = 0;
   public processFlowData: string[] = [];
 
-  public invReportTable: any[] = [];
+  public invReportTable: any[] = [];//to store prev inv report
 
 
   //var for modify

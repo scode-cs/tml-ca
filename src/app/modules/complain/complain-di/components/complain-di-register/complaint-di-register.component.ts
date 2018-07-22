@@ -5,17 +5,18 @@ import { Subscription } from 'rxjs/Subscription';//to get route param
 // import { ToastService } from "../../../../home/services/toast-service";
 import { Router, ActivatedRoute } from '@angular/router';
 import { ROUTE_PATHS } from '../../../../router/router-paths';
-import { ComplaintDIRegisterDataService } from "app/modules/complain/complain-di/services/complaint-di-register-data.service";
+import { ComplaintDIRegisterDataService } from 'app/modules/complain/complain-di/services/complaint-di-register-data.service';
 import { NgbdModalComponent } from '../../../../widget/modal/components/modal-component';
 import { NgbModal, NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { DatePipe } from '@angular/common';
-import { LocalStorageService } from "../../../../shared/services/local-storage.service";
+import { LocalStorageService } from '../../../../shared/services/local-storage.service';
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 import { NgbdComplaintDIRegisterModalComponent } from 'app/modules/complain/complain-di/components/complain-di-register/complaint-di-register-modal/complaint-di-register-modal.component';
-import { ComplaintDIRegisterEmitService } from "app/modules/complain/complain-di/services/complaint-di-register-emit.service";
-import { ComplaintDIInvoiceDetailsService } from "app/modules/complain/complain-di/services/complaint-di-invoice-details.service";
-import { DIPolygonModel } from "app/modules/shared/components/process-flow/complain-di-polygon.model";
-import { SessionErrorService } from "../../../../shared/services/session-error.service";
+import { ComplaintDIRegisterEmitService } from 'app/modules/complain/complain-di/services/complaint-di-register-emit.service';
+import { ComplaintDIInvoiceDetailsService } from 'app/modules/complain/complain-di/services/complaint-di-invoice-details.service';
+import { DIPolygonModel } from 'app/modules/shared/components/process-flow/complain-di-polygon.model';
+import { SessionErrorService } from '../../../../shared/services/session-error.service';
+import { ComplaintDIConfigModel } from 'app/modules/complain/complain-di/models/complain-di-config.model';
 
 @Component({
   selector: 'ispl-complaint-di-register-form',
@@ -135,6 +136,7 @@ export class ComplaintDIRegisterComponent implements OnInit {
   public processFlowPageIndex: number = 0;
   public processFlowData: string[] = [];
   public departmentNameDropDownList: any[] = [];//for department name dropdown
+  public invReportTable: any[] = [];//to store prev inv report
   //busySpinner 
   public busySpinner: any = {
     selectedBusy: true,
@@ -165,6 +167,7 @@ export class ComplaintDIRegisterComponent implements OnInit {
       this.complaintReferenceNo = params.complaintReferenceNo ? params.complaintReferenceNo : '';
     });
     console.log("complaintReferenceNo for modify Complaint di: ", this.complaintReferenceNo);
+    this.invReportTable = new ComplaintDIConfigModel().prevInvReportHeader;//getting prev inv report details
     this.processFlowData = new DIPolygonModel().siteVisitRequired;//set the process flow step from model    
 
     // this.toastService.toastElementRef.info('Complaint Register!', 'Info!');

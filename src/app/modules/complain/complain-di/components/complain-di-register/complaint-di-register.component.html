@@ -17,6 +17,80 @@
   <app-flowmangement></app-flowmangement>
     <!-- end div of process flow  -->
 
+   <!-- main div -->
+   <div class="form-div-style">
+      <!-- start table div -->
+      <div class="col-lg-12 col-md-12 col-xs-12 scroll-bar grid-table-style" style="margin-bottom: 15px; margin-top: 5px;">
+         <table class="table-style">
+           <thead>
+             <tr class="th-style">
+               <td class="hideextra" *ngFor="let invRprt of  invReportTable" [ngClass]="invRprt.headerClass" >
+                   {{ invRprt.headerDesc }}
+               </td>
+             </tr>
+           </thead>
+           <tbody>
+             <ng-container>
+               <!-- <tr class="tr-style" *ngFor=" let invoiceDet of complaintReferenceDetailsForModify.itemNos?.items
+             let odd = odd; let even = even;" [ngClass]="{even: even, odd: odd }">
+                 <td class="td-style-first">
+                   {{invoiceDet.invoiceNo}}
+                 </td>
+                 <td class="td-style hideextra">
+                   {{invoiceDet.invoiceDate|date: 'dd-MMM-yyyy'}}
+                 </td>
+                 <td class="td-style hideextra">
+                   {{invoiceDet.itemCode}}
+                 </td>
+                 <td class="td-style hideextra">
+                   {{invoiceDet.itemName}}
+                 </td>
+                 <td class="td-style hideextra">
+                   {{invoiceDet.customerCode}}
+                 </td>
+                 <td class="td-style hideextra">
+                   {{invoiceDet.customerName}}
+                 </td>
+                 <td class="td-style hideextra">
+                   {{invoiceDet.projectName}}
+                 </td>
+                 <td class="td-style hideextra">
+                   {{invoiceDet.projectLocation}}
+                 </td>
+                 <td class="td-style hideextra">
+                   {{invoiceDet.poNo}}
+                 </td>
+                 <td class="td-style-last hideextra">
+                   {{invoiceDet.soNo}}
+                 </td>
+               </tr> -->
+               <tr class="tr-style">
+                   <td class="td-style-first hideextra">
+                     &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Add Item(s)
+                     <i style="font-size:16px;cursor: pointer;" title="Click here" class="fa fa-plus-circle" (click)="onAddItemOpenModal()"></i>
+                   </td>
+                   <td class="td-style">
+ 
+                   </td>
+                   <td class="td-style">
+ 
+                   </td>
+                   <td class="td-style">
+ 
+                   </td>
+                   <td class="td-style">
+ 
+                   </td>
+                   <td class="td-style-last">
+ 
+                   </td>
+                 </tr>
+             </ng-container>
+           </tbody>
+         </table>
+       </div>
+       <!--end table div-->
+
   <!-- start div for complaintRegister body-->
   <div>
     <!--start form for complaintRegisterFormGroup-->

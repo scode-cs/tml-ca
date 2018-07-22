@@ -249,9 +249,13 @@ padding-top: 52px!important;
   padding-right: 30px;
 }
 
-.grid-div-style{
-  padding-left: 30px;
-  padding-right: 30px;
+.form-div-style {
+  /* padding-left: 30px;
+  padding-right: 30px; */
   padding-top: 3px;
 }
 
+.grid-table-style {
+  padding-left: 30px;
+  padding-right: 30px
+}
