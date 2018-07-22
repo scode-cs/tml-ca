@@ -26,25 +26,21 @@
             <!--start div closeDate-->
             <div class="form-group col-xs-12 col-sm-6 col-md-6 col-lg-4">
                 <label>Date</label>
-                <input type="date" class="form-control" formControlName="rcaAddEditDate" 
-                />
+                <input type="text" class="form-control" formControlName="rcaAddEditDate" [value]="rcaAddEditDate| date: 'dd-MMM-YYYY'"
+                readonly="readonly"/>
             </div>
             <!--end of div for closeDate-->
 
             <!-- start div for rca details -->
             <div class="form-group col-xs-12 col-sm-6 col-md-6 col-lg-4">
                 <label>RCA Details</label>
-                <label class="red-asterick">*</label>
-                <textarea rows="5" formControlName="rcaAddEditDetails" [value]="rcaAddEditDetails" class="form-control hide-horizontal-scroll" required></textarea>
-                <div class="alert alert-danger" *ngIf="rcaDIAddEditFormGroup.get('rcaAddEditDetails').hasError('required') && rcaDIAddEditFormGroup.get('rcaAddEditDetails').touched">
-                    <i class="fa fa-exclamation-circle"></i>RCA Details is required!
-                </div>
+                <textarea rows="5" formControlName="rcaAddEditDetails" [value]="rcaAddEditDetails" class="form-control hide-horizontal-scroll" readonly="readonly"></textarea>
             </div>
             <!-- end of div for rca details -->
 
             <!--files-->
             <!--start div for show files-->
-            <div class="form-group col-xs-12 col-sm-6 col-md-6 col-lg-4" *ngIf="complaintReferenceNo && selectedComplaintReferenceDetails.files?.length!=0">
+            <div class="form-group col-xs-12 col-sm-6 col-md-6 col-lg-4" *ngIf="complaintReferenceNo && selectedComplaintReferenceDetails.files?.length>0">
                 <label>Uploaded file(s)</label>
                 <div *ngFor="let file of selectedComplaintReferenceDetails.files">
                     <a href="{{file.fileUrl}}" target="_blank">{{file.fileName}}</a>
@@ -52,28 +48,13 @@
                 </div>
             </div>
             <!--end div for show files-->
-
-            <!--start fle upload div-->
-            <div class="form-group col-xs-12 col-sm-6 col-md-6 col-lg-4">
-                <div class="form-group col-xs-12 col-sm-12 col-md-12 col-lg-12" style="padding-left: 0px;">
-                    <label for="imageFile">File(s) Upload</label>
-                    <label class="red-coloured-label">(max size 100 mb)</label>
-                    <input type="file" (change)="fileChangeRCADIAddEdit($event)" multiple/>
-                </div>
-            </div>
-            <!--end of file upload div-->
+           
             <!-- start div for Submit  and Cancel Button-->
             <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
-                <!-- start div for Submit Button-->
-                <div class="col-xs-12 col-sm-4 col-md-4 col-lg-2 button-holder">
-                    <button type="submit" class="btn btn-primary primary-button-style" (click)="onRCADIAddEditRejectSubmit('Accept')" [disabled]="!rcaDIAddEditFormGroup.valid">Accept
-                    </button>
-                </div>
-                <!-- end div for Submit Button-->
                 <!-- start div for Cancel Button-->
                 <div class="col-xs-12 col-sm-4 col-md-4 col-lg-2 button-holder">
-                    <button type="submit" class="btn default-button-style" (click)="onRCADIAddEditRejectSubmit('Reject')">
-                        Reject
+                    <button type="submit" class="btn default-button-style" (click)="onCancel()">
+                        Cancel
                     </button>
                 </div>
                 <!-- end div for Cancel Button-->

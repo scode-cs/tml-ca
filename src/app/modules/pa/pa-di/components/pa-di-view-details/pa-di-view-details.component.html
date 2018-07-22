@@ -9,10 +9,10 @@
         </ol>
     </div>
     <div class="title-style">
-        <h1 class="title-style">{{ title }}</h1>
+        <h1 class="title-style">{{ title }}{{complaintStatus}}</h1>
     </div>
     <!--start form for rcaDIAddEditFormGroup-->
-    <form [formGroup]="rcaDIAddEditFormGroup" autocomplete="off">
+    <form [formGroup]="paDIAddEditFormGroup" autocomplete="off">
         <!-- start div for row form-style class-->
         <div class="row form-style">
             <!--start div complaint reference no -->
@@ -26,15 +26,15 @@
             <!--start div closeDate-->
             <div class="form-group col-xs-12 col-sm-6 col-md-6 col-lg-4">
                 <label>Date</label>
-                <input type="text" class="form-control" formControlName="rcaAddEditDate" [value]="rcaAddEditDate| date: 'dd-MMM-YYYY'"
+                <input type="text" class="form-control" formControlName="paAddEditDate" [value]="paAddEditDate| date: 'dd-MMM-YYYY'"
                 readonly="readonly"/>
             </div>
             <!--end of div for closeDate-->
 
             <!-- start div for rca details -->
             <div class="form-group col-xs-12 col-sm-6 col-md-6 col-lg-4">
-                <label>RCA Details</label>
-                <textarea rows="5" formControlName="rcaAddEditDetails" [value]="rcaAddEditDetails" class="form-control hide-horizontal-scroll" readonly="readonly"></textarea>
+                <label>PA Details</label>
+                <textarea rows="5" formControlName="paAddEditDetails" [value]="paAddEditDetails" class="form-control hide-horizontal-scroll" readonly="readonly"></textarea>
             </div>
             <!-- end of div for rca details -->
 

@@ -54,7 +54,9 @@ import { RCADIAddEditComponent } from '../rca/rca-di/components/rca-di-add-edit/
 import { ComplaintReferenceNoSearchComponent } from '../investigation-report-di/components/investigation-report-di-add/complaint-reference-no-search/complaint-reference-no-search.component';
 import { CADIAddEditComponent } from '../ca/ca-di/components/ca-di-add-edit/ca-di-add-edit.component';//ca
 import { PADIAddEditComponent } from '../pa/pa-di/components/pa-di-add-edit/pa-di-add-edit.component';
-import { RCADIViewDetailsComponent } from '../rca/rca-di/components/rca-view-details/rca-di-view-details.component';
+import { RCADIViewDetailsComponent } from '../rca/rca-di/components/rca-di-view-details/rca-di-view-details.component';
+import { CADIViewDetailsComponent } from '../ca/ca-di/components/ca-di-view-details/ca-di-view-details.component';
+import { PADIViewDetailsComponent } from '../pa/pa-di/components/pa-di-view-details/pa-di-view-details.component';
 
 export const HOME_ROUTES: Routes = [
   {
@@ -284,12 +286,20 @@ export const HOME_ROUTES: Routes = [
         component: CADIAddEditComponent
       },
       {
+        path: ROUTER_PATHS.ViewDetailsCADIRouter,//ca view by complaint ref no
+        component: CADIViewDetailsComponent
+      },
+      {
         path: ROUTER_PATHS.AddPADIRouter,//add pa di
         component: PADIAddEditComponent
       },
       {
         path: ROUTER_PATHS.ModifyPADIRouter,//modify pa di
         component: PADIAddEditComponent
+      },
+      {
+        path: ROUTER_PATHS.ViewDetailsPADIRouter,//pa view by complaint ref no
+        component: PADIViewDetailsComponent
       },
 
 

@@ -180,25 +180,33 @@ const ROUTE_VIEW_ROLE_FULL: string = ROUTE_HOME_FULL + "/" + ROUTE_VIEW_ROLE;
 
 //rca
 const ROUTE_ADD_RCA_DI: string = "addrcadi";
-const ROUTE_MODIFY_RCA_DI: string = ROUTE_ADD_RCA_DI + '/' + ':complaintReferenceNo';
+const ROUTE_MODIFY_RCA_DI: string = ROUTE_ADD_RCA_DI + '/' + ':complaintReferenceNo'+ '/' + ':complaintStatus';
 const ROUTE_MODIFY_RCA_DI_FULL: string = ROUTE_HOME_FULL + "/" + ROUTE_ADD_RCA_DI;//modify
 const ROUTE_ADD_RCA_DI_FULL: string = ROUTE_HOME_FULL + "/" + ROUTE_ADD_RCA_DI;//add
 const ROUTE_VIEW_DETAILS_RCA_DI_CONST: string = "viewrcadi";//rca view
-const ROUTE_VIEW_DETAILS_RCA_DI: string = ROUTE_VIEW_DETAILS_RCA_DI_CONST + '/' + ':complaintReferenceNo';
+const ROUTE_VIEW_DETAILS_RCA_DI: string = ROUTE_VIEW_DETAILS_RCA_DI_CONST + '/' + ':complaintReferenceNo'+ '/' + ':complaintStatus';
 const ROUTE_VIEW_DETAILS_RCA_DI_FULL: string = ROUTE_HOME_FULL + "/" + ROUTE_VIEW_DETAILS_RCA_DI_CONST;//view
 
 
 //ca
 const ROUTE_ADD_CA_DI: string = "addcadi";
-const ROUTE_MODIFY_CA_DI: string = ROUTE_ADD_CA_DI + '/' + ':complaintReferenceNo';
+const ROUTE_MODIFY_CA_DI: string = ROUTE_ADD_CA_DI + '/' + ':complaintReferenceNo'+ '/' + ':complaintStatus';
 const ROUTE_MODIFY_CA_DI_FULL: string = ROUTE_HOME_FULL + "/" + ROUTE_ADD_CA_DI;//modify
 const ROUTE_ADD_CA_DI_FULL: string = ROUTE_HOME_FULL + "/" + ROUTE_ADD_CA_DI;//add
+const ROUTE_VIEW_DETAILS_CA_DI_CONST: string = "viewcadi";//ca view
+const ROUTE_VIEW_DETAILS_CA_DI: string = ROUTE_VIEW_DETAILS_CA_DI_CONST + '/' + ':complaintReferenceNo'+ '/' + ':complaintStatus';
+const ROUTE_VIEW_DETAILS_CA_DI_FULL: string = ROUTE_HOME_FULL + "/" + ROUTE_VIEW_DETAILS_CA_DI_CONST;//view
+
 
 //pa
 const ROUTE_ADD_PA_DI: string = "addpadi";
-const ROUTE_MODIFY_PA_DI: string = ROUTE_ADD_PA_DI + '/' + ':complaintReferenceNo';
+const ROUTE_MODIFY_PA_DI: string = ROUTE_ADD_PA_DI + '/' + ':complaintReferenceNo'+ '/' + ':complaintStatus';
 const ROUTE_MODIFY_PA_DI_FULL: string = ROUTE_HOME_FULL + "/" + ROUTE_ADD_PA_DI;//modify
 const ROUTE_ADD_PA_DI_FULL: string = ROUTE_HOME_FULL + "/" + ROUTE_ADD_PA_DI;//add
+const ROUTE_VIEW_DETAILS_PA_DI_CONST: string = "viewpadi";//pa view
+const ROUTE_VIEW_DETAILS_PA_DI: string = ROUTE_VIEW_DETAILS_PA_DI_CONST + '/' + ':complaintReferenceNo'+ '/' + ':complaintStatus';
+const ROUTE_VIEW_DETAILS_PA_DI_FULL: string = ROUTE_HOME_FULL + "/" + ROUTE_VIEW_DETAILS_PA_DI_CONST;//view
+
 
 //for mis report
 const ROUTE_MIS_REPORTS: string = "misreport";
@@ -268,8 +276,10 @@ export const ROUTE_PATHS = {
     RouteViewDetailsRCADI: ROUTE_VIEW_DETAILS_RCA_DI_FULL,//view rca
     RouteAddCADI: ROUTE_ADD_CA_DI_FULL,//add ca di
     RouteModifyCADI: ROUTE_MODIFY_CA_DI_FULL,//modify ca di
+    RouteViewDetailsCADI: ROUTE_VIEW_DETAILS_CA_DI_FULL,//view ca
     RouteAddPADI: ROUTE_ADD_PA_DI_FULL,//add pa di
     RouteModifyPADI: ROUTE_MODIFY_PA_DI_FULL,//modify pa di
+    RouteViewDetailsPADI: ROUTE_VIEW_DETAILS_PA_DI_FULL,//view pa
 }
 
 // Router names (like login, home, dashboard etc.)
@@ -333,6 +343,8 @@ export const ROUTER_PATHS = {
     ViewDetailsRCADIRouter: ROUTE_VIEW_DETAILS_RCA_DI,//rca view details
     AddCADIRouter: ROUTE_ADD_CA_DI,//add ca di
     ModifyCADIRouter: ROUTE_MODIFY_CA_DI,//modify ca di
+    ViewDetailsCADIRouter: ROUTE_VIEW_DETAILS_CA_DI,//ca view details
     AddPADIRouter: ROUTE_ADD_PA_DI,//add Pa di
     ModifyPADIRouter: ROUTE_MODIFY_PA_DI,//modify Pa di
+    ViewDetailsPADIRouter: ROUTE_VIEW_DETAILS_PA_DI,//pa view details
 }
