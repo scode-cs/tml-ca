@@ -91,7 +91,7 @@ export class PADIViewDetailsComponent implements OnInit {
     this.currentDate = this.datePipe.transform(date, 'yyyy-MM-dd');
     this.paDIAddEditFormGroup.controls["paAddEditDate"].setValue(this.currentDate);
     // this.rcaAddEditDate = this.datePipe.transform(this.currentDate, 'yyyy-MM-dd');
-    this.paAddEditDate = this.datePipe.transform(this.currentDate, 'dd-MMM-YYYY');
+    this.paAddEditDate = this.datePipe.transform(this.currentDate,  'yyyy-MM-dd');
     console.log("  rca::: this.paAddEditDate   ", this.paAddEditDate);
   }//end of method
 

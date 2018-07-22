@@ -191,7 +191,7 @@ const ROUTE_VIEW_DETAILS_RCA_DI_FULL: string = ROUTE_HOME_FULL + "/" + ROUTE_VIE
 //ca
 const ROUTE_ADD_CA_DI: string = "addcadi";
 const ROUTE_MODIFY_CA_DI: string = ROUTE_ADD_CA_DI + '/' + ':complaintReferenceNo'+ '/' + ':complaintStatus';
-const ROUTE_MODIFY_CA_DI_FULL: string = ROUTE_HOME_FULL + "/" + ROUTE_ADD_CA_DI;//modify
+// const ROUTE_MODIFY_CA_DI_FULL: string = ROUTE_HOME_FULL + "/" + ROUTE_ADD_CA_DI;//modify
 const ROUTE_ADD_CA_DI_FULL: string = ROUTE_HOME_FULL + "/" + ROUTE_ADD_CA_DI;//add
 const ROUTE_VIEW_DETAILS_CA_DI_CONST: string = "viewcadi";//ca view
 const ROUTE_VIEW_DETAILS_CA_DI: string = ROUTE_VIEW_DETAILS_CA_DI_CONST + '/' + ':complaintReferenceNo'+ '/' + ':complaintStatus';
@@ -201,7 +201,7 @@ const ROUTE_VIEW_DETAILS_CA_DI_FULL: string = ROUTE_HOME_FULL + "/" + ROUTE_VIEW
 //pa
 const ROUTE_ADD_PA_DI: string = "addpadi";
 const ROUTE_MODIFY_PA_DI: string = ROUTE_ADD_PA_DI + '/' + ':complaintReferenceNo'+ '/' + ':complaintStatus';
-const ROUTE_MODIFY_PA_DI_FULL: string = ROUTE_HOME_FULL + "/" + ROUTE_ADD_PA_DI;//modify
+// const ROUTE_MODIFY_PA_DI_FULL: string = ROUTE_HOME_FULL + "/" + ROUTE_ADD_PA_DI;//modify
 const ROUTE_ADD_PA_DI_FULL: string = ROUTE_HOME_FULL + "/" + ROUTE_ADD_PA_DI;//add
 const ROUTE_VIEW_DETAILS_PA_DI_CONST: string = "viewpadi";//pa view
 const ROUTE_VIEW_DETAILS_PA_DI: string = ROUTE_VIEW_DETAILS_PA_DI_CONST + '/' + ':complaintReferenceNo'+ '/' + ':complaintStatus';
@@ -275,10 +275,10 @@ export const ROUTE_PATHS = {
     RouteModifyRCADI: ROUTE_MODIFY_RCA_DI_FULL,//modify rca di
     RouteViewDetailsRCADI: ROUTE_VIEW_DETAILS_RCA_DI_FULL,//view rca
     RouteAddCADI: ROUTE_ADD_CA_DI_FULL,//add ca di
-    RouteModifyCADI: ROUTE_MODIFY_CA_DI_FULL,//modify ca di
+    // RouteModifyCADI: ROUTE_MODIFY_CA_DI_FULL,//modify ca di
     RouteViewDetailsCADI: ROUTE_VIEW_DETAILS_CA_DI_FULL,//view ca
     RouteAddPADI: ROUTE_ADD_PA_DI_FULL,//add pa di
-    RouteModifyPADI: ROUTE_MODIFY_PA_DI_FULL,//modify pa di
+    // RouteModifyPADI: ROUTE_MODIFY_PA_DI_FULL,//modify pa di
     RouteViewDetailsPADI: ROUTE_VIEW_DETAILS_PA_DI_FULL,//view pa
 }
 
@@ -341,10 +341,12 @@ export const ROUTER_PATHS = {
     AddRCADIRouter: ROUTE_ADD_RCA_DI,//add rca di
     ModifyRCADIRouter: ROUTE_MODIFY_RCA_DI,//modify rca di
     ViewDetailsRCADIRouter: ROUTE_VIEW_DETAILS_RCA_DI,//rca view details
-    AddCADIRouter: ROUTE_ADD_CA_DI,//add ca di
-    ModifyCADIRouter: ROUTE_MODIFY_CA_DI,//modify ca di
+    AddCADIRouter: ROUTE_MODIFY_CA_DI,//add ca di
+    // AddCADIRouter: ROUTE_ADD_CA_DI,//add ca di
+    // ModifyCADIRouter: ROUTE_MODIFY_CA_DI,//modify ca di
     ViewDetailsCADIRouter: ROUTE_VIEW_DETAILS_CA_DI,//ca view details
-    AddPADIRouter: ROUTE_ADD_PA_DI,//add Pa di
-    ModifyPADIRouter: ROUTE_MODIFY_PA_DI,//modify Pa di
+    AddPADIRouter: ROUTE_MODIFY_PA_DI,//add Pa di
+    // AddPADIRouter: ROUTE_ADD_PA_DI,//add Pa di
+    // ModifyPADIRouter: ROUTE_MODIFY_PA_DI,//modify Pa di
     ViewDetailsPADIRouter: ROUTE_VIEW_DETAILS_PA_DI,//pa view details
 }
