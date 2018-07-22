@@ -21,11 +21,6 @@
           <span class="sr-only">(current)</span>
         </a>
       </li>
-      <li class="nav-item active">
-        <a class="nav-link" [href]="pageNavigation.rcadiadd">
-          RCA &nbsp;         
-        </a>
-      </li>
       <li class="nav-item dropdown" *ngFor="let navMenuElem of navMenuList">
         <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
           <i class="{{menuIcons[navMenuElem.applnId]}}"></i> {{navMenuElem.applnDesc}}

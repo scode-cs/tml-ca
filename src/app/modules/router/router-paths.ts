@@ -184,6 +184,18 @@ const ROUTE_MODIFY_RCA_DI: string = ROUTE_ADD_RCA_DI + '/' + ':complaintReferenc
 const ROUTE_MODIFY_RCA_DI_FULL: string = ROUTE_HOME_FULL + "/" + ROUTE_ADD_RCA_DI;//modify
 const ROUTE_ADD_RCA_DI_FULL: string = ROUTE_HOME_FULL + "/" + ROUTE_ADD_RCA_DI;//add
 
+//ca
+const ROUTE_ADD_CA_DI: string = "addcadi";
+const ROUTE_MODIFY_CA_DI: string = ROUTE_ADD_CA_DI + '/' + ':complaintReferenceNo';
+const ROUTE_MODIFY_CA_DI_FULL: string = ROUTE_HOME_FULL + "/" + ROUTE_ADD_CA_DI;//modify
+const ROUTE_ADD_CA_DI_FULL: string = ROUTE_HOME_FULL + "/" + ROUTE_ADD_CA_DI;//add
+
+//pa
+const ROUTE_ADD_PA_DI: string = "addpadi";
+const ROUTE_MODIFY_PA_DI: string = ROUTE_ADD_PA_DI + '/' + ':complaintReferenceNo';
+const ROUTE_MODIFY_PA_DI_FULL: string = ROUTE_HOME_FULL + "/" + ROUTE_ADD_PA_DI;//modify
+const ROUTE_ADD_PA_DI_FULL: string = ROUTE_HOME_FULL + "/" + ROUTE_ADD_PA_DI;//add
+
 //for mis report
 const ROUTE_MIS_REPORTS: string = "misreport";
 const ROUTE_MIS_REPORTS_VIEW: string = ROUTE_MIS_REPORTS + "/" + ':plantType';
@@ -249,6 +261,10 @@ export const ROUTE_PATHS = {
     RouteMisReportViewDetails: ROUTE_MIS_REPORT_VIEW_DETAILS_FULL,//for mis report details full
     RouteAddRCADI: ROUTE_ADD_RCA_DI_FULL,//add rca di
     RouteModifyRCADI: ROUTE_MODIFY_RCA_DI_FULL,//modify rca di
+    RouteAddCADI: ROUTE_ADD_CA_DI_FULL,//add ca di
+    RouteModifyCADI: ROUTE_MODIFY_CA_DI_FULL,//modify ca di
+    RouteAddPADI: ROUTE_ADD_PA_DI_FULL,//add pa di
+    RouteModifyPADI: ROUTE_MODIFY_PA_DI_FULL,//modify pa di
 }
 
 // Router names (like login, home, dashboard etc.)
@@ -309,4 +325,8 @@ export const ROUTER_PATHS = {
     MisReportViewDetailsRouter: ROUTE_MIS_REPORTS_VIEW_DETAILS,//for mis reports view details
     AddRCADIRouter: ROUTE_ADD_RCA_DI,//add rca di
     ModifyRCADIRouter: ROUTE_MODIFY_RCA_DI,//modify rca di
+    AddCADIRouter: ROUTE_ADD_CA_DI,//add ca di
+    ModifyCADIRouter: ROUTE_MODIFY_CA_DI,//modify ca di
+    AddPADIRouter: ROUTE_ADD_PA_DI,//add Pa di
+    ModifyPADIRouter: ROUTE_MODIFY_PA_DI,//modify Pa di
 }

@@ -23,7 +23,7 @@ import { CADIService } from "../../services/ca-di-add-edit.service";
     private fileData: FormData;
 
     public fileList: FileList;
-    public title: string = "RCA";//to show titlee on html page
+    public title: string = "CA";//to show titlee on html page
     public complaintReferenceNo: string;//to get complaint reference no from route param
     public caDIAddEditFormGroup: FormGroup;
     //for busy spinner
