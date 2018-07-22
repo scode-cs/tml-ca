@@ -14,10 +14,6 @@ h1.manage-profile-title {
   font-size: 30px;
 }
 
-.manage-profile-form {
-  padding: 30px 30px;
-}
-
 .compliant-submit-button-div{
   padding-left: 15px;
 }
@@ -247,4 +243,15 @@ input:focus {
 padding-top: 52px!important;
 }
 /* end of invoice search style*/
+.inv-report-form-style {
+  padding-top: 0px!important;
+  padding-left: 30px;
+  padding-right: 30px;
+}
+
+.grid-div-style{
+  padding-left: 30px;
+  padding-right: 30px;
+  padding-top: 3px;
+}
 

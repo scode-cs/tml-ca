@@ -8,15 +8,15 @@ import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/observable/forkJoin';//new add for forkjoin
 import { Subject } from 'rxjs/Subject';
 import { Subscription } from 'rxjs/Subscription';//to get route param
-import { LocalStorageService } from "../../../shared/services/local-storage.service";
-import { PreliInvestigationDataService } from "app/modules/preliminary-investigation-di/services/preliminary-investigation-di.service";
+import { LocalStorageService } from '../../../shared/services/local-storage.service';
+import { InvestigationReportDIDataService } from 'app/modules/investigation-report-di/services/investigation-report-di.service';
 import { NgbdModalComponent } from '../../../widget/modal/components/modal-component';
 import { AppUrlsConst, WebServiceConst } from '../../../app-config';
 import { DatePipe } from '@angular/common';
-import { SessionErrorService } from "../../../shared/services/session-error.service";
-import { NgbdComplaintReferenceNoModalComponent } from "app/modules/investigation-report-di/components/investigation-report-di-add/complaint-reference-no-modal/complaint-reference-no-modal.component";
-import { DIPolygonModel } from "app/modules/shared/components/process-flow/complain-di-polygon.model";
-
+import { SessionErrorService } from '../../../shared/services/session-error.service';
+import { NgbdComplaintReferenceNoModalComponent } from 'app/modules/investigation-report-di/components/investigation-report-di-add/complaint-reference-no-modal/complaint-reference-no-modal.component';
+import { DIPolygonModel } from 'app/modules/shared/components/process-flow/complain-di-polygon.model';
+import { InvestigationReportDIConfigModel } from 'app/modules/investigation-report-di/models/investigation-report-di-config.model';
 @Component({
   selector: 'ispl-investigation-report-di-add-form',
   templateUrl: 'investigation-report-di-add.component.html',
@@ -85,6 +85,8 @@ export class InvestigationReportDiComponent implements OnInit {
   public processFlowPageIndex: number = 0;
   public processFlowData: string[] = [];
 
+  public invReportTable: any[] = [];
+
 
   //var for modify
   public complaintRefNoForUpdate: string;
@@ -143,7 +145,7 @@ export class InvestigationReportDiComponent implements OnInit {
     private router: Router,
     // private toastService: ToastService,
     private localStorageService: LocalStorageService,
-    private preliInvestigationDataService: PreliInvestigationDataService,
+    private investigationReportDIDataService: InvestigationReportDIDataService,
     private modalService: NgbModal,//modal
     private sessionErrorService: SessionErrorService,
     private datePipe: DatePipe//for date
@@ -155,6 +157,7 @@ export class InvestigationReportDiComponent implements OnInit {
     routeSubscription = this.activatedroute.params.subscribe(params => {
       this.complaintRefNoForUpdate = params.complaintReferenceNo ? params.complaintReferenceNo : '';
     });
+    this.invReportTable = new InvestigationReportDIConfigModel().prevInvReportHeader;
     console.log("complaintReferenceNo for modify in preliminary-investigation-di-add-component: ",
       this.complaintRefNoForUpdate);
       this.buildForm();
@@ -180,23 +183,23 @@ export class InvestigationReportDiComponent implements OnInit {
   private getListAndOptionValues() {
     //taking an array for forkjoin service call method
     let preliInvestData: any[] = [];
-    preliInvestData.push(this.preliInvestigationDataService.getSocketVal());
-    preliInvestData.push(this.preliInvestigationDataService.getSpigotVal());
-    preliInvestData.push(this.preliInvestigationDataService.getStencilVal());
-    preliInvestData.push(this.preliInvestigationDataService.getSurfaceOuterVal());
-    preliInvestData.push(this.preliInvestigationDataService.getCoatingBitVal());
-    preliInvestData.push(this.preliInvestigationDataService.getFittingsJointingVal());
-    preliInvestData.push(this.preliInvestigationDataService.getInnerCMLVal());
-    preliInvestData.push(this.preliInvestigationDataService.getLoadingRelatedVal());
-    preliInvestData.push(this.preliInvestigationDataService.getLubricationVal());
-    preliInvestData.push(this.preliInvestigationDataService.getPipeLayingVal());
-    preliInvestData.push(this.preliInvestigationDataService.getDiaVal());
-    preliInvestData.push(this.preliInvestigationDataService.getClassificationVal());
-    preliInvestData.push(this.preliInvestigationDataService.getAreaSalesManagerDetailsVal(this.localStorageService.appSettings.areaSalesOrZonalManagerDesignationId));
+    preliInvestData.push(this.investigationReportDIDataService.getSocketVal());
+    preliInvestData.push(this.investigationReportDIDataService.getSpigotVal());
+    preliInvestData.push(this.investigationReportDIDataService.getStencilVal());
+    preliInvestData.push(this.investigationReportDIDataService.getSurfaceOuterVal());
+    preliInvestData.push(this.investigationReportDIDataService.getCoatingBitVal());
+    preliInvestData.push(this.investigationReportDIDataService.getFittingsJointingVal());
+    preliInvestData.push(this.investigationReportDIDataService.getInnerCMLVal());
+    preliInvestData.push(this.investigationReportDIDataService.getLoadingRelatedVal());
+    preliInvestData.push(this.investigationReportDIDataService.getLubricationVal());
+    preliInvestData.push(this.investigationReportDIDataService.getPipeLayingVal());
+    preliInvestData.push(this.investigationReportDIDataService.getDiaVal());
+    preliInvestData.push(this.investigationReportDIDataService.getClassificationVal());
+    preliInvestData.push(this.investigationReportDIDataService.getAreaSalesManagerDetailsVal(this.localStorageService.appSettings.areaSalesOrZonalManagerDesignationId));
     if(this.complaintRefNoForUpdate){
       
     }else{
-      preliInvestData.push(this.preliInvestigationDataService.getCompRefNoValForPreliInvestigationReport());
+      preliInvestData.push(this.investigationReportDIDataService.getCompRefNoValForPreliInvestigationReport());
     }
 
     Observable.forkJoin(preliInvestData).
@@ -446,7 +449,7 @@ export class InvestigationReportDiComponent implements OnInit {
       this.complaintReferenceDetailsForModify.itemsHeader = '';
       //end of if comp ref no is null  
     } else {
-      this.preliInvestigationDataService.getComplaintReferenceDetailsView(this.complaintReferenceNo,this.fileActivityId).
+      this.investigationReportDIDataService.getComplaintReferenceDetailsView(this.complaintReferenceNo,this.fileActivityId).
         subscribe(res => {
           console.log("getComplaintReferenceDetailsView: ", res);
           this.complaintReferenceDetails = res.details[0];
@@ -873,10 +876,10 @@ export class InvestigationReportDiComponent implements OnInit {
       // this.busySpinner.busy = true;//spinner
       let methodForAddOrEditPreli: any;
       methodForAddOrEditPreli = this.complaintRefNoForUpdate ? 
-      this.preliInvestigationDataService.preliModifyReportSubmit(formDataObj):
-      this.preliInvestigationDataService.submitService(formDataObj);
+      this.investigationReportDIDataService.preliModifyReportSubmit(formDataObj):
+      this.investigationReportDIDataService.submitService(formDataObj);
       // if (this.complaintRefNoForUpdate == '' || this.complaintRefNoForUpdate == undefined) {
-        // this.preliInvestigationDataService.submitService(formDataObj).
+        // this.investigationReportDIDataService.submitService(formDataObj).
         this.busySpinner.submitBusy = true;
         this.updateBusySpinner();
         methodForAddOrEditPreli.
@@ -951,7 +954,7 @@ export class InvestigationReportDiComponent implements OnInit {
   //method to get preli view report details by complaint ref no
   getPreliViewReportDetailsForModifyByCompRefNo(compRefNo: string) {
     this.busySpinner.editPreliBusy = true;
-    this.preliInvestigationDataService.getPreliViewDetForUpdate(compRefNo).
+    this.investigationReportDIDataService.getPreliViewDetForUpdate(compRefNo).
       subscribe(res => {
         console.log("complaintReferenceDetailsForModify: ", res);
         this.complaintReferenceDetailsForModify = res.details[0];
