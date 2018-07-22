@@ -241,12 +241,16 @@
         <!--end div for last date of supply-->
 
         <!--start div for area sales manager-->
-        <fieldset disabled class="form-group col-xs-12 col-sm-6 col-md-6 col-lg-4">
+        <!-- <fieldset disabled class="form-group col-xs-12 col-sm-6 col-md-6 col-lg-4">
           <label for="areaSalesManager">Customer Account Manager</label>
           <select class="custom-select col-xs-12 col-sm-6 col-md-6 col-lg-4" formControlName="areaSalesManager">
             <option *ngFor="let asm of areaSalesManagerDetails.details" value="{{asm.Key}}">{{asm.Value}}</option>
           </select>
-        </fieldset>
+        </fieldset> -->
+        <div class="form-group col-xs-12 col-sm-6 col-md-6 col-lg-4">
+            <label for="lastDateOfSupply">Customer Account Manager</label>
+            <input type="text" class="form-control" formControlName="areaSalesManager" readonly>
+        </div>
         <!--end of div for area sales manager-->
 
         <!--start div for test certificate/Inspection certificate-->
@@ -311,21 +315,29 @@
         <!--end div for Observations-->
 
         <!--start div of dia-->
-        <fieldset disabled class="form-group col-xs-12 col-sm-6 col-md-6 col-lg-4">
+        <!-- <fieldset disabled class="form-group col-xs-12 col-sm-6 col-md-6 col-lg-4">
           <label for="dia">Dia</label>
           <select class="custom-select col-xs-12 col-sm-6 col-md-6 col-lg-4" formControlName="dia">
             <option *ngFor="let d of diaVal.details" value="{{ d.Key }}">{{ d.Value }}</option>
           </select>         
-        </fieldset>
+        </fieldset> -->
+        <div class="form-group col-xs-12 col-sm-6 col-md-6 col-lg-4">
+            <label>Dia</label>
+            <input type="text" class="form-control" formControlName="dia" readonly>
+        </div>
         <!--end of div dia-->
 
         <!--start div of clasification-->
-        <fieldset disabled class="form-group col-xs-12 col-sm-6 col-md-6 col-lg-4">
+        <!-- <fieldset disabled class="form-group col-xs-12 col-sm-6 col-md-6 col-lg-4">
           <label for="classification">Classification</label>
           <select class="custom-select col-xs-12 col-sm-6 col-md-6 col-lg-4" formControlName="classification">
             <option *ngFor="let classi of classificationVal.details" value="{{ classi.Key }}">{{ classi.Value }}</option>
           </select>         
-        </fieldset>
+        </fieldset> -->
+        <div class="form-group col-xs-12 col-sm-6 col-md-6 col-lg-4">
+            <label>Classification</label>
+            <input type="text" class="form-control" formControlName="classification" readonly>
+        </div>
         <!--end of div Classification-->
 
         <!--start div for batch no-->
