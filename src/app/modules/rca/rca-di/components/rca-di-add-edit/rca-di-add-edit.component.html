@@ -3,14 +3,14 @@
         <ol class="breadcrumb breadcrumb-custom">
             <li class="breadcrumb-item">
                 <a href="#/home">
-                    <i class="fa fa-home"></i> Home </a>
+                    <i class="fa fa-home"></i> Home - RCA </a>
             </li>
             <li class="breadcrumb-item active">{{title}}</li>
         </ol>
     </div>
-    <div class="title-style">
-        <h1 class="title-style">{{ title }}{{complaintStatus}}</h1>
-    </div>
+    <!--start process flow div-->
+    <app-flowmangement [complianStatus]="complaintStatus" [pageType]="'add'"></app-flowmangement>
+    <!-- end div of process flow  -->
     <!--start form for rcaDIAddEditFormGroup-->
     <form [formGroup]="rcaDIAddEditFormGroup" autocomplete="off">
         <!-- start div for row form-style class-->
@@ -26,8 +26,7 @@
             <!--start div closeDate-->
             <div class="form-group col-xs-12 col-sm-6 col-md-6 col-lg-4">
                 <label>Date</label>
-                <input type="date" class="form-control" formControlName="rcaAddEditDate" 
-                />
+                <input type="date" class="form-control" formControlName="rcaAddEditDate" />
             </div>
             <!--end of div for closeDate-->
 
@@ -35,7 +34,8 @@
             <div class="form-group col-xs-12 col-sm-6 col-md-6 col-lg-4">
                 <label>RCA Details</label>
                 <label class="red-asterick">*</label>
-                <textarea rows="5" formControlName="rcaAddEditDetails" [value]="rcaAddEditDetails" class="form-control hide-horizontal-scroll" required></textarea>
+                <textarea rows="5" formControlName="rcaAddEditDetails" [value]="rcaAddEditDetails" class="form-control hide-horizontal-scroll"
+                    required></textarea>
                 <div class="alert alert-danger" *ngIf="rcaDIAddEditFormGroup.get('rcaAddEditDetails').hasError('required') && rcaDIAddEditFormGroup.get('rcaAddEditDetails').touched">
                     <i class="fa fa-exclamation-circle"></i>RCA Details is required!
                 </div>
@@ -84,14 +84,14 @@
         <!-- error msg div -->
         <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" *ngIf="errMsgShowFlag">
             <div class="alert alert-danger">
-              {{errorMsg}}&nbsp;
-              <button aria-label="Close" class="close" type="button" (click)="deleteResErrorMsgOnClick()">
-                <span aria-hidden="true">×</span>
-              </button>
+                {{errorMsg}}&nbsp;
+                <button aria-label="Close" class="close" type="button" (click)="deleteResErrorMsgOnClick()">
+                    <span aria-hidden="true">×</span>
+                </button>
             </div>
             <br/>
             <br/>
-          </div>
+        </div>
         <!-- end of error msg div -->
     </form>
     <!--end form for rcaDIAddEditFormGroup-->
