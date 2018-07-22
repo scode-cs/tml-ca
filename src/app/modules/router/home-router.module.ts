@@ -1,38 +1,38 @@
-import { Routes } from "@angular/router";
-import { ROUTER_PATHS } from "./router-paths";
+import { Routes } from '@angular/router';
+import { ROUTER_PATHS } from './router-paths';
 import { HomeComponent } from '../home/components/home.component';
-import { ComplaintDIRegisterComponent } from "../complain/complain-di/components/complain-di-register/complaint-di-register.component";
-import { DashboardComponent } from "../dashboard/components/dashboard.component";
-import { ComplainDIViewComponent } from "../complain/complain-di/components/complain-di-view/complain-di-view.component";
-import { AuthenticationGuardService } from "./services/route-guard.service";
-import { AddUserComponent } from "../user/components/user-add/user-add.component";
-import { ViewUserComponent } from "../user/components/user-view/user-view.component";
-import { ManageProfileComponent } from "../manage-profile/components/manage-profile.component"
+import { ComplaintDIRegisterComponent } from '../complain/complain-di/components/complain-di-register/complaint-di-register.component';
+import { DashboardComponent } from '../dashboard/components/dashboard.component';
+import { ComplainDIViewComponent } from '../complain/complain-di/components/complain-di-view/complain-di-view.component';
+import { AuthenticationGuardService } from './services/route-guard.service';
+import { AddUserComponent } from '../user/components/user-add/user-add.component';
+import { ViewUserComponent } from '../user/components/user-view/user-view.component';
+import { ManageProfileComponent } from '../manage-profile/components/manage-profile.component'
 //importing PreliminaryInvestigationDiComponent 19.07.17
-//import { PreliminaryInvestigationDiComponent } from "../preliminary-investigation-di/components/preliminary-investigation-di-add/preliminary-investigavtion-di-add.component";
-import { InvestigationReportDiComponent } from "../investigation-report-di/components/investigation-report-di-add/investigation-report-di-add.component";
-//import { PreliminaryInvestigationReportDIViewComponent } from "../preliminary-investigation-di/components/preliminary-investigation-di-view/preliminary-investigavtion-di-view.component";
-import { InvestigationReportDIViewComponent } from "../investigation-report-di/components/investigation-report-di-view/investigation-report-di-view.component";
-import { ComplaintPIRegisterComponent } from "../complain/complain-pi/components/complain-pi-register/complaint-pi-register.component";
-import { ComplainPIViewComponent } from "../complain/complain-pi/components/complain-pi-view/complain-pi-view.component";
-import { AllocateComplaintComponent } from "../allocate-reallocate-complaint/components/allocate-complaints/allocate-complaint.component";
-import { AllocateComplaintAddComponent } from "../allocate-reallocate-complaint/components/allocate-complaint-add/allocate-complaint-add.component";
-import { ComplaintResolutionDIComponent } from "../complaint-resolution-di/components/complaint-resolution-di.component";
-import { ComplaintResoluionDIAddComponent } from "../complaint-resolution-di/components/complaint-resolution-di-add/complaint-resolution-di-add.component";
+//import { PreliminaryInvestigationDiComponent } from '../preliminary-investigation-di/components/preliminary-investigation-di-add/preliminary-investigavtion-di-add.component';
+import { InvestigationReportDiComponent } from '../investigation-report-di/components/investigation-report-di-add/investigation-report-di-add.component';
+//import { PreliminaryInvestigationReportDIViewComponent } from '../preliminary-investigation-di/components/preliminary-investigation-di-view/preliminary-investigavtion-di-view.component';
+import { InvestigationReportDIViewComponent } from '../investigation-report-di/components/investigation-report-di-view/investigation-report-di-view.component';
+import { ComplaintPIRegisterComponent } from '../complain/complain-pi/components/complain-pi-register/complaint-pi-register.component';
+import { ComplainPIViewComponent } from '../complain/complain-pi/components/complain-pi-view/complain-pi-view.component';
+import { AllocateComplaintComponent } from '../allocate-reallocate-complaint/components/allocate-complaints/allocate-complaint.component';
+import { AllocateComplaintAddComponent } from '../allocate-reallocate-complaint/components/allocate-complaint-add/allocate-complaint-add.component';
+import { ComplaintResolutionDIComponent } from '../complaint-resolution-di/components/complaint-resolution-di.component';
+import { ComplaintResoluionDIAddComponent } from '../complaint-resolution-di/components/complaint-resolution-di-add/complaint-resolution-di-add.component';
 //importing capa action component
-import { CAPAActionComponent } from "../capa-action/components/capa-action.component";
-import { CAPAActionDIAddComponent } from "../capa-action/components/capa-action-di-add/capa-action-di-add.component";
+import { CAPAActionComponent } from '../capa-action/components/capa-action.component';
+import { CAPAActionDIAddComponent } from '../capa-action/components/capa-action-di-add/capa-action-di-add.component';
 //pi capa and reso
-import { CAPAActionPIComponent } from "../capa-action-pi/components/capa-action-pi.component";
-import { CAPAActionPIAddComponent } from "../capa-action-pi/components/capa-action-pi-add/capa-action-pi-add.component";
-import { ComplaintResolutionPIComponent } from "app/modules/complaint-resolution-pi/components/complaint-resolution-pi.component";
-import { ComplaintResoluionPIAddComponent } from "app/modules/complaint-resolution-pi/components/complaint-resolution-pi-add/complaint-resolution-pi-add.component";
+import { CAPAActionPIComponent } from '../capa-action-pi/components/capa-action-pi.component';
+import { CAPAActionPIAddComponent } from '../capa-action-pi/components/capa-action-pi-add/capa-action-pi-add.component';
+import { ComplaintResolutionPIComponent } from 'app/modules/complaint-resolution-pi/components/complaint-resolution-pi.component';
+import { ComplaintResoluionPIAddComponent } from 'app/modules/complaint-resolution-pi/components/complaint-resolution-pi-add/complaint-resolution-pi-add.component';
 // for close complaint pi
-import { CloseComplaintPIComponent } from "../close-complaint/close-complaint-pi/components/close-complaint-pi.component";
-import { CloseComplaintPIAddComponent } from "../close-complaint/close-complaint-pi/components/close-complaint-pi-add/close-complaint-pi-add.component";
+import { CloseComplaintPIComponent } from '../close-complaint/close-complaint-pi/components/close-complaint-pi.component';
+import { CloseComplaintPIAddComponent } from '../close-complaint/close-complaint-pi/components/close-complaint-pi-add/close-complaint-pi-add.component';
 // for close complaint di
-import { CloseComplaintDIComponent } from "../close-complaint/close-complaint-di/components/close-complaint-di.component";
-import { CloseComplaintDIAddComponent } from "../close-complaint/close-complaint-di/components/close-complaint-di-add/close-complaint-di-add.component";
+import { CloseComplaintDIComponent } from '../close-complaint/close-complaint-di/components/close-complaint-di.component';
+import { CloseComplaintDIAddComponent } from '../close-complaint/close-complaint-di/components/close-complaint-di-add/close-complaint-di-add.component';
 //for pi customer search
 import { ComplaintPICustomerSearchComponent } from '../complain/complain-pi/components/complain-pi-register/complain-pi-customer-search/complaint-pi-customer-search.component';
 //for pi invoice search
@@ -41,20 +41,20 @@ import { ComplaintPIInvoiceSearchComponent } from '../complain/complain-pi/compo
 import { ComplaintDICustomerSearchComponent } from '../complain/complain-di/components/complain-di-register/complain-di-customer-search/complaint-di-customer-search.component';
 //for di invoice search
 import { ComplaintDIInvoiceSearchComponent } from '../complain/complain-di/components/complain-di-register/complain-di-invoice-search/complaint-di-invoice-search.component';
-import { AddRoleComponent } from "../role/components/role-add/role-add.component";
-import { ViewRoleComponent } from "../role/components/role-view/role-view.component";
-//import { PreliminaryInvestigationDiViewDetailsComponent } from "../preliminary-investigation-di/components/preliminary-investigation-di-view-details/preliminary-investigavtion-di-view-details.component";
-import { InvestigationReportDiViewDetailsComponent } from "../investigation-report-di/components/investigation-report-di-view-details/investigation-report-di-view-details.component";
+import { AddRoleComponent } from '../role/components/role-add/role-add.component';
+import { ViewRoleComponent } from '../role/components/role-view/role-view.component';
+//import { PreliminaryInvestigationDiViewDetailsComponent } from '../preliminary-investigation-di/components/preliminary-investigation-di-view-details/preliminary-investigavtion-di-view-details.component';
+import { InvestigationReportDiViewDetailsComponent } from '../investigation-report-di/components/investigation-report-di-view-details/investigation-report-di-view-details.component';
 
 //to view the complaints in details
 import { ComplaintDIViewDetailsComponent } from '../complain/complain-di/components/complain-di-view-details/complaint-di-view-details.component';
-import { ReportsDIViewComponent } from "../report/report-di/components/report-di-view/report-di-view.component";
-import { ReportDIViewDetailsComponent } from "../report/report-di/components/report-di-view-details/report-di-view-details.component";
-import { RCADIAddEditComponent } from "../rca/rca-di/components/rca-di-add-edit/rca-di-add-edit.component";
-import { ComplaintReferenceNoSearchComponent } from "../investigation-report-di/components/investigation-report-di-add/complaint-reference-no-search/complaint-reference-no-search.component";
-import { CADIAddEditComponent } from "../ca/ca-di/components/ca-di-add-edit/ca-di-add-edit.component";//ca
-import { PADIAddEditComponent } from "../pa/pa-di/components/pa-di-add-edit/pa-di-add-edit.component";
-
+import { ReportsDIViewComponent } from '../report/report-di/components/report-di-view/report-di-view.component';
+import { ReportDIViewDetailsComponent } from '../report/report-di/components/report-di-view-details/report-di-view-details.component';
+import { RCADIAddEditComponent } from '../rca/rca-di/components/rca-di-add-edit/rca-di-add-edit.component';
+import { ComplaintReferenceNoSearchComponent } from '../investigation-report-di/components/investigation-report-di-add/complaint-reference-no-search/complaint-reference-no-search.component';
+import { CADIAddEditComponent } from '../ca/ca-di/components/ca-di-add-edit/ca-di-add-edit.component';//ca
+import { PADIAddEditComponent } from '../pa/pa-di/components/pa-di-add-edit/pa-di-add-edit.component';
+import { RCADIViewDetailsComponent } from '../rca/rca-di/components/rca-view-details/rca-di-view-details.component';
 
 export const HOME_ROUTES: Routes = [
   {
@@ -266,6 +266,10 @@ export const HOME_ROUTES: Routes = [
       {
         path: ROUTER_PATHS.AddRCADIRouter,//add rca di
         component: RCADIAddEditComponent
+      },
+      {
+        path: ROUTER_PATHS.ViewDetailsRCADIRouter,//rca view by complaint ref no
+        component: RCADIViewDetailsComponent
       },
       {
         path: ROUTER_PATHS.ModifyRCADIRouter,//modify rca di
