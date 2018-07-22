@@ -15,6 +15,7 @@ import { AppUrlsConst, WebServiceConst } from '../../../app-config';
 import { DatePipe } from '@angular/common';
 import { SessionErrorService } from "../../../shared/services/session-error.service";
 import { NgbdComplaintReferenceNoModalComponent } from "app/modules/investigation-report-di/components/investigation-report-di-add/complaint-reference-no-modal/complaint-reference-no-modal.component";
+import { DIPolygonModel } from "app/modules/shared/components/process-flow/complain-di-polygon.model";
 
 @Component({
   selector: 'ispl-investigation-report-di-add-form',
@@ -80,6 +81,9 @@ export class InvestigationReportDiComponent implements OnInit {
 
   // to store distinct official document no
   public officialDocumentNosArr: any[] = [];
+
+  public processFlowPageIndex: number = 0;
+  public processFlowData: string[] = [];
 
 
   //var for modify
@@ -154,6 +158,7 @@ export class InvestigationReportDiComponent implements OnInit {
     console.log("complaintReferenceNo for modify in preliminary-investigation-di-add-component: ",
       this.complaintRefNoForUpdate);
       this.buildForm();
+      this.processFlowData = new DIPolygonModel().siteVisitRequired;//set the process flow step from model    
     //formatting the current date
     let date = new Date();
     this.currentDate = this.datePipe.transform(date, 'dd-MMM-yyyy');
@@ -167,6 +172,7 @@ export class InvestigationReportDiComponent implements OnInit {
       : 'Add Investigation Report';//set the title according to the complaintRefNoForModify
     //method to get preli view det for modify
     this.preliReportViewByComplaintRefNo(this.complaintRefNoForUpdate);
+    
 
   }//end of onInit
 

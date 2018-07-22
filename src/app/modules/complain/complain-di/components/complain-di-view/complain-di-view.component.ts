@@ -1,13 +1,14 @@
 import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormBuilder, Validators, FormControl } from '@angular/forms';
-import { LocalStorageService } from "../../../../shared/services/local-storage.service";
-import { ViewComplaintDIDataService } from "app/modules/complain/complain-di/services/complaint-di-view-data.service";
+import { LocalStorageService } from '../../../../shared/services/local-storage.service';
+import { ViewComplaintDIDataService } from 'app/modules/complain/complain-di/services/complaint-di-view-data.service';
 import { Router, ActivatedRoute } from '@angular/router';
 import { Subscription } from 'rxjs/Subscription';//to get route param
 import { ROUTE_PATHS } from '../../../../router/router-paths';
 import { ComplainDIViewModel } from '../../models/complain-di-view.model';
 import { TilesInteractionService } from '../../../../dashboard/services/tiles-interaction.service';
-import { SessionErrorService } from "../../../../shared/services/session-error.service";
+import { SessionErrorService } from '../../../../shared/services/session-error.service';
+import { ProcessFlowStatusDetailsModel } from 'app/modules/shared/components/process-flow/process-flow-status-details.model';
 
 @Component({
   selector: 'ispl-complain-di-view',
@@ -22,7 +23,7 @@ export class ComplainDIViewComponent implements OnInit {
 
   public facetedDataDetails: any[] = [];//to show faceted data in html
 
-  
+  public processFlowStatusDet: string[] = [];
 
   //for sorting and orderType activity id parameters
   public sortSelection: any = {
@@ -276,39 +277,18 @@ export class ComplainDIViewComponent implements OnInit {
   }//end of onclick method
 
   //creating method to get complaint details by single check
-  complaintDetailsByCheckbox(complaintDetail, viewParam?: string) {
-    this.getComplaintDetailsByCheckbox(complaintDetail, viewParam);
+  selectComplaint(complaintDetail, viewParam?: string) {
+    this.getComplaintDetailsOnSelect(complaintDetail, viewParam);
 
   }
-  getComplaintDetailsByCheckbox(complaintDetail: any, viewParam?: string) {
+  getComplaintDetailsOnSelect(complaintDetail: any, viewParam?: string) {
     console.log("checked : ", complaintDetail);
+    this.processFlowStatusDet = new ProcessFlowStatusDetailsModel().statusDetails;
+    console.log("this.processFlowStatusDet======",this.processFlowStatusDet);
     console.log("param to check the click from view::",viewParam);
-    //checking the length of selectedData by clicking on checkbox
-    if (this.selectedData.length == 0) {
-      //push complaintDetail obj to selectedData array
-      this.selectedData.push(complaintDetail);
-      console.log("complaint di selected data : ", this.selectedData);
-    } else {
-      let indexCount: number = 0;
-      let removeFlag: boolean = false;
-      for (let selectedData of this.selectedData) {
-        if (selectedData.complaintReferenceNo == complaintDetail.complaintReferenceNo) {
-          this.selectedData.splice(indexCount, 1);
-          removeFlag = true;
-          break;
-        }//end of if
-        indexCount++;
-      }//end of for
-      console.log("complaint di selected data after deleting: ", this.selectedData);
-      if (!removeFlag) {
-        this.selectedData.push(complaintDetail);
-      }//end of if
-      console.log("complaint di selected data after pushing: ", this.selectedData);
-    }//end of else
-     //check the param is view then call the view method
-     if(viewParam === 'View'){
-      this.viewComplaintDetails();
-    }
+
+    //TODO: Need to add route logic
+
   }//end of method of getcomplaintDetailByCheckbox
 
 

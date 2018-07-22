@@ -170,7 +170,7 @@
                         <ng-container *ngIf="complaintViewValue.activityId==complaintLoggedActivityId then thenBlockOfCheckboxForActivityId; else elseBlockOfCheckboxForActivityId"></ng-container>
                         <ng-template #thenBlockOfCheckboxForActivityId>
                           <td class="td-style-first">
-                            <input type="checkbox" [checked]="otherCheck" (click)="complaintDetailsByCheckbox(complaintViewValue)" />
+                            <input type="checkbox" [checked]="otherCheck" (click)="selectComplaint(complaintViewValue)" />
                           </td>
                         </ng-template>
                         <ng-template #elseBlockOfCheckboxForActivityId>
@@ -181,7 +181,7 @@
                         <ng-container *ngIf="complaintViewValue.activityId==complaintLoggedActivityId then thenBlockOfCheckboxForActivityIdSiteVisit; else elseBlockOfCheckboxForActivityIdSiteVisit"></ng-container>
                         <ng-template #thenBlockOfCheckboxForActivityIdSiteVisit>
                           <td class="td-style-first">
-                            <input type="checkbox" [checked]="otherCheck" (click)="complaintDetailsByCheckbox(complaintViewValue)" />
+                            <input type="checkbox" [checked]="otherCheck" (click)="selectComplaint(complaintViewValue)" />
                           </td>
                         </ng-template>
                         <ng-template #elseBlockOfCheckboxForActivityIdSiteVisit>
@@ -193,7 +193,7 @@
                     <!-- start ng-template for view checkbox -->
                     <ng-template #elseBlockOfModifyCheckbox>
                       <td class="td-style-first">
-                        <!-- <input type="checkbox" [checked]="otherCheck" (click)="complaintDetailsByCheckbox(complaintViewValue)"/> -->
+                        <!-- <input type="checkbox" [checked]="otherCheck" (click)="selectComplaint(complaintViewValue)"/> -->
                       </td>
                     </ng-template>
                     <!-- end of ng-template for view checkbox -->
@@ -201,7 +201,7 @@
                       {{complaintViewValue.complaintReferenceNo}}
                     </td>
                     <td class="td-style" *ngIf="viewEditParam === 'View'">
-                      <span class="custom-link" title="Click here" (click)="complaintDetailsByCheckbox(complaintViewValue,'View')">
+                      <span class="custom-link" title="Click here" (click)="selectComplaint(complaintViewValue,'View')">
                         {{complaintViewValue.complaintReferenceNo}}
                       </span>
                     </td>
