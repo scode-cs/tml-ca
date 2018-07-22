@@ -8,7 +8,7 @@ import { ROUTE_PATHS } from '../../router/router-paths';
 import { LocalStorageService } from "../../shared/services/local-storage.service";
 import { UserModel } from "../../shared/models/user-model";
 import { AppSettingsModel } from "../../shared/models/app-settings-model";
-import { DBSettingsModel } from "../../shared/models/db-settings-model";
+import { DBSettingsModel } from '../../shared/models/db-Settings-model';
 
 @Component({
   selector: 'ispl-login',
