@@ -4,12 +4,14 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { LoginComponent } from './components/login.component';
 import { LoginService } from './services/login.service';
 import { HomeModule } from '../home/home.module';
+import { SharedModule } from '../shared/shared.module';
 
 @NgModule({
   imports: [
     ReactiveFormsModule,
     BrowserModule,
-    HomeModule
+    HomeModule,
+    SharedModule
   ],
   declarations: [
     LoginComponent

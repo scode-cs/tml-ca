@@ -10,7 +10,8 @@ import { DashboardBothService } from '../../services/dashboard-both.services';
 import { ROUTE_PATHS } from '../../../router/router-paths';
 import { AppSettingsModel } from '../../../shared/models/app-settings-model';
 import { UserModel } from '../../../shared/models/user-model';
-import { DBSettingsModel } from "../../../shared/models/db-settings-model";
+import { DBSettingsModel } from '../../../shared/models/db-Settings-model';
+
 @Component({
   selector: 'dashboard-both-modal-component',
   templateUrl: 'dashboard-both-modal.component.html',
