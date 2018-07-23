@@ -97,6 +97,7 @@ export class InvestigationReportDiViewDetailsComponent implements OnInit {
   
   public invReportTable: any[] = [];
 
+
   constructor(
     private activatedroute: ActivatedRoute,
     private formBuilder: FormBuilder,
@@ -125,7 +126,6 @@ export class InvestigationReportDiViewDetailsComponent implements OnInit {
       : 'Investigation Report';//set the title according to the complaintRefNoForModify
     //method to get preli view det for view
     this.preliReportViewByComplaintRefNo(this.complaintRefNoForUpdate);
-
   }//end of onInit
 
   //method to get list & option values from service class
@@ -205,6 +205,11 @@ export class InvestigationReportDiViewDetailsComponent implements OnInit {
       'complaintRefNo': [''
       ],
       'complaintRefNoForModify': [''
+      ],
+      'siteVisitMade': [''
+        , [
+          Validators.required
+        ]
       ],
       'siteVisitDate': [''
       ],
