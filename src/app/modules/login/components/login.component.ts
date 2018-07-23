@@ -30,6 +30,9 @@ export class LoginComponent implements OnInit {
 
   ngOnInit(): void {
     this.buildForm();
+    // let testStr: string =  '[{"SLNO":"1","AUTO_ID":"1"},{"SLNO":"2","AUTO_ID":"2"}]';
+    // let json : any = JSON.parse(testStr);
+    // console.log("json==== ",json);
   }
 
   private buildForm(): void {
