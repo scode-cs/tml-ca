@@ -181,7 +181,7 @@ const ROUTE_VIEW_ROLE_FULL: string = ROUTE_HOME_FULL + "/" + ROUTE_VIEW_ROLE;
 //rca
 const ROUTE_ADD_RCA_DI: string = "addrcadi";
 const ROUTE_MODIFY_RCA_DI: string = ROUTE_ADD_RCA_DI + '/' + ':complaintReferenceNo'+ '/' + ':complaintStatus';
-const ROUTE_MODIFY_RCA_DI_FULL: string = ROUTE_HOME_FULL + "/" + ROUTE_ADD_RCA_DI;//modify
+// const ROUTE_MODIFY_RCA_DI_FULL: string = ROUTE_HOME_FULL + "/" + ROUTE_ADD_RCA_DI;//modify
 const ROUTE_ADD_RCA_DI_FULL: string = ROUTE_HOME_FULL + "/" + ROUTE_ADD_RCA_DI;//add
 const ROUTE_VIEW_DETAILS_RCA_DI_CONST: string = "viewrcadi";//rca view
 const ROUTE_VIEW_DETAILS_RCA_DI: string = ROUTE_VIEW_DETAILS_RCA_DI_CONST + '/' + ':complaintReferenceNo'+ '/' + ':complaintStatus';
@@ -272,7 +272,7 @@ export const ROUTE_PATHS = {
     RouteMisReportView: ROUTE_MIS_REPORTS_VIEW_FULL,//for mis report grid view full
     RouteMisReportViewDetails: ROUTE_MIS_REPORT_VIEW_DETAILS_FULL,//for mis report details full
     RouteAddRCADI: ROUTE_ADD_RCA_DI_FULL,//add rca di
-    RouteModifyRCADI: ROUTE_MODIFY_RCA_DI_FULL,//modify rca di
+    // RouteModifyRCADI: ROUTE_MODIFY_RCA_DI_FULL,//modify rca di
     RouteViewDetailsRCADI: ROUTE_VIEW_DETAILS_RCA_DI_FULL,//view rca
     RouteAddCADI: ROUTE_ADD_CA_DI_FULL,//add ca di
     // RouteModifyCADI: ROUTE_MODIFY_CA_DI_FULL,//modify ca di
@@ -338,15 +338,11 @@ export const ROUTER_PATHS = {
     ViewRoleRouter: ROUTE_VIEW_ROLE,
     MisReportViewRouter: ROUTE_MIS_REPORTS_VIEW,//for grid view of mis report
     MisReportViewDetailsRouter: ROUTE_MIS_REPORTS_VIEW_DETAILS,//for mis reports view details
-    AddRCADIRouter: ROUTE_ADD_RCA_DI,//add rca di
-    ModifyRCADIRouter: ROUTE_MODIFY_RCA_DI,//modify rca di
+    AddRCADIRouter: ROUTE_MODIFY_RCA_DI,//add rca di
+    // ModifyRCADIRouter: ROUTE_MODIFY_RCA_DI,//modify rca di
     ViewDetailsRCADIRouter: ROUTE_VIEW_DETAILS_RCA_DI,//rca view details
     AddCADIRouter: ROUTE_MODIFY_CA_DI,//add ca di
-    // AddCADIRouter: ROUTE_ADD_CA_DI,//add ca di
-    // ModifyCADIRouter: ROUTE_MODIFY_CA_DI,//modify ca di
     ViewDetailsCADIRouter: ROUTE_VIEW_DETAILS_CA_DI,//ca view details
     AddPADIRouter: ROUTE_MODIFY_PA_DI,//add Pa di
-    // AddPADIRouter: ROUTE_ADD_PA_DI,//add Pa di
-    // ModifyPADIRouter: ROUTE_MODIFY_PA_DI,//modify Pa di
     ViewDetailsPADIRouter: ROUTE_VIEW_DETAILS_PA_DI,//pa view details
 }

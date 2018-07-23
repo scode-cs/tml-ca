@@ -274,17 +274,9 @@ export const HOME_ROUTES: Routes = [
         component: RCADIViewDetailsComponent
       },
       {
-        path: ROUTER_PATHS.ModifyRCADIRouter,//modify rca di
-        component: RCADIAddEditComponent
-      },
-      {
         path: ROUTER_PATHS.AddCADIRouter,//add ca di
         component: CADIAddEditComponent
       },
-      // {
-      //   path: ROUTER_PATHS.ModifyCADIRouter,//modify ca di
-      //   component: CADIAddEditComponent
-      // },
       {
         path: ROUTER_PATHS.ViewDetailsCADIRouter,//ca view by complaint ref no
         component: CADIViewDetailsComponent
@@ -293,10 +285,6 @@ export const HOME_ROUTES: Routes = [
         path: ROUTER_PATHS.AddPADIRouter,//add pa di
         component: PADIAddEditComponent
       },
-      // {
-      //   path: ROUTER_PATHS.ModifyPADIRouter,//modify pa di
-      //   component: PADIAddEditComponent
-      // },
       {
         path: ROUTER_PATHS.ViewDetailsPADIRouter,//pa view by complaint ref no
         component: PADIViewDetailsComponent
