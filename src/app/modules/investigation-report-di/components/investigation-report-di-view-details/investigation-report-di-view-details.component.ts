@@ -73,6 +73,9 @@ export class InvestigationReportDiViewDetailsComponent implements OnInit {
   //array to store item details
   public itemDetailsArr: any[] = [];
 
+  //variable used for radio button
+  public siteVisitMadeValue: string = "Y";
+
   //var for view
   public complaintRefNoForUpdate: string;
   //var for checkboxes
@@ -799,6 +802,24 @@ export class InvestigationReportDiViewDetailsComponent implements OnInit {
         this.sessionErrorService.routeToLogin(err._body);
       });
   }//end of method getPreliViewReportDetailsByCompRefNo
+
+  //start method for clicking radio button 
+  public onRadioClick(radioValue) {
+    console.log("radioValue ", radioValue);
+    this.siteVisitMadeValue = radioValue;
+  //   //  if siteVisitValue is Y then this if condition will be executed
+    if (this.siteVisitMadeValue === "Y") {
+      this.preliInvestFormGroup.controls["siteVisitMade"].setValue(this.siteVisitMadeValue);
+  //     //set sitevisitby field mandatory
+      this.preliInvestFormGroup.get('siteVisitDate').setValidators(Validators.required);
+    } else if (this.siteVisitMadeValue === "N") { // siteVisitValue is N then this if condition will be executed
+  //     this.siteVisitDt = "Info";
+      this.preliInvestFormGroup.controls["siteVisitMade"].setValue(this.siteVisitMadeValue);
+      this.preliInvestFormGroup.get('siteVisitDate').setValidators(null);
+      this.preliInvestFormGroup.get('siteVisitDate').updateValueAndValidity();
+      this.preliInvestFormGroup.controls['siteVisitDate'].markAsUntouched();
+    } // end of else
+  }//end of method onRadioClick
 
 
 }//end of class
