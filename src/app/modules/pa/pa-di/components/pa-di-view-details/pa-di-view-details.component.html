@@ -8,9 +8,9 @@
             <li class="breadcrumb-item active">{{title}}</li>
         </ol>
     </div>
-    <div class="title-style">
-        <h1 class="title-style">{{ title }}{{complaintStatus}}</h1>
-    </div>
+    <!--start process flow div-->
+    <app-flowmangement [complianStatus]="complaintStatus" [pageType]="'view'"></app-flowmangement>
+    <!-- end div of process flow  -->
     <!--start form for rcaDIAddEditFormGroup-->
     <form [formGroup]="paDIAddEditFormGroup" autocomplete="off">
         <!-- start div for row form-style class-->
