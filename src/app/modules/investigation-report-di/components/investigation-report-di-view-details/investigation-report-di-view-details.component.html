@@ -97,11 +97,54 @@
         </div>
         <!-- end div for Complaint Reference No [View] -->
 
-        <!-- start div for site visit Date -->
+        <!-- start div of Site Visit Made radio button -->
         <div class="form-group col-xs-12 col-sm-6 col-md-6 col-lg-4">
-          <label for="siteVisitDate">Site Visit Date</label>
-          <input type="text" class="form-control" [value]="siteVisitDt|date: 'dd-MMM-yyyy'" formControlName="siteVisitDate" readonly>
-        </div>
+          <ng-container *ngIf="siteVisitMadeValue =='Y'">
+            <div style="display:inline-block;">
+              <label>Site Visit Made</label>
+              <label class="red-asterick">*</label>
+              <label class="control control--radio">Yes
+                <input type="radio" name="siteVisitMade" formControlName="siteVisitMade" [value]="Y" [checked]=true (click)="onRadioClick('Y')" />
+                <div class="control__indicator"></div>
+              </label>
+            </div>
+            <div style="display:inline-block;">
+              <label class="control control--radio">No
+                <input type="radio" name="siteVisitMade" formControlName="siteVisitMade" [value]="N" (click)="onRadioClick('N')" />
+                <div class="control__indicator"></div>
+              </label>
+            </div>
+          </ng-container>
+          <ng-container *ngIf="siteVisitMadeValue =='N'">
+            <div style="display:inline-block;">
+              <label>Site Visit Made</label>
+              <label class="red-asterick">*</label>
+              <label class="control control--radio">Yes
+                <input type="radio" name="siteVisitMade" formControlName="siteVisitMade" [value]="Y" (click)="onRadioClick('Y')" />
+                <div class="control__indicator"></div>
+              </label>
+            </div>
+            <div style="display:inline-block;">
+              <label class="control control--radio">No
+                <input type="radio" name="siteVisitMade" formControlName="siteVisitMade" [value]="N" [checked]=true (click)="onRadioClick('N')" />
+                <div class="control__indicator"></div>
+              </label>
+            </div>
+          </ng-container>
+          </div>
+          <!-- end div of Site Visit Made requied -->
+
+
+        <!-- start div for site visit Date -->
+        <ng-container *ngIf="siteVisitMadeValue === 'Y'">
+          <div class="form-group col-xs-12 col-sm-6 col-md-6 col-lg-4">
+            <label for="siteVisitDate">Site Visit Date</label>
+            <input type="date" class="form-control" [value]="siteVisitDt|date: 'dd-MMM-yyyy'" formControlName="siteVisitDate">
+            <div class="alert alert-danger" *ngIf="preliInvestFormGroup.get('siteVisitDate').touched && preliInvestFormGroup.get('siteVisitDate').hasError('required')">
+              <i class="fa fa-exclamation-circle"></i> Site Visit Date is required!
+            </div>
+          </div>
+        </ng-container>
         <!-- end div for site visit Date -->
 
         <!-- start div for Date -->

@@ -30,7 +30,7 @@ export class InvestigationReportDiComponent implements OnInit {
   // form data for file upload
   private formData: FormData = new FormData();
   private fileData: FormData;
-  public fileList: FileList; 
+  public fileList: FileList;
 
   public title: string;
 
@@ -87,6 +87,9 @@ export class InvestigationReportDiComponent implements OnInit {
 
   public invReportTable: any[] = [];//to store prev inv report
 
+  //variable used for radio button
+  public siteVisitMadeValue: string = "";
+
 
   //var for modify
   public complaintRefNoForUpdate: string;
@@ -109,7 +112,7 @@ export class InvestigationReportDiComponent implements OnInit {
   public resErrorMsg: string;
   //for file
   public fileActivityId: number = this.localStorageService.appSettings.preliminaryInvestigationActivityId;//to get uploaded file for DI edit
-  
+
   //set maxlength from localstorage
   public testCertificateLength: number = this.localStorageService.dbSettings.testCertificate;
   public complaintDescriptionLength: number = this.localStorageService.dbSettings.complaintDescription;
@@ -160,22 +163,22 @@ export class InvestigationReportDiComponent implements OnInit {
     this.invReportTable = new InvestigationReportDIConfigModel().prevInvReportHeader;
     console.log("complaintReferenceNo for modify in preliminary-investigation-di-add-component: ",
       this.complaintRefNoForUpdate);
-      this.buildForm();
-      this.processFlowData = new DIPolygonModel().siteVisitRequired;//set the process flow step from model    
+    this.buildForm();
+    this.processFlowData = new DIPolygonModel().siteVisitRequired;//set the process flow step from model    
     //formatting the current date
     let date = new Date();
     this.currentDate = this.datePipe.transform(date, 'dd-MMM-yyyy');
     this.preliInvestFormGroup.controls["preliDate"].setValue(this.currentDate);
     this.preliDate = this.datePipe.transform(this.currentDate, 'dd-MMM-yyyy');
     console.log("  preli::: this.preliDate   ", this.preliDate);
-   
+
     this.getListAndOptionValues();//method to get list val from service class
     this.title = this.complaintRefNoForUpdate ?
       'Modify Investigation Report'
       : 'Add Investigation Report';//set the title according to the complaintRefNoForModify
     //method to get preli view det for modify
     this.preliReportViewByComplaintRefNo(this.complaintRefNoForUpdate);
-    
+
 
   }//end of onInit
 
@@ -196,9 +199,9 @@ export class InvestigationReportDiComponent implements OnInit {
     preliInvestData.push(this.investigationReportDIDataService.getDiaVal());
     preliInvestData.push(this.investigationReportDIDataService.getClassificationVal());
     preliInvestData.push(this.investigationReportDIDataService.getAreaSalesManagerDetailsVal(this.localStorageService.appSettings.areaSalesOrZonalManagerDesignationId));
-    if(this.complaintRefNoForUpdate){
-      
-    }else{
+    if (this.complaintRefNoForUpdate) {
+
+    } else {
       preliInvestData.push(this.investigationReportDIDataService.getCompRefNoValForPreliInvestigationReport());
     }
 
@@ -218,13 +221,13 @@ export class InvestigationReportDiComponent implements OnInit {
         this.diaVal = res[10];
         this.classificationVal = res[11];
         this.areaSalesManagerDetails = res[12];
-        if(this.complaintRefNoForUpdate){
+        if (this.complaintRefNoForUpdate) {
 
-        }else{
+        } else {
           this.complaintRefNoVal = res[13];
           //checking ref no are available or not
-          if(this.complaintRefNoVal.length == 1){
-            this. resMsgType = this.errorConst;
+          if (this.complaintRefNoVal.length == 1) {
+            this.resMsgType = this.errorConst;
             this.resErrorMsg = "No complaint reference no found for Site Visit report ! ";
           }//end of if
         }//end of else
@@ -232,12 +235,12 @@ export class InvestigationReportDiComponent implements OnInit {
         this.busySpinner.allPreliBusy = false;
         this.updateBusySpinner();
       },
-      err => {
-        console.log(err);
-        this.busySpinner.allPreliBusy = false;
-        this.updateBusySpinner();
-        this.sessionErrorService.routeToLogin(err._body);
-      });
+        err => {
+          console.log(err);
+          this.busySpinner.allPreliBusy = false;
+          this.updateBusySpinner();
+          this.sessionErrorService.routeToLogin(err._body);
+        });
   }//end of method getListValues & options val
 
   //onOpenModal for opening modal from modalService
@@ -255,7 +258,7 @@ export class InvestigationReportDiComponent implements OnInit {
   private updateBusySpinner() {
     if (this.busySpinner.allPreliBusy || this.busySpinner.editPreliBusy || this.busySpinner.submitBusy) {
       this.busySpinner.busy = true;
-    } else if(this.busySpinner.allPreliBusy == false  && this.busySpinner.editPreliBusy == false && this.busySpinner.submitBusy == false){
+    } else if (this.busySpinner.allPreliBusy == false && this.busySpinner.editPreliBusy == false && this.busySpinner.submitBusy == false) {
       this.busySpinner.busy = false;
     }//end of else if
   }//end of busy spinner method
@@ -268,6 +271,11 @@ export class InvestigationReportDiComponent implements OnInit {
         // ]
       ],
       'complaintRefNoForModify': [''
+      ],
+      'siteVisitMade': [''
+        , [
+          Validators.required
+        ]
       ],
       'siteVisitDate': [''
       ],
@@ -304,9 +312,9 @@ export class InvestigationReportDiComponent implements OnInit {
       'complaintDescription': [''
       ],
       'observations': [''
-      , [
-        Validators.required
-      ]
+        , [
+          Validators.required
+        ]
       ],
       'dia': [''
         , [
@@ -319,9 +327,9 @@ export class InvestigationReportDiComponent implements OnInit {
         ]
       ],
       'batchNo': [''
-      , [
-        Validators.required
-      ]
+        , [
+          Validators.required
+        ]
       ],
       'marking': [''
       ],
@@ -344,7 +352,7 @@ export class InvestigationReportDiComponent implements OnInit {
       'rubberGasketMake': [''
       ],
       'rubberGasketBatchNo': [''
-      , [
+        , [
           Validators.required
         ]
       ],
@@ -404,10 +412,10 @@ export class InvestigationReportDiComponent implements OnInit {
   }//end of build form
 
   // to get distinct official document no
-  private getDistinctOfficialDocNoDropdownVal(invoiceDetails: any){
-    if(this.officialDocumentNosArr.length === 0){
-      for(let invDet of invoiceDetails.items){
-        if(invDet.invoiceNo){
+  private getDistinctOfficialDocNoDropdownVal(invoiceDetails: any) {
+    if (this.officialDocumentNosArr.length === 0) {
+      for (let invDet of invoiceDetails.items) {
+        if (invDet.invoiceNo) {
           this.officialDocumentNosArr.push(invDet.invoiceNo);
         }//end of if
       }//end of for
@@ -415,20 +423,20 @@ export class InvestigationReportDiComponent implements OnInit {
   }//end of the method getDistinctOfficialDocNoDropdownVal
 
   //method to get TotalQtyFromItems 
-  private getTotalQtyFromItems(itemdetjson: any) { 
-    console.log("itemdetjson in getTotalQtyFromItems:::::",itemdetjson);
+  private getTotalQtyFromItems(itemdetjson: any) {
+    console.log("itemdetjson in getTotalQtyFromItems:::::", itemdetjson);
     this.itemDetailsArr = itemdetjson;
     // this.complaintReferenceDetailsForModify.itemNos.items;
-        console.log("this.itemDetailsArr:::::>>>>>>>",this.itemDetailsArr);
-        for(let itms of this.itemDetailsArr){
-          let firstCharOfItmcode: string = itms.itemCode.charAt(0).toUpperCase();
-          console.log("item code first letter :::::::",firstCharOfItmcode);
-          if(firstCharOfItmcode === "D"){
-            console.log("itmcode === D");
-            this.totalQtyInMtrs = this.totalQtyInMtrs + itms.invoiceQtyInMtrs;
-            this.totalQtyInTons = this.totalQtyInTons + itms.invoiceQtyInTons;
-          }
-        }
+    console.log("this.itemDetailsArr:::::>>>>>>>", this.itemDetailsArr);
+    for (let itms of this.itemDetailsArr) {
+      let firstCharOfItmcode: string = itms.itemCode.charAt(0).toUpperCase();
+      console.log("item code first letter :::::::", firstCharOfItmcode);
+      if (firstCharOfItmcode === "D") {
+        console.log("itmcode === D");
+        this.totalQtyInMtrs = this.totalQtyInMtrs + itms.invoiceQtyInMtrs;
+        this.totalQtyInTons = this.totalQtyInTons + itms.invoiceQtyInTons;
+      }
+    }
   }// end of method to get TotalQtyFromItems 
 
   //method for onChangeComplaintRefNo to get some value
@@ -443,19 +451,19 @@ export class InvestigationReportDiComponent implements OnInit {
       this.preliInvestFormGroup.controls["concernedPersonName"].setValue('');
       this.preliInvestFormGroup.controls["siteVisitDate"].setValue('');
       // this.preliInvestFormGroup.controls["totalNoOfPipes"].setValue(0);
-      this.preliInvestFormGroup.controls["totalQtyInTons"].setValue(0);      
+      this.preliInvestFormGroup.controls["totalQtyInTons"].setValue(0);
       this.preliInvestFormGroup.controls["totalQtyInMtrs"].setValue(0);
       this.complaintReferenceDetailsForModify.itemNos = '';
       this.complaintReferenceDetailsForModify.itemsHeader = '';
       //end of if comp ref no is null  
     } else {
-      this.investigationReportDIDataService.getComplaintReferenceDetailsView(this.complaintReferenceNo,this.fileActivityId).
+      this.investigationReportDIDataService.getComplaintReferenceDetailsView(this.complaintReferenceNo, this.fileActivityId).
         subscribe(res => {
           console.log("getComplaintReferenceDetailsView: ", res);
           this.complaintReferenceDetails = res.details[0];
           console.log("complaintReferenceDetails: ", this.complaintReferenceDetails);
           this.resMsgType = res.msgType;
-          if(res.msgType == this.infoConstant){
+          if (res.msgType == this.infoConstant) {
             this.siteVisitDt = this.complaintReferenceDetails.siteVisitDt;
             this.preliInvestFormGroup.controls["siteVisitDate"].setValue(this.siteVisitDt);
             console.log("siteVisitDt: ", this.siteVisitDt);
@@ -467,7 +475,7 @@ export class InvestigationReportDiComponent implements OnInit {
             //new add
             //new add for grid view of preli item det at the time of selecting a complaint reference no
             this.complaintReferenceDetailsForModify.itemNos = this.complaintReferenceDetails.itemNos;
-            
+
             this.complaintReferenceDetailsForModify.itemsHeader = res.itemsHeader;
             // this.totalNoOfPipes = this.complaintReferenceDetails.invoiceQtyTotal;
             // this.preliInvestFormGroup.controls["totalNoOfPipes"].setValue(this.totalNoOfPipes);
@@ -476,37 +484,37 @@ export class InvestigationReportDiComponent implements OnInit {
             itemdetjson = this.complaintReferenceDetailsForModify.itemNos.items;
             //calling the method to get total qty
             this.getTotalQtyFromItems(itemdetjson);
-            
+
             // this.totalQtyInTons = this.complaintReferenceDetails.invoiceQtyInTons;
             this.preliInvestFormGroup.controls["totalQtyInTons"].setValue(this.totalQtyInTons);
             // this.totalQtyInMtrs = this.complaintReferenceDetails.invoiceQtyInMtrs;
             this.preliInvestFormGroup.controls["totalQtyInMtrs"].setValue(this.totalQtyInMtrs);
-          }else{
-            this. resMsgType = this.errorConst;
+          } else {
+            this.resMsgType = this.errorConst;
             this.resErrorMsg = "Sorry! Save data fail. Please try again";
           }
           this.busySpinner.editPreliBusy = false;
           this.updateBusySpinner();
         },
-        err => {
-          console.log("getComplaintReferenceDetailsView Error: ", err);
-          if (err.status == 401) {
-            this.resErrorMsg = "Sorry! Unable to save data. Please try again.";
-          } else {
-            this.resErrorMsg = "Netowrk/Server Problem";
-          }
-          this.busySpinner.editPreliBusy = false;
-          this.updateBusySpinner();
-          this.sessionErrorService.routeToLogin(err._body);
-        });
+          err => {
+            console.log("getComplaintReferenceDetailsView Error: ", err);
+            if (err.status == 401) {
+              this.resErrorMsg = "Sorry! Unable to save data. Please try again.";
+            } else {
+              this.resErrorMsg = "Netowrk/Server Problem";
+            }
+            this.busySpinner.editPreliBusy = false;
+            this.updateBusySpinner();
+            this.sessionErrorService.routeToLogin(err._body);
+          });
     }//end of else comp ref no is null
   }//end of onChangeComplaintRefNo
 
   //start method of onAddItemOpenModal
-  public onAddItemOpenModal(){
+  public onAddItemOpenModal() {
     this.getDistinctOfficialDocNoDropdownVal(this.complaintReferenceDetailsForModify.itemNos);
   }//end of the method
-  
+
   //method for list check
   public onclickSurfaceOuterCheck(key) {
     //alert("checked surface outer val :" + key);
@@ -847,7 +855,7 @@ export class InvestigationReportDiComponent implements OnInit {
     preliInvestiReportDet.activityId = 0;
     console.log("preli investigation report submit val: ", preliInvestiReportDet);
     console.log("this.totalFileSize on submit method:::::::::::", this.totalFileSize);
-    
+
     if (this.totalFileSize > this.fileSizeLimit) {
       this.resMsgType = this.errorConst;
       this.resErrorMsg = "File size should be within 100 mb !";
@@ -872,35 +880,35 @@ export class InvestigationReportDiComponent implements OnInit {
 
       let formDataObj: any = {};
       formDataObj = this.formData;
-      console.log("preli formDataObj====>>>>",formDataObj);
+      console.log("preli formDataObj====>>>>", formDataObj);
       // this.busySpinner.busy = true;//spinner
       let methodForAddOrEditPreli: any;
-      methodForAddOrEditPreli = this.complaintRefNoForUpdate ? 
-      this.investigationReportDIDataService.preliModifyReportSubmit(formDataObj):
-      this.investigationReportDIDataService.submitService(formDataObj);
+      methodForAddOrEditPreli = this.complaintRefNoForUpdate ?
+        this.investigationReportDIDataService.preliModifyReportSubmit(formDataObj) :
+        this.investigationReportDIDataService.submitService(formDataObj);
       // if (this.complaintRefNoForUpdate == '' || this.complaintRefNoForUpdate == undefined) {
-        // this.investigationReportDIDataService.submitService(formDataObj).
-        this.busySpinner.submitBusy = true;
-        this.updateBusySpinner();
-        methodForAddOrEditPreli.
+      // this.investigationReportDIDataService.submitService(formDataObj).
+      this.busySpinner.submitBusy = true;
+      this.updateBusySpinner();
+      methodForAddOrEditPreli.
         subscribe(res => {
-          console.log("preli Success Response: ",res);
+          console.log("preli Success Response: ", res);
           this.busySpinner.submitBusy = false;
           this.updateBusySpinner();
-          if(res.msgType == "Info"){
-            this. resMsgType = res.msgType;
+          if (res.msgType == "Info") {
+            this.resMsgType = res.msgType;
             let complainRefrenceId: string;
             complainRefrenceId = preliInvestiReportDet.complaintRefNo;
             this.onOpenModal(complainRefrenceId);
             this.router.navigate([ROUTE_PATHS.RouteHome]);
-          }else{
-            this. resMsgType = this.errorConst;
+          } else {
+            this.resMsgType = this.errorConst;
             this.resErrorMsg = "Sorry! Save data fail. Please try again";
             this.formData = new FormData();
             // "Sorry! Unable to save data.Please try again";
             // "Netowrk/Server Problem";
           }
-        },err => {
+        }, err => {
           this.busySpinner.submitBusy = false;
           this.updateBusySpinner();
           if (err.status == 401) {
@@ -909,8 +917,8 @@ export class InvestigationReportDiComponent implements OnInit {
             this.resErrorMsg = "Netowrk/Server Problem";
           }
           this.formData = new FormData();
-        });      
-      }//end of else
+        });
+    }//end of else
   }//end of method preliDiSubmit
 
   // start method of deleteResErrorMsgOnClick
@@ -920,20 +928,20 @@ export class InvestigationReportDiComponent implements OnInit {
     }
   }//method to delete error msg
 
-    //file upload event  
-    public fileChange(event) {
-      this.fileData = new FormData();
-      this.totalFileSize = 0;
-      this.fileList = event.target.files;
-      if (this.fileList.length > 0) {
-        for (let i: number = 0; i < this.fileList.length; i++) {
-          let file: File = this.fileList[i];
-          this.fileData.append('uploadFile' + i.toString(), file, file.name);
-          this.totalFileSize = this.totalFileSize + file.size;
-          console.log("this.totalFileSize:::::::::::", this.totalFileSize);
-        }//end of for
-      }//end of if
-    }//end of filechange method  
+  //file upload event  
+  public fileChange(event) {
+    this.fileData = new FormData();
+    this.totalFileSize = 0;
+    this.fileList = event.target.files;
+    if (this.fileList.length > 0) {
+      for (let i: number = 0; i < this.fileList.length; i++) {
+        let file: File = this.fileList[i];
+        this.fileData.append('uploadFile' + i.toString(), file, file.name);
+        this.totalFileSize = this.totalFileSize + file.size;
+        console.log("this.totalFileSize:::::::::::", this.totalFileSize);
+      }//end of for
+    }//end of if
+  }//end of filechange method  
 
   //cancel method
   public onCancel(): void {
@@ -982,7 +990,7 @@ export class InvestigationReportDiComponent implements OnInit {
         itemdetjson = this.complaintReferenceDetailsForModify.itemNos.items;
         //calling the method to get total qty
         this.getTotalQtyFromItems(itemdetjson);
-        
+
         // this.totalNoOfPipes = this.complaintReferenceDetailsForModify.totalNoOfPipes;
         // this.preliInvestFormGroup.controls["totalNoOfPipes"].setValue(this.totalNoOfPipes);
         // this.totalQtyInTons = this.complaintReferenceDetailsForModify.totalQtyInTons;
@@ -1143,22 +1151,40 @@ export class InvestigationReportDiComponent implements OnInit {
         // }
 
       },
-      err => {
-        console.log("getComplaintReferenceDetailsView Error: ", err);
-        this.resMsgType = "Error";
-        console.log("resMsgType ", this.resMsgType);
-        this.busySpinner.editPreliBusy = false; // to load the spinner 
-        this.updateBusySpinner();
-        this.sessionErrorService.routeToLogin(err._body);
-      });
+        err => {
+          console.log("getComplaintReferenceDetailsView Error: ", err);
+          this.resMsgType = "Error";
+          console.log("resMsgType ", this.resMsgType);
+          this.busySpinner.editPreliBusy = false; // to load the spinner 
+          this.updateBusySpinner();
+          this.sessionErrorService.routeToLogin(err._body);
+        });
   }//end of method getPreliViewReportDetailsByCompRefNo
 
   //to open the comp reference no modal
-  public onComplaintRefNoOpenModal(complaintRefNo: string){
+  public onComplaintRefNoOpenModal(complaintRefNo: string) {
     const modalRef = this.modalService.open(NgbdComplaintReferenceNoModalComponent);
     modalRef.componentInstance.modalTitle = this.title;
     modalRef.componentInstance.complaintReferenceNo = complaintRefNo;
   }//end  of method
+
+  //start method for clicking radio button 
+  public onRadioClick(radioValue) {
+    console.log("radioValue ", radioValue);
+    this.siteVisitMadeValue = radioValue;
+  //   //  if siteVisitValue is Y then this if condition will be executed
+    if (this.siteVisitMadeValue === "Y") {
+      this.preliInvestFormGroup.controls["siteVisitMade"].setValue(this.siteVisitMadeValue);
+  //     //set sitevisitby field mandatory
+      this.preliInvestFormGroup.get('siteVisitDate').setValidators(Validators.required);
+    } else if (this.siteVisitMadeValue === "N") { // siteVisitValue is N then this if condition will be executed
+  //     this.siteVisitDt = "Info";
+      this.preliInvestFormGroup.controls["siteVisitMade"].setValue(this.siteVisitMadeValue);
+      this.preliInvestFormGroup.get('siteVisitDate').setValidators(null);
+      this.preliInvestFormGroup.get('siteVisitDate').updateValueAndValidity();
+      this.preliInvestFormGroup.controls['siteVisitDate'].markAsUntouched();
+    } // end of else
+  }//end of method onRadioClick
 
 
 }//end of class
