@@ -50,14 +50,16 @@ import { InvestigationReportDiViewDetailsComponent } from '../investigation-repo
 import { ComplaintDIViewDetailsComponent } from '../complain/complain-di/components/complain-di-view-details/complaint-di-view-details.component';
 import { ReportsDIViewComponent } from '../report/report-di/components/report-di-view/report-di-view.component';
 import { ReportDIViewDetailsComponent } from '../report/report-di/components/report-di-view-details/report-di-view-details.component';
-import { RCADIAddEditComponent } from '../rca/rca-di/components/rca-di-add-edit/rca-di-add-edit.component';
 import { ComplaintReferenceNoSearchComponent } from '../investigation-report-di/components/investigation-report-di-add/complaint-reference-no-search/complaint-reference-no-search.component';
-import { CADIAddEditComponent } from '../ca/ca-di/components/ca-di-add-edit/ca-di-add-edit.component';//ca
-import { PADIAddEditComponent } from '../pa/pa-di/components/pa-di-add-edit/pa-di-add-edit.component';
-import { RCADIViewDetailsComponent } from '../rca/rca-di/components/rca-di-view-details/rca-di-view-details.component';
-import { CADIViewDetailsComponent } from '../ca/ca-di/components/ca-di-view-details/ca-di-view-details.component';
-import { PADIViewDetailsComponent } from '../pa/pa-di/components/pa-di-view-details/pa-di-view-details.component';
 
+import { RCADIAddEditComponent } from '../rca/rca-di/components/rca-di-add-edit/rca-di-add-edit.component';
+import { RCADIViewDetailsComponent } from '../rca/rca-di/components/rca-di-view-details/rca-di-view-details.component';
+import { CADIAddEditComponent } from '../ca/ca-di/components/ca-di-add-edit/ca-di-add-edit.component';//ca
+import { CADIViewDetailsComponent } from '../ca/ca-di/components/ca-di-view-details/ca-di-view-details.component';
+import { PADIAddEditComponent } from '../pa/pa-di/components/pa-di-add-edit/pa-di-add-edit.component';
+import { PADIViewDetailsComponent } from '../pa/pa-di/components/pa-di-view-details/pa-di-view-details.component';
+import { CloseComplainDIAddEditComponent } from '../close-complain/close-complain-di/components/close-complain-di-add-edit/close-complain-di-add-edit.component';
+import { CloseComplainDIViewDetailsComponent } from '../close-complain/close-complain-di/components/close-complain-di-view-details/close-complain-di-view-details.component';
 export const HOME_ROUTES: Routes = [
   {
     path: ROUTER_PATHS.HomeRouter,
@@ -289,6 +291,14 @@ export const HOME_ROUTES: Routes = [
         path: ROUTER_PATHS.ViewDetailsPADIRouter,//pa view by complaint ref no
         component: PADIViewDetailsComponent
       },
+      {
+        path: ROUTER_PATHS.AddCloseComplainDIRouter,//close complain di add/edit
+        component: CloseComplainDIAddEditComponent
+      },
+      {
+        path: ROUTER_PATHS.ViewDetailsCloseComplainDIRouter,//close complain di view 
+        component: CloseComplainDIViewDetailsComponent
+      }
 
 
 
