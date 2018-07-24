@@ -88,8 +88,7 @@ export class InvestigationReportDiComponent implements OnInit {
   public invReportTable: any[] = [];//to store prev inv report
 
   //variable used for radio button
-  public siteVisitMadeValue: string = "";
-
+  public invReportVar: any = { siteVisitMadeValue: '', sampleCollectedValue: '' };
 
   //var for modify
   public complaintRefNoForUpdate: string;
@@ -279,134 +278,25 @@ export class InvestigationReportDiComponent implements OnInit {
       ],
       'siteVisitDate': [''
       ],
+      'sampleColleted': [''
+        , [
+          Validators.required
+        ]
+      ],
+      'sampleColletedDate': [''
+      ],
       'preliDate': [''
         , [
           Validators.required
         ]
       ],
-      'concernedPersonName': [''
+      'unloadingEquipment': [''
       ],
-      'concernedPersonContactNo': [''
+      'lubricantUsed': [''
+      ], 
+      'layingPosiion': [''
       ],
-      'supplyCommencementDate': [''
-      ],
-      // 'totalNoOfPipes': [''
-      // ],
-      'totalQtyInTons': [''
-      ],
-      'totalQtyInMtrs': [''
-      ],
-      'lastDateOfSupply': [''
-      ],
-      'areaSalesManager': [''
-        , [
-          Validators.required
-        ]
-      ],
-      'testCertificate': [''
-      ],
-      'natureOfcomplaintProductRelated': [''
-      ],
-      'natureOfcomplaintServiceRelated': [''
-      ],
-      'complaintDescription': [''
-      ],
-      'observations': [''
-        , [
-          Validators.required
-        ]
-      ],
-      'dia': [''
-        , [
-          Validators.required
-        ]
-      ],
-      'classification': [''
-        , [
-          Validators.required
-        ]
-      ],
-      'batchNo': [''
-        , [
-          Validators.required
-        ]
-      ],
-      'marking': [''
-      ],
-      'inspectionMarking': [''
-      ],//
-      'lengthOfPipe': [''
-      ],
-      'noOfPieces': [''
-      ],//
-      'thicknessWall': [''
-      ],
-      'ovality': [''
-      ],
-      'straigtness': [''
-      ],
-      'pipeCuttingToolsUsed': [''
-      ],
-      'pipeCuttingMethodApplied': [''
-      ],
-      'rubberGasketMake': [''
-      ],
-      'rubberGasketBatchNo': [''
-        , [
-          Validators.required
-        ]
-      ],
-      'rubberGasketTestCertificate': [''
-      ],
-      'rubberGasketBulb': [''
-      ],
-      'rubberGasketHeal': [''
-      ],
-      'peSleeveDimensionWidth': [''
-      ],
-      'peSleeveDimensionThickness': [''
-      ],
-      'peSleeveDimensionStrength': [''
-      ],
-      'pipeJointing': [''
-      ],//
-      'pipeTestingHydrotestPressure': [''
-      ],//
-      'ferulConnectionMethod': [''
-      ],//
-      'unloadingRelatedToolsUsed': [''
-      ],
-      'unloadingRelatedMethodApplied': [''
-      ],
-      'actionTakenByASM': [''
-      ],
-      'presentStatus': [''
-      ],
-      'expectationOfCustomer': [''
-      ],
-      'outstandingWithCustomer': [''
-      ],
-      'resolutionRectificationAction': [''
-      ],
-      'socket': [''
-      ],
-      'spigot': [''
-      ],
-      'surfaceOuter': [''
-      ],
-      'coating': [''
-      ],
-      'innerCML': [''
-      ],
-      'lubricationUsed': [''
-      ],
-      'pipeLaying': [''
-      ],
-      'fittingsJointing': [''
-      ],
-      'loadingRelated': [''
-      ],
-      'stencil': [''
+      'jointingtype': [''
       ]
     });
   }//end of build form
@@ -1169,22 +1059,36 @@ export class InvestigationReportDiComponent implements OnInit {
   }//end  of method
 
   //start method for clicking radio button 
-  public onRadioClick(radioValue) {
+  public onRadioClick(radioValue: string, radioButtonName: string) {
     console.log("radioValue ", radioValue);
-    this.siteVisitMadeValue = radioValue;
-  //   //  if siteVisitValue is Y then this if condition will be executed
-    if (this.siteVisitMadeValue === "Y") {
-      this.preliInvestFormGroup.controls["siteVisitMade"].setValue(this.siteVisitMadeValue);
-  //     //set sitevisitby field mandatory
-      this.preliInvestFormGroup.get('siteVisitDate').setValidators(Validators.required);
-    } else if (this.siteVisitMadeValue === "N") { // siteVisitValue is N then this if condition will be executed
-  //     this.siteVisitDt = "Info";
-      this.preliInvestFormGroup.controls["siteVisitMade"].setValue(this.siteVisitMadeValue);
-      this.preliInvestFormGroup.get('siteVisitDate').setValidators(null);
-      this.preliInvestFormGroup.get('siteVisitDate').updateValueAndValidity();
-      this.preliInvestFormGroup.controls['siteVisitDate'].markAsUntouched();
-    } // end of else
+    console.log("radioButtonName ", radioButtonName);
+    if (radioButtonName === "siteVisitMade") {
+      this.invReportVar.siteVisitMadeValue = radioValue;
+      //   //  if siteVisitValue is Y then this if condition will be executed
+      if (this.invReportVar.siteVisitMadeValue === "Y") {
+        this.preliInvestFormGroup.controls["siteVisitMade"].setValue(this.invReportVar.siteVisitMadeValue);
+        //     //set sitevisitby field mandatory
+        this.preliInvestFormGroup.get('siteVisitDate').setValidators(Validators.required);
+      } else if (this.invReportVar.siteVisitMadeValue === "N") { // siteVisitValue is N then this if condition will be executed
+        //     this.siteVisitDt = "Info";
+        this.preliInvestFormGroup.controls["siteVisitMade"].setValue(this.invReportVar.siteVisitMadeValue);
+        this.preliInvestFormGroup.get('siteVisitDate').setValidators(null);
+        this.preliInvestFormGroup.get('siteVisitDate').updateValueAndValidity();
+        this.preliInvestFormGroup.controls['siteVisitDate'].markAsUntouched();
+      } // end of else
+    } else if (radioButtonName === "sampleColleted") {
+      this.invReportVar.sampleCollectedValue = radioValue;
+      //   //  if sampleColleted is Y then this if condition will be executed
+      if (this.invReportVar.sampleCollectedValue === "Y") {
+        this.preliInvestFormGroup.controls["sampleColleted"].setValue(this.invReportVar.siteVisitMadeValue);
+        //     //set sitevisitby field mandatory
+        this.preliInvestFormGroup.get('sampleColletedDate').setValidators(Validators.required);
+      }else if (this.invReportVar.sampleCollectedValue === "N") { // sampleColleted is N then this if condition will be executed
+        this.preliInvestFormGroup.controls["sampleColleted"].setValue(this.invReportVar.siteVisitMadeValue);
+        this.preliInvestFormGroup.get('sampleColleted').setValidators(null);
+        this.preliInvestFormGroup.get('sampleColleted').updateValueAndValidity();
+        this.preliInvestFormGroup.controls['sampleColleted'].markAsUntouched();
+      } // end of else
+    }//end of else if of sampleColleted
   }//end of method onRadioClick
-
-
 }//end of class

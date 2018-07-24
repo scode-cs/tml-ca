@@ -73,13 +73,14 @@ export class InvestigationReportDiViewDetailsComponent implements OnInit {
   //array to store item details
   public itemDetailsArr: any[] = [];
 
-  //variable used for radio button
-  public siteVisitMadeValue: string = "Y";
-
   //var for view
   public complaintRefNoForUpdate: string;
   //var for checkboxes
   public stencilCheck: boolean = false;
+
+  //variable used for radio button
+  public invReportVar: any = { siteVisitMadeValue: 'Y', sampleCollectedValue: 'Y' };
+
   //busySpinner 
   public busySpinner: any = {
     busy: true,
@@ -203,124 +204,27 @@ export class InvestigationReportDiViewDetailsComponent implements OnInit {
   private buildForm(): void {
     this.preliInvestFormGroup = this.formBuilder.group({
       'complaintRefNo': [''
-      ],
-      'complaintRefNoForModify': [''
-      ],
-      'siteVisitMade': [''
-        , [
-          Validators.required
-        ]
-      ],
-      'siteVisitDate': [''
-      ],
-      'preliDate': [''
-      ],
-      'concernedPersonName': [''
-      ],
-      'concernedPersonContactNo': [''
-      ],
-      'supplyCommencementDate': [''
-      ],
-       // 'totalNoOfPipes': [''
-      // ],
-      'totalQtyInTons': [''
-      ],
-      'totalQtyInMtrs': [''
-      ],
-      'lastDateOfSupply': [''
-      ],
-      'areaSalesManager': [''
-      ],
-      'testCertificate': [''
-      ],
-      'natureOfcomplaintProductRelated': [''
-      ],
-      'natureOfcomplaintServiceRelated': [''
-      ],
-      'complaintDescription': [''
-      ],
-      'observations': [''
-      ],
-      'dia': [''
-      ],
-      'classification': [''
-      ],
-      'batchNo': [''
-      ],
-      'marking': [''
-      ],
-      'inspectionMarking': [''
-      ],//
-      'lengthOfPipe': [''
-      ],
-      'noOfPieces': [''
-      ],//
-      'thicknessWall': [''
-      ],
-      'ovality': [''
-      ],
-      'straigtness': [''
-      ],
-      'pipeCuttingToolsUsed': [''
-      ],
-      'pipeCuttingMethodApplied': [''
-      ],
-      'rubberGasketMake': [''
-      ],
-      'rubberGasketBatchNo': [''
-      ],
-      'rubberGasketTestCertificate': [''
-      ],
-      'rubberGasketBulb': [''
-      ],
-      'rubberGasketHeal': [''
-      ],
-      'peSleeveDimensionWidth': [''
-      ],
-      'peSleeveDimensionThickness': [''
-      ],
-      'peSleeveDimensionStrength': [''
-      ],
-      'pipeJointing': [''
-      ],//
-      'pipeTestingHydrotestPressure': [''
-      ],//
-      'ferulConnectionMethod': [''
-      ],//
-      'unloadingRelatedToolsUsed': [''
-      ],
-      'unloadingRelatedMethodApplied': [''
-      ],
-      'actionTakenByASM': [''
-      ],
-      'presentStatus': [''
-      ],
-      'expectationOfCustomer': [''
-      ],
-      'outstandingWithCustomer': [''
-      ],
-      'resolutionRectificationAction': [''
-      ],
-      'socket': [''
-      ],
-      'spigot': [''
-      ],
-      'surfaceOuter': [''
-      ],
-      'coating': [''
-      ],
-      'innerCML': [''
-      ],
-      'lubricationUsed': [''
-      ],
-      'pipeLaying': [''
-      ],
-      'fittingsJointing': [''
-      ],
-      'loadingRelated': [''
-      ],
-      'stencil': [''
-      ]
+    ],
+    'complaintRefNoForModify': [''
+    ],
+    'siteVisitMade': [''
+    ],
+    'siteVisitDate': [''
+    ],
+    'sampleColleted': [''
+    ],
+    'sampleColletedDate': [''
+    ],
+    'preliDate': [''
+    ],
+    'unloadingEquipment': [''
+    ],
+    'lubricantUsed': [''
+    ], 
+    'layingPosiion': [''
+    ],
+    'jointingtype': [''
+    ]
     });
   }//end of build form
 
@@ -807,24 +711,5 @@ export class InvestigationReportDiViewDetailsComponent implements OnInit {
         this.sessionErrorService.routeToLogin(err._body);
       });
   }//end of method getPreliViewReportDetailsByCompRefNo
-
-  //start method for clicking radio button 
-  public onRadioClick(radioValue) {
-    console.log("radioValue ", radioValue);
-    this.siteVisitMadeValue = radioValue;
-  //   //  if siteVisitValue is Y then this if condition will be executed
-    if (this.siteVisitMadeValue === "Y") {
-      this.preliInvestFormGroup.controls["siteVisitMade"].setValue(this.siteVisitMadeValue);
-  //     //set sitevisitby field mandatory
-      this.preliInvestFormGroup.get('siteVisitDate').setValidators(Validators.required);
-    } else if (this.siteVisitMadeValue === "N") { // siteVisitValue is N then this if condition will be executed
-  //     this.siteVisitDt = "Info";
-      this.preliInvestFormGroup.controls["siteVisitMade"].setValue(this.siteVisitMadeValue);
-      this.preliInvestFormGroup.get('siteVisitDate').setValidators(null);
-      this.preliInvestFormGroup.get('siteVisitDate').updateValueAndValidity();
-      this.preliInvestFormGroup.controls['siteVisitDate'].markAsUntouched();
-    } // end of else
-  }//end of method onRadioClick
-
 
 }//end of class

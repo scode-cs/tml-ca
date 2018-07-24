@@ -127,11 +127,10 @@ export class ComplaintDIRegisterComponent implements OnInit {
   public complaintQtyInMtrsError: boolean = true;
   //to store  selected items grid row
   public selectedItemsGrid: any[] = [];
-  public custCode: string = "";
-  public custName: string = "";
-  public custSegment: string = "";
-  public salesGroup: string = "";
-  public salesOffice: string = "";
+
+  //to store customer details
+  private custInfo: any = { custCode: '', custName: '', custSegment: '', salesGroup: '', salesOffice: ''};
+
   //var to check index for process flow
   public processFlowPageIndex: number = 0;
   public processFlowData: string[] = [];
@@ -313,18 +312,18 @@ export class ComplaintDIRegisterComponent implements OnInit {
     this.selectedItemsGrid = [];
     for (let selectedDet of selectedItemDetailsParam) {
       for (let selItm of selectedDet.value.selectedItem) {
-        this.custCode = selItm.customerCode;
-        this.custName = selItm.customerName;
-        this.custSegment = selItm.customerSegment;
-        this.salesGroup = selItm.salesGroup;
-        this.salesOffice = selItm.salesOffice;
+        this.custInfo.custCode = selItm.customerCode;
+        this.custInfo.custName = selItm.customerName;
+        this.custInfo.custSegment = selItm.customerSegment;
+        this.custInfo.salesGroup = selItm.salesGroup;
+        this.custInfo.salesOffice = selItm.salesOffice;
         this.selectedItemsGrid.push(selItm);
         this.contactPersonNameForModify = selItm.customerContactPersonName;
         this.contactPersonPhoneNoForModify = selItm.customerContactPersonPhoneNo;
         this.contactPersonEmailIdForModify = selItm.customerContactPersonEmailId;
       }//end of for
     }//end of for
-    this.complaintDIInvoiceDetailsService.custCode = this.custCode;
+    this.complaintDIInvoiceDetailsService.custCode = this.custInfo.custCode;
     this.complaintQtyErrorCheck();
   }//end of the method setCustInforOnEventEmit
 
@@ -580,18 +579,18 @@ export class ComplaintDIRegisterComponent implements OnInit {
     this.complaintDIInvoiceDetailsService.selectedItemDetails = selectedItemsDet;
 
     for (let selItm of this.selectedItemsGrid) {
-      this.custCode = selItm.customerCode;
-      this.custName = selItm.customerName;
-      this.salesGroup = selItm.salesGroup;
-      this.salesOffice = selItm.salesOffice;
+      this.custInfo.custCode = selItm.customerCode;
+      this.custInfo.custName = selItm.customerName;
+      this.custInfo.salesGroup = selItm.salesGroup;
+      this.custInfo.salesOffice = selItm.salesOffice;
       break;
     }
 
     this.complaintDIInvoiceDetailsService.title = this.title;
-    this.complaintDIInvoiceDetailsService.custCode = this.custCode;
-    this.complaintDIInvoiceDetailsService.custName = this.custName;
-    this.complaintDIInvoiceDetailsService.salesGroup = this.salesGroup;
-    this.complaintDIInvoiceDetailsService.salesOffice = this.salesOffice;
+    this.complaintDIInvoiceDetailsService.custCode = this.custInfo.custCode;
+    this.complaintDIInvoiceDetailsService.custName = this.custInfo.custName;
+    this.complaintDIInvoiceDetailsService.salesGroup = this.custInfo.salesGroup;
+    this.complaintDIInvoiceDetailsService.salesOffice = this.custInfo.salesOffice;
     this.complaintDIInvoiceDetailsService.testVar = "data stored";
   }//end of the method setInvDetsForInvNoSearch
 
@@ -676,20 +675,20 @@ export class ComplaintDIRegisterComponent implements OnInit {
       let items: any[] = selItemsDetParam.items;
 
       for (let selItm of items) {
-        this.custCode = selItm.customerCode;
-        this.custName = selItm.customerName;
-        this.custSegment = selItm.customerSegment;
-        this.salesGroup = selItm.salesGroup;
-        this.salesOffice = selItm.salesOffice;
+        this.custInfo.custCode = selItm.customerCode;
+        this.custInfo.custName = selItm.customerName;
+        this.custInfo.custSegment = selItm.customerSegment;
+        this.custInfo.salesGroup = selItm.salesGroup;
+        this.custInfo.salesOffice = selItm.salesOffice;
         this.contactPersonNameForModify = selItm.customerContactPersonName;
         this.contactPersonPhoneNoForModify = selItm.customerContactPersonPhoneNo;
         this.contactPersonEmailIdForModify = selItm.customerContactPersonEmailId;
         break;
       }
-      this.complaintDIInvoiceDetailsService.custCode = this.custCode;
-      this.complaintDIInvoiceDetailsService.custName = this.custName;
-      this.complaintDIInvoiceDetailsService.salesGroup = this.salesGroup;
-      this.complaintDIInvoiceDetailsService.salesOffice = this.salesOffice;
+      this.complaintDIInvoiceDetailsService.custCode = this.custInfo.custCode;
+      this.complaintDIInvoiceDetailsService.custName = this.custInfo.custName;
+      this.complaintDIInvoiceDetailsService.salesGroup = this.custInfo.salesGroup;
+      this.complaintDIInvoiceDetailsService.salesOffice = this.custInfo.salesOffice;
       //storing the inv details which are selected
       this.selectedItemsGrid = items;
 
@@ -859,8 +858,8 @@ export class ComplaintDIRegisterComponent implements OnInit {
     modalRef.componentInstance.items = this.items;
     if (invoiceNo == '') {
       this.setInvDetsForInvNoSearch();
-      modalRef.componentInstance.custCode = this.custCode;
-      modalRef.componentInstance.custName = this.custName;
+      modalRef.componentInstance.custCode = this.custInfo.custCode;
+      modalRef.componentInstance.custName = this.custInfo.custName;
     } else if (invoiceNo != '') {
       this.complaintDIInvoiceDetailsService.selectedItemDetails = this.selectedItemsGrid;
       console.log("selected grid in pi reg====>>>>>", this.complaintDIInvoiceDetailsService.selectedItemDetails);
@@ -1216,17 +1215,17 @@ export class ComplaintDIRegisterComponent implements OnInit {
           let invItems: any[] = this.selectedComplaintReferenceDetails.itemNos.items;
           if (invItems.length > 0) {
             for (let selItm of invItems) {
-              this.custCode = selItm.customerCode;
-              this.custName = selItm.customerName;
-              this.custSegment = selItm.customerSegment;
-              this.salesGroup = selItm.salesGroup;
-              this.salesOffice = selItm.salesOffice;
+              this.custInfo.custCode = selItm.customerCode;
+              this.custInfo.custName = selItm.customerName;
+              this.custInfo.custSegment = selItm.customerSegment;
+              this.custInfo.salesGroup = selItm.salesGroup;
+              this.custInfo.salesOffice = selItm.salesOffice;
               break;
             }//end of for
-            this.complaintDIInvoiceDetailsService.custCode = this.custCode;
-            this.complaintDIInvoiceDetailsService.custName = this.custName;
-            this.complaintDIInvoiceDetailsService.salesGroup = this.salesGroup;
-            this.complaintDIInvoiceDetailsService.salesOffice = this.salesOffice;
+            this.complaintDIInvoiceDetailsService.custCode = this.custInfo.custCode;
+            this.complaintDIInvoiceDetailsService.custName = this.custInfo.custName;
+            this.complaintDIInvoiceDetailsService.salesGroup = this.custInfo.salesGroup;
+            this.complaintDIInvoiceDetailsService.salesOffice = this.custInfo.salesOffice;
             for (let selItm of invItems) {
               this.selectedItemsGrid.push(selItm);
             }
@@ -1333,13 +1332,13 @@ export class ComplaintDIRegisterComponent implements OnInit {
     if (this.selectedItemDetails.length == 0) {
       this.selectedItemsGrid = [];
       if (this.complaintDIInvoiceDetailsService.compRefNo == undefined || this.complaintDIInvoiceDetailsService.compRefNo == "") {
-        this.custCode = "";
-        this.custName = "";
+        this.custInfo.custCode = "";
+        this.custInfo.custName = "";
       }
-      this.custSegment = "";
-      this.salesGroup = "";
-      this.salesOffice = "";
-      this.complaintDIInvoiceDetailsService.custCode = this.custCode;
+      this.custInfo.custSegment = "";
+      this.custInfo.salesGroup = "";
+      this.custInfo.salesOffice = "";
+      this.complaintDIInvoiceDetailsService.custCode = this.custInfo.custCode;
     } else if (this.selectedItemDetails.length > 0) {
       let selectedItemObj: any[] = [];
       for (let selectedDet of this.selectedItemDetails) {
