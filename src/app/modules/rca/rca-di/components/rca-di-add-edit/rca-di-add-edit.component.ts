@@ -24,6 +24,7 @@ export class RCADIAddEditComponent implements OnInit {
   private totalFileSize: number = 0;//file upload error
   private fileSizeLimit: number = 104857600;
   private fileData: FormData;
+  private currentDate: string;//for sysdate
 
   public fileList: FileList;
   public title: string = "RCA";//to show titlee on html page
@@ -35,7 +36,6 @@ export class RCADIAddEditComponent implements OnInit {
     submitBusy: false,//for submit spinner
     busy: true
   };
-  public currentDate: string;//for sysdate
   public rcaAddEditDate: string;//close date
   public selectedComplaintReferenceDetails: any = {};//to get selected complaint values  
   public rcaAddEditDetails: string = "";//text area value for rca details
