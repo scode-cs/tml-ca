@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormBuilder, Validators, FormControl } from '@angular/forms';
 import { Router,ActivatedRoute } from '@angular/router';
 import { LocalStorageService } from "../../../../shared/services/local-storage.service";
-import { ViewComplaintPIDataService } from "app/modules/complain/complain-pi/services/complaint-pi-view-data.service";
+import { ViewComplaintPIDataService } from "../../services/complaint-pi-view-data.service";
 import { ROUTE_PATHS } from '../../../../router/router-paths';
 import { TilesInteractionService } from '../../../../dashboard/services/tiles-interaction.service';
 import { Subscription } from 'rxjs/Subscription';//to get route param

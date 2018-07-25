@@ -1,7 +1,7 @@
 import { Component, OnInit } from "@angular/core";
 import { LocalStorageService } from "../../shared/services/local-storage.service";
 import { Router } from "@angular/router";
-import { ROUTE_PATHS } from "app/modules/router/router-paths";
+import { ROUTE_PATHS } from "../../router/router-paths";
 import { LogoutService } from "../services/logout.service";
 import { SessionErrorService } from "../../shared/services/session-error.service";
 @Component({

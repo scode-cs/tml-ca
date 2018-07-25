@@ -8,7 +8,7 @@ import { ToastService } from "../../../home/services/toast-service";
 import { ROUTE_PATHS } from '../../../router/router-paths';
 import { LocalStorageService } from "../../../shared/services/local-storage.service";
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
-import { CloseComplaintPIService } from "app/modules/close-complaint/close-complaint-pi/services/close-complaint-pi.service";
+import { CloseComplaintPIService } from "../services/close-complaint-pi.service";
 import { SessionErrorService } from "../../../shared/services/session-error.service";
 
 @Component({

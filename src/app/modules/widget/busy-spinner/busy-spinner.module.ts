@@ -2,7 +2,7 @@ import { NgModule } from '@angular/core';
 import { RouterModule } from '@angular/router';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
-import { BusySpinnerComponent } from "app/modules/widget/busy-spinner/components/busy-spinner.component";
+import { BusySpinnerComponent } from "./components/busy-spinner.component";
 
 @NgModule({
   imports: [

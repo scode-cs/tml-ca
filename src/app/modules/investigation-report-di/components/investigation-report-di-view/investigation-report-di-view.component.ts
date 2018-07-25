@@ -3,7 +3,7 @@ import { FormGroup, FormBuilder, Validators, FormControl } from '@angular/forms'
 import { Subscription } from 'rxjs/Subscription';//to get route param
 import { Router, ActivatedRoute } from '@angular/router';
 import { LocalStorageService } from "../../../shared/services/local-storage.service";
-import { InvestigationReportDIViewDataService } from "app/modules/investigation-report-di/services/investigation-report-di-view.service";
+import { InvestigationReportDIViewDataService } from "../../services/investigation-report-di-view.service";
 import { ROUTE_PATHS } from '../../../router/router-paths';
 import { SessionErrorService } from "../../../shared/services/session-error.service";
 

@@ -3,7 +3,7 @@ import { NgbModal, NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { Router } from '@angular/router';
 import "rxjs/add/operator/do";
 import "rxjs/add/operator/map";
-import { Observable } from 'rxjs/Rx';
+import { Observable } from 'rxjs';
 import { LocalStorageService } from "../../../shared/services/local-storage.service";
 import { AppUrlsConst, WebServiceConst } from '../../../app-config';
 import { DashboardBothService } from '../../services/dashboard-both.services';

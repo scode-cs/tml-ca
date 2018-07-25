@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormBuilder, Validators, FormControl } from '@angular/forms';
 import { LocalStorageService } from "../../../shared/services/local-storage.service";
-import { ViewRoleDataService } from "app/modules/role/services/view-role-data.service";
+import { ViewRoleDataService } from "../../services/view-role-data.service";
 import { Router } from '@angular/router';
 import { ROUTE_PATHS } from '../../../router/router-paths';
 import { SessionErrorService } from "../../../shared/services/session-error.service";

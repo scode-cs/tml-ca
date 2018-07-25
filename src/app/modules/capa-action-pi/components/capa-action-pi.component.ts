@@ -5,7 +5,7 @@ import { Subscription } from 'rxjs/Subscription';//to get route param
 // import { ToastService } from "../../home/services/toast-service";
 import { Router, ActivatedRoute } from '@angular/router';
 import { ROUTE_PATHS } from '../../router/router-paths';
-import { CAPAActionPIService } from "app/modules/capa-action-pi/services/capa-action-pi.service";
+import { CAPAActionPIService } from "../services/capa-action-pi.service";
 import { NgbModal, NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { DatePipe } from '@angular/common';
 import { LocalStorageService } from "../../shared/services/local-storage.service";

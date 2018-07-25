@@ -4,7 +4,7 @@ import { RouterModule } from '@angular/router';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 //for modal
-import { NgbdModalComponent } from 'app/modules/widget/modal/components/modal-component';
+import { NgbdModalComponent } from './components/modal-component';
 // import { NgbdComplaintModalComponent } from 'app/modules/widget/modal/components/modal-complaint.component';
 
 

@@ -1,8 +1,8 @@
 import { Injectable, EventEmitter } from '@angular/core';
 import { ActivatedRouteSnapshot, CanActivate, CanDeactivate, Router } from '@angular/router';
 import { Observable } from 'rxjs/Observable';
-import { LocalStorageService } from '../../shared/services/local-storage.service';
-import { ROUTE_PATHS } from "app/modules/router/router-paths";
+import { LocalStorageService } from './local-storage.service';
+import { ROUTE_PATHS } from "../../router/router-paths";
 import { OnInit } from '@angular/core/src/metadata/lifecycle_hooks';
 
 

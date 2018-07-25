@@ -9,7 +9,7 @@ import 'rxjs/add/observable/forkJoin';//new add for forkjoin
 import { Subject } from 'rxjs/Subject';
 import { Subscription } from 'rxjs/Subscription';//to get route param
 import { LocalStorageService } from "../../../shared/services/local-storage.service";
-import { PreliInvestigationDataService } from "app/modules/preliminary-investigation-di/services/preliminary-investigation-di.service";
+import { PreliInvestigationDataService } from "../../services/preliminary-investigation-di.service";
 import { NgbdModalComponent } from '../../../widget/modal/components/modal-component';
 import { AppUrlsConst, WebServiceConst } from '../../../app-config';
 import { DatePipe } from '@angular/common';

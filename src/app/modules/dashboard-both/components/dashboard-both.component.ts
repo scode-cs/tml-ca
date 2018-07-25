@@ -3,7 +3,7 @@ import { APP_DASHBOARD_ANIMATIONS } from "../../shared/components/animations/app
 import { LocalStorageService } from "../../shared/services/local-storage.service";
 import { Router } from '@angular/router';
 import { NgbModal, NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
-import { DashboardBothModalComponent } from '../components/dashboard-both-modal/dashboard-both-modal.component';
+import { DashboardBothModalComponent } from './dashboard-both-modal/dashboard-both-modal.component';
 
 @Component({
   selector: 'dashboard-both',

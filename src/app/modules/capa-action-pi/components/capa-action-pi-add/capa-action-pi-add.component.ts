@@ -4,7 +4,7 @@ import { Subscription } from 'rxjs/Subscription';//to get route param
 import { Router, ActivatedRoute } from '@angular/router';
 import { DatePipe } from '@angular/common';
 import { ROUTE_PATHS } from '../../../router/router-paths';
-import { CAPAActionPIService } from 'app/modules/capa-action-pi/services/capa-action-pi.service';
+import { CAPAActionPIService } from '../../services/capa-action-pi.service';
 import { LocalStorageService } from "../../../shared/services/local-storage.service";
 import { SessionErrorService } from "../../../shared/services/session-error.service";
 

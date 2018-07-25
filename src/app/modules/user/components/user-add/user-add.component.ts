@@ -3,7 +3,7 @@ import { FormGroup, FormBuilder, Validators,FormControl,FormArray } from '@angul
 import { ToastService } from "../../../home/services/toast-service";
 import { Router,ActivatedRoute } from '@angular/router';
 import { ROUTE_PATHS } from '../../../router/router-paths';
-import { AddUserDataService } from "app/modules/user/services/add-user-data.service";
+import { AddUserDataService } from "../../services/add-user-data.service";
 import { LocalStorageService } from "../../../shared/services/local-storage.service";
 import { UserModel } from "../../../shared/models/user-model";
 import { Subscription } from 'rxjs/Subscription';//to get route param

@@ -4,16 +4,16 @@ import { ToastService } from "../../../../home/services/toast-service";
 import { Router, ActivatedRoute } from '@angular/router';
 import { Subscription } from 'rxjs/Subscription';//to get route param
 import { ROUTE_PATHS } from '../../../../router/router-paths';
-import { ComplaintPIRegisterDataService } from "app/modules/complain/complain-pi/services/complaint-pi-register-data.service";
+import { ComplaintPIRegisterDataService } from "../../services/complaint-pi-register-data.service";
 import { NgbdModalComponent } from '../../../../widget/modal/components/modal-component';
 import { NgbModal, NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { DatePipe } from '@angular/common';
 import { LocalStorageService } from "../../../../shared/services/local-storage.service";
-import { NgbdComplaintPIRegisterModalComponent } from 'app/modules/complain/complain-pi/components/complain-pi-register/complaint-pi-register-modal/complaint-pi-register-modal.component';
-import { ComplaintPIRegisterEmitService } from "app/modules/complain/complain-pi/services/complaint-pi-register-emit.service";
-import { InvoiceSearchDetailsModel } from "app/modules/complain/complain-pi/models/invoice-search-details.model";
-import { PIPolygonModel } from "app/modules/shared/components/process-flow/complain-pi-polygon.model";
-import { SessionErrorService } from "app/modules/shared/services/session-error.service";
+import { NgbdComplaintPIRegisterModalComponent } from './complaint-pi-register-modal/complaint-pi-register-modal.component';
+import { ComplaintPIRegisterEmitService } from "../../services/complaint-pi-register-emit.service";
+import { InvoiceSearchDetailsModel } from "../../models/invoice-search-details.model";
+import { PIPolygonModel } from "../../../../shared/components/process-flow/complain-pi-polygon.model";
+import { SessionErrorService } from "../../../../shared/services/session-error.service";
 
 @Component({
   selector: 'ispl-complaint-pi-register-form',

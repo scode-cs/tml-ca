@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormBuilder, Validators, FormControl } from '@angular/forms';
 import { LocalStorageService } from "../../../shared/services/local-storage.service";
-import { ViewUserDataService } from "app/modules/user/services/view-user-data.service";
+import { ViewUserDataService } from "../../services/view-user-data.service";
 import { Router } from '@angular/router';
 import { ROUTE_PATHS } from '../../../router/router-paths';
 import { SessionErrorService } from "../../../shared/services/session-error.service";

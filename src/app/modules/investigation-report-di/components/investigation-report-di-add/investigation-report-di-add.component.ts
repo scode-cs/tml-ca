@@ -9,14 +9,14 @@ import 'rxjs/add/observable/forkJoin';//new add for forkjoin
 import { Subject } from 'rxjs/Subject';
 import { Subscription } from 'rxjs/Subscription';//to get route param
 import { LocalStorageService } from '../../../shared/services/local-storage.service';
-import { InvestigationReportDIDataService } from 'app/modules/investigation-report-di/services/investigation-report-di.service';
+import { InvestigationReportDIDataService } from '../../services/investigation-report-di.service';
 import { NgbdModalComponent } from '../../../widget/modal/components/modal-component';
 import { AppUrlsConst, WebServiceConst } from '../../../app-config';
 import { DatePipe } from '@angular/common';
 import { SessionErrorService } from '../../../shared/services/session-error.service';
-import { NgbdComplaintReferenceNoModalComponent } from 'app/modules/investigation-report-di/components/investigation-report-di-add/complaint-reference-no-modal/complaint-reference-no-modal.component';
-import { DIPolygonModel } from 'app/modules/shared/components/process-flow/complain-di-polygon.model';
-import { InvestigationReportDIConfigModel } from 'app/modules/investigation-report-di/models/investigation-report-di-config.model';
+import { NgbdComplaintReferenceNoModalComponent } from './complaint-reference-no-modal/complaint-reference-no-modal.component';
+import { DIPolygonModel } from '../../../shared/components/process-flow/complain-di-polygon.model';
+import { InvestigationReportDIConfigModel } from '../../models/investigation-report-di-config.model';
 @Component({
   selector: 'ispl-investigation-report-di-add-form',
   templateUrl: 'investigation-report-di-add.component.html',
