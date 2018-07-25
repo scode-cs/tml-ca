@@ -67,7 +67,6 @@ export class ComplainDIViewComponent implements OnInit {
   //taking any array for faceted
   public facetedArray: any[] = [];
   public dashboardParameter: string = '';
-  public viewEditParam: string ;//for view and edit param
 
   //for busy spinner
   public busySpinner: any = {
@@ -113,19 +112,15 @@ export class ComplainDIViewComponent implements OnInit {
   private getParamFromRoute(){
     let routeSubscription: Subscription;
     routeSubscription = this.activatedroute.params.subscribe(params => {
-      this.viewEditParam = params.viewEditParam ? params.viewEditParam : '';//get the viewEditParam to check wheather its edit or not
       this.dashboardParameter = params.activitytype ? params.activitytype : '';//get param from dashboard
-      console.log("this. view edit param: ",this.viewEditParam);
       this.selectedData = [];//removing the array 
-      // if dashboard parameter is not blank then set the viewEditParam value
-      if(this.dashboardParameter){
-        this.viewEditParam = "View";
-      }//end of if
-      if(this.viewEditParam === 'Modify'){
-        this.title = "Modify Complaints";
-      }else if(this.viewEditParam === 'View'){
+     
+      // if(this.dashboardParameter){
+      //   this.viewEditParam = "View";
+      // }//end of if
+      
         this.title = "View Complaints";
-      }
+      
     });
   }
   //end of method to get route param
@@ -354,15 +349,15 @@ export class ComplainDIViewComponent implements OnInit {
       this.modifyComplaint = user.complaintReferenceNo;
     }//end of for
     console.log("complaintRefId for view : ", this.modifyComplaint);
-    //start condition of wheather the param coming from dashboard or not
-    if(this.dashboardParameter){
-      this.viewEditParam = "view";
-    }
-    //end of condition of wheather the param coming from dashboard or not
+    // //start condition of wheather the param coming from dashboard or not
+    // if(this.dashboardParameter){
+    //   this.viewEditParam = "view";
+    // }
+    // //end of condition of wheather the param coming from dashboard or not
  
 
     // Not authenticated
-    this.router.navigate([ROUTE_PATHS.RouteComplainDIViewDetails,this.viewEditParam, this.modifyComplaint]);
+    // this.router.navigate([ROUTE_PATHS.RouteComplainDIViewDetails,this.viewEditParam, this.modifyComplaint]);
   }//end of add user method
 
 

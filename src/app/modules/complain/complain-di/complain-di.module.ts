@@ -2,7 +2,7 @@ import { NgModule }            from '@angular/core';
 import { ReactiveFormsModule } from '@angular/forms';
 import { BrowserModule } from '@angular/platform-browser';
 import { ComplaintDIRegisterComponent } from './components/complain-di-register/complaint-di-register.component';
-import { ComplaintDIViewDetailsComponent } from './components/complain-di-view-details/complaint-di-view-details.component';
+import { ComplainDIViewDetailsComponent } from './components/complain-di-view-details/complaint-di-view-details.component';
 import { ComplainDIViewComponent } from "./components/complain-di-view/complain-di-view.component";
 import { CommonModule } from "@angular/common";
 import { ComplaintDIRegisterDataService } from "./services/complaint-di-register-data.service";
@@ -28,7 +28,7 @@ import { ComplaintDICustomerSearchComponent } from './components/complain-di-reg
   declarations: [
     ComplaintDIRegisterComponent,
     ComplainDIViewComponent,
-    ComplaintDIViewDetailsComponent,
+    ComplainDIViewDetailsComponent,
     NgbdComplaintDIRegisterModalComponent,
     ComplaintDIInvoiceSearchComponent,
     ComplaintDICustomerSearchComponent
@@ -37,7 +37,7 @@ import { ComplaintDICustomerSearchComponent } from './components/complain-di-reg
   exports: [
     ComplaintDIRegisterComponent,
     ComplainDIViewComponent,
-    ComplaintDIViewDetailsComponent,
+    ComplainDIViewDetailsComponent,
     ComplaintDIInvoiceSearchComponent,
     ComplaintDICustomerSearchComponent
   ],
