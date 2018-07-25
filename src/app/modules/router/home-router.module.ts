@@ -183,10 +183,10 @@ export const HOME_ROUTES: Routes = [
       //   path: ROUTER_PATHS.ViewModifyPreliminaryInvestigationRouter,
       //   component: PreliminaryInvestigationReportDIViewComponent
       // },
-      {
-        path: ROUTER_PATHS.ViewModifyInvestigationReportRouter,
-        component: InvestigationReportDIViewComponent
-      },
+      // {
+      //   path: ROUTER_PATHS.ViewModifyInvestigationReportRouter,
+      //   component: InvestigationReportDIViewComponent
+      // },
       // {//preli view details
       //   path: ROUTER_PATHS.ViewDetailsPreliminaryInvestigationDiRouter,
       //   component: PreliminaryInvestigationDiViewDetailsComponent
