@@ -20,6 +20,9 @@ export class LoginComponent implements OnInit {
   public title: string = "Complaint Management System";
   public loginForm: FormGroup;
   public loginError: string = '';
+
+  public tstJson: any[] = [];
+
   constructor(
     private formBuilder: FormBuilder,
     private router: Router,
@@ -36,6 +39,7 @@ export class LoginComponent implements OnInit {
     // let testStr: string =  '[{"SLNO":"1","AUTO_ID":"1"},{"SLNO":"2","AUTO_ID":"2"}]';    
     let json : any = JSON.parse(s);
     console.log("json==== ",json);
+    this.tstJson = json;
   }
 
   private buildForm(): void {

@@ -175,28 +175,28 @@
          <ng-container *ngIf="selectedItemDetails.length!=0">
           <div class="form-group col-xs-12 col-sm-6 col-md-6 col-lg-4">
             <label>Customer Code</label>
-            <input type="text" class="form-control" [value]="custCode" readonly/>
+            <input type="text" class="form-control" [value]="custInfo.custCode" readonly/>
           </div>
 
 
           <div class="form-group col-xs-12 col-sm-6 col-md-6 col-lg-4">
             <label>Customer Name</label>
-            <input type="text" class="form-control" [value]="custName" readonly/>
+            <input type="text" class="form-control" [value]="custInfo.custName" readonly/>
           </div>
 
           <div class="form-group col-xs-12 col-sm-6 col-md-6 col-lg-4" hidden>
             <label>Customer Segment</label>
-            <input type="text" class="form-control" [value]="custSegment" readonly/>
+            <input type="text" class="form-control" [value]="custInfo.custSegment" readonly/>
           </div>
 
           <div class="form-group col-xs-12 col-sm-6 col-md-6 col-lg-4">
             <label>Sales Group</label>
-            <input type="text" class="form-control" [value]="salesGroup" readonly/>
+            <input type="text" class="form-control" [value]="custInfo.salesGroup" readonly/>
           </div>
 
           <div class="form-group col-xs-12 col-sm-6 col-md-6 col-lg-4">
             <label>Sales Office</label>
-            <input type="text" class="form-control" [value]="salesOffice" readonly/>
+            <input type="text" class="form-control" [value]="custInfo.salesOffice" readonly/>
           </div>
         </ng-container>
         <!-- end div for cust code ,custname ,sales group, sales office -->

@@ -8,341 +8,219 @@
       <li class="breadcrumb-item active">{{title}}</li>
     </ol>
   </div>
-    
+  <!--start process flow div-->
+  <app-flowmangement [complianStatus]="complaintStatus" [pageType]="'view'"></app-flowmangement>
+  <!-- end div of process flow  -->
+  
   <!-- main div -->
   <div>
-
     <!-- main div -->
-  <div class="form-div-style">
+    <div class="form-div-style">
       <!-- start table div -->
       <div class="col-lg-12 col-md-12 col-xs-12 scroll-bar prev-inv-report-table-style">
-         <table class="table-style">
-           <thead>
-             <tr class="th-style">
-               <td class="hideextra" *ngFor="let invRprt of  invReportTable" [ngClass]="invRprt.headerClass" >
-                   {{ invRprt.headerDesc }}
-               </td>
-             </tr>
-           </thead>
-           <tbody>
-             <ng-container>
-               <!-- <tr class="tr-style" *ngFor=" let invoiceDet of complaintReferenceDetailsForModify.itemNos?.items
-             let odd = odd; let even = even;" [ngClass]="{even: even, odd: odd }">
-                 <td class="td-style-first">
-                   {{invoiceDet.invoiceNo}}
-                 </td>
-                 <td class="td-style hideextra">
-                   {{invoiceDet.invoiceDate|date: 'dd-MMM-yyyy'}}
-                 </td>
-                 <td class="td-style hideextra">
-                   {{invoiceDet.itemCode}}
-                 </td>
-                 <td class="td-style hideextra">
-                   {{invoiceDet.itemName}}
-                 </td>
-                 <td class="td-style hideextra">
-                   {{invoiceDet.customerCode}}
-                 </td>
-                 <td class="td-style hideextra">
-                   {{invoiceDet.customerName}}
-                 </td>
-                 <td class="td-style hideextra">
-                   {{invoiceDet.projectName}}
-                 </td>
-                 <td class="td-style hideextra">
-                   {{invoiceDet.projectLocation}}
-                 </td>
-                 <td class="td-style hideextra">
-                   {{invoiceDet.poNo}}
-                 </td>
-                 <td class="td-style-last hideextra">
-                   {{invoiceDet.soNo}}
-                 </td>
-               </tr> -->
-               <tr class="tr-style">
-                   <td class="td-style-first hideextra">
-                     &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Add Item(s)
-                     <i style="font-size:16px;cursor: pointer;" title="Click here" class="fa fa-plus-circle" (click)="onAddItemOpenModal()"></i>
-                   </td>
-                   <td class="td-style">
- 
-                   </td>
-                   <td class="td-style">
- 
-                   </td>
-                   <td class="td-style">
- 
-                   </td>
-                   <td class="td-style">
- 
-                   </td>
-                   <td class="td-style-last">
- 
-                   </td>
-                 </tr>
-             </ng-container>
-           </tbody>
-         </table>
-       </div>
-       <!--end table div-->
+        <table class="table-style">
+          <thead>
+            <tr class="th-style">
+              <td class="hideextra" *ngFor="let invRprt of  invReportTable" [ngClass]="invRprt.headerClass">
+                {{ invRprt.headerDesc }}
+              </td>
+            </tr>
+          </thead>
+          <tbody>
+            <ng-container>
+              <tr class="tr-style">
+                <td class="td-style-first hideextra">
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Add Item(s)
+                  <i style="font-size:16px;cursor: pointer;" title="Click here" class="fa fa-plus-circle" (click)="onAddItemOpenModal()"></i>
+                </td>
+                <td class="td-style">
 
-    <!--start form -->
-    <form [formGroup]="preliInvestFormGroup" autocomplete="off" (ngSubmit)="onClickPreliInvestigationReportDISubmit()">
-      <!--start div of row manage profile form-->
-      <div class="row inv-report-form-style">
-        <!-- start div for Complaint Reference No [View] -->
-        <div class="form-group col-xs-12 col-sm-6 col-md-6 col-lg-4" *ngIf="complaintRefNoForUpdate">
-          <label for="complaintRefNo">Complaint Reference No </label>
-          <input type="text" class="form-control" formControlName="complaintRefNoForModify" value="{{complaintRefNoForModify}}" readonly>
-        </div>
-        <!-- end div for Complaint Reference No [View] -->
+                </td>
+                <td class="td-style">
 
-        <!-- start div of Site Visit Made radio button -->
-        <div class="form-group col-xs-12 col-sm-6 col-md-6 col-lg-4">
-          <ng-container *ngIf="invReportVar.siteVisitMadeValue =='Y'">
-            <div style="display:inline-block;">
-              <label>Site Visit Made</label>
-              <label class="control control--radio">Yes
-                <input type="radio" name="siteVisitMade" formControlName="siteVisitMade" [value]="Y" [checked]=true  disabled/>
-                <div class="control__indicator"></div>
-              </label>
-            </div>
-            <div style="display:inline-block;">
-              <label class="control control--radio">No
-                <input type="radio" name="siteVisitMade" formControlName="siteVisitMade" [value]="N" />
-                <div class="control__indicator"></div>
-              </label>
-            </div>
-          </ng-container>
-          <ng-container *ngIf="invReportVar.siteVisitMadeValue =='N'">
-            <div style="display:inline-block;">
-              <label>Site Visit Made</label>
-              <label class="control control--radio">Yes
-                <input type="radio" name="siteVisitMade" formControlName="siteVisitMade" [value]="Y" />
-                <div class="control__indicator"></div>
-              </label>
-            </div>
-            <div style="display:inline-block;">
-              <label class="control control--radio">No
-                <input type="radio" name="siteVisitMade" formControlName="siteVisitMade" [value]="N" [checked]=true disabled/>
-                <div class="control__indicator"></div>
-              </label>
-            </div>
-          </ng-container>
+                </td>
+                <td class="td-style">
+
+                </td>
+                <td class="td-style">
+
+                </td>
+                <td class="td-style-last">
+
+                </td>
+              </tr>
+            </ng-container>
+          </tbody>
+        </table>
+      </div>
+      <!--end table div-->
+
+      <!--start form -->
+      <form [formGroup]="preliInvestFormGroup" autocomplete="off" (ngSubmit)="onClickPreliInvestigationReportDISubmit()">
+        <!--start div of row manage profile form-->
+        <div class="row inv-report-form-style">
+          <!-- start div for Complaint Reference No [View] -->
+          <div class="form-group col-xs-12 col-sm-6 col-md-6 col-lg-4" *ngIf="complaintReferenceNo">
+            <label for="complaintRefNo">Complaint Reference No </label>
+            <input type="text" class="form-control" formControlName="complaintRefNoForModify" value="{{complaintRefNoForModify}}" readonly>
+          </div>
+          <!-- end div for Complaint Reference No [View] -->
+
+          <!-- start div of Site Visit Made radio button -->
+          <div class="form-group col-xs-12 col-sm-6 col-md-6 col-lg-4">
+            <ng-container *ngIf="invReportVar.siteVisitMadeValue =='Y'">
+              <div style="display:inline-block;">
+                <label>Site Visit Made</label>
+                <label class="control control--radio">Yes
+                  <input type="radio" name="siteVisitMade" formControlName="siteVisitMade" [value]="Y" [checked]=true disabled/>
+                  <div class="control__indicator"></div>
+                </label>
+              </div>
+              <div style="display:inline-block;">
+                <label class="control control--radio">No
+                  <input type="radio" name="siteVisitMade" formControlName="siteVisitMade" [value]="N" />
+                  <div class="control__indicator"></div>
+                </label>
+              </div>
+            </ng-container>
+            <ng-container *ngIf="invReportVar.siteVisitMadeValue =='N'">
+              <div style="display:inline-block;">
+                <label>Site Visit Made</label>
+                <label class="control control--radio">Yes
+                  <input type="radio" name="siteVisitMade" formControlName="siteVisitMade" [value]="Y" />
+                  <div class="control__indicator"></div>
+                </label>
+              </div>
+              <div style="display:inline-block;">
+                <label class="control control--radio">No
+                  <input type="radio" name="siteVisitMade" formControlName="siteVisitMade" [value]="N" [checked]=true disabled/>
+                  <div class="control__indicator"></div>
+                </label>
+              </div>
+            </ng-container>
           </div>
           <!-- end div of Site Visit Made requied -->
 
-
-        <!-- start div for site visit Date -->
-        <ng-container *ngIf="invReportVar.siteVisitMadeValue === 'Y'">
-          <div class="form-group col-xs-12 col-sm-6 col-md-6 col-lg-4">
-            <label for="siteVisitDate">Site Visit Date</label>
-            <input type="date" class="form-control" [value]="siteVisitDt|date: 'dd-MMM-yyyy'" formControlName="siteVisitDate">
-            <div class="alert alert-danger" *ngIf="preliInvestFormGroup.get('siteVisitDate').touched && preliInvestFormGroup.get('siteVisitDate').hasError('required')">
-              <i class="fa fa-exclamation-circle"></i> Site Visit Date is required!
-            </div>
-          </div>
-        </ng-container>
-        <!-- end div for site visit Date -->
-
-         <!-- start div of Sample Collected radio button -->
-         <div class="form-group col-xs-12 col-sm-6 col-md-6 col-lg-4">
-            <ng-container *ngIf="invReportVar.sampleCollectedValue =='Y'">
-                <div style="display:inline-block;">
-                  <label>Sample Collected</label>
-                  <label class="control control--radio">Yes
-                    <input type="radio" name="sampleColleted" formControlName="sampleColleted" [value]="Y" [checked]=true disabled/>
-                    <div class="control__indicator"></div>
-                  </label>
-                </div>
-                <div style="display:inline-block;">
-                  <label class="control control--radio">No
-                    <input type="radio" name="sampleColleted" formControlName="sampleColleted" [value]="N"/>
-                    <div class="control__indicator"></div>
-                  </label>
-                </div>
-              </ng-container>
-          <ng-container *ngIf="invReportVar.sampleCollectedValue =='N'">
-            <div style="display:inline-block;">
-              <label>Sample Collected</label>
-              <label class="control control--radio">Yes
-                <input type="radio" name="sampleColleted" formControlName="sampleColleted" [value]="Y" />
-                <div class="control__indicator"></div>
-              </label>
-            </div>
-            <div style="display:inline-block;">
-              <label class="control control--radio">No
-                <input type="radio" name="sampleColleted" formControlName="sampleColleted" [value]="N" [checked]=true disabled />
-                <div class="control__indicator"></div>
-              </label>
+          <!-- start div for site visit Date -->
+          <ng-container *ngIf="invReportVar.siteVisitMadeValue === 'Y'">
+            <div class="form-group col-xs-12 col-sm-6 col-md-6 col-lg-4">
+              <label for="siteVisitDate">Site Visit Date</label>
+              <input type="text" class="form-control" [value]="siteVisitDt|date: 'dd-MMM-yyyy'" formControlName="siteVisitDate" readonly>
             </div>
           </ng-container>
+          <!-- end div for site visit Date -->
+
+          <!-- start div of Sample Collected radio button -->
+          <div class="form-group col-xs-12 col-sm-6 col-md-6 col-lg-4">
+            <ng-container *ngIf="invReportVar.sampleCollectedValue =='Y'">
+              <div style="display:inline-block;">
+                <label>Sample Collected</label>
+                <label class="control control--radio">Yes
+                  <input type="radio" name="sampleColleted" formControlName="sampleColleted" [value]="Y" [checked]=true disabled/>
+                  <div class="control__indicator"></div>
+                </label>
+              </div>
+              <div style="display:inline-block;">
+                <label class="control control--radio">No
+                  <input type="radio" name="sampleColleted" formControlName="sampleColleted" [value]="N" />
+                  <div class="control__indicator"></div>
+                </label>
+              </div>
+            </ng-container>
+            <ng-container *ngIf="invReportVar.sampleCollectedValue =='N'">
+              <div style="display:inline-block;">
+                <label>Sample Collected</label>
+                <label class="control control--radio">Yes
+                  <input type="radio" name="sampleColleted" formControlName="sampleColleted" [value]="Y" />
+                  <div class="control__indicator"></div>
+                </label>
+              </div>
+              <div style="display:inline-block;">
+                <label class="control control--radio">No
+                  <input type="radio" name="sampleColleted" formControlName="sampleColleted" [value]="N" [checked]=true disabled />
+                  <div class="control__indicator"></div>
+                </label>
+              </div>
+            </ng-container>
           </div>
           <!-- end div of Sample Collected-->
 
           <!-- start div for Sample Collected Date -->
-        <ng-container *ngIf="invReportVar.sampleCollectedValue === 'Y'">
-          <div class="form-group col-xs-12 col-sm-6 col-md-6 col-lg-4">
-            <label for="sampleColletedDate">Sample Collected Date</label>
-            <input type="date" class="form-control" [value]="sampleColletedDate|date: 'dd-MMM-yyyy'" formControlName="sampleColletedDate">
-            <div class="alert alert-danger" *ngIf="preliInvestFormGroup.get('sampleColletedDate').touched && preliInvestFormGroup.get('sampleColletedDate').hasError('required')">
-              <i class="fa fa-exclamation-circle"></i> Sample Collected Date is required!
+          <ng-container *ngIf="invReportVar.sampleCollectedValue === 'Y'">
+            <div class="form-group col-xs-12 col-sm-6 col-md-6 col-lg-4">
+              <label for="sampleColletedDate">Sample Collected Date</label>
+              <input type="text" class="form-control" [value]="sampleColletedDate|date: 'dd-MMM-yyyy'" formControlName="sampleColletedDate"
+                readonly/>
             </div>
+          </ng-container>
+          <!-- end div for Sample Collected Date -->
+
+          <!-- start div for Date -->
+          <div class="form-group col-xs-12 col-sm-6 col-md-6 col-lg-4">
+            <label for="Date">Date</label>
+            <input type="text" class="form-control" formControlName="preliDate" [value]="preliDateView|date: 'dd-MMM-yyyy'" readonly>
           </div>
-        </ng-container>
-        <!-- end div for Sample Collected Date -->
+          <!-- end div for Date -->
 
-        <!-- start div for Date -->
-        <div class="form-group col-xs-12 col-sm-6 col-md-6 col-lg-4">
-          <label for="preliDate">Date</label>
-          <input type="text" class="form-control" formControlName="preliDate" [value]="preliDateView|date: 'dd-MMM-yyyy'" readonly>
-        </div>
-        <!-- end div for Date -->
+          <!-- item grid table will be shown -->
 
-
-        <!-- start table div -->
-        <div class="col-lg-12 col-md-12 col-xs-12 scroll-bar" style="margin-bottom: 15px; margin-top: 5px;" *ngIf="complaintReferenceDetailsForModify.itemsHeader">
-          <table class="table-style">
-            <thead>
-              <tr class="th-style">
-                <td class="header-style-first hideextra">
-                  {{complaintReferenceDetailsForModify.itemsHeader?.invoiceNo}}
-                </td>
-                <td class="header-style hideextra">
-                  {{complaintReferenceDetailsForModify.itemsHeader?.invoiceDate}}
-                </td>
-                <td class="header-style hideextra">
-                  {{complaintReferenceDetailsForModify.itemsHeader?.itemCode}}
-                </td>
-                <td class="header-style hideextra">
-                  {{complaintReferenceDetailsForModify.itemsHeader?.itemName}}
-                </td>
-                <td class="header-style hideextra">
-                  {{complaintReferenceDetailsForModify.itemsHeader?.customerCode}}
-                </td>
-                <td class="header-style hideextra">
-                  {{complaintReferenceDetailsForModify.itemsHeader?.customerName}}
-                </td>
-                <td class="header-style hideextra">
-                  {{complaintReferenceDetailsForModify.itemsHeader?.projectName}}
-                </td>
-                <td class="header-style hideextra">
-                  {{complaintReferenceDetailsForModify.itemsHeader?.projectLocation}}
-                </td>
-                <td class="header-style hideextra">
-                  {{complaintReferenceDetailsForModify.itemsHeader?.poNo}}
-                </td>
-                <td class="header-style-last hideextra">
-                  {{complaintReferenceDetailsForModify.itemsHeader?.soNo}}
-                </td>
-              </tr>
-            </thead>
-            <tbody>
-              <ng-container>
-                <tr class="tr-style" *ngFor=" let invoiceDet of complaintReferenceDetailsForModify.itemNos?.items
-              let odd = odd; let even = even;" [ngClass]="{even: even, odd: odd }">
-                  <td class="td-style-first">
-                    {{invoiceDet.invoiceNo}}
-                  </td>
-                  <td class="td-style hideextra">
-                    {{invoiceDet.invoiceDate|date: 'dd-MMM-yyyy'}}
-                  </td>
-                  <td class="td-style hideextra">
-                    {{invoiceDet.itemCode}}
-                  </td>
-                  <td class="td-style hideextra">
-                    {{invoiceDet.itemName}}
-                  </td>
-                  <td class="td-style hideextra">
-                    {{invoiceDet.customerCode}}
-                  </td>
-                  <td class="td-style hideextra">
-                    {{invoiceDet.customerName}}
-                  </td>
-                  <td class="td-style hideextra">
-                    {{invoiceDet.projectName}}
-                  </td>
-                  <td class="td-style hideextra">
-                    {{invoiceDet.projectLocation}}
-                  </td>
-                  <td class="td-style hideextra">
-                    {{invoiceDet.poNo}}
-                  </td>
-                  <td class="td-style-last hideextra">
-                    {{invoiceDet.soNo}}
-                  </td>
-                </tr>
-              </ng-container>
-            </tbody>
-          </table>
-        </div>
-        <!--end table div-->
-
-        <!--start div for Unloading Equipment [view]-->
-        <div class="form-group col-xs-12 col-sm-6 col-md-6 col-lg-4" >
-            <label >Unloading Equipment</label>
+          <!--start div for Unloading Equipment [view]-->
+          <div class="form-group col-xs-12 col-sm-6 col-md-6 col-lg-4">
+            <label>Unloading Equipment</label>
             <ul class="list-group ul-style">
-              <li class="list-group-item li-style" *ngFor="let stencil of complaintReferenceDetailsForModify.stencil">
+              <li class="list-group-item li-style" *ngFor="">
                 <label class="custom-control custom-checkbox">
-                  <input type="checkbox" class="custom-control-input" formControlName="unloadingEquipment" 
-                  disabled/>
+                  <input type="checkbox" class="custom-control-input" formControlName="unloadingEquipment" disabled/>
                   <span class="custom-control-indicator"></span>
                   <span class="custom-control-description">
-                    {{ lubrication.Value }}
                   </span>
                 </label>
               </li>
             </ul>
           </div>
           <!--end div for Unloading Equipment [view]-->
-  
-           <!--start div for Lubricant Used [view]-->
-           <div class="form-group col-xs-12 col-sm-6 col-md-6 col-lg-4">
+
+          <!--start div for Lubricant Used [view]-->
+          <div class="form-group col-xs-12 col-sm-6 col-md-6 col-lg-4">
             <label>Lubricant Used</label>
             <ul class="list-group ul-style">
-              <li class="list-group-item li-style" *ngFor="let stencil of complaintReferenceDetailsForModify.stencil">
+              <li class="list-group-item li-style" *ngFor="">
                 <label class="custom-control custom-checkbox">
-                  <input type="checkbox" class="custom-control-input" formControlName="lubricantUsed" (click)="onclickLoadingRelatedCheck(loadingRelated.Key)"
-                  disabled/>
+                  <input type="checkbox" class="custom-control-input" formControlName="lubricantUsed" disabled/>
                   <span class="custom-control-indicator"></span>
                   <span class="custom-control-description">
-                    {{ lubrication.Value }}
                   </span>
                 </label>
               </li>
             </ul>
           </div>
           <!--end div for Lubricant Used [view]-->
-  
+
           <!--start div for Unloading Equipment [view]-->
           <div class="form-group col-xs-12 col-sm-6 col-md-6 col-lg-4">
             <label for="stencil">Laying Position</label>
             <ul class="list-group ul-style">
-              <li class="list-group-item li-style" *ngFor="let stencil of complaintReferenceDetailsForModify.stencil">
+              <li class="list-group-item li-style" *ngFor="">
                 <label class="custom-control custom-checkbox">
-                  <input type="checkbox" class="custom-control-input" formControlName="layingPosiion"  (click)="onclickLoadingRelatedCheck(loadingRelated.Key)"
-                  disabled/>
+                  <input type="checkbox" class="custom-control-input" formControlName="layingPosiion" disabled/>
                   <span class="custom-control-indicator"></span>
                   <span class="custom-control-description">
-                    {{ lubrication.Value }}
                   </span>
                 </label>
               </li>
             </ul>
           </div>
           <!--end div for Unloading Equipment [view]-->
-  
+
           <!--start div for Unloading Equipment [view]-->
           <div class="form-group col-xs-12 col-sm-6 col-md-6 col-lg-4">
             <label for="stencil">Jointing Type</label>
             <ul class="list-group ul-style">
-              <li class="list-group-item li-style" *ngFor="let stencil of complaintReferenceDetailsForModify.stencil">
+              <li class="list-group-item li-style" *ngFor="">
                 <label class="custom-control custom-checkbox">
-                  <input type="checkbox" class="custom-control-input" formControlName="jointingtype" (click)="onclickLoadingRelatedCheck(loadingRelated.Key)"
-                  disabled/>
+                  <input type="checkbox" class="custom-control-input" formControlName="jointingtype" disabled/>
                   <span class="custom-control-indicator"></span>
                   <span class="custom-control-description">
-                    {{ lubrication.Value }}
                   </span>
                 </label>
               </li>
@@ -350,41 +228,37 @@
           </div>
           <!--end div for Unloading Equipment [view]-->
 
-        <!--files-->
-        <div class="form-group col-xs-12 col-sm-6 col-md-6 col-lg-4" *ngIf="complaintRefNoForUpdate">
-          <label>Uploaded file(s)</label>
-          <div *ngFor="let file of complaintReferenceDetailsForModify.files">
-            <a href="{{file.fileUrl}}" target="_blank">{{file.fileName}}</a>
-            <br/>
+          <!--files-->
+          <div class="form-group col-xs-12 col-sm-6 col-md-6 col-lg-4" *ngIf="complaintRefNo">
+            <label>Uploaded file(s)</label>
+            <div *ngFor="let file of complaintReferenceDetailsForModify.files">
+              <a href="{{file.fileUrl}}" target="_blank">{{file.fileName}}</a>
+              <br/>
+            </div>
           </div>
-        </div>
-        <!--end div for show files-->
+          <!--end div for show files-->
 
 
-        <!--start button div-->
-        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
-          <!-- <div class="col-xs-12 col-sm-4 col-md-4 col-lg-2 button-holder">
-            <button type="submit" class="btn btn-primary primary-button-style" [disabled]="!preliInvestFormGroup.valid">Submit
-            </button>
-          </div> -->
-          <div class="col-xs-12 col-sm-4 col-md-4 col-lg-2 button-holder">
-            <button type="submit" class="btn default-button-style" (click)="onCancel()">
-              Cancel
-            </button>
+          <!--start button div-->
+          <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+            <div class="col-xs-12 col-sm-4 col-md-4 col-lg-2 button-holder">
+              <button type="submit" class="btn default-button-style" (click)="onCancel()">
+                Cancel
+              </button>
+            </div>
           </div>
-        </div>
-        <!--end of button div-->
+          <!--end of button div-->
 
-      </div>
-      <!--end of div row manage profile form-->
-    </form>
-    <!--end form -->
+        </div>
+        <!--end of div row manage profile form-->
+      </form>
+      <!--end form -->
+    </div>
+    <!-- end of main div -->
   </div>
-  <!-- end of main div -->
-</div>
-<!--end of page-container-->
+  <!--end of page-container-->
 
-<!--spinner-->
-<!-- <ispl-busy-spinner *ngIf="busySpinner.busy">
+  <!--spinner-->
+  <!-- <ispl-busy-spinner *ngIf="busySpinner.busy">
 
 </ispl-busy-spinner> -->
