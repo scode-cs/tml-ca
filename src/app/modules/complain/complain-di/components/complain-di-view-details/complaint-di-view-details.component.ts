@@ -22,7 +22,7 @@ import { SessionErrorService } from "app/modules/shared/services/session-error.s
   templateUrl: 'complaint-di-view-details.component.html',
   styleUrls: ['complaint-di-view-details.component.css']
 })
-export class ComplaintDIViewDetailsComponent implements OnInit {
+export class ComplainDIViewDetailsComponent implements OnInit {
 
   // form data for file upload
   private formData: FormData = new FormData();

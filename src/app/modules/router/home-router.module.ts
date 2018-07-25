@@ -47,7 +47,7 @@ import { ViewRoleComponent } from '../role/components/role-view/role-view.compon
 import { InvestigationReportDiViewDetailsComponent } from '../investigation-report-di/components/investigation-report-di-view-details/investigation-report-di-view-details.component';
 
 //to view the complaints in details
-import { ComplaintDIViewDetailsComponent } from '../complain/complain-di/components/complain-di-view-details/complaint-di-view-details.component';
+import { ComplainDIViewDetailsComponent } from '../complain/complain-di/components/complain-di-view-details/complaint-di-view-details.component';
 import { ReportsDIViewComponent } from '../report/report-di/components/report-di-view/report-di-view.component';
 import { ReportDIViewDetailsComponent } from '../report/report-di/components/report-di-view-details/report-di-view-details.component';
 import { ComplaintReferenceNoSearchComponent } from '../investigation-report-di/components/investigation-report-di-add/complaint-reference-no-search/complaint-reference-no-search.component';
@@ -88,16 +88,16 @@ export const HOME_ROUTES: Routes = [
         component: ComplaintDIRegisterComponent
       },
       {
-        path: ROUTER_PATHS.ModifyComplaintDIRouter,//modify complaint di by clicking on edit button
+        path: ROUTER_PATHS.ModifyComplaintDIRouter,//modify complaint di 
         component: ComplaintDIRegisterComponent
       },
       {
-        path: ROUTER_PATHS.ComplainDIViewModifyRouter,//view di page from menu for view or modify
+        path: ROUTER_PATHS.ComplainDIViewRouter,//view complaint di (complain di view page- grid view)
         component: ComplainDIViewComponent
       },
       {
-        path: ROUTER_PATHS.ComplainDIViewDetailsRouter,//for view complaint details for single view
-        component: ComplaintDIViewDetailsComponent
+        path: ROUTER_PATHS.ComplainDIViewDetailsRouter,//complaint di view in details(by ref no and status)
+        component: ComplainDIViewDetailsComponent
       },
       {
         path: ROUTER_PATHS.DIViewComplaintWithParameterRouter,

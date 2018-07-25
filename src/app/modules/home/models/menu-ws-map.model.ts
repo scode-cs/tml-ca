@@ -11,8 +11,9 @@ export class MenuWsMapModel{
    private _userMenu:any ={
     homeNavigation: '#'+ROUTE_PATHS.RouteDashboard,
     SSM0000002: '#'+ROUTE_PATHS.RouteComplainDIRegister,//di reg
-    SSM0000003: '#'+ROUTE_PATHS.RouteComplainDIViewModify+"/View",//for view di
-    SSM0000026: '#'+ROUTE_PATHS.RouteComplainDIViewModify+"/Modify",//for complain di modify
+    SSM0000003: '#'+ROUTE_PATHS.RouteComplainDIView,//for view di
+    SSM0000026: '#'+ROUTE_PATHS.RouteComplainDIView,//for view di - [SSM0000026- modify menu id]
+    // SSM0000026: '#'+ROUTE_PATHS.RouteComplainDIViewModify+"/Modify",//for complain di modify
     SSM0000017: '#'+ROUTE_PATHS.RouteAddUser,
     SSM0000019: '#'+ROUTE_PATHS.RouteViewUser,
     logout: '#'+ROUTE_PATHS.RouteLogout,

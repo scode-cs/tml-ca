@@ -1,225 +1,231 @@
-const ROUTE_LOGIN: string = "login";
-const ROUTE_LOGIN_FULL: string = "/" + ROUTE_LOGIN;
+const ROUTE_LOGIN: string = 'login';
+const ROUTE_LOGIN_FULL: string = '/' + ROUTE_LOGIN;
 
-const ROUTE_LOGOUT: string = "logout";
-const ROUTE_LOGOUT_FULL: string = "/" + ROUTE_LOGOUT;
+const ROUTE_LOGOUT: string = 'logout';
+const ROUTE_LOGOUT_FULL: string = '/' + ROUTE_LOGOUT;
 
-const ROUTE_HOME: string = "home";
-const ROUTE_HOME_FULL: string = "/" + ROUTE_HOME;
+const ROUTE_HOME: string = 'home';
+const ROUTE_HOME_FULL: string = '/' + ROUTE_HOME;
 
-const ROUTE_DASHBOARD: string = "dashboard";
-const ROUTE_DASHBOARD_FULL: string = ROUTE_HOME_FULL + "/" + ROUTE_DASHBOARD;
+const ROUTE_DASHBOARD: string = 'dashboard';
+const ROUTE_DASHBOARD_FULL: string = ROUTE_HOME_FULL + '/' + ROUTE_DASHBOARD;
 
 //dashboard for both user
-const ROUTE_DASHBOARD_BOTH: string = "dashboardboth";
-const ROUTE_DASHBOARD_BOTH_FULL: string = "/" + ROUTE_DASHBOARD_BOTH;
+const ROUTE_DASHBOARD_BOTH: string = 'dashboardboth';
+const ROUTE_DASHBOARD_BOTH_FULL: string = '/' + ROUTE_DASHBOARD_BOTH;
 
-const ROUTE_ADD_USER: string = "adduser";
+const ROUTE_ADD_USER: string = 'adduser';
 const ROUTE_MODIFY_USER_ID: string = ROUTE_ADD_USER + '/' + ':userId';
-const ROUTE_MODIFY_USER_FULL: string = ROUTE_HOME_FULL + "/" + ROUTE_ADD_USER;//modify
-const ROUTE_ADD_USER_FULL: string = ROUTE_HOME_FULL + "/" + ROUTE_ADD_USER;//add
+const ROUTE_MODIFY_USER_FULL: string = ROUTE_HOME_FULL + '/' + ROUTE_ADD_USER;//modify
+const ROUTE_ADD_USER_FULL: string = ROUTE_HOME_FULL + '/' + ROUTE_ADD_USER;//add
 
-const ROUTE_VIEW_USER: string = "viewuser";
-const ROUTE_VIEW_USER_FULL: string = ROUTE_HOME_FULL + "/" + ROUTE_VIEW_USER;
+const ROUTE_VIEW_USER: string = 'viewuser';
+const ROUTE_VIEW_USER_FULL: string = ROUTE_HOME_FULL + '/' + ROUTE_VIEW_USER;
 
-const ROUTE_MANAGE_PROFILE : string = "manageprofile";
-const ROUTE_MANAGE_PROFILE_FULL : string = ROUTE_HOME_FULL + "/" + ROUTE_MANAGE_PROFILE;
+const ROUTE_MANAGE_PROFILE : string = 'manageprofile';
+const ROUTE_MANAGE_PROFILE_FULL : string = ROUTE_HOME_FULL + '/' + ROUTE_MANAGE_PROFILE;
 
 //add complaint di
-const ROUTE_COMP_DI_REG: string = "compregisterdi";
-const ROUTE_COMP_DI_REG_FULL: string = ROUTE_HOME_FULL + "/" + ROUTE_COMP_DI_REG;
+const ROUTE_COMP_DI_REG: string = 'compregisterdi';
+const ROUTE_COMP_DI_REG_FULL: string = ROUTE_HOME_FULL + '/' + ROUTE_COMP_DI_REG;
+
+//for modify complaint di
+const ROUTE_MODIFY_COMPLAINT_REFERENCE_NO: string = ROUTE_COMP_DI_REG + '/' + ':complaintReferenceNo';
+const ROUTE_MODIFY_COMPLAINT_DI_FULL: string = ROUTE_HOME_FULL + '/' + ROUTE_COMP_DI_REG;//modify complaint
 
 //view complaint DI
-const ROUTE_COMP_DI_VIEW: string = "complainviewdi";//for complaint di view
-//const ROUTE_COMP_DI_VIEW_FULL: string = ROUTE_HOME_FULL + "/" + ROUTE_COMP_DI_VIEW;
+const ROUTE_COMP_DI_VIEW: string = 'viewcomplaindi';//for complaint di view
+//const ROUTE_COMP_DI_VIEW_FULL: string = ROUTE_HOME_FULL + '/' + ROUTE_COMP_DI_VIEW;
+const ROUTE_COMP_DI_VIEW_DETAILS: string = ROUTE_COMP_DI_VIEW + '/' + ':complaintReferenceNo'+ '/' + ':complaintStatus';
+const ROUTE_COMP_DI_VIEW_FULL: string = ROUTE_HOME_FULL + '/' + ROUTE_COMP_DI_VIEW;//view
 
-//new add for view or modify COMP_DI - 19.02.18 from menu
-const ROUTE_VIEW_MODIFY_COMP_DI: string =  ROUTE_COMP_DI_VIEW + "/" + ':viewEditParam';
-const ROUTE_VIEW_MODIFY_COMP_DI_FULL: string = ROUTE_HOME_FULL + "/" + ROUTE_COMP_DI_VIEW;
 
-//new add for single view COMP_DI 15.02.18 for view button
-const ROUTE_VIEW_DETAILS_COMPLAINT_DI: string =  ROUTE_COMP_DI_VIEW + "/" + ':viewEditParam' + '/' + ':complaintReferenceNo';
-const ROUTE_VIEW_DETAILS_COMPLAINT_DI_FULL: string = ROUTE_HOME_FULL + "/" + ROUTE_COMP_DI_VIEW;
 
-//for modify complaint di for edit button
-const ROUTE_MODIFY_COMPLAINT_REFERENCE_NO: string = ROUTE_COMP_DI_REG + '/' + ':complaintReferenceNo';
-const ROUTE_MODIFY_COMPLAINT_DI_FULL: string = ROUTE_HOME_FULL + "/" + ROUTE_COMP_DI_REG;//modify complaint
+
+// //new add for view or modify COMP_DI - 19.02.18 from menu
+// const ROUTE_VIEW_MODIFY_COMP_DI: string =  ROUTE_COMP_DI_VIEW + '/' + ':viewEditParam';
+// const ROUTE_VIEW_MODIFY_COMP_DI_FULL: string = ROUTE_HOME_FULL + '/' + ROUTE_COMP_DI_VIEW;
+
+// //new add for single view COMP_DI 15.02.18 for view button
+// const ROUTE_VIEW_DETAILS_COMPLAINT_DI: string =  ROUTE_COMP_DI_VIEW + '/' + ':viewEditParam' + '/' + ':complaintReferenceNo';
+// const ROUTE_VIEW_DETAILS_COMPLAINT_DI_FULL: string = ROUTE_HOME_FULL + '/' + ROUTE_COMP_DI_VIEW;
+
 
 //view complaint di according to parameter
-const ROUTE_COMP_DI_VIEW_FROM_DASHBOARD: string = "complainViewDIDashboard";
+const ROUTE_COMP_DI_VIEW_FROM_DASHBOARD: string = 'complainViewDIDashboard';
 const ROUTE_COMP_DI_VIEW_WITH_PARAMETER: string = ROUTE_COMP_DI_VIEW_FROM_DASHBOARD + '/' + ':activitytype';//for complaint di view from dashboard
-const ROUTE_COMP_DI_VIEW_WITH_PARAMETER_FULL: string = ROUTE_HOME_FULL + "/" +  ROUTE_COMP_DI_VIEW_FROM_DASHBOARD;
+const ROUTE_COMP_DI_VIEW_WITH_PARAMETER_FULL: string = ROUTE_HOME_FULL + '/' +  ROUTE_COMP_DI_VIEW_FROM_DASHBOARD;
 
 
 //for complain pi register 09.08.17
-const ROUTE_COMP_PI_REG: string = "compregisterpi";
-const ROUTE_COMP_PI_REG_FULL: string = ROUTE_HOME_FULL + "/" + ROUTE_COMP_PI_REG;
+const ROUTE_COMP_PI_REG: string = 'compregisterpi';
+const ROUTE_COMP_PI_REG_FULL: string = ROUTE_HOME_FULL + '/' + ROUTE_COMP_PI_REG;
 
 //for complaint pi view
-const ROUTE_COMP_PI_VIEW: string = "complainviewpi";
-const ROUTE_COMP_PI_VIEW_FULL: string = ROUTE_HOME_FULL + "/" + ROUTE_COMP_PI_VIEW;
+const ROUTE_COMP_PI_VIEW: string = 'complainviewpi';
+const ROUTE_COMP_PI_VIEW_FULL: string = ROUTE_HOME_FULL + '/' + ROUTE_COMP_PI_VIEW;
 
 //view complaint pi according to parameter
 const ROUTE_COMP_PI_VIEW_WITH_PARAMETER: string = ROUTE_COMP_PI_VIEW + '/' + ':activitytype';//for complaint di view
-const ROUTE_COMP_PI_VIEW_WITH_PARAMETER_FULL: string = ROUTE_HOME_FULL + "/" + ROUTE_COMP_PI_VIEW;
+const ROUTE_COMP_PI_VIEW_WITH_PARAMETER_FULL: string = ROUTE_HOME_FULL + '/' + ROUTE_COMP_PI_VIEW;
 
 //for modify complain pi
 const ROUTE_MODIFY_COMPLAINT_PI_REFERENCE_NO: string = ROUTE_COMP_PI_REG + '/' + ':complaintReferenceNo';
-const ROUTE_MODIFY_COMPLAINT_PI_FULL: string = ROUTE_HOME_FULL + "/" + ROUTE_COMP_PI_REG;//modify pi complaint
+const ROUTE_MODIFY_COMPLAINT_PI_FULL: string = ROUTE_HOME_FULL + '/' + ROUTE_COMP_PI_REG;//modify pi complaint
 
 //new add for PRELIMINRY_INVESTIGATION_DI 19.07.17
-// const ROUTE_PRELIMINRY_INVESTIGATION_DI_ADD: string = "sitevisitadddi";
-// const ROUTE_PRELIMINRY_INVESTIGATION_DI_ADD_FULL : string = ROUTE_HOME_FULL + "/" + ROUTE_PRELIMINRY_INVESTIGATION_DI_ADD;
-const ROUTE_INVESTIGATION_REPORT_DI_ADD: string = "investigationreport";
-const ROUTE_INVESTIGATION_REPORT_DI_ADD_FULL: string = ROUTE_HOME_FULL + "/" + ROUTE_INVESTIGATION_REPORT_DI_ADD;
+// const ROUTE_PRELIMINRY_INVESTIGATION_DI_ADD: string = 'sitevisitadddi';
+// const ROUTE_PRELIMINRY_INVESTIGATION_DI_ADD_FULL : string = ROUTE_HOME_FULL + '/' + ROUTE_PRELIMINRY_INVESTIGATION_DI_ADD;
+const ROUTE_INVESTIGATION_REPORT_DI_ADD: string = 'investigationreport';
+const ROUTE_INVESTIGATION_REPORT_DI_ADD_FULL: string = ROUTE_HOME_FULL + '/' + ROUTE_INVESTIGATION_REPORT_DI_ADD;
 
 //new add for view PRELIMINRY_INVESTIGATION_DI 22.08.17
-//const ROUTE_PRELIMINRY_INVESTIGATION_DI_VIEW: string = "sitevisitviewdi";
+//const ROUTE_PRELIMINRY_INVESTIGATION_DI_VIEW: string = 'sitevisitviewdi';
 
-// const ROUTE_PRELIMINRY_INVESTIGATION_DI_VIEW_FULL: string = ROUTE_HOME_FULL + "/" + ROUTE_PRELIMINRY_INVESTIGATION_DI_VIEW;
+// const ROUTE_PRELIMINRY_INVESTIGATION_DI_VIEW_FULL: string = ROUTE_HOME_FULL + '/' + ROUTE_PRELIMINRY_INVESTIGATION_DI_VIEW;
 //new add for view or modify PRELI_DI - 19.02.18
-//const ROUTE_VIEW_MODIFY_PRELIMINRY_INVESTIGATION_DI: string =  ROUTE_PRELIMINRY_INVESTIGATION_DI_VIEW + "/" + ':viewEditParam';
-//const ROUTE_VIEW_MODIFY_PRELIMINRY_INVESTIGATION_DI_FULL: string = ROUTE_HOME_FULL + "/" + ROUTE_PRELIMINRY_INVESTIGATION_DI_VIEW;
-const ROUTE_INVESTIGATION_REPORT_DI_VIEW: string = "investigationreportviewdi";
-const ROUTE_VIEW_MODIFY_INVESTIGATION_REPORT_DI: string =  ROUTE_INVESTIGATION_REPORT_DI_VIEW + "/" + ':viewEditParam';
-const ROUTE_VIEW_MODIFY_INVESTIGATION_REPORT_DI_FULL: string = ROUTE_HOME_FULL + "/" + ROUTE_INVESTIGATION_REPORT_DI_VIEW;
+//const ROUTE_VIEW_MODIFY_PRELIMINRY_INVESTIGATION_DI: string =  ROUTE_PRELIMINRY_INVESTIGATION_DI_VIEW + '/' + ':viewEditParam';
+//const ROUTE_VIEW_MODIFY_PRELIMINRY_INVESTIGATION_DI_FULL: string = ROUTE_HOME_FULL + '/' + ROUTE_PRELIMINRY_INVESTIGATION_DI_VIEW;
+const ROUTE_INVESTIGATION_REPORT_DI_VIEW: string = 'investigationreportviewdi';
+const ROUTE_VIEW_MODIFY_INVESTIGATION_REPORT_DI: string =  ROUTE_INVESTIGATION_REPORT_DI_VIEW + '/' + ':viewEditParam';
+const ROUTE_VIEW_MODIFY_INVESTIGATION_REPORT_DI_FULL: string = ROUTE_HOME_FULL + '/' + ROUTE_INVESTIGATION_REPORT_DI_VIEW;
 
 //new add for modify PRELIMINRY_INVESTIGATION_DI 22.08.17
 // const ROUTE_MODIFY_PRELIMINRY_INVESTIGATION_DI: string =  ROUTE_PRELIMINRY_INVESTIGATION_DI_ADD + '/' + ':complaintReferenceNo';
-//const ROUTE_MODIFY_PRELIMINRY_INVESTIGATION_DI_FULL: string = ROUTE_HOME_FULL + "/" + ROUTE_PRELIMINRY_INVESTIGATION_DI_ADD;
+//const ROUTE_MODIFY_PRELIMINRY_INVESTIGATION_DI_FULL: string = ROUTE_HOME_FULL + '/' + ROUTE_PRELIMINRY_INVESTIGATION_DI_ADD;
 const ROUTE_MODIFY_INVESTIGATION_REPORT_DI: string =  ROUTE_INVESTIGATION_REPORT_DI_ADD + '/' + ':complaintReferenceNo';
-const ROUTE_MODIFY_INVESTIGATION_REPORT_DI_FULL: string = ROUTE_HOME_FULL + "/" + ROUTE_INVESTIGATION_REPORT_DI_ADD;
+const ROUTE_MODIFY_INVESTIGATION_REPORT_DI_FULL: string = ROUTE_HOME_FULL + '/' + ROUTE_INVESTIGATION_REPORT_DI_ADD;
 
 //new add for single view PRELIMINRY_INVESTIGATION_DI 15.02.18
-// const ROUTE_VIEW_DETAILS_PRELIMINRY_INVESTIGATION_DI: string =  ROUTE_PRELIMINRY_INVESTIGATION_DI_VIEW + "/" + ':viewEditParam' + '/' + ':complaintReferenceNo';
-// const ROUTE_VIEW_DETAILS_PRELIMINRY_INVESTIGATION_DI_FULL: string = ROUTE_HOME_FULL + "/" + ROUTE_PRELIMINRY_INVESTIGATION_DI_VIEW;
-const ROUTE_VIEW_DETAILS_INVESTIGATION_REPORT_DI: string =  ROUTE_INVESTIGATION_REPORT_DI_VIEW + "/" + ':viewEditParam' + '/' + ':complaintReferenceNo';
-const ROUTE_VIEW_DETAILS_INVESTIGATION_REPORT_DI_FULL: string = ROUTE_HOME_FULL + "/" + ROUTE_INVESTIGATION_REPORT_DI_VIEW;
+// const ROUTE_VIEW_DETAILS_PRELIMINRY_INVESTIGATION_DI: string =  ROUTE_PRELIMINRY_INVESTIGATION_DI_VIEW + '/' + ':viewEditParam' + '/' + ':complaintReferenceNo';
+// const ROUTE_VIEW_DETAILS_PRELIMINRY_INVESTIGATION_DI_FULL: string = ROUTE_HOME_FULL + '/' + ROUTE_PRELIMINRY_INVESTIGATION_DI_VIEW;
+const ROUTE_VIEW_DETAILS_INVESTIGATION_REPORT_DI: string =  ROUTE_INVESTIGATION_REPORT_DI_VIEW + '/' + ':viewEditParam' + '/' + ':complaintReferenceNo';
+const ROUTE_VIEW_DETAILS_INVESTIGATION_REPORT_DI_FULL: string = ROUTE_HOME_FULL + '/' + ROUTE_INVESTIGATION_REPORT_DI_VIEW;
 
 //complaint reference no search
-const ROUTE_COMPLAINT_REFERENCE_NO_SEARCH: string ="complaintReferenceNoSearch";
-const ROUTE_COMPLAINT_REFERENCE_NO_SEARCH_FULL: string = ROUTE_HOME_FULL + "/"+ ROUTE_COMPLAINT_REFERENCE_NO_SEARCH;
+const ROUTE_COMPLAINT_REFERENCE_NO_SEARCH: string ='complaintReferenceNoSearch';
+const ROUTE_COMPLAINT_REFERENCE_NO_SEARCH_FULL: string = ROUTE_HOME_FULL + '/'+ ROUTE_COMPLAINT_REFERENCE_NO_SEARCH;
 
 
 //new add for allocate complaint add
-const ROUTE_ADD_ALLOCATE_COMPLAINT: string = "allocateComplaintadd";
-const ROUTE_ADD_ALLOCATE_COMPLAINT_FULL: string = ROUTE_HOME_FULL + "/" + ROUTE_ADD_ALLOCATE_COMPLAINT;
+const ROUTE_ADD_ALLOCATE_COMPLAINT: string = 'allocateComplaintadd';
+const ROUTE_ADD_ALLOCATE_COMPLAINT_FULL: string = ROUTE_HOME_FULL + '/' + ROUTE_ADD_ALLOCATE_COMPLAINT;
 
 //new add for allocate complaint route
-const ROUTE_ALLOCATE_COMPLAINT_CONST: string = "allocateComplaint";
-//const ROUTE_ALLOCATE_COMPLAINT_FULL: string = ROUTE_HOME_FULL + "/" + ROUTE_ALLOCATE_COMPLAINT;
+const ROUTE_ALLOCATE_COMPLAINT_CONST: string = 'allocateComplaint';
+//const ROUTE_ALLOCATE_COMPLAINT_FULL: string = ROUTE_HOME_FULL + '/' + ROUTE_ALLOCATE_COMPLAINT;
 
-const ROUTE_ALLOCATE_COMPLAINT: string = ROUTE_ALLOCATE_COMPLAINT_CONST + "/" + ':viewEditParam';//route path for menu
-const ROUTE_ALLOCATE_COMPLAINT_FULL: string = ROUTE_HOME_FULL + "/"+ ROUTE_ALLOCATE_COMPLAINT_CONST;
+const ROUTE_ALLOCATE_COMPLAINT: string = ROUTE_ALLOCATE_COMPLAINT_CONST + '/' + ':viewEditParam';//route path for menu
+const ROUTE_ALLOCATE_COMPLAINT_FULL: string = ROUTE_HOME_FULL + '/'+ ROUTE_ALLOCATE_COMPLAINT_CONST;
 
 //new add for modify allocate complaint single view cum add/edit -- 22.02.18
 const ROUTE_MODIFY_ALLOCATE_COMPLAINT: string =  ROUTE_ALLOCATE_COMPLAINT_CONST + '/' + ':complaintReferenceNo'+ '/' + ':viewEditParam';
-const ROUTE_MODIFY_ALLOCATE_COMPLAINT_FULL: string = ROUTE_HOME_FULL + "/" + ROUTE_ALLOCATE_COMPLAINT_CONST;
+const ROUTE_MODIFY_ALLOCATE_COMPLAINT_FULL: string = ROUTE_HOME_FULL + '/' + ROUTE_ALLOCATE_COMPLAINT_CONST;
 
 //complaint resolution di
-const ROUTE_COMPLAINT_RESOLUTION_DI: string = "complaintresolutiondi";
-const ROUTE_COMPLAINT_RESOLUTION_DI_FULL: string = ROUTE_HOME_FULL + "/"+ ROUTE_COMPLAINT_RESOLUTION_DI;
+const ROUTE_COMPLAINT_RESOLUTION_DI: string = 'complaintresolutiondi';
+const ROUTE_COMPLAINT_RESOLUTION_DI_FULL: string = ROUTE_HOME_FULL + '/'+ ROUTE_COMPLAINT_RESOLUTION_DI;
 //Complaint Resolution pi single view cum add/edit
 const ROUTE_MODIFY_COMPLAINT_RESOLUTION_DI: string = ROUTE_COMPLAINT_RESOLUTION_DI + '/' + ':complaintReferenceNo';
 const ROUTE_MODIFY_COMPLAINT_RESOLUTION_DI_FULL: string = ROUTE_HOME_FULL + '/' + ROUTE_COMPLAINT_RESOLUTION_DI;
 // Capa Action DI Route
-const ROUTE_CAPA_DI_CONST: string = "capaactiondi";
-const ROUTE_CAPA_ACTION_DI: string = ROUTE_CAPA_DI_CONST + "/" + ':viewEditParam';//route path for menu
-const ROUTE_CAPA_ACTION_DI_FULL: string = ROUTE_HOME_FULL + "/"+ ROUTE_CAPA_DI_CONST;
+const ROUTE_CAPA_DI_CONST: string = 'capaactiondi';
+const ROUTE_CAPA_ACTION_DI: string = ROUTE_CAPA_DI_CONST + '/' + ':viewEditParam';//route path for menu
+const ROUTE_CAPA_ACTION_DI_FULL: string = ROUTE_HOME_FULL + '/'+ ROUTE_CAPA_DI_CONST;
 //capa actn pi single view cum add/edit
 const ROUTE_MODIFY_CAPA_ACTION_DI: string = ROUTE_CAPA_DI_CONST + '/' + ':viewEditParam'+ '/' + ':complaintReferenceNo';
 const ROUTE_MODIFY_CAPA_ACTION_DI_FULL: string = ROUTE_HOME_FULL + '/' + ROUTE_CAPA_DI_CONST;
 //pi capa and reso
 // Capa Action PI Route
-const ROUTE_CAPA_ACTION_PI: string ="capaactionpiview";
-const ROUTE_CAPA_ACTION_PI_FULL: string = ROUTE_HOME_FULL + "/"+ ROUTE_CAPA_ACTION_PI;
+const ROUTE_CAPA_ACTION_PI: string ='capaactionpiview';
+const ROUTE_CAPA_ACTION_PI_FULL: string = ROUTE_HOME_FULL + '/'+ ROUTE_CAPA_ACTION_PI;
 //capa actn pi single view cum add/edit
 const ROUTE_MODIFY_CAPA_ACTION_PI: string = ROUTE_CAPA_ACTION_PI + '/' + ':complaintReferenceNo';
 const ROUTE_MODIFY_CAPA_ACTION_PI_FULL: string = ROUTE_HOME_FULL + '/' + ROUTE_CAPA_ACTION_PI;
 // Complaint Resolution PI Route
-const ROUTE_COMPLAINT_RESOLUTION_PI: string ="rootcauseanalysispi";
-const ROUTE_COMPLAINT_RESOLUTION_PI_FULL: string = ROUTE_HOME_FULL + "/"+ ROUTE_COMPLAINT_RESOLUTION_PI;
+const ROUTE_COMPLAINT_RESOLUTION_PI: string ='rootcauseanalysispi';
+const ROUTE_COMPLAINT_RESOLUTION_PI_FULL: string = ROUTE_HOME_FULL + '/'+ ROUTE_COMPLAINT_RESOLUTION_PI;
 //Complaint Resolution pi single view cum add/edit
 const ROUTE_MODIFY_COMPLAINT_RESOLUTION_PI: string = ROUTE_COMPLAINT_RESOLUTION_PI + '/' + ':complaintReferenceNo';
 const ROUTE_MODIFY_COMPLAINT_RESOLUTION_PI_FULL: string = ROUTE_HOME_FULL + '/' + ROUTE_COMPLAINT_RESOLUTION_PI;
 //close complaint di
-const ROUTE_CLOSE_COMPLAINT_DI: string ="closeComplaintdi";
-const ROUTE_CLOSE_COMPLAINT_DI_FULL: string = ROUTE_HOME_FULL + "/"+ ROUTE_CLOSE_COMPLAINT_DI;
+const ROUTE_CLOSE_COMPLAINT_DI: string ='closeComplaintdi';
+const ROUTE_CLOSE_COMPLAINT_DI_FULL: string = ROUTE_HOME_FULL + '/'+ ROUTE_CLOSE_COMPLAINT_DI;
 //Complaint Resolution di single view cum add/edit
 const ROUTE_MODIFY_CLOSE_COMPLAINT_DI: string = ROUTE_CLOSE_COMPLAINT_DI + '/' + ':complaintReferenceNo';
 const ROUTE_MODIFY_CLOSE_COMPLAINT_DI_FULL: string = ROUTE_HOME_FULL + '/' + ROUTE_CLOSE_COMPLAINT_DI;
 //close complaint pi
-const ROUTE_CLOSE_COMPLAINT_PI: string ="closecomplaintpi";
-const ROUTE_CLOSE_COMPLAINT_PI_FULL: string = ROUTE_HOME_FULL + "/"+ ROUTE_CLOSE_COMPLAINT_PI;
+const ROUTE_CLOSE_COMPLAINT_PI: string ='closecomplaintpi';
+const ROUTE_CLOSE_COMPLAINT_PI_FULL: string = ROUTE_HOME_FULL + '/'+ ROUTE_CLOSE_COMPLAINT_PI;
 //Complaint Resolution di single view cum add/edit
 const ROUTE_MODIFY_CLOSE_COMPLAINT_PI: string = ROUTE_CLOSE_COMPLAINT_PI + '/' + ':complaintReferenceNo';
 const ROUTE_MODIFY_CLOSE_COMPLAINT_PI_FULL: string = ROUTE_HOME_FULL + '/' + ROUTE_CLOSE_COMPLAINT_PI;
 
 //pi invoice search
-const ROUTE_COMPLAINT_PI_INVOICE_SEARCH: string ="complaintPIInvoiceSearch";
-const ROUTE_COMPLAINT_PI_INVOICE_SEARCH_FULL: string = ROUTE_HOME_FULL + "/"+ ROUTE_COMPLAINT_PI_INVOICE_SEARCH;
+const ROUTE_COMPLAINT_PI_INVOICE_SEARCH: string ='complaintPIInvoiceSearch';
+const ROUTE_COMPLAINT_PI_INVOICE_SEARCH_FULL: string = ROUTE_HOME_FULL + '/'+ ROUTE_COMPLAINT_PI_INVOICE_SEARCH;
 
 //pi customer search
-const ROUTE_COMPLAINT_PI_CUSTOMER_SEARCH: string ="complaintPICustomerSearch";
-const ROUTE_COMPLAINT_PI_CUSTOMER_SEARCH_FULL: string = ROUTE_HOME_FULL + "/"+ ROUTE_COMPLAINT_PI_CUSTOMER_SEARCH;
+const ROUTE_COMPLAINT_PI_CUSTOMER_SEARCH: string ='complaintPICustomerSearch';
+const ROUTE_COMPLAINT_PI_CUSTOMER_SEARCH_FULL: string = ROUTE_HOME_FULL + '/'+ ROUTE_COMPLAINT_PI_CUSTOMER_SEARCH;
 //di invoice search
-const ROUTE_COMPLAINT_DI_INVOICE_SEARCH: string ="complaintDIInvoiceSearch";
-const ROUTE_COMPLAINT_DI_INVOICE_SEARCH_FULL: string = ROUTE_HOME_FULL + "/"+ ROUTE_COMPLAINT_DI_INVOICE_SEARCH;
+const ROUTE_COMPLAINT_DI_INVOICE_SEARCH: string ='complaintDIInvoiceSearch';
+const ROUTE_COMPLAINT_DI_INVOICE_SEARCH_FULL: string = ROUTE_HOME_FULL + '/'+ ROUTE_COMPLAINT_DI_INVOICE_SEARCH;
 
 //di customer search
-const ROUTE_COMPLAINT_DI_CUSTOMER_SEARCH: string ="complaintDICustomerSearch";
-const ROUTE_COMPLAINT_DI_CUSTOMER_SEARCH_FULL: string = ROUTE_HOME_FULL + "/"+ ROUTE_COMPLAINT_DI_CUSTOMER_SEARCH;
+const ROUTE_COMPLAINT_DI_CUSTOMER_SEARCH: string ='complaintDICustomerSearch';
+const ROUTE_COMPLAINT_DI_CUSTOMER_SEARCH_FULL: string = ROUTE_HOME_FULL + '/'+ ROUTE_COMPLAINT_DI_CUSTOMER_SEARCH;
 
-const ROUTE_ADD_ROLE: string = "addrole";
+const ROUTE_ADD_ROLE: string = 'addrole';
 const ROUTE_MODIFY_ROLE_ID: string = ROUTE_ADD_ROLE + '/' + ':roleId';
-const ROUTE_MODIFY_ROLE_FULL: string = ROUTE_HOME_FULL + "/" + ROUTE_ADD_ROLE;//modify
-const ROUTE_ADD_ROLE_FULL: string = ROUTE_HOME_FULL + "/" + ROUTE_ADD_ROLE;//add
+const ROUTE_MODIFY_ROLE_FULL: string = ROUTE_HOME_FULL + '/' + ROUTE_ADD_ROLE;//modify
+const ROUTE_ADD_ROLE_FULL: string = ROUTE_HOME_FULL + '/' + ROUTE_ADD_ROLE;//add
 
-const ROUTE_VIEW_ROLE: string = "viewrole";
-const ROUTE_VIEW_ROLE_FULL: string = ROUTE_HOME_FULL + "/" + ROUTE_VIEW_ROLE;
+const ROUTE_VIEW_ROLE: string = 'viewrole';
+const ROUTE_VIEW_ROLE_FULL: string = ROUTE_HOME_FULL + '/' + ROUTE_VIEW_ROLE;
 
 //close di
-const ROUTE_ADD_CLOSE_COMPLAIN_DI_CONST: string = "addclosecomplaindi";
+const ROUTE_ADD_CLOSE_COMPLAIN_DI_CONST: string = 'addclosecomplaindi';
 const ROUTE_ADD_CLOSE_COMPLAIN_DI: string = ROUTE_ADD_CLOSE_COMPLAIN_DI_CONST + '/' + ':complaintReferenceNo'+ '/' + ':complaintStatus';
-const ROUTE_ADD_CLOSE_COMPLAIN_DI_FULL: string = ROUTE_HOME_FULL + "/" + ROUTE_ADD_CLOSE_COMPLAIN_DI_CONST;//add
-const ROUTE_VIEW_DETAILS_CLOSE_COMPLAIN_DI_CONST: string = "viewclosecomplaindi";//close complain view
+const ROUTE_ADD_CLOSE_COMPLAIN_DI_FULL: string = ROUTE_HOME_FULL + '/' + ROUTE_ADD_CLOSE_COMPLAIN_DI_CONST;//add
+const ROUTE_VIEW_DETAILS_CLOSE_COMPLAIN_DI_CONST: string = 'viewclosecomplaindi';//close complain view
 const ROUTE_VIEW_DETAILS_CLOSE_COMPLAIN_DI: string = ROUTE_VIEW_DETAILS_CLOSE_COMPLAIN_DI_CONST + '/' + ':complaintReferenceNo'+ '/' + ':complaintStatus';
-const ROUTE_VIEW_DETAILS_CLOSE_COMPLAIN_DI_FULL: string = ROUTE_HOME_FULL + "/" + ROUTE_VIEW_DETAILS_CLOSE_COMPLAIN_DI_CONST;//view
+const ROUTE_VIEW_DETAILS_CLOSE_COMPLAIN_DI_FULL: string = ROUTE_HOME_FULL + '/' + ROUTE_VIEW_DETAILS_CLOSE_COMPLAIN_DI_CONST;//view
 
 
 //rca di
-const ROUTE_ADD_RCA_DI_CONST: string = "addrcadi";
+const ROUTE_ADD_RCA_DI_CONST: string = 'addrcadi';
 const ROUTE_ADD_RCA_DI: string = ROUTE_ADD_RCA_DI_CONST + '/' + ':complaintReferenceNo'+ '/' + ':complaintStatus';
-const ROUTE_ADD_RCA_DI_FULL: string = ROUTE_HOME_FULL + "/" + ROUTE_ADD_RCA_DI_CONST;//add
-const ROUTE_VIEW_DETAILS_RCA_DI_CONST: string = "viewrcadi";//rca view
+const ROUTE_ADD_RCA_DI_FULL: string = ROUTE_HOME_FULL + '/' + ROUTE_ADD_RCA_DI_CONST;//add
+const ROUTE_VIEW_DETAILS_RCA_DI_CONST: string = 'viewrcadi';//rca view
 const ROUTE_VIEW_DETAILS_RCA_DI: string = ROUTE_VIEW_DETAILS_RCA_DI_CONST + '/' + ':complaintReferenceNo'+ '/' + ':complaintStatus';
-const ROUTE_VIEW_DETAILS_RCA_DI_FULL: string = ROUTE_HOME_FULL + "/" + ROUTE_VIEW_DETAILS_RCA_DI_CONST;//view
+const ROUTE_VIEW_DETAILS_RCA_DI_FULL: string = ROUTE_HOME_FULL + '/' + ROUTE_VIEW_DETAILS_RCA_DI_CONST;//view
 
 
 //ca di
-const ROUTE_ADD_CA_DI_CONST: string = "addcadi";
+const ROUTE_ADD_CA_DI_CONST: string = 'addcadi';
 const ROUTE_ADD_CA_DI: string = ROUTE_ADD_CA_DI_CONST + '/' + ':complaintReferenceNo'+ '/' + ':complaintStatus';
-const ROUTE_ADD_CA_DI_FULL: string = ROUTE_HOME_FULL + "/" + ROUTE_ADD_CA_DI_CONST;//add
-const ROUTE_VIEW_DETAILS_CA_DI_CONST: string = "viewcadi";//ca view
+const ROUTE_ADD_CA_DI_FULL: string = ROUTE_HOME_FULL + '/' + ROUTE_ADD_CA_DI_CONST;//add
+const ROUTE_VIEW_DETAILS_CA_DI_CONST: string = 'viewcadi';//ca view
 const ROUTE_VIEW_DETAILS_CA_DI: string = ROUTE_VIEW_DETAILS_CA_DI_CONST + '/' + ':complaintReferenceNo'+ '/' + ':complaintStatus';
-const ROUTE_VIEW_DETAILS_CA_DI_FULL: string = ROUTE_HOME_FULL + "/" + ROUTE_VIEW_DETAILS_CA_DI_CONST;//view
+const ROUTE_VIEW_DETAILS_CA_DI_FULL: string = ROUTE_HOME_FULL + '/' + ROUTE_VIEW_DETAILS_CA_DI_CONST;//view
 
 
 //pa di
-const ROUTE_ADD_PA_DI_CONST: string = "addpadi";
+const ROUTE_ADD_PA_DI_CONST: string = 'addpadi';
 const ROUTE_ADD_PA_DI: string = ROUTE_ADD_PA_DI_CONST + '/' + ':complaintReferenceNo'+ '/' + ':complaintStatus';
-const ROUTE_ADD_PA_DI_FULL: string = ROUTE_HOME_FULL + "/" + ROUTE_ADD_PA_DI_CONST;//add
-const ROUTE_VIEW_DETAILS_PA_DI_CONST: string = "viewpadi";//pa view
+const ROUTE_ADD_PA_DI_FULL: string = ROUTE_HOME_FULL + '/' + ROUTE_ADD_PA_DI_CONST;//add
+const ROUTE_VIEW_DETAILS_PA_DI_CONST: string = 'viewpadi';//pa view
 const ROUTE_VIEW_DETAILS_PA_DI: string = ROUTE_VIEW_DETAILS_PA_DI_CONST + '/' + ':complaintReferenceNo'+ '/' + ':complaintStatus';
-const ROUTE_VIEW_DETAILS_PA_DI_FULL: string = ROUTE_HOME_FULL + "/" + ROUTE_VIEW_DETAILS_PA_DI_CONST;//view
+const ROUTE_VIEW_DETAILS_PA_DI_FULL: string = ROUTE_HOME_FULL + '/' + ROUTE_VIEW_DETAILS_PA_DI_CONST;//view
 
 
 //for mis report
-const ROUTE_MIS_REPORTS: string = "misreport";
-const ROUTE_MIS_REPORTS_VIEW: string = ROUTE_MIS_REPORTS + "/" + ':plantType';
-const ROUTE_MIS_REPORTS_VIEW_FULL: string =  ROUTE_HOME_FULL + "/" + ROUTE_MIS_REPORTS;
-const ROUTE_MIS_REPORTS_VIEW_DETAILS: string = ROUTE_MIS_REPORTS + "/" + ':plantType' + "/" + ':complaintReferenceNo';
-const ROUTE_MIS_REPORT_VIEW_DETAILS_FULL: string = ROUTE_HOME_FULL + "/" + ROUTE_MIS_REPORTS;
+const ROUTE_MIS_REPORTS: string = 'misreport';
+const ROUTE_MIS_REPORTS_VIEW: string = ROUTE_MIS_REPORTS + '/' + ':plantType';
+const ROUTE_MIS_REPORTS_VIEW_FULL: string =  ROUTE_HOME_FULL + '/' + ROUTE_MIS_REPORTS;
+const ROUTE_MIS_REPORTS_VIEW_DETAILS: string = ROUTE_MIS_REPORTS + '/' + ':plantType' + '/' + ':complaintReferenceNo';
+const ROUTE_MIS_REPORT_VIEW_DETAILS_FULL: string = ROUTE_HOME_FULL + '/' + ROUTE_MIS_REPORTS;
 
 // Full route path (/login, /home/dashboard etc.)
 export const ROUTE_PATHS = {
@@ -230,9 +236,10 @@ export const ROUTE_PATHS = {
     RouteDashboard: ROUTE_DASHBOARD_FULL,
     RouteDashboardBoth: ROUTE_DASHBOARD_BOTH_FULL,//for dashboard full
     RouteComplainDIRegister: ROUTE_COMP_DI_REG_FULL,//complaint di reg from menu
-    RouteComplainDIViewModify: ROUTE_VIEW_MODIFY_COMP_DI_FULL,//from menu comp view or modify
-    RouteComplainDIViewDetails: ROUTE_VIEW_DETAILS_COMPLAINT_DI_FULL,//complaint di view details by clicking on view button
-    RouteModifyComplaint: ROUTE_MODIFY_COMPLAINT_DI_FULL,//modify di complaint by clicking on edit button
+    RouteComplainDIView: ROUTE_COMP_DI_VIEW_FULL,//complain di view full
+    // RouteComplainDIViewModify: ROUTE_VIEW_MODIFY_COMP_DI_FULL,//from menu comp view or modify
+    // RouteComplainDIViewDetails: ROUTE_VIEW_DETAILS_COMPLAINT_DI_FULL,//complaint di view details by clicking on view button
+    RouteModifyComplaint: ROUTE_MODIFY_COMPLAINT_DI_FULL,//modify di complaint
     RouteComplaintDIViewWithParameter: ROUTE_COMP_DI_VIEW_WITH_PARAMETER_FULL,//complaint DI view with parameter for dashboard to view di
     RouteComplaintPIViewWithParameter: ROUTE_COMP_PI_VIEW_WITH_PARAMETER_FULL,//complaint PI view with parameter
     RouteAddUser: ROUTE_ADD_USER_FULL,//add
@@ -293,8 +300,10 @@ export const ROUTER_PATHS = {
     LogoutRouter: ROUTE_LOGOUT,
     HomeRouter: ROUTE_HOME,
     ComplainDIRegisterRouter: ROUTE_COMP_DI_REG,//complaint di reg from menu
-    ComplainDIViewModifyRouter: ROUTE_VIEW_MODIFY_COMP_DI,//complain di view or modify from menu
-    ComplainDIViewDetailsRouter: ROUTE_VIEW_DETAILS_COMPLAINT_DI,//view di by clicking on view button
+    ComplainDIViewRouter: ROUTE_COMP_DI_VIEW,//complain di view
+    ComplainDIViewDetailsRouter: ROUTE_COMP_DI_VIEW_DETAILS,//comp view details(Reg page in view mode)
+    // ComplainDIViewModifyRouter: ROUTE_VIEW_MODIFY_COMP_DI,//complain di view or modify from menu
+    // ComplainDIViewDetailsRouter: ROUTE_VIEW_DETAILS_COMPLAINT_DI,//view di by clicking on view button
     ModifyComplaintDIRouter: ROUTE_MODIFY_COMPLAINT_REFERENCE_NO,//modify complain di 
     DIViewComplaintWithParameterRouter: ROUTE_COMP_DI_VIEW_WITH_PARAMETER,//DI view comp with parameter from dashboard 
     ComplainPIRegisterRouter: ROUTE_COMP_PI_REG, //complain register pi 09.08.17
