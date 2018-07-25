@@ -25,8 +25,8 @@ export class MenuWsMapModel{
     // SSM0000027: '#'+ROUTE_PATHS.RoutePreliminaryInvestigationDIViewModify+"/modify",//preli modify  
     // new add for preliminaryinvestigationdi navigation 12.07.17
     SSM0000005: '#'+ROUTE_PATHS.RouteInvestigationReportDiAdd,//preli add
-    SSM0000006: '#'+ROUTE_PATHS.RouteInvestigationReportDIViewModify+"/view",//preli view
-    SSM0000027: '#'+ROUTE_PATHS.RouteInvestigationReportDIViewModify+"/modify",//preli modify   
+    // SSM0000006: '#'+ROUTE_PATHS.RouteInvestigationReportDIViewModify+"/view",//preli view
+    // SSM0000027: '#'+ROUTE_PATHS.RouteInvestigationReportDIViewModify+"/modify",//preli modify   
     //new add for ComplainPiRegister navigation 09-08-17
     SSM0000011:  '#'+ROUTE_PATHS.RouteComplainPIRegister,
     SSM0000012: '#'+ROUTE_PATHS.RouteComplainPIView,
