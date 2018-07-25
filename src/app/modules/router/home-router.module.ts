@@ -25,8 +25,8 @@ import { CAPAActionDIAddComponent } from '../capa-action/components/capa-action-
 //pi capa and reso
 import { CAPAActionPIComponent } from '../capa-action-pi/components/capa-action-pi.component';
 import { CAPAActionPIAddComponent } from '../capa-action-pi/components/capa-action-pi-add/capa-action-pi-add.component';
-import { ComplaintResolutionPIComponent } from 'app/modules/complaint-resolution-pi/components/complaint-resolution-pi.component';
-import { ComplaintResoluionPIAddComponent } from 'app/modules/complaint-resolution-pi/components/complaint-resolution-pi-add/complaint-resolution-pi-add.component';
+import { ComplaintResolutionPIComponent } from '../complaint-resolution-pi/components/complaint-resolution-pi.component';
+import { ComplaintResoluionPIAddComponent } from '../complaint-resolution-pi/components/complaint-resolution-pi-add/complaint-resolution-pi-add.component';
 // for close complaint pi
 import { CloseComplaintPIComponent } from '../close-complaint/close-complaint-pi/components/close-complaint-pi.component';
 import { CloseComplaintPIAddComponent } from '../close-complaint/close-complaint-pi/components/close-complaint-pi-add/close-complaint-pi-add.component';
@@ -47,7 +47,7 @@ import { ViewRoleComponent } from '../role/components/role-view/role-view.compon
 import { InvestigationReportDiViewDetailsComponent } from '../investigation-report-di/components/investigation-report-di-view-details/investigation-report-di-view-details.component';
 
 //to view the complaints in details
-import { ComplainDIViewDetailsComponent } from '../complain/complain-di/components/complain-di-view-details/complaint-di-view-details.component';
+import { ComplainDIViewDetailsComponent } from '../complain/complain-di/components/complain-di-view-details/complain-di-view-details.component';
 import { ReportsDIViewComponent } from '../report/report-di/components/report-di-view/report-di-view.component';
 import { ReportDIViewDetailsComponent } from '../report/report-di/components/report-di-view-details/report-di-view-details.component';
 import { ComplaintReferenceNoSearchComponent } from '../investigation-report-di/components/investigation-report-di-add/complaint-reference-no-search/complaint-reference-no-search.component';

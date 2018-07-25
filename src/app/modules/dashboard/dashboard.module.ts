@@ -2,9 +2,9 @@ import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { ReactiveFormsModule } from '@angular/forms';
 // import { ComplaintRegisterModule } from "../complain/complain.module";
-import { DashboardComponent } from "app/modules/dashboard/components/dashboard.component";
+import { DashboardComponent } from "./components/dashboard.component";
 import { TilesModule } from "../widget/Tiles/tiles.module";
-import { TilesInteractionService } from "../dashboard/services/tiles-interaction.service";
+import { TilesInteractionService } from "./services/tiles-interaction.service";
 
 
 

@@ -5,7 +5,7 @@ import { Subscription } from 'rxjs/Subscription';//to get route param
 import { ToastService } from "../../home/services/toast-service";
 import { Router, ActivatedRoute } from '@angular/router';
 import { ROUTE_PATHS } from '../../router/router-paths';
-import { ComplaintResolutionDIService } from "app/modules/complaint-resolution-di/services/complaint-resolution-di.service";
+import { ComplaintResolutionDIService } from "../services/complaint-resolution-di.service";
 import { NgbModal, NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { DatePipe } from '@angular/common';
 import { LocalStorageService } from "../../shared/services/local-storage.service";

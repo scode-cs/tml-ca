@@ -4,14 +4,14 @@ import { NgbModal, NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { Http, RequestOptions, Headers, Response } from '@angular/http';
 import "rxjs/add/operator/do";
 import "rxjs/add/operator/map";
-import { Observable } from 'rxjs/Rx';
+import { Observable } from 'rxjs';
 import { LocalStorageService } from "../../../../../shared/services/local-storage.service";
 // import { AppUrlsConst, WebServiceConst } from "../../../../app-config';
-import { ComplaintPIRegisterDataService } from "app/modules/complain/complain-pi/services/complaint-pi-register-data.service";
-import { ComplaintPIRegisterEmitService } from "app/modules/complain/complain-pi/services/complaint-pi-register-emit.service";
+import { ComplaintPIRegisterDataService } from "../../../services/complaint-pi-register-data.service";
+import { ComplaintPIRegisterEmitService } from "../../../services/complaint-pi-register-emit.service";
 import { ROUTE_PATHS } from '../../../../../router/router-paths';
 import { Router, ActivatedRoute } from '@angular/router';
-import { InvoiceSearchDetailsModel } from "app/modules/complain/complain-pi/models/invoice-search-details.model";
+import { InvoiceSearchDetailsModel } from "../../../models/invoice-search-details.model";
 import { SessionErrorService } from "../../../../../shared/services/session-error.service";
 
 @Component({

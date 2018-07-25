@@ -2,12 +2,12 @@ import { NgModule }            from '@angular/core';
 import { ReactiveFormsModule } from '@angular/forms';
 import { BrowserModule } from '@angular/platform-browser';
 import { CommonModule } from "@angular/common";
-import { BusySpinnerModule } from "app/modules/widget/busy-spinner/busy-spinner.module";
+import { BusySpinnerModule } from "../../widget/busy-spinner/busy-spinner.module";
 import { DatePipe } from '@angular/common';
-import { SharedModule } from "app/modules/shared/shared.module";
-import { RCADIAddEditComponent } from "../rca-di/components/rca-di-add-edit/rca-di-add-edit.component";
-import { RCADIService } from "../rca-di/services/rca-di-add-edit.service";
-import { RCADIViewDetailsComponent } from "../rca-di/components/rca-di-view-details/rca-di-view-details.component";
+import { SharedModule } from "../../shared/shared.module";
+import { RCADIAddEditComponent } from "./components/rca-di-add-edit/rca-di-add-edit.component";
+import { RCADIService } from "./services/rca-di-add-edit.service";
+import { RCADIViewDetailsComponent } from "./components/rca-di-view-details/rca-di-view-details.component";
 
 @NgModule({
   imports:      [

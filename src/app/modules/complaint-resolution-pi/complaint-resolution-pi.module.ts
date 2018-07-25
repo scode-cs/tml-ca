@@ -4,11 +4,11 @@ import { BrowserModule } from '@angular/platform-browser';
 import { HttpModule } from '@angular/http';  
 import { DatePipe } from '@angular/common';
 import { CommonModule, APP_BASE_HREF, LocationStrategy, HashLocationStrategy } from "@angular/common";
-import { ComplaintResolutionPIComponent } from "../complaint-resolution-pi/components/complaint-resolution-pi.component";
-import { BusySpinnerModule } from "app/modules/widget/busy-spinner/busy-spinner.module";
-import { SharedModule } from "app/modules/shared/shared.module";
-import { ComplaintResolutionPIService } from "app/modules/complaint-resolution-pi/services/complaint-resolution-pi.service";
-import { ComplaintResoluionPIAddComponent } from  "../complaint-resolution-pi/components/complaint-resolution-pi-add/complaint-resolution-pi-add.component";
+import { ComplaintResolutionPIComponent } from "./components/complaint-resolution-pi.component";
+import { BusySpinnerModule } from "../widget/busy-spinner/busy-spinner.module";
+import { SharedModule } from "../shared/shared.module";
+import { ComplaintResolutionPIService } from "./services/complaint-resolution-pi.service";
+import { ComplaintResoluionPIAddComponent } from  "./components/complaint-resolution-pi-add/complaint-resolution-pi-add.component";
 @NgModule({
   imports:      [
     ReactiveFormsModule,

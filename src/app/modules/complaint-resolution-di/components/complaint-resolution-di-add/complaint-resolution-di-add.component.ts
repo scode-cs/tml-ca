@@ -4,7 +4,7 @@ import { Subscription } from 'rxjs/Subscription';//to get route param
 import { Router, ActivatedRoute } from '@angular/router';
 import { DatePipe } from '@angular/common';
 import { ROUTE_PATHS } from '../../../router/router-paths';
-import { ComplaintResolutionDIService } from "app/modules/complaint-resolution-di/services/complaint-resolution-di.service";
+import { ComplaintResolutionDIService } from "../../services/complaint-resolution-di.service";
 import { LocalStorageService } from "../../../shared/services/local-storage.service";
 import { SessionErrorService } from "../../../shared/services/session-error.service";
 // import {NgbModal, NgbActiveModal} from '@ng-bootstrap/ng-bootstrap';

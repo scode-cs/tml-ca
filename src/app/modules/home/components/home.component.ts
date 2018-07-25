@@ -2,7 +2,7 @@ import { Component, NgModule, Output, EventEmitter, ViewContainerRef, OnInit, Af
 import { BrowserModule } from '@angular/platform-browser';
 import { FormsModule } from '@angular/forms';
 import { Router, RouterModule, Routes } from '@angular/router';
-import {Observable} from 'rxjs/Rx';//for a method call in every 2 min
+import {Observable} from 'rxjs';//for a method call in every 2 min
 import 'rxjs/add/observable/interval';
 import { ToastrConfig, ToastrService } from "ngx-toastr";
 import { ROUTE_PATHS } from '../../router/router-paths';
@@ -11,8 +11,8 @@ import { LocalStorageService } from "../../shared/services/local-storage.service
 import { UserModel } from "../../shared/models/user-model"; 
 import { MenuWsMapModel } from "../models/menu-ws-map.model";
 import { HomeDataService } from "../services/home.services";
-import { ComplaintDIInvoiceDetailsService } from "app/modules/complain/complain-di/services/complaint-di-invoice-details.service";
-import { InvoiceSearchDetailsModel } from "app/modules/complain/complain-pi/models/invoice-search-details.model";
+import { ComplaintDIInvoiceDetailsService } from "../../complain/complain-di/services/complaint-di-invoice-details.service";
+import { InvoiceSearchDetailsModel } from "../../complain/complain-pi/models/invoice-search-details.model";
 import { SessionErrorService } from "../../shared/services/session-error.service";
 @Component({
     selector: 'ispl-home',

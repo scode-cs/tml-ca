@@ -5,7 +5,7 @@ import { Router, ActivatedRoute } from '@angular/router';
 import { Subscription } from 'rxjs/Subscription';//to get route param
 import { ROUTE_PATHS } from '../../../router/router-paths';
 import { NgbModal, NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
-import { AllocateComplaintDIDataService } from 'app/modules/allocate-reallocate-complaint/services/allocate-complaint-data.services';
+import { AllocateComplaintDIDataService } from '../../services/allocate-complaint-data.services';
 import { LocalStorageService } from "../../../shared/services/local-storage.service";
 import { SessionErrorService } from "../../../shared/services/session-error.service";
 

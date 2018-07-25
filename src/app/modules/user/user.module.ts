@@ -3,12 +3,12 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { BrowserModule } from '@angular/platform-browser';
 import { CommonModule } from "@angular/common";
 import { RouterModule } from '@angular/router';
-import { AddUserComponent } from "app/modules/user/components/user-add/user-add.component";
-import { ViewUserComponent } from "app/modules/user/components/user-view/user-view.component";
+import { AddUserComponent } from "./components/user-add/user-add.component";
+import { ViewUserComponent } from "./components/user-view/user-view.component";
 import { AddUserDataService } from "./services/add-user-data.service";
 import { ViewUserDataService } from "./services/view-user-data.service";
-import { BusySpinnerModule } from "app/modules/widget/busy-spinner/busy-spinner.module";
-import { SharedModule } from "app/modules/shared/shared.module";
+import { BusySpinnerModule } from "../widget/busy-spinner/busy-spinner.module";
+import { SharedModule } from "../shared/shared.module";
 
 
 @NgModule({

@@ -1,14 +1,14 @@
 import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormBuilder, Validators, FormControl } from '@angular/forms';
 import { LocalStorageService } from '../../../../shared/services/local-storage.service';
-import { ViewComplaintDIDataService } from 'app/modules/complain/complain-di/services/complaint-di-view-data.service';
+import { ViewComplaintDIDataService } from '../../services/complaint-di-view-data.service';
 import { Router, ActivatedRoute } from '@angular/router';
 import { Subscription } from 'rxjs/Subscription';//to get route param
 import { ROUTE_PATHS } from '../../../../router/router-paths';
 import { ComplainDIViewModel } from '../../models/complain-di-view.model';
 import { TilesInteractionService } from '../../../../dashboard/services/tiles-interaction.service';
 import { SessionErrorService } from '../../../../shared/services/session-error.service';
-import { ProcessFlowStatusDetailsModel } from 'app/modules/shared/components/process-flow/process-flow-status-details.model';
+import { ProcessFlowStatusDetailsModel } from '../../../../shared/components/process-flow/process-flow-status-details.model';
 
 @Component({
   selector: 'ispl-complain-di-view',

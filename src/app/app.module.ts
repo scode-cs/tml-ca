@@ -13,7 +13,7 @@ import { HomeModule } from "./modules/home/home.module";
 import { ToastrModule } from 'ngx-toastr';
 import { LocalStorageService } from "./modules/shared/services/local-storage.service";
 //for modal
-import { NgbdModalComponent } from 'app/modules/widget/modal/components/modal-component';
+import { NgbdModalComponent } from './modules/widget/modal/components/modal-component';
 import { SessionErrorService } from "./modules/shared/services/session-error.service";
 
 

@@ -5,9 +5,9 @@ import { Router, ActivatedRoute } from '@angular/router';
 import { Subscription } from 'rxjs/Subscription';//to get route param
 import { ROUTE_PATHS } from '../../../../../router/router-paths';
 import { LocalStorageService } from "../../../../../shared/services/local-storage.service";
-import { ComplaintPIRegisterDataService } from "app/modules/complain/complain-pi/services/complaint-pi-register-data.service";
-import { InvoiceSearchDetailsModel } from "app/modules/complain/complain-pi/models/invoice-search-details.model";
-import { ComplaintPIRegisterEmitService } from "app/modules/complain/complain-pi/services/complaint-pi-register-emit.service";
+import { ComplaintPIRegisterDataService } from "../../../services/complaint-pi-register-data.service";
+import { InvoiceSearchDetailsModel } from "../../../models/invoice-search-details.model";
+import { ComplaintPIRegisterEmitService } from "../../../services/complaint-pi-register-emit.service";
 import { SessionErrorService } from "../../../../../shared/services/session-error.service";
 
 @Component({
