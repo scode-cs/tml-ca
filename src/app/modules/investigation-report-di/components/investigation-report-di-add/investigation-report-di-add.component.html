@@ -8,67 +8,51 @@
       <li class="breadcrumb-item active">{{title}}</li>
     </ol>
   </div>
-
-   <!--start process flow div-->
-   <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 step-row" style="padding-left: 30px;padding-right: 30px;">
-    <ng-container *ngFor="let processData of processFlowData;let i = index;">
-      <!-- start div for active step -->
-      <div class="step-active step-col" style="display:inline-block;width: 16%;" *ngIf="i == processFlowPageIndex">
-        <p style="padding-top: 8px;text-align:center;color: white;font-size: 20px;" *ngIf="i == processFlowPageIndex">
-          <a style="color:white" [href]="processData.processUrl">{{processData.processName}}</a>
-        </p>
-      </div>
-      <!-- end of div for active step -->
-      <!-- start div for inactive step -->
-      <div class="step-inactive step-col" style="display:inline-block;width: 16%;" *ngIf="i > processFlowPageIndex">
-        <p style="padding-top: 8px;text-align:center;color: #5a5d5f;font-size: 20px;" *ngIf="i > processFlowPageIndex">
-          <a [href]="processData.processUrl">{{processData.processName}}</a>
-        </p>
-      </div>
-    </ng-container>
-  </div>  
+  <!--start process flow div-->
+  <app-flowmangement [complianStatus]="complaintStatus" [pageType]="'add'"></app-flowmangement>
   <!-- end div of process flow  -->
-    
+
+
   <!-- main div -->
   <div class="form-div-style">
-     <!-- start table div -->
-     <div class="col-lg-12 col-md-12 col-xs-12 scroll-bar grid-table-style" style="margin-bottom: 15px; margin-top: 5px;">
-        <table class="table-style">
-          <thead>
-            <tr class="th-style">
-              <td class="hideextra" *ngFor="let invRprt of  invReportTable" [ngClass]="invRprt.headerClass" >
-                  {{ invRprt.headerDesc }}
+    <!-- start table div -->
+    <div class="col-lg-12 col-md-12 col-xs-12 scroll-bar grid-table-style" style="margin-bottom: 15px; margin-top: 5px;">
+      <table class="table-style">
+        <thead>
+          <tr class="th-style">
+            <td class="hideextra" *ngFor="let invRprt of  invReportTable" [ngClass]="invRprt.headerClass">
+              {{ invRprt.headerDesc }}
+            </td>
+          </tr>
+        </thead>
+        <tbody>
+          <ng-container>
+            <tr class="tr-style">
+              <td class="td-style-first hideextra">
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Add Item(s)
+                <i style="font-size:16px;cursor: pointer;" title="Click here" class="fa fa-plus-circle" (click)="onAddItemOpenModal()"></i>
+              </td>
+              <td class="td-style">
+
+              </td>
+              <td class="td-style">
+
+              </td>
+              <td class="td-style">
+
+              </td>
+              <td class="td-style">
+
+              </td>
+              <td class="td-style-last">
+
               </td>
             </tr>
-          </thead>
-          <tbody>
-            <ng-container>
-              <tr class="tr-style">
-                  <td class="td-style-first hideextra">
-                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Add Item(s)
-                    <i style="font-size:16px;cursor: pointer;" title="Click here" class="fa fa-plus-circle" (click)="onAddItemOpenModal()"></i>
-                  </td>
-                  <td class="td-style">
-
-                  </td>
-                  <td class="td-style">
-
-                  </td>
-                  <td class="td-style">
-
-                  </td>
-                  <td class="td-style">
-
-                  </td>
-                  <td class="td-style-last">
-
-                  </td>
-                </tr>
-            </ng-container>
-          </tbody>
-        </table>
-      </div>
-      <!--end table div-->
+          </ng-container>
+        </tbody>
+      </table>
+    </div>
+    <!--end table div-->
 
 
     <!--start form -->
@@ -78,10 +62,10 @@
 
         <!-- start div for Complaint Reference No -->
         <div class="form-group col-xs-12 col-sm-6 col-md-6 col-lg-4">
-            <label>Complaint Reference No</label>
-            <input type="text" class="form-control"  readonly>
-          </div>
-          <!-- end div for Complaint Reference No -->
+          <label>Complaint Reference No</label>
+          <input type="text" class="form-control" readonly>
+        </div>
+        <!-- end div for Complaint Reference No -->
 
         <!-- start div of Site Visit Made radio button -->
         <div class="form-group col-xs-12 col-sm-6 col-md-6 col-lg-4">
@@ -90,13 +74,15 @@
               <label>Site Visit Made</label>
               <label class="red-asterick">*</label>
               <label class="control control--radio">Yes
-                <input type="radio" name="siteVisitMade" formControlName="siteVisitMade" [value]="Y" (click)="onRadioClick('Y','siteVisitMade')" />
+                <input type="radio" name="siteVisitMade" formControlName="siteVisitMade" [value]="Y" (click)="onRadioClick('Y','siteVisitMade')"
+                />
                 <div class="control__indicator"></div>
               </label>
             </div>
             <div style="display:inline-block;">
               <label class="control control--radio">No
-                <input type="radio" name="siteVisitMade" formControlName="siteVisitMade" [value]="N" (click)="onRadioClick('N','siteVisitMade')" />
+                <input type="radio" name="siteVisitMade" formControlName="siteVisitMade" [value]="N" (click)="onRadioClick('N','siteVisitMade')"
+                />
                 <div class="control__indicator"></div>
               </label>
             </div>
@@ -106,13 +92,15 @@
               <label>Site Visit Made</label>
               <label class="red-asterick">*</label>
               <label class="control control--radio">Yes
-                <input type="radio" name="siteVisitMade" formControlName="siteVisitMade" [value]="Y" [checked]=true (click)="onRadioClick('Y','siteVisitMade')" />
+                <input type="radio" name="siteVisitMade" formControlName="siteVisitMade" [value]="Y" [checked]=true (click)="onRadioClick('Y','siteVisitMade')"
+                />
                 <div class="control__indicator"></div>
               </label>
             </div>
             <div style="display:inline-block;">
               <label class="control control--radio">No
-                <input type="radio" name="siteVisitMade" formControlName="siteVisitMade" [value]="N" (click)="onRadioClick('N','siteVisitMade')" />
+                <input type="radio" name="siteVisitMade" formControlName="siteVisitMade" [value]="N" (click)="onRadioClick('N','siteVisitMade')"
+                />
                 <div class="control__indicator"></div>
               </label>
             </div>
@@ -122,19 +110,21 @@
               <label>Site Visit Made</label>
               <label class="red-asterick">*</label>
               <label class="control control--radio">Yes
-                <input type="radio" name="siteVisitMade" formControlName="siteVisitMade" [value]="Y" (click)="onRadioClick('Y','siteVisitMade')" />
+                <input type="radio" name="siteVisitMade" formControlName="siteVisitMade" [value]="Y" (click)="onRadioClick('Y','siteVisitMade')"
+                />
                 <div class="control__indicator"></div>
               </label>
             </div>
             <div style="display:inline-block;">
               <label class="control control--radio">No
-                <input type="radio" name="siteVisitMade" formControlName="siteVisitMade" [value]="N" [checked]=true (click)="onRadioClick('N','siteVisitMade')" />
+                <input type="radio" name="siteVisitMade" formControlName="siteVisitMade" [value]="N" [checked]=true (click)="onRadioClick('N','siteVisitMade')"
+                />
                 <div class="control__indicator"></div>
               </label>
             </div>
           </ng-container>
-          </div>
-          <!-- end div of Site Visit Made requied -->
+        </div>
+        <!-- end div of Site Visit Made requied -->
 
 
         <!-- start div for site visit Date -->
@@ -156,13 +146,15 @@
               <label>Sample Collected</label>
               <label class="red-asterick">*</label>
               <label class="control control--radio">Yes
-                <input type="radio" name="sampleColleted" formControlName="sampleColleted" [value]="Y" (click)="onRadioClick('Y','sampleColleted')" />
+                <input type="radio" name="sampleColleted" formControlName="sampleColleted" [value]="Y" (click)="onRadioClick('Y','sampleColleted')"
+                />
                 <div class="control__indicator"></div>
               </label>
             </div>
             <div style="display:inline-block;">
               <label class="control control--radio">No
-                <input type="radio" name="sampleColleted" formControlName="sampleColleted" [value]="N" (click)="onRadioClick('N','sampleColleted')" />
+                <input type="radio" name="sampleColleted" formControlName="sampleColleted" [value]="N" (click)="onRadioClick('N','sampleColleted')"
+                />
                 <div class="control__indicator"></div>
               </label>
             </div>
@@ -172,13 +164,15 @@
               <label>Sample Collected</label>
               <label class="red-asterick">*</label>
               <label class="control control--radio">Yes
-                <input type="radio" name="sampleColleted" formControlName="sampleColleted" [value]="Y" [checked]=true (click)="onRadioClick('Y','sampleColleted')" />
+                <input type="radio" name="sampleColleted" formControlName="sampleColleted" [value]="Y" [checked]=true (click)="onRadioClick('Y','sampleColleted')"
+                />
                 <div class="control__indicator"></div>
               </label>
             </div>
             <div style="display:inline-block;">
               <label class="control control--radio">No
-                <input type="radio" name="sampleColleted" formControlName="sampleColleted" [value]="N" (click)="onRadioClick('N','sampleColleted')" />
+                <input type="radio" name="sampleColleted" formControlName="sampleColleted" [value]="N" (click)="onRadioClick('N','sampleColleted')"
+                />
                 <div class="control__indicator"></div>
               </label>
             </div>
@@ -188,19 +182,21 @@
               <label>Sample Collected</label>
               <label class="red-asterick">*</label>
               <label class="control control--radio">Yes
-                <input type="radio" name="sampleColleted" formControlName="sampleColleted" [value]="Y" (click)="onRadioClick('Y','sampleColleted')" />
+                <input type="radio" name="sampleColleted" formControlName="sampleColleted" [value]="Y" (click)="onRadioClick('Y','sampleColleted')"
+                />
                 <div class="control__indicator"></div>
               </label>
             </div>
             <div style="display:inline-block;">
               <label class="control control--radio">No
-                <input type="radio" name="sampleColleted" formControlName="sampleColleted" [value]="N" [checked]=true (click)="onRadioClick('N','sampleColleted')" />
+                <input type="radio" name="sampleColleted" formControlName="sampleColleted" [value]="N" [checked]=true (click)="onRadioClick('N','sampleColleted')"
+                />
                 <div class="control__indicator"></div>
               </label>
             </div>
           </ng-container>
-          </div>
-          <!-- end div of Sample Collected-->
+        </div>
+        <!-- end div of Sample Collected-->
 
 
         <!-- start div for Sample Collected Date -->
@@ -223,95 +219,55 @@
         </div>
         <!-- end div for Date -->
 
-         <!-- start table div -->
-         <div class="col-lg-12 col-md-12 col-xs-12 scroll-bar" style="margin-bottom: 15px; margin-top: 5px;" *ngIf="complaintReferenceDetailsForModify.itemsHeader">
+        <!-- start table div -->
+        <div class="col-lg-12 col-md-12 col-xs-12 scroll-bar grid-table-style" style="margin-bottom: 15px; margin-top: 5px;">
           <table class="table-style">
             <thead>
               <tr class="th-style">
-                <td class="header-style-first hideextra">
-                  {{complaintReferenceDetailsForModify.itemsHeader?.invoiceNo}}
-                </td>
-                <td class="header-style hideextra">
-                  {{complaintReferenceDetailsForModify.itemsHeader?.invoiceDate}}
-                </td>
-                <td class="header-style hideextra">
-                  {{complaintReferenceDetailsForModify.itemsHeader?.itemCode}}
-                </td>
-                <td class="header-style hideextra">
-                  {{complaintReferenceDetailsForModify.itemsHeader?.itemName}}
-                </td>
-                <td class="header-style hideextra">
-                  {{complaintReferenceDetailsForModify.itemsHeader?.customerCode}}
-                </td>
-                <td class="header-style hideextra">
-                  {{complaintReferenceDetailsForModify.itemsHeader?.customerName}}
-                </td>
-                <td class="header-style hideextra">
-                  {{complaintReferenceDetailsForModify.itemsHeader?.projectName}}
-                </td>
-                <td class="header-style hideextra">
-                  {{complaintReferenceDetailsForModify.itemsHeader?.projectLocation}}
-                </td>
-                <td class="header-style hideextra">
-                  {{complaintReferenceDetailsForModify.itemsHeader?.poNo}}
-                </td>
-                <td class="header-style-last hideextra">
-                  {{complaintReferenceDetailsForModify.itemsHeader?.soNo}}
+                <td class="hideextra" *ngFor="let invRprt of  invReportTable" [ngClass]="invRprt.headerClass">
+                  {{ invRprt.headerDesc }}
                 </td>
               </tr>
             </thead>
             <tbody>
               <ng-container>
-                  <tr class="tr-style">
-                      <td class="td-style-first hideextra">
-                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Add Item(s)
-                        <i style="font-size:16px;cursor: pointer;" title="Click here" class="fa fa-plus-circle" (click)="onAddItemOpenModal()"></i>
-                      </td>
-                      <td class="td-style">
-  
-                      </td>
-                      <td class="td-style">
-  
-                      </td>
-                      <td class="td-style">
-  
-                      </td>
-                      <td class="td-style">
-  
-                      </td>
-                      <td class="td-style">
-  
-                      </td>
-                      <td class="td-style">
-  
-                      </td>
-                      <td class="td-style">
-  
-                      </td>
-                      <td class="td-style">
-  
-                      </td>
-                      <td class="td-style-last">
-  
-                      </td>
-                    </tr>
-                </ng-container>
+                <tr class="tr-style">
+                  <td class="td-style-first hideextra">
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Add Item(s)
+                    <i style="font-size:16px;cursor: pointer;" title="Click here" class="fa fa-plus-circle" (click)="onAddItemOpenModal()"></i>
+                  </td>
+                  <td class="td-style">
+
+                  </td>
+                  <td class="td-style">
+
+                  </td>
+                  <td class="td-style">
+
+                  </td>
+                  <td class="td-style">
+
+                  </td>
+                  <td class="td-style-last">
+
+                  </td>
+                </tr>
+              </ng-container>
             </tbody>
           </table>
         </div>
         <!--end table div-->
 
         <!--start div for Unloading Equipment [add]-->
-        <div class="form-group col-xs-12 col-sm-6 col-md-6 col-lg-4" >
-          <label >Unloading Equipment</label>
+        <div class="form-group col-xs-12 col-sm-6 col-md-6 col-lg-4">
+          <label>Unloading Equipment</label>
           <ul class="list-group ul-style">
-            <li class="list-group-item li-style" *ngFor="let lubrication of lubricationVal.details">
+            <li class="list-group-item li-style" *ngFor="">
               <label class="custom-control custom-checkbox">
                 <input type="checkbox" class="custom-control-input" formControlName="unloadingEquipment" (click)="onclickLoadingRelatedCheck(loadingRelated.Key)"
                 />
                 <span class="custom-control-indicator"></span>
                 <span class="custom-control-description">
-                  {{ lubrication.Value }}
                 </span>
               </label>
             </li>
@@ -319,17 +275,16 @@
         </div>
         <!--end div for Unloading Equipment [add]-->
 
-         <!--start div for Lubricant Used [add]-->
-         <div class="form-group col-xs-12 col-sm-6 col-md-6 col-lg-4">
+        <!--start div for Lubricant Used [add]-->
+        <div class="form-group col-xs-12 col-sm-6 col-md-6 col-lg-4">
           <label>Lubricant Used</label>
           <ul class="list-group ul-style">
-            <li class="list-group-item li-style" *ngFor="let lubrication of lubricationVal.details">
+            <li class="list-group-item li-style" *ngFor="">
               <label class="custom-control custom-checkbox">
                 <input type="checkbox" class="custom-control-input" formControlName="lubricantUsed" (click)="onclickLoadingRelatedCheck(loadingRelated.Key)"
                 />
                 <span class="custom-control-indicator"></span>
                 <span class="custom-control-description">
-                  {{ lubrication.Value }}
                 </span>
               </label>
             </li>
@@ -341,13 +296,12 @@
         <div class="form-group col-xs-12 col-sm-6 col-md-6 col-lg-4">
           <label for="stencil">Laying Position</label>
           <ul class="list-group ul-style">
-            <li class="list-group-item li-style" *ngFor="let lubrication of lubricationVal.details">
+            <li class="list-group-item li-style" *ngFor="">
               <label class="custom-control custom-checkbox">
-                <input type="checkbox" class="custom-control-input" formControlName="layingPosiion"  (click)="onclickLoadingRelatedCheck(loadingRelated.Key)"
+                <input type="checkbox" class="custom-control-input" formControlName="layingPosiion" (click)="onclickLoadingRelatedCheck(loadingRelated.Key)"
                 />
                 <span class="custom-control-indicator"></span>
                 <span class="custom-control-description">
-                  {{ lubrication.Value }}
                 </span>
               </label>
             </li>
@@ -359,13 +313,12 @@
         <div class="form-group col-xs-12 col-sm-6 col-md-6 col-lg-4">
           <label for="stencil">Jointing Type</label>
           <ul class="list-group ul-style">
-            <li class="list-group-item li-style" *ngFor="let lubrication of lubricationVal.details">
+            <li class="list-group-item li-style" *ngFor="">
               <label class="custom-control custom-checkbox">
                 <input type="checkbox" class="custom-control-input" formControlName="jointingtype" (click)="onclickLoadingRelatedCheck(loadingRelated.Key)"
                 />
                 <span class="custom-control-indicator"></span>
                 <span class="custom-control-description">
-                  {{ lubrication.Value }}
                 </span>
               </label>
             </li>
@@ -407,10 +360,8 @@
           </div>
         </div>
         <!--end of button div-->
-
-
       </div>
-      <!--end of div row manage profile form-->
+      <!--end of div form style-->
     </form>
     <!--end form -->
 
@@ -420,6 +371,6 @@
 <!--end of page-container-->
 
 <!--spinner-->
-<ispl-busy-spinner *ngIf="busySpinner.busy">
-
-</ispl-busy-spinner>
+<!-- <ispl-busy-spinner *ngIf="busySpinner.busy">
+  
+  </ispl-busy-spinner> -->
