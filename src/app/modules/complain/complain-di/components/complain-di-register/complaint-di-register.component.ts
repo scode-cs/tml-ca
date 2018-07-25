@@ -129,7 +129,7 @@ export class ComplaintDIRegisterComponent implements OnInit {
   public selectedItemsGrid: any[] = [];
 
   //to store customer details
-  private custInfo: any = { custCode: '', custName: '', custSegment: '', salesGroup: '', salesOffice: ''};
+  public custInfo: any = { custCode: '', custName: '', custSegment: '', salesGroup: '', salesOffice: ''};
 
   //var to check index for process flow
   public processFlowPageIndex: number = 0;
