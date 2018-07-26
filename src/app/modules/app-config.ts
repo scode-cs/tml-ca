@@ -148,7 +148,10 @@ export const AppUrlsConst: any = {
     //rca add/edit
     RCA_ADD_EDIT_URL: URL_PATH + 'api/util/rca/rca_det',
     //rca reject url
-    RCA_REJECT_URL: URL_PATH + 'api/util/rca/rca_cncl'
+    RCA_REJECT_URL: URL_PATH + 'api/util/rca/rca_cncl',
+    //complain view url 
+    COMPLAIN_VIEW_HEADER_URL: URL_PATH + 'api/complaintview/viewcomplaintheader',//di complain view from header table
+    COMPLAIN_VIEW_DETAIL_URL: URL_PATH + 'api/complaintview/viewcomplaintdetail'//di complain view from detail table
 
 }
 

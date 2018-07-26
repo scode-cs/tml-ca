@@ -6,7 +6,7 @@ import 'rxjs/add/operator/do';
 import 'rxjs/add/operator/catch';
 import 'rxjs/add/operator/map';
 import { AppUrlsConst, WebServiceConst } from '../../../app-config';
-import { LocalStorageService } from "../../../shared/services/local-storage.service";
+import { LocalStorageService } from '../../../shared/services/local-storage.service';
 
 @Injectable()
 export class ComplaintDIRegisterDataService {
@@ -40,7 +40,7 @@ export class ComplaintDIRegisterDataService {
   }
 
   getSelectValLoggedBy() {
-    let actionUrl = AppUrlsConst.CMP_REG_LOGGED_BY_SELECT_VAL + "/" + "DI";
+    let actionUrl = AppUrlsConst.CMP_REG_LOGGED_BY_SELECT_VAL + '/' + 'DI';
     this.headers = this.configService();
 
     return this.http.get(actionUrl, { headers: this.headers })
@@ -70,15 +70,13 @@ export class ComplaintDIRegisterDataService {
   //method to get complain reference details view
   getComplaintReferenceDetails(complaintReferenceNo: string,fileActivityId: number) {
     let fileActivityIdStr: string = fileActivityId.toString();
-    this.actionUrl = AppUrlsConst.DI_COMPLAINT_REFERENCE_DETAILS_VIEW_WITHOUT_HEADER_URL + "/" + complaintReferenceNo + "/" + fileActivityIdStr;
+    this.actionUrl = AppUrlsConst.DI_COMPLAINT_REFERENCE_DETAILS_VIEW_WITHOUT_HEADER_URL + '/' + complaintReferenceNo + '/' + fileActivityIdStr;
     this.headers = this.configService();
 
     return this.http.get(this.actionUrl, { headers: this.headers })
       .map((res: Response) => { return res.json() })
       .catch((error: Response) => { return Observable.throw(error) });
   }//end of get getComplaintReferenceDetailsView
- 
-
 
   //method for getting all the invoice details and passing invoice no as parameter
   getInvoiceDetails(invoiceNo: string) {
@@ -103,7 +101,7 @@ export class ComplaintDIRegisterDataService {
     this.headers = this.configService();
     let user : any = {};
     user.customerName = customerName;
-    console.log(" user======>",user);
+    console.log(' user======>',user);
     return this.http.post(actnUrl, user, { headers: this.headers })
         .map((res: Response) => { return res.json() })
         .catch((error: Response) => { return Observable.throw(error) });
@@ -114,9 +112,9 @@ export class ComplaintDIRegisterDataService {
     this.headers = this.configService();
     let user : any = {};
     user.customerCode = custCode;
-    user.invoiceNo = "";
-    user.itemCode = "";
-    console.log(" user======>",user);
+    user.invoiceNo = '';
+    user.itemCode = '';
+    console.log(' user======>',user);
     return this.http.post(actnUrl, user, { headers: this.headers })
         .map((res: Response) => { return res.json() })
         .catch((error: Response) => { return Observable.throw(error) });
@@ -140,6 +138,24 @@ export class ComplaintDIRegisterDataService {
       .map(this.successCallback)
       .catch(this.errorCallBack);
   }//end of method to update complaint
+
+
+  //method to get complain reference details view
+  getComplaintReferenceViewDetails(complaintReferenceNo: string,complainStatus: number) {
+    this.actionUrl = AppUrlsConst.COMPLAIN_VIEW_DETAIL_URL 
+    +"?filter="+
+    // +this.localStorageService.appSettings.complaintReferenceNo+'="'
+    "CMPLNT_REF_NO='"
+    +complaintReferenceNo+"' AND "
+    +this.localStorageService.appSettings.activityIdFieldName+"="+complainStatus
+    +"&sortData="+"&orderBy=";
+    this.headers = this.configService();
+    console.log("this.actionUrl::",this.actionUrl);
+
+    return this.http.get(this.actionUrl, { headers: this.headers })
+      .map((res: Response) => { return res.json() })
+      .catch((error: Response) => { return Observable.throw(error) });
+  }//end of get getComplaintReferenceDetailsView
 
 
 }
