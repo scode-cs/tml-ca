@@ -10,6 +10,11 @@
   color: black;
 }
 
+.grid-table-style{
+  padding-left: 30px;
+  padding-right: 30px
+}
+
 h1.complaint-title {
   font-size: 30px;
 }
