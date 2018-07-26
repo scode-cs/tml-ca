@@ -20,24 +20,9 @@
   <!-- start div for complaintRegister body-->
   <div>
     <!--start form for complaintRegisterFormGroup-->
-    <form [formGroup]="complaintRegisterFormGroup" autocomplete="off" (ngSubmit)="onComplainSubmit()">
+    <form [formGroup]="complaintRegisterFormGroup" autocomplete="off">
 
-      <!-- start div for row complaint-form class-->
-      <div class="row complaint-form">
-        <!-- start div for complaint reference no-->
-        <div class="form-group col-xs-12 col-sm-6 col-md-6 col-lg-4" *ngIf="complaintReferenceNo">
-          <label>Complaint Reference No</label>
-          <input type="text" class="form-control" [value]="complaintReferenceNo" readonly/>
-        </div>
-        <!-- end div for complaint reference no-->
-
-        <!-- start div for Compliant Reference Date-->
-        <div class="form-group col-xs-12 col-sm-6 col-md-6 col-lg-4">
-          <label for="compliantReferenceDateTime">Compliant Reference Date</label>
-          <input type="text" class="form-control date-picker-height" formControlName="complaintReferenceDt" readonly/>
-        </div>
-        <!--end div for Compliant Reference Date-->
-
+      
         <!-- start table div -->
         <div class="col-lg-12 col-md-12 col-xs-12 scroll-bar grid-table-style" style="margin-bottom: 15px; margin-top: 5px;">
           <table class="table-style">
@@ -77,6 +62,22 @@
           </table>
         </div>
         <!--end table div-->
+
+      <!-- start div for row complaint-form class-->
+      <div class="row complaint-form">
+        <!-- start div for complaint reference no-->
+        <div class="form-group col-xs-12 col-sm-6 col-md-6 col-lg-4" *ngIf="complaintReferenceNo">
+          <label>Complaint Reference No</label>
+          <input type="text" class="form-control" [value]="complaintReferenceNo" readonly/>
+        </div>
+        <!-- end div for complaint reference no-->
+
+        <!-- start div for Compliant Reference Date-->
+        <div class="form-group col-xs-12 col-sm-6 col-md-6 col-lg-4">
+          <label for="compliantReferenceDateTime">Compliant Reference Date</label>
+          <input type="text" class="form-control date-picker-height" formControlName="complaintReferenceDt" readonly/>
+        </div>
+        <!--end div for Compliant Reference Date-->
 
         <!-- start div for Mode of Receipt of Complaint-->
         <div class="form-group col-xs-12 col-sm-6 col-md-6 col-lg-4">

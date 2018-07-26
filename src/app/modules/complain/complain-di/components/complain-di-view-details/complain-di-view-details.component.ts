@@ -28,12 +28,11 @@ export class ComplainDIViewDetailsComponent implements OnInit {
     private router: Router,
     private activatedroute: ActivatedRoute,
     private formBuilder: FormBuilder,
-    private datePipe: DatePipe,
   ) {
+    this.buildForm();//to build form
   }
 
   ngOnInit(): void {
-    this.buildForm();//to build form
     this.getRouteParam();//to get route param 
     this.invReportTable = new ComplaintDIConfigModel().prevInvReportHeader;//getting prev inv report details
        
