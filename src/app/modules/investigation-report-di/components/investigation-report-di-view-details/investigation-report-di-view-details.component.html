@@ -61,8 +61,8 @@
         <div class="row inv-report-form-style">
           <!-- start div for Complaint Reference No [View] -->
           <div class="form-group col-xs-12 col-sm-6 col-md-6 col-lg-4" *ngIf="complaintReferenceNo">
-            <label for="complaintRefNo">Complaint Reference No </label>
-            <input type="text" class="form-control" formControlName="complaintRefNoForModify" value="{{complaintRefNoForModify}}" readonly>
+            <label for="complaintReferenceNo">Complaint Reference No </label>
+            <input type="text" class="form-control" formControlName="complaintReferenceNo" value="{{complaintReferenceNo}}" readonly>
           </div>
           <!-- end div for Complaint Reference No [View] -->
 
@@ -229,10 +229,10 @@
           <!--end div for Unloading Equipment [view]-->
 
           <!--files-->
-          <div class="form-group col-xs-12 col-sm-6 col-md-6 col-lg-4" *ngIf="complaintRefNo">
+          <div class="form-group col-xs-12 col-sm-6 col-md-6 col-lg-4" *ngIf="complaintReferenceNo">
             <label>Uploaded file(s)</label>
-            <div *ngFor="let file of complaintReferenceDetailsForModify.files">
-              <a href="{{file.fileUrl}}" target="_blank">{{file.fileName}}</a>
+            <div *ngFor="">
+              <a href="" target="_blank">File Name</a>
               <br/>
             </div>
           </div>

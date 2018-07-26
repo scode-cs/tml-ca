@@ -17,7 +17,7 @@ import { InvestigationReportDIConfigModel } from '../../models/investigation-rep
 })
 export class InvestigationReportDiViewDetailsComponent implements OnInit {
  
-  public title: string;
+  public title: string = 'Investigation Report';
 
   //creating a FormGroup for Preliminary Investigation
   public preliInvestFormGroup: FormGroup;
@@ -35,26 +35,30 @@ export class InvestigationReportDiViewDetailsComponent implements OnInit {
     private sessionErrorService: SessionErrorService,
     private datePipe: DatePipe//for date
   ) {
+    this.buildForm();  
   }
 
   ngOnInit(): void {
+    this.getRouteParam();
+    this.invReportTable = new InvestigationReportDIConfigModel().prevInvReportHeader;
+  }//end of onInit
+   
+  //start method getRouteParam to get route parameter
+  private getRouteParam() {
     let routeSubscription: Subscription;
     routeSubscription = this.activatedroute.params.subscribe(params => {
       this.complaintReferenceNo = params.complaintReferenceNo ? params.complaintReferenceNo : '';
       this.complaintStatus = params.complaintStatus ? params.complaintStatus : ''; 
     });
-    console.log("complaintReferenceNo for view in preliminary-investigation-di-add-component: ",
-      this.complaintReferenceNo);
-      this.buildForm();   
-    this.title = 'Investigation Report';
-    this.invReportTable = new InvestigationReportDIConfigModel().prevInvReportHeader;
-  }//end of onInit
+    console.log("complaintReferenceNo for view in preliminary-investigation-di-add-component: ",this.complaintReferenceNo);
+  }//end of the method
 
+  //start method buildForm to build the form
   private buildForm(): void {
     this.preliInvestFormGroup = this.formBuilder.group({
       'complaintRefNo': [''
     ],
-    'complaintRefNoForModify': [''
+    'complaintReferenceNo': [''
     ],
     'siteVisitMade': [''
     ],
