@@ -4,10 +4,11 @@ import { FormGroup, FormBuilder, Validators, FormControl } from '@angular/forms'
 import { Subscription } from 'rxjs/Subscription';//to get route param
 import { Router, ActivatedRoute } from '@angular/router';
 import { ROUTE_PATHS } from '../../../../router/router-paths';
-import { DatePipe } from '@angular/common';
+// import { DatePipe } from '@angular/common';
 import { LocalStorageService } from "../../../../shared/services/local-storage.service";
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 import { ComplaintDIConfigModel } from '../../models/complain-di-config.model';
+import { ComplaintDIRegisterDataService } from "../../services/complaint-di-register-data.service";
 
 
 @Component({
@@ -21,13 +22,14 @@ export class ComplainDIViewDetailsComponent implements OnInit {
   public title: string = "Complaint Register";
   public complaintRegisterFormGroup: FormGroup;
   public complaintReferenceNo: string = '';//to store route param
-  public complaintStatus: string = '';//to store route param 
+  public complaintStatus: number ;//to store route param 
   public invReportTable: any[] = [];//to store prev inv report
   
   constructor(
     private router: Router,
     private activatedroute: ActivatedRoute,
     private formBuilder: FormBuilder,
+    private complaintDIRegisterDataService: ComplaintDIRegisterDataService
   ) {
     this.buildForm();//to build form
   }
@@ -35,7 +37,7 @@ export class ComplainDIViewDetailsComponent implements OnInit {
   ngOnInit(): void {
     this.getRouteParam();//to get route param 
     this.invReportTable = new ComplaintDIConfigModel().prevInvReportHeader;//getting prev inv report details
-       
+    this.getviewComplainReferenceDetailsWSCall();//service call
   }//end of on init
 
   //method to get route param
@@ -80,6 +82,20 @@ export class ComplainDIViewDetailsComponent implements OnInit {
     });
 
   }//end of method buildForm
+
+  //method to get complain reference details by service call
+  private getviewComplainReferenceDetailsWSCall() {
+    this.complaintDIRegisterDataService.getComplaintReferenceViewDetails(this.complaintReferenceNo,this.complaintStatus).
+      subscribe(res => {
+       console.log("res of ref det::::",res);
+      },
+      err => {
+        console.log(err);
+        
+        // this.sessionErrorService.routeToLogin(err._body);
+      });
+
+  }//end of method
 
   //for clicking cancel button this method will be invoked
   public onCancel(): void {
