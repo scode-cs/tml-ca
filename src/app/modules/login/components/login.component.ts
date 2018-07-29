@@ -39,8 +39,6 @@ export class LoginComponent implements OnInit {
     // let json : any = JSON.parse(s);
     // console.log("json==== ",json);
     // this.tstJson = json;
-    let s: string = "Hello";
-    console.log("s============:",s);
   }
 
   private buildForm(): void {

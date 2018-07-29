@@ -140,29 +140,29 @@ export class InvestigationReportDIDataService {
       .map((res: Response) => { return res.json() })
       .catch((error: Response) => { return Observable.throw(error) });
   }//end of get classification val
-  
+
   //method to get employee details for area sales manager dropdown
   getAreaSalesManagerDetailsVal(areaSalesOrZonalManagerDesignationId: string) {
     this.actionUrl = AppUrlsConst.EMPLOYEE_DET_BY_DESIGNATION_ID + "/" + areaSalesOrZonalManagerDesignationId;
     this.headers = this.configService();
-    
+
     return this.http.get(this.actionUrl, { headers: this.headers })
-    .map((res: Response) => { return res.json() })
-    .catch((error: Response) => { return Observable.throw(error) });
+      .map((res: Response) => { return res.json() })
+      .catch((error: Response) => { return Observable.throw(error) });
   }//end of getAreaSalesManagerDetailsVal method
 
   // PRELI_INVESTIGATION_COMPLAINT_REF_NO_VAL
   getCompRefNoValForPreliInvestigationReport() {
     this.actionUrl = AppUrlsConst.PRELI_INVESTIGATION_COMPLAINT_REF_NO_VAL;
     this.headers = this.configService();
-  
+
     return this.http.get(this.actionUrl, { headers: this.headers })
       .map((res: Response) => { return res.json() })
       .catch((error: Response) => { return Observable.throw(error) });
   }//end of getCompRefNoValForPreliInvestigationReport
-  
+
   //method to get complain reference details view
-  getComplaintReferenceDetailsView(complaintReferenceNo: string,fileActivityId: number) {
+  getComplaintReferenceDetailsView(complaintReferenceNo: string, fileActivityId: number) {
     let fileActivityIdStr: string = fileActivityId.toString();
     let actionUrl = AppUrlsConst.DI_COMPLAINT_REFERENCE_DETAILS_VIEW_WITHOUT_HEADER_URL + "/" + complaintReferenceNo + "/" + fileActivityIdStr;
     this.headers = this.configService();
@@ -171,56 +171,65 @@ export class InvestigationReportDIDataService {
       .map((res: Response) => { return res.json() })
       .catch((error: Response) => { return Observable.throw(error) });
   }//end of get getComplaintReferenceDetailsView
-  
+
   //for submit preli
-  submitService(formData: any) {   
-    this.actionUrl = AppUrlsConst.PRELI_INVESTIGATION_REPORT_DI_ADD_SUBMIT_URL;  
-      return this.http.post(this.actionUrl, formData)
+  submitService(formData: any) {
+    this.actionUrl = AppUrlsConst.PRELI_INVESTIGATION_REPORT_DI_ADD_SUBMIT_URL;
+    return this.http.post(this.actionUrl, formData)
       .map(this.successCallbackForPreliAdd)
-      .catch(this.errorCallBackForPreliAdd);  
+      .catch(this.errorCallBackForPreliAdd);
   }//end of submit preli
   private successCallbackForPreliAdd(res: Response) {
-    console.log("preli success : " , res);
+    console.log("preli success : ", res);
     return res.json();
   }
   private errorCallBackForPreliAdd(error: Response) {
-      console.error("prelin error : " , error);
-      return Observable.throw(error);
+    console.error("prelin error : ", error);
+    return Observable.throw(error);
   }
 
   //for submit preli edit
-  preliModifyReportSubmit(formData: any) {   
-    this.actionUrl = AppUrlsConst.MODIFY_PRELI_INVESTIGATION_REPORT_DI_SUBMIT_URL;  
-      return this.http.put(this.actionUrl, formData)
+  preliModifyReportSubmit(formData: any) {
+    this.actionUrl = AppUrlsConst.MODIFY_PRELI_INVESTIGATION_REPORT_DI_SUBMIT_URL;
+    return this.http.put(this.actionUrl, formData)
       .map(this.successCallbackForPreliModify)
-      .catch(this.errorCallBackForPreliModify);  
+      .catch(this.errorCallBackForPreliModify);
   }//end of submit preli edit
   private successCallbackForPreliModify(res: Response) {
-    console.log("preli edit success res in service class: " , res);
+    console.log("preli edit success res in service class: ", res);
     return res.json();
   }
   private errorCallBackForPreliModify(error: Response) {
-      console.error("prelin edit error in service class : " , error);
-      return Observable.throw(error);
+    console.error("prelin edit error in service class : ", error);
+    return Observable.throw(error);
   }
 
-//get comp ref no list for preli investigation report
+  //get comp ref no list for preli investigation report
 
   //method to get preli view details for edit/update
   public getPreliViewDetForUpdate(complaintRefNo: string) {
-  this.actionUrl = AppUrlsConst.PRELI_INVESTIGATION_REPORT_DI_VIEW_BY_COPLAINT_REFERENCE_NO + "/" + complaintRefNo ;
-  this.headers = this.configService();
+    this.actionUrl = AppUrlsConst.PRELI_INVESTIGATION_REPORT_DI_VIEW_BY_COPLAINT_REFERENCE_NO + "/" + complaintRefNo;
+    this.headers = this.configService();
 
-  return this.http.get(this.actionUrl, { headers: this.headers })
-    .map((res: Response) => { return res.json() })
-    .catch((error: Response) => { return Observable.throw(error) });
-}//end of method to getPreliViewDetForUpdate 
+    return this.http.get(this.actionUrl, { headers: this.headers })
+      .map((res: Response) => { return res.json() })
+      .catch((error: Response) => { return Observable.throw(error) });
+  }//end of method to getPreliViewDetForUpdate 
 
+  //method to get complain reference details view
+  getInvestigationReportViewDetails(complaintReferenceNo: string, complainStatus: number) {
+    this.actionUrl = AppUrlsConst.COMPLAIN_VIEW_DETAIL_URL
+      + "?filter=" +
+      // +this.localStorageService.appSettings.complaintReferenceNo+'="'
+      "CMPLNT_REF_NO='"
+      + complaintReferenceNo + "' AND "
+      + this.localStorageService.appSettings.activityIdFieldName + "=" + complainStatus
+      + "&sortData=" + "&orderBy=";
+    this.headers = this.configService();
+    console.log("this.actionUrl::", this.actionUrl);
 
-
-
-
-
-
-
+    return this.http.get(this.actionUrl, { headers: this.headers })
+      .map((res: Response) => { return res.json() })
+      .catch((error: Response) => { return Observable.throw(error) });
+  }//end of get getComplaintReferenceDetailsView
 }//end of class

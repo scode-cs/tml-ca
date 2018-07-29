@@ -8,6 +8,7 @@ import { LocalStorageService } from "../../../shared/services/local-storage.serv
 import { DatePipe } from '@angular/common';
 import { SessionErrorService } from "../../../shared/services/session-error.service";
 import { InvestigationReportDIConfigModel } from '../../models/investigation-report-di-config.model';
+import { InvestigationReportDIDataService } from '../../services/investigation-report-di.service';
 
 @Component({
   selector: 'ispl-investigation-report-di-view-details-form',
@@ -16,16 +17,18 @@ import { InvestigationReportDIConfigModel } from '../../models/investigation-rep
   styleUrls: ['investigation-report-di-view-details.component.css']
 })
 export class InvestigationReportDiViewDetailsComponent implements OnInit {
- 
-  public title: string = 'Investigation Report';
 
+  public title: string = 'Investigation Report';
   //creating a FormGroup for Preliminary Investigation
-  public preliInvestFormGroup: FormGroup;
+  public invReportFormGroup: FormGroup;
   public complaintReferenceNo: string;//to get complaint ref no from html and send it as a parameter
   //variable used for radio button
-  public invReportVar: any = { siteVisitMadeValue: 'Y', sampleCollectedValue: 'Y' };
+  public invReportVar: any = { siteVisitMadeValue: '', sampleCollectedValue: 'Y' };
   public invReportTable: any[] = [];//to store prev inv report
-  public complaintStatus: string = "";//to fetch complaint status from route
+  public complaintStatus: number;//to fetch complaint status from route
+  public invReportDeatils: any[] = [];// to store invReport deatils from response
+  public invReportIndex : number = 0;
+
   constructor(
     private activatedroute: ActivatedRoute,
     private formBuilder: FormBuilder,
@@ -33,53 +36,85 @@ export class InvestigationReportDiViewDetailsComponent implements OnInit {
     // private toastService: ToastService,
     private localStorageService: LocalStorageService,
     private sessionErrorService: SessionErrorService,
+    private investigationReportDIDataService: InvestigationReportDIDataService,
     private datePipe: DatePipe//for date
   ) {
-    this.buildForm();  
+    this.buildForm();
   }
 
   ngOnInit(): void {
     this.getRouteParam();
     this.invReportTable = new InvestigationReportDIConfigModel().prevInvReportHeader;
+    this.getInvestigationViewDetailsWSCall();
   }//end of onInit
-   
+
   //start method getRouteParam to get route parameter
   private getRouteParam() {
     let routeSubscription: Subscription;
     routeSubscription = this.activatedroute.params.subscribe(params => {
       this.complaintReferenceNo = params.complaintReferenceNo ? params.complaintReferenceNo : '';
-      this.complaintStatus = params.complaintStatus ? params.complaintStatus : ''; 
+      this.complaintStatus = params.complaintStatus ? params.complaintStatus : '';
     });
-    console.log("complaintReferenceNo for view in preliminary-investigation-di-add-component: ",this.complaintReferenceNo);
+    console.log("complaintReferenceNo for view in preliminary-investigation-di-add-component: ", this.complaintReferenceNo);
   }//end of the method
 
   //start method buildForm to build the form
   private buildForm(): void {
-    this.preliInvestFormGroup = this.formBuilder.group({
+    this.invReportFormGroup = this.formBuilder.group({
       'complaintRefNo': [''
-    ],
-    'complaintReferenceNo': [''
-    ],
-    'siteVisitMade': [''
-    ],
-    'siteVisitDate': [''
-    ],
-    'sampleColleted': [''
-    ],
-    'sampleColletedDate': [''
-    ],
-    'preliDate': [''
-    ],
-    'unloadingEquipment': [''
-    ],
-    'lubricantUsed': [''
-    ], 
-    'layingPosiion': [''
-    ],
-    'jointingtype': [''
-    ]
+      ],
+      'complaintReferenceNo': [''
+      ],
+      'siteVisitMade': [''
+      ],
+      'siteVisitDate': [''
+      ],
+      'sampleColleted': [''
+      ],
+      'sampleColletedDate': [''
+      ],
+      'preliDate': [''
+      ],
+      'unloadingEquipment': [''
+      ],
+      'lubricantUsed': [''
+      ],
+      'layingPosiion': [''
+      ],
+      'jointingtype': [''
+      ]
     });
   }//end of build form
+
+
+  //method to get investigation report details by service call
+  private getInvestigationViewDetailsWSCall() {
+    this.investigationReportDIDataService.getInvestigationReportViewDetails(this.complaintReferenceNo, this.complaintStatus).
+      subscribe(res => {
+        //console.log("res of ref det::::",res);
+        if (res.msgType === "Info") {
+          let invReportDeatilsJson: any = JSON.parse(res.mapDetails);
+          this.invReportDeatils = invReportDeatilsJson;
+          console.log("res of inv Report Deatils::::", this.invReportDeatils);
+          this.invReportIndex = this.invReportDeatils ? this.invReportDeatils.length - 1 : 0;
+          this.setFormValue();
+        }
+      },
+        err => {
+          console.log(err);
+
+          // this.sessionErrorService.routeToLogin(err._body);
+        });
+  }//end of method
+
+  private setFormValue() {
+    let formData: any = this.invReportDeatils[this.invReportIndex];  
+    this.invReportFormGroup.controls['complaintReferenceNo'].setValue(formData.complaintReferenceNo);
+    this.invReportFormGroup.controls['siteVisitDate'].setValue(this.datePipe.transform(formData.siteVisitDt,'dd-MMM-yyyy'));
+    this.invReportVar.siteVisitMadeValue = formData.siteVisit;
+    this.invReportFormGroup.controls['siteVisitMade'].setValue(formData.siteVisit);
+  }
+
 
   //cancel method
   public onCancel(): void {
