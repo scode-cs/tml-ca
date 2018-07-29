@@ -21,7 +21,7 @@ import { SessionErrorService } from "../../../../../shared/services/session-erro
 })
 export class NgbdComplaintPIRegisterModalComponent implements OnInit {
   //spinner
-  private busySpinner: any = {
+  public busySpinner: any = {
     busy: true
   }
   //end of spinner
@@ -31,7 +31,7 @@ export class NgbdComplaintPIRegisterModalComponent implements OnInit {
   @Input() custCode: string;
   public msgType: string;
   private headers: Headers;
-  private items: any = {};
+  public items: any = {};
   //Array for selected Item
   public checkedItemArr: any[] = [];
   public selectedItemDetails: any[] = [];
