@@ -22,46 +22,28 @@
     <!--start form for complaintRegisterFormGroup-->
     <form [formGroup]="complaintRegisterFormGroup" autocomplete="off">
 
-      
-        <!-- start table div -->
-        <div class="col-lg-12 col-md-12 col-xs-12 scroll-bar grid-table-style" style="margin-bottom: 15px; margin-top: 5px;">
-          <table class="table-style">
-            <thead>
-              <tr class="th-style">
-                <td class="hideextra" *ngFor="let invRprt of  invReportTable" [ngClass]="invRprt.headerClass">
-                  {{ invRprt.headerDesc }}
-                </td>
-              </tr>
-            </thead>
-            <tbody>
-              <ng-container>
 
-                <tr class="tr-style">
-                  <td class="td-style-first hideextra">
-                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Add Item(s)
-                    <i style="font-size:16px;cursor: pointer;" title="Click here" class="fa fa-plus-circle"></i>
-                  </td>
-                  <td class="td-style">
+      <!-- start table div -->
+      <div *ngIf="complainDetails.length > 1"  class="col-lg-12 col-md-12 col-xs-12 scroll-bar grid-table-style" style="margin-bottom: 15px; margin-top: 5px;">
+        <table class="table-style">
+          <thead>
+            <tr class="th-style">
+              <td class="hideextra" *ngFor="let invRprt of invReportTable" [ngClass]="invRprt.headerClass">
+                {{ invRprt.headerDesc }}
+              </td>
+            </tr>
+          </thead>
+          <tbody>
 
-                  </td>
-                  <td class="td-style">
-
-                  </td>
-                  <td class="td-style">
-
-                  </td>
-                  <td class="td-style">
-
-                  </td>
-                  <td class="td-style-last">
-
-                  </td>
-                </tr>
-              </ng-container>
-            </tbody>
-          </table>
-        </div>
-        <!--end table div-->
+            <tr class="tr-style" *ngFor="let compDet of complainDetails">
+              <td class="hideextra" *ngFor="let invRprt of invReportTable" [ngClass]="invRprt.dataClass">
+                {{ compDet[invRprt.headerKey] }}
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <!--end table div-->
 
       <!-- start div for row complaint-form class-->
       <div class="row complaint-form">
@@ -90,28 +72,23 @@
         <ng-container>
           <div class="form-group col-xs-12 col-sm-6 col-md-6 col-lg-4">
             <label>Customer Code</label>
-            <input type="text" class="form-control" readonly/>
+            <input type="text" class="form-control" formControlName="custCode" readonly/>
           </div>
 
 
           <div class="form-group col-xs-12 col-sm-6 col-md-6 col-lg-4">
             <label>Customer Name</label>
-            <input type="text" class="form-control" readonly/>
-          </div>
-
-          <div class="form-group col-xs-12 col-sm-6 col-md-6 col-lg-4" hidden>
-            <label>Customer Segment</label>
-            <input type="text" class="form-control" readonly/>
+            <input type="text" class="form-control" formControlName="custName" readonly/>
           </div>
 
           <div class="form-group col-xs-12 col-sm-6 col-md-6 col-lg-4">
             <label>Sales Group</label>
-            <input type="text" class="form-control" readonly/>
+            <input type="text" class="form-control" formControlName="salesGroup" readonly/>
           </div>
 
           <div class="form-group col-xs-12 col-sm-6 col-md-6 col-lg-4">
             <label>Sales Office</label>
-            <input type="text" class="form-control" readonly/>
+            <input type="text" class="form-control" formControlName="salesOffice" readonly/>
           </div>
         </ng-container>
         <!-- end div for cust code ,custname ,sales group, sales office -->
@@ -137,71 +114,146 @@
 
         <!-- start table div -->
         <div class="col-lg-12 col-md-12 col-xs-12 scroll-bar" style="margin-bottom: 15px; margin-top: 5px;">
-          <!-- item details table will be shown here -->          
+          <table class="table-style">
+            <thead>
+              <tr class="th-style ">
+                <td class="header-style-first hideextra">
+                  Official Document No
+                </td>
+                <td class="header-style hideextra">
+                  Billing Date
+                </td>
+                <td class="header-style hideextra">
+                  Material Code
+                </td>
+                <td class="header-style hideextra">
+                  Material Name
+                </td>
+                <td class="header-style hideextra">
+                  Invoice Qty
+                </td>
+                <td class="header-style hideextra">
+                  Complaint Qty
+                </td>
+                <td class="header-style hideextra">
+                  Batch No
+                </td>
+                <td class="header-style hideextra">
+                  Usage Group
+                </td>
+                <td class="header-style hideextra">
+                  State/ Region
+                </td>
+                <td class="header-style hideextra">
+                  Purchase Order No
+                </td>
+                <td class="header-style hideextra">
+                  Sales Order No
+                </td>
+                <td class="header-style hideextra">
+                  Inspection Vendor Name
+                </td>
+                <td class="header-style-last hideextra">
+                  Loading Vendor Name Truck No
+                </td>
+              </tr>
+            </thead>
+            <tbody>
+              <tr class="tr-style">
+                <td class="td-style-first">
+                </td>
+                <td class="td-style">
+
+                </td>
+                <td class="td-style">
+
+                </td>
+                <td class="td-style">
+
+                </td>
+                <td class="td-style">
+
+                </td>
+                <td class="td-style">
+
+                </td>
+                <td class="td-style">
+
+                </td>
+                <td class="td-style">
+
+                </td>
+                <td class="td-style">
+
+                </td>
+                <td class="td-style">
+
+                </td>
+                <td class="td-style">
+
+                </td>
+                <td class="td-style-last">
+
+                </td>
+              </tr>
+            </tbody>
+          </table>
         </div>
         <!--end table div-->
 
         <!--start div for Contact Person Name-->
         <div class="form-group col-xs-12 col-sm-6 col-md-6 col-lg-4">
           <label for="contactPersonName">Customer's Contact Person</label>
-          <input type="text" class="form-control" 
-            formControlName="contactPersonName" readonly/>
+          <input type="text" class="form-control" formControlName="contactPersonName" readonly/>
         </div>
         <!--end div for Contact Person Name-->
 
         <!--start div for Contact Person Phone No-->
         <div class="form-group col-xs-12 col-sm-6 col-md-6 col-lg-4">
           <label for="contactPersonPhoneNo">Phone No</label>
-          <input type="text" class="form-control"
-            formControlName="contactPersonPhoneNo" readonly/>
+          <input type="text" class="form-control" formControlName="contactPersonPhoneNo" readonly/>
         </div>
         <!--end div for Contact Person Phone No-->
 
         <!--start div for Contact Person Email Id-->
         <div class="form-group col-xs-12 col-sm-6 col-md-6 col-lg-4">
           <label for="contactPersonEmailId">Email Id</label>
-          <input type="text" class="form-control" 
-            formControlName="contactPersonEmailId" readonly/>
+          <input type="text" class="form-control" formControlName="contactPersonEmailId" readonly/>
         </div>
         <!--end div for Contact Person Email Id-->
 
         <!--start div for Complaint Type-->
         <div class="form-group col-xs-12 col-sm-6 col-md-6 col-lg-4">
           <label>Complaint Type</label>
-          <input type="text" class="form-control" 
-          formControlName="complaintTypeId" readonly/>
+          <input type="text" class="form-control" formControlName="complaintTypeId" readonly/>
         </div>
         <!--end div for Complaint Type-->
 
         <!--start div for Nature of Complaint-->
         <div disabled class="form-group col-xs-12 col-sm-6 col-md-6 col-lg-4">
           <label>Nature of Complaint</label>
-          <input type="text" class="form-control" 
-          formControlName="natureOfComplaintId" readonly/>
+          <input type="text" class="form-control" formControlName="natureOfComplaintId" readonly/>
         </div>
         <!--end div for Nature of Complaint-->
 
         <!--start div for Detail of Complaint-->
         <div class="form-group col-xs-12 col-sm-6 col-md-6 col-lg-4">
           <label for="detailOfComplaint">Detail of Complaint</label>
-          <textarea rows="5" class="form-control hide-horizontal-scroll" 
-            formControlName="complaintDetails" readonly></textarea>
+          <textarea rows="5" class="form-control hide-horizontal-scroll" formControlName="complaintDetails" readonly></textarea>
         </div>
         <!--end div for Detail of Complaint-->
 
         <!--start div for Complaint Logged By-->
         <div class="form-group col-xs-12 col-sm-6 col-md-6 col-lg-4">
           <label>Complaint Logged By</label>
-          <input type="text" class="form-control" 
-          formControlName="loggedBy" readonly/>          
+          <input type="text" class="form-control" formControlName="loggedBy" readonly/>
         </div>
         <!--end div for Complaint Logged By-->
 
         <!--start div for Complaint Logged On-->
         <div class="form-group col-xs-12 col-sm-6 col-md-6 col-lg-4">
           <label>Complaint Logged On</label>
-          <input type="text" class="form-control date-picker-height" formControlName="loggedOnDt"
-            readonly/>
+          <input type="text" class="form-control date-picker-height" formControlName="loggedOnDt" readonly/>
         </div>
         <!--end div for Complaint Logged On-->
 
@@ -211,13 +263,13 @@
             <div style="display:inline-block;">
               <label>Site Visit Required</label>
               <label class="control control--radio">Yes
-                <input type="radio" name="siteVisit" formControlName="siteVisit" [value]="Y" [checked]=true disabled/>
+                <input type="radio" name="siteVisit" formControlName="siteVisit" [value]="'Y'" [checked]=true disabled/>
                 <div class="control__indicator"></div>
               </label>
             </div>
             <div style="display:inline-block;">
               <label class="control control--radio">No
-                <input type="radio" name="siteVisit" formControlName="siteVisit" [value]="N" disabled/>
+                <input type="radio" name="siteVisit" formControlName="siteVisit" [value]="'N'" disabled/>
                 <div class="control__indicator"></div>
               </label>
             </div>
@@ -226,13 +278,12 @@
         <!--end div for radio button-->
 
         <!--start ng-container for site visit date and siteVisitValue = Y-->
-          <!-- start div for site visit by department name -->
-          <div class="form-group col-xs-12 col-sm-6 col-md-6 col-lg-4">
-            <label for="siteVisitBy">Site Visit By</label>
-                <input type="text" class="form-control" formControlName="siteVisitByDepartmentName"
-                readonly/>
-          </div>
-          <!-- end of div for site visit by department name -->
+        <!-- start div for site visit by department name -->
+        <div class="form-group col-xs-12 col-sm-6 col-md-6 col-lg-4">
+          <label for="siteVisitBy">Site Visit By</label>
+          <input type="text" class="form-control" formControlName="siteVisitByDepartmentName" readonly/>
+        </div>
+        <!-- end of div for site visit by department name -->
 
         <!--start div for show files-->
         <div class="form-group col-xs-12 col-sm-6 col-md-6 col-lg-4">

@@ -12,11 +12,13 @@ export  class AuthenticationGuardService implements CanActivate {
 
   canActivate(route: ActivatedRouteSnapshot): boolean {
     console.log("Route Guard: ",this.localStorageService);
-    if (!this.localStorageService.user && !this.localStorageService.user.accessToken) {
+    if (this.localStorageService.user && this.localStorageService.user.accessToken) {
+      return true;
+    }else{
       alert('Please login to continue');
       this.router.navigate([ROUTE_PATHS.RouteLogin]);
       return false;
     }
-    return true;
+    
   }
 }

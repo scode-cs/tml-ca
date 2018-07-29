@@ -36,12 +36,12 @@ import { SessionErrorService } from "./modules/shared/services/session-error.ser
   ],
   declarations: [
     AppComponent,
-    NgbdModalComponent,
+   // NgbdModalComponent,
    
   ],
   //new add for modal
   entryComponents:[
-    NgbdModalComponent,
+    //NgbdModalComponent,
     
   ],
   

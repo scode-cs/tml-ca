@@ -1,11 +1,11 @@
 export class ComplaintDIConfigModel {
     private _prevInvReportHeader: any[] = [
-        { headerKey: '', headerDesc: 'Mode of Complaint', headerClass: 'header-style-first', dataClass: 'td-style-first' },
-        { headerKey: '', headerDesc: 'Complaint Ref. Date', headerClass: 'header-style', dataClass: 'td-style' },
-        { headerKey: '', headerDesc: 'Complaint Type', headerClass: 'header-style', dataClass: 'td-style' },
-        { headerKey: '', headerDesc: 'Nature of Complaint', headerClass: 'header-style', dataClass: 'td-style' },
-        { headerKey: '', headerDesc: 'Complaint Logged By', headerClass: 'header-style', dataClass: 'td-style' },
-        { headerKey: '', headerDesc: 'Site Visit Required ', headerClass: 'header-style-last', dataClass: 'td-style-last' }
+        { headerKey: 'modeId', headerDesc: 'Mode of Complaint', headerClass: 'header-style-first', dataClass: 'td-style-first' },
+        { headerKey: 'complaintReferenceDt', headerDesc: 'Complaint Ref. Date', headerClass: 'header-style', dataClass: 'td-style' },
+        { headerKey: 'complaintTypeDesc', headerDesc: 'Complaint Type', headerClass: 'header-style', dataClass: 'td-style' },
+        { headerKey: 'natureOfComplaintDesc', headerDesc: 'Nature of Complaint', headerClass: 'header-style', dataClass: 'td-style' },
+        { headerKey: 'loggedBy', headerDesc: 'Complaint Logged By', headerClass: 'header-style', dataClass: 'td-style' },
+        { headerKey: 'siteVisit', headerDesc: 'Site Visit Required ', headerClass: 'header-style-last', dataClass: 'td-style-last' }
     ]
 
     get prevInvReportHeader(): any[] {

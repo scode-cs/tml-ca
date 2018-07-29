@@ -27,20 +27,18 @@
             </tr>
           </thead>
           <tbody>
-            <ng-container>
               <tr class="tr-style" *ngFor="let invReportDet of invReportDeatils">
                 <td class="hideextra" *ngFor="let invRprt of invReportTable" [ngClass]="invRprt.dataClass">
                   {{ invReportDet[invRprt.headerKey] }}
                 </td>
-              </tr>
-            </ng-container>
+            </tr>
           </tbody>
         </table>
       </div>
       <!--end table div-->
 
       <!--start form -->
-      <form [formGroup]="invReportFormGroup" autocomplete="off" (ngSubmit)="onClickPreliInvestigationReportDISubmit()">
+      <form [formGroup]="preliInvestFormGroup" autocomplete="off">
         <!--start div of row manage profile form-->
         <div class="row inv-report-form-style">
           <!-- start div for Complaint Reference No [View] -->

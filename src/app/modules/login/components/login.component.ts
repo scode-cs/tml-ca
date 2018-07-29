@@ -57,7 +57,7 @@ export class LoginComponent implements OnInit {
 
   }
 
-  private loginSubmit(): void {
+  public loginSubmit(): void {
     console.log("login click");
     let user: any = {};
 
@@ -125,6 +125,8 @@ export class LoginComponent implements OnInit {
     appSettingsModel.siteVisitByFieldName = resDetails.appSettingsDetails.siteVisitByFieldName;
     appSettingsModel.siteVisitRequiredFieldName = resDetails.appSettingsDetails.siteVisitRequiredFieldName;
     appSettingsModel.allocationOfComplaintReadFieldName = resDetails.appSettingsDetails.allocationOfComplaintReadFieldName;
+    appSettingsModel.complaintReferenceNoFieldName = 
+    resDetails.appSettingsDetails.complaintReferenceNoFieldName;
     this.localStorageService.appSettings = appSettingsModel;
     
     //set the dbsettings details to dbsettings model

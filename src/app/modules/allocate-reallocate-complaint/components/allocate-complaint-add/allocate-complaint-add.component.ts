@@ -53,6 +53,8 @@ export class AllocateComplaintAddComponent {
   //error var
   public allocateComplaintAddError: string;
 
+  public resErrorType: any;
+
   //for busy spinner
   public busySpinner: any = {
     siteVisitBusy: false,

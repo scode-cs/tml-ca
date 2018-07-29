@@ -25,7 +25,7 @@ export class NgbdComplaintDIRegisterModalComponent implements OnInit {
   @Input() custName: string;
   @Input() custCode: string;
   private headers: Headers;
-  private items: any = {};
+  public items: any = {};
   //Array for selected Item
   public checkedItemArr: any[] = [];
   public selectedItemDetails: any[] = [];
@@ -36,7 +36,7 @@ export class NgbdComplaintDIRegisterModalComponent implements OnInit {
   public complaintDIInvoiceDetails: any = {};//to show the complaint det in html page
 
   //spinner
-  private busySpinner: any = {
+  public busySpinner: any = {
     busy: true
   }
 
