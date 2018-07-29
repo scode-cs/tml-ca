@@ -27,6 +27,7 @@ import { SessionErrorService } from "../../../../shared/services/session-error.s
     public custName: string = "";
     public salesGroup: string = "";
     public salesOffice: string = "";
+    public title:string="";
     //for busy spinner
     public busySpinner: any = {
         complaintDIReportBusy: true,
