@@ -20,7 +20,10 @@ h1.complaint-title {
 }
 
 .complaint-form {
-  padding: 30px 30px;
+  padding-right: 30px;
+  padding-left: 30px;
+  margin-bottom: 30px;
+  margin-top: 15px;
 }
 
 .compliant-submit-button-div{

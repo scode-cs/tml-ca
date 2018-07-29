@@ -9,6 +9,7 @@ import { LocalStorageService } from "../../../../shared/services/local-storage.s
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 import { ComplaintDIConfigModel } from '../../models/complain-di-config.model';
 import { ComplaintDIRegisterDataService } from "../../services/complaint-di-register-data.service";
+import { SessionErrorService } from '../../../../shared/services/session-error.service';
 
 
 @Component({
@@ -27,18 +28,21 @@ export class ComplainDIViewDetailsComponent implements OnInit {
   public complainDetails: any[] = [];//to store complain reference detailS
 
   public complainIndex: number = 0;
+  public busySpinner: boolean = true;
   
   constructor(
     private router: Router,
     private activatedroute: ActivatedRoute,
     private datePipe: DatePipe,//for date
     private formBuilder: FormBuilder,
-    private complaintDIRegisterDataService: ComplaintDIRegisterDataService
+    private complaintDIRegisterDataService: ComplaintDIRegisterDataService,
+    private sessionErrorService: SessionErrorService
   ) {
     this.buildForm();//to build form
   }
 
   ngOnInit(): void {
+    this.busySpinner = true;
     this.getRouteParam();//to get route param 
     this.invReportTable = new ComplaintDIConfigModel().prevInvReportHeader;//getting prev inv report details
     this.getviewComplainReferenceDetailsWSCall();//service call
@@ -104,11 +108,13 @@ export class ComplainDIViewDetailsComponent implements OnInit {
          this.complainDetails = json;
          this.complainIndex = this.complainDetails ? this.complainDetails.length-1 : 0;
           this.setResValToForm();
+          this.busySpinner = false;
        }//end of if
       },
       err => {
-        console.log(err);        
-        // this.sessionErrorService.routeToLogin(err._body);
+        console.log(err);   
+        this.busySpinner = false;     
+        this.sessionErrorService.routeToLogin(err._body);
       });
   }//end of method
 
@@ -141,8 +147,13 @@ export class ComplainDIViewDetailsComponent implements OnInit {
   }// end of onCancel method
 
   public selectData(cmpIndex: number) {
+    this.busySpinner = true;
     this.complainIndex = cmpIndex;
     this.setResValToForm();
+    setTimeout(() => {
+      this.busySpinner = false;
+    }, 500);
+    
   }
  
 }//end of class
