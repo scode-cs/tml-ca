@@ -139,7 +139,7 @@ export class InvestigationReportDiComponent implements OnInit {
   public outstandingWithCustomerLength: number = this.localStorageService.dbSettings.outstandingWithCustomer;
   public resolutionRectificationActionLength: number = this.localStorageService.dbSettings.resolutionRectificationAction;
 
-
+  public complaintStatus: string = '';
 
   constructor(
     private activatedroute: ActivatedRoute,
@@ -293,7 +293,7 @@ export class InvestigationReportDiComponent implements OnInit {
       'unloadingEquipment': [''
       ],
       'lubricantUsed': [''
-      ], 
+      ],
       'layingPosiion': [''
       ],
       'jointingtype': [''
@@ -1083,7 +1083,7 @@ export class InvestigationReportDiComponent implements OnInit {
         this.preliInvestFormGroup.controls["sampleColleted"].setValue(this.invReportVar.siteVisitMadeValue);
         //     //set sitevisitby field mandatory
         this.preliInvestFormGroup.get('sampleColletedDate').setValidators(Validators.required);
-      }else if (this.invReportVar.sampleCollectedValue === "N") { // sampleColleted is N then this if condition will be executed
+      } else if (this.invReportVar.sampleCollectedValue === "N") { // sampleColleted is N then this if condition will be executed
         this.preliInvestFormGroup.controls["sampleColleted"].setValue(this.invReportVar.siteVisitMadeValue);
         this.preliInvestFormGroup.get('sampleColleted').setValidators(null);
         this.preliInvestFormGroup.get('sampleColleted').updateValueAndValidity();

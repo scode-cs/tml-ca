@@ -24,13 +24,13 @@ export class NgbdComplaintReferenceNoModalComponent implements OnInit {
   @Input() complaintReferenceNo: string;
   @Input() custName: string;
   @Input() custCode: string;
-  
+
 
   public msgType: string;
- 
 
+  public complaintStatus: string = "";
   //spinner
-  private busySpinner: any = {
+  public busySpinner: any = {
     busy: true
   }
 
@@ -46,19 +46,19 @@ export class NgbdComplaintReferenceNoModalComponent implements OnInit {
 
   ngOnInit(): void {
     if (this.complaintReferenceNo != '') {
-     
+
       //this.invoiceSearchDetailsModel.invNo = this.complaintReferenceNo;
     } else if (this.complaintReferenceNo == '') {
-     
+
       this.msgType = "Error";
       this.busySpinner.busy = false;
     }//end of if
   }//end of onInit
 
-  
+
   // start method onRedirectComplaintReferenceNoSearch for redirecting to complaint ref no search page
   onRedirectComplaintReferenceNoSearch() {
-    
+
 
     if (this.complaintReferenceNo === "") {
       this.router.navigate([ROUTE_PATHS.RouteComplaintReferenceNoSearch]);

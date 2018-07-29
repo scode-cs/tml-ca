@@ -17,6 +17,7 @@ import { ComplaintDIInvoiceDetailsService } from '../../services/complaint-di-in
 import { DIPolygonModel } from '../../../../shared/components/process-flow/complain-di-polygon.model';
 import { SessionErrorService } from '../../../../shared/services/session-error.service';
 import { ComplaintDIConfigModel } from '../../models/complain-di-config.model';
+import { Iuerdata } from '../../models/complain.model';
 
 @Component({
   selector: 'ispl-complaint-di-register-form',
@@ -444,6 +445,7 @@ export class ComplaintDIRegisterComponent implements OnInit {
       [
         Validators.required,
         Validators.email,
+        
       ]
       ],
       'loggedBy': [''
