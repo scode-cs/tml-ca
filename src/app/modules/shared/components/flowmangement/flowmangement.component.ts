@@ -1,4 +1,4 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, OnChanges } from '@angular/core';
 import { DIPolygonModel } from '../process-flow/complain-di-polygon.model';
 import { ProcessFlowStatusDetailsModel } from '../process-flow/process-flow-status-details.model';
 export interface IflowStructure {
@@ -9,7 +9,7 @@ export interface IflowStructure {
   templateUrl: './flowmangement.component.html',
   styleUrls: ['./flowmangement.component.css']
 })
-export class FlowmangementComponent implements OnInit {
+export class FlowmangementComponent implements OnInit, OnChanges {
   @Input() complianStatus;
   @Input() pageType;
 
@@ -28,6 +28,10 @@ export class FlowmangementComponent implements OnInit {
   }
 
   ngOnInit() {
+
+  }
+  ngOnChanges() {
+
     this.processFlowData = new ProcessFlowStatusDetailsModel().statusDetails;
     console.log(this.processFlowData);
 
@@ -36,7 +40,6 @@ export class FlowmangementComponent implements OnInit {
 
     this.constructFlowStructure();
   }
-
   private constructFlowStructure() {
     if (this.pageType == this.constants.addPage) {
       this.flowStructureList = this.constructAddPageFlow();
