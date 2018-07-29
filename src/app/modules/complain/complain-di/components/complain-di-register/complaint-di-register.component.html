@@ -352,6 +352,9 @@
           <label for="contactPersonPhoneNo">Phone No</label>
           <input type="text" id="contactPersonPhoneNo" class="form-control" [maxlength]="contactPersonPhoneNoLength" [value]="contactPersonPhoneNoForModify" formControlName="contactPersonPhoneNo"
           />
+          <div class="alert alert-danger" *ngIf="complaintRegisterFormGroup.get('contactPersonPhoneNo').hasError('pattern') && complaintRegisterFormGroup.get('contactPersonPhoneNo').touched && !complaintRegisterFormGroup.get('contactPersonEmailId').hasError('email') ">
+            <i class="fa fa-exclamation-circle"></i> Provide valid phone
+          </div>
         </div>
         <!--end div for Contact Person Phone No-->
 

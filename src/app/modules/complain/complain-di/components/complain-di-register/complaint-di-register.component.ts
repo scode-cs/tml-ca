@@ -436,7 +436,9 @@ export class ComplaintDIRegisterComponent implements OnInit {
       ],
       'contactPersonName': [''
       ],
-      'contactPersonPhoneNo': [''
+      'contactPersonPhoneNo': ['',[
+        Validators.pattern(/^-?(0|[1-9]\d*)?$/)
+      ]
       ],
       'contactPersonEmailId': ['',
       [
@@ -1474,6 +1476,7 @@ export class ComplaintDIRegisterComponent implements OnInit {
 
   //start method of onKeyupBatchNo
   public onKeyupBatchNo(batchNoParam: string, invoiceNo: string, itemCode: string) {
+  
     for (let selectedItmDet of this.selectedItemDetails) {
       for (let itemDet of selectedItmDet.value.selectedItem) {
         if (itemDet.invoiceNo == invoiceNo && itemDet.itemCode == itemCode) {
