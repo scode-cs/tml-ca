@@ -28,6 +28,8 @@ export class InvestigationReportDiViewDetailsComponent implements OnInit {
   public complaintStatus: number;//to fetch complaint status from route
   public invReportDeatils: any[] = [];// to store invReport deatils from response
   public invReportIndex : number = 0;
+  //busySpinner 
+  public busySpinner: boolean = true;
 
   constructor(
     private activatedroute: ActivatedRoute,
@@ -43,6 +45,7 @@ export class InvestigationReportDiViewDetailsComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    this.busySpinner = true;
     this.getRouteParam();
     this.invReportTable = new InvestigationReportDIConfigModel().prevInvReportHeader;
     this.getInvestigationViewDetailsWSCall();
@@ -69,9 +72,9 @@ export class InvestigationReportDiViewDetailsComponent implements OnInit {
       ],
       'siteVisitDate': [''
       ],
-      'sampleColleted': [''
+      'sampleCollected': [''
       ],
-      'sampleColletedDate': [''
+      'sampleCollectedDate': [''
       ],
       'preliDate': [''
       ],
@@ -98,11 +101,12 @@ export class InvestigationReportDiViewDetailsComponent implements OnInit {
           console.log("res of inv Report Deatils::::", this.invReportDeatils);
           this.invReportIndex = this.invReportDeatils ? this.invReportDeatils.length - 1 : 0;
           this.setFormValue();
+          this.busySpinner = false;
         }
       },
         err => {
           console.log(err);
-
+          this.busySpinner = false;
           // this.sessionErrorService.routeToLogin(err._body);
         });
   }//end of method
@@ -119,7 +123,7 @@ export class InvestigationReportDiViewDetailsComponent implements OnInit {
   //cancel method
   public onCancel(): void {
     // Not authenticated
-    this.router.navigate([ROUTE_PATHS.RouteHome]);
+    // this.router.navigate([ROUTE_PATHS.RouteHome]);
   }//end of cancel method
 
 }//end of class
