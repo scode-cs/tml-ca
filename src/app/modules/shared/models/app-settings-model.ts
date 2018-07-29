@@ -5,7 +5,7 @@ export class AppSettingsModel{
   private _loginUserPassMaxLength: number;
   private _loginUserPassMinLength: number;
   private _rolePrefix: string;
-   private _areaSalesOrZonalManagerDesignationId: string;
+  private _areaSalesOrZonalManagerDesignationId: string;
   private _complaintRegistrationActivityId: number;
   private _preliminaryInvestigationActivityId: number;
   private _closeComplaintActivityId: number;
@@ -15,6 +15,7 @@ export class AppSettingsModel{
   private _analyseCustomerComplaintsAndActionPlanActivityId: number;
   private _changeInQapOrwiOrisoProceedureActivityId: number;
   private _menuDetails:any;
+  private _complaintReferenceNoFieldName: string;
   private _validComplaintFieldName: string;
   private _complaintLoggedByFieldName: string;
   private _complaintReceivedByOther: string;
@@ -79,6 +80,13 @@ export class AppSettingsModel{
   }
   set companyId(companyId: string) {
     this._companyId = companyId;
+  }
+
+  get complaintReferenceNoFieldName(): string {
+    return this._complaintReferenceNoFieldName;
+  }
+  set complaintReferenceNoFieldName(complaintReferenceNoFieldName: string) {
+    this._complaintReferenceNoFieldName = complaintReferenceNoFieldName;
   }
 
   get diffBetwnCmplntRefDtAndLoggedOnDt(): number {

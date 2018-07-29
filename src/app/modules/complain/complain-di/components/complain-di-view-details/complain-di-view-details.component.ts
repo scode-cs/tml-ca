@@ -88,6 +88,8 @@ export class ComplainDIViewDetailsComponent implements OnInit {
     this.complaintDIRegisterDataService.getComplaintReferenceViewDetails(this.complaintReferenceNo,this.complaintStatus).
       subscribe(res => {
        console.log("res of ref det::::",res);
+       let json : any = JSON.parse(res.mapDetails);
+       console.log("json::::",json);
       },
       err => {
         console.log(err);
