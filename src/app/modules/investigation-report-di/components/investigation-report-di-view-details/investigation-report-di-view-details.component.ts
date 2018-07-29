@@ -107,17 +107,18 @@ export class InvestigationReportDiViewDetailsComponent implements OnInit {
         err => {
           console.log(err);
           this.busySpinner = false;
-          // this.sessionErrorService.routeToLogin(err._body);
+          this.sessionErrorService.routeToLogin(err._body);
         });
   }//end of method
 
+  //start method setFormValue to set the value in invreport form
   private setFormValue() {
     let formData: any = this.invReportDeatils[this.invReportIndex];  
     this.invReportFormGroup.controls['complaintReferenceNo'].setValue(formData.complaintReferenceNo);
     this.invReportFormGroup.controls['siteVisitDate'].setValue(this.datePipe.transform(formData.siteVisitDt,'dd-MMM-yyyy'));
     this.invReportVar.siteVisitMadeValue = formData.siteVisit;
     this.invReportFormGroup.controls['siteVisitMade'].setValue(formData.siteVisit);
-  }
+  }//end method setFormValue
 
 
   //cancel method
