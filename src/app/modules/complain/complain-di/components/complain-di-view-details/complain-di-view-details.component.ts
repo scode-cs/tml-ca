@@ -121,16 +121,16 @@ export class ComplainDIViewDetailsComponent implements OnInit {
     this.complaintRegisterFormGroup.controls['custCode'].setValue(complainFormData.custCode);
     this.complaintRegisterFormGroup.controls['custName'].setValue(complainFormData.customerName);
     this.complaintRegisterFormGroup.controls['salesGroup'].setValue(complainFormData.salesGroup);
-    this.complaintRegisterFormGroup.controls['salesOffice'].setValue(complainFormData.salesGroup);
+    this.complaintRegisterFormGroup.controls['salesOffice'].setValue(complainFormData.salesOffice);
     this.complaintRegisterFormGroup.controls['contactPersonName'].setValue(complainFormData.contactPersonName);
     this.complaintRegisterFormGroup.controls['contactPersonPhoneNo'].setValue(complainFormData.contactPersonPhoneNo);
     this.complaintRegisterFormGroup.controls['contactPersonEmailId'].setValue(complainFormData.contactPersonEmailId);
-    this.complaintRegisterFormGroup.controls['loggedBy'].setValue(complainFormData.loggedBy);
+    this.complaintRegisterFormGroup.controls['loggedBy'].setValue(complainFormData.loggedByName);
     this.complaintRegisterFormGroup.controls['loggedOnDt'].setValue(this.datePipe.transform(complainFormData.loggedOnDt,'dd-MMM-yyyy'));
     this.complaintRegisterFormGroup.controls['complaintTypeId'].setValue(complainFormData.complaintTypeDesc);
     this.complaintRegisterFormGroup.controls['natureOfComplaintId'].setValue(complainFormData.natureOfComplaintDesc);
-    this.complaintRegisterFormGroup.controls['complaintDetails'].setValue(complainFormData.natureOfComplaintDesc);
-    this.complaintRegisterFormGroup.controls['siteVisit'].setValue(complainFormData.natureOfComplaintDesc);
+    this.complaintRegisterFormGroup.controls['complaintDetails'].setValue(complainFormData.complaintDetails);
+    this.complaintRegisterFormGroup.controls['siteVisit'].setValue(complainFormData.siteVisit);
     this.complaintRegisterFormGroup.controls['siteVisitByDepartmentName'].setValue(complainFormData.siteVisitByDepartmentName);
   
   }//end of method 
@@ -139,5 +139,10 @@ export class ComplainDIViewDetailsComponent implements OnInit {
   public onCancel(): void {
     this.router.navigate([ROUTE_PATHS.RouteHome]);
   }// end of onCancel method
+
+  public selectData(cmpIndex: number) {
+    this.complainIndex = cmpIndex;
+    this.setResValToForm();
+  }
  
 }//end of class
