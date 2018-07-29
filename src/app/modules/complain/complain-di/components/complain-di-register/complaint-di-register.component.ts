@@ -129,7 +129,7 @@ export class ComplaintDIRegisterComponent implements OnInit {
   public selectedItemsGrid: any[] = [];
 
   //to store customer details
-  public custInfo: any = { custCode: '', custName: '', custSegment: '', salesGroup: '', salesOffice: ''};
+  public custInfo: any = { custCode: '', custName: '', custSegment: '', salesGroup: '', salesOffice: '' };
 
   //var to check index for process flow
   public processFlowPageIndex: number = 0;
@@ -146,6 +146,9 @@ export class ComplaintDIRegisterComponent implements OnInit {
     busy: true
   }
 
+
+  //
+  public complaintStatus = '10';
   constructor(
     private activatedroute: ActivatedRoute,
     private formBuilder: FormBuilder,
@@ -217,8 +220,8 @@ export class ComplaintDIRegisterComponent implements OnInit {
 
     let invDet: any;
 
-    console.log("this.complaintDIInvoiceDetailsService.testVar=====>>>>>>>>>",this.complaintDIInvoiceDetailsService.testVar)
-    if(!this.complaintDIInvoiceDetailsService.testVar){
+    console.log("this.complaintDIInvoiceDetailsService.testVar=====>>>>>>>>>", this.complaintDIInvoiceDetailsService.testVar)
+    if (!this.complaintDIInvoiceDetailsService.testVar) {
       this.clearInvDetService();
     }
 
@@ -276,10 +279,10 @@ export class ComplaintDIRegisterComponent implements OnInit {
           this.setCustInforOnEventEmit(this.selectedItemDetails);
         }
       },
-      err => {
-        console.log(err);
-        this.sessionErrorService.routeToLogin(err._body);
-      });
+        err => {
+          console.log(err);
+          this.sessionErrorService.routeToLogin(err._body);
+        });
   }//end of event emiiter result
 
   //start method for getting distinct key value pair map of selected item grid 4.11.17
@@ -349,12 +352,12 @@ export class ComplaintDIRegisterComponent implements OnInit {
           }//end of if
         }//end for
       },
-      err => {
-        console.log(err);
-        loadBusySpinner.receiptModeBusy = false;
-        selectedValuesUpdateSpinner();
-        this.sessionErrorService.routeToLogin(err._body);
-      });
+        err => {
+          console.log(err);
+          loadBusySpinner.receiptModeBusy = false;
+          selectedValuesUpdateSpinner();
+          this.sessionErrorService.routeToLogin(err._body);
+        });
     //getting all values of LoggedBy
     this.complaintDIRegisterDataService.getSelectValLoggedBy().
       subscribe(res => {
@@ -369,12 +372,12 @@ export class ComplaintDIRegisterComponent implements OnInit {
           }//end of if
         }//end for
       },
-      err => {
-        console.log(err);
-        loadBusySpinner.loggedByBusy = false;
-        selectedValuesUpdateSpinner();
-        this.sessionErrorService.routeToLogin(err._body);
-      });
+        err => {
+          console.log(err);
+          loadBusySpinner.loggedByBusy = false;
+          selectedValuesUpdateSpinner();
+          this.sessionErrorService.routeToLogin(err._body);
+        });
     //getting all values of complaintType
     this.complaintDIRegisterDataService.getSelectComplaintType().
       subscribe(res => {
@@ -390,12 +393,12 @@ export class ComplaintDIRegisterComponent implements OnInit {
           }//end of if
         }//end for
       },
-      err => {
-        console.log(err);
-        loadBusySpinner.complaintTypeBusy = false;
-        selectedValuesUpdateSpinner();
-        this.sessionErrorService.routeToLogin(err._body);
-      });
+        err => {
+          console.log(err);
+          loadBusySpinner.complaintTypeBusy = false;
+          selectedValuesUpdateSpinner();
+          this.sessionErrorService.routeToLogin(err._body);
+        });
 
     // method to stop selected spinner
     let selectedValuesUpdateSpinner = (): any => {
@@ -417,9 +420,9 @@ export class ComplaintDIRegisterComponent implements OnInit {
         ]
       ],
       'complaintReferenceDt': [''
-      //  , [
-      //     Validators.required
-      //   ]
+        //  , [
+        //     Validators.required
+        //   ]
       ],
       'invoiceNo': [''
         // , [
@@ -435,7 +438,11 @@ export class ComplaintDIRegisterComponent implements OnInit {
       ],
       'contactPersonPhoneNo': [''
       ],
-      'contactPersonEmailId': [''
+      'contactPersonEmailId': ['',
+      [
+        Validators.required,
+        Validators.email,
+      ]
       ],
       'loggedBy': [''
         // , [
@@ -448,7 +455,8 @@ export class ComplaintDIRegisterComponent implements OnInit {
         // ]
       ],
       'complaintTypeId': [''
-        , [
+        , 
+        [
           Validators.required,
         ]
       ],
@@ -714,7 +722,7 @@ export class ComplaintDIRegisterComponent implements OnInit {
   }//end of the method
 
   // start method clearInvDetService to clear all inv det value
-  private clearInvDetService(){
+  private clearInvDetService() {
     this.complaintDIInvoiceDetailsService.invoiceDetails = "";
     this.complaintDIInvoiceDetailsService.selectedItemDetails = "";
     this.complaintDIInvoiceDetailsService.custCode = "";
@@ -876,13 +884,13 @@ export class ComplaintDIRegisterComponent implements OnInit {
         this.busySpinner.itemBusy = false;//to stop the spinner
         this.updateBusySpinner();//method to stop the spinner 
       },
-      err => {
-        console.log(err);
-        this.busySpinner.itemBusy = false;//to stop the spinner
-        this.updateBusySpinner();//method to stop the spinner 
-        this.sessionErrorService.routeToLogin(err._body);
+        err => {
+          console.log(err);
+          this.busySpinner.itemBusy = false;//to stop the spinner
+          this.updateBusySpinner();//method to stop the spinner 
+          this.sessionErrorService.routeToLogin(err._body);
 
-      });
+        });
   }//end method of getItemsVal
 
 
@@ -928,12 +936,12 @@ export class ComplaintDIRegisterComponent implements OnInit {
             }//end of else if
           }//end for
         },
-        err => {
-          console.log(err);
-          this.busySpinner.natureOfCompdropdownBusy = false;//to stop the spinner
-          this.updateBusySpinner();
-          this.sessionErrorService.routeToLogin(err._body);
-        });
+          err => {
+            console.log(err);
+            this.busySpinner.natureOfCompdropdownBusy = false;//to stop the spinner
+            this.updateBusySpinner();
+            this.sessionErrorService.routeToLogin(err._body);
+          });
     }//end else
     if (this.complaintTypeName === "Others(CAT C)" && !compDet) {
       this.complaintRegisterFormGroup.get('complaintDetails').setValidators(Validators.required);
@@ -1285,15 +1293,15 @@ export class ComplaintDIRegisterComponent implements OnInit {
         }
 
       },
-      err => {
-        console.log(err);
-        //spinner
-        this.busySpinner.compEditBusy = false;
-        this.updateBusySpinner();
-        //end of spinner
-        this.sessionErrorService.routeToLogin(err._body);
+        err => {
+          console.log(err);
+          //spinner
+          this.busySpinner.compEditBusy = false;
+          this.updateBusySpinner();
+          //end of spinner
+          this.sessionErrorService.routeToLogin(err._body);
 
-      });
+        });
 
   }
   //  end method getComplaintReferenceDetails
@@ -1311,10 +1319,10 @@ export class ComplaintDIRegisterComponent implements OnInit {
         console.log(" itemsHeaderRes  : ", itemsHeaderRes);
         this.itemsHeader = itemsHeaderRes;
       },
-      err => {
-        console.log(err);
-        this.sessionErrorService.routeToLogin(err._body);
-      });
+        err => {
+          console.log(err);
+          this.sessionErrorService.routeToLogin(err._body);
+        });
 
   }//end of the method getItemsHeaderEventEmitter
 
@@ -1364,7 +1372,7 @@ export class ComplaintDIRegisterComponent implements OnInit {
     if ((complaintDetails == "" || complaintDetails == " ") && this.complaintTypeName == "Others(CAT C)") {
       this.complaintRegisterFormGroup.controls['natureOfComplaintId'].markAsUntouched();
       this.complaintDetailsEnable = true;
-    }else if((complaintDetails == "" || complaintDetails == " ") && this.complaintTypeName != "Others(CAT C)"){
+    } else if ((complaintDetails == "" || complaintDetails == " ") && this.complaintTypeName != "Others(CAT C)") {
       if (this.natureCmpName == "Others") {
         this.complaintDetailsEnable = true;
         this.complaintRegisterFormGroup.controls['complaintDetails'].markAsTouched();
@@ -1399,7 +1407,7 @@ export class ComplaintDIRegisterComponent implements OnInit {
             itemDet.uiInpErrFlag = true;
             itemDet.uiInpErrDesc = 'Complaint Quantity can’t be less than zero';
             this.complaintQtyErrorCorrection();
-          }else if (complaintQtyInMtrs > 0 && complaintQtyInMtrs <= invoiceQtyInMtrs && !(isNaN(complaintQtyInMtrs))) {
+          } else if (complaintQtyInMtrs > 0 && complaintQtyInMtrs <= invoiceQtyInMtrs && !(isNaN(complaintQtyInMtrs))) {
             itemDet.complaintQtyInMtrs = complaintQtyInMtrs;
             flag = true;
             itemDet.uiInpErrFlag = false;
