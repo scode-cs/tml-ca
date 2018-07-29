@@ -14,7 +14,7 @@
   <!-- end div for breadcrumb-->
 
   <!--start process flow div-->
-  <app-flowmangement></app-flowmangement>
+  <app-flowmangement [complianStatus]="complaintStatus" [pageType]="'add'"></app-flowmangement>
     <!-- end div of process flow  -->
 
    <!-- main div -->
@@ -360,6 +360,12 @@
           <label for="contactPersonEmailId">Email Id</label>
           <input type="text" id="contactPersonEmailId" class="form-control" [maxlength]="contactPersonEmailIdLength" [value]="contactPersonEmailIdForModify" formControlName="contactPersonEmailId"
           />
+          <div class="alert alert-danger" *ngIf="complaintRegisterFormGroup.get('contactPersonEmailId').hasError('required') && complaintRegisterFormGroup.get('contactPersonEmailId').touched && !complaintRegisterFormGroup.get('contactPersonEmailId').hasError('email') ">
+            <i class="fa fa-exclamation-circle"></i> Provide valid email id
+          </div>
+           <div class="alert alert-danger" *ngIf="complaintRegisterFormGroup.get('contactPersonEmailId').hasError('email') && complaintRegisterFormGroup.get('contactPersonEmailId').touched">
+            <i class="fa fa-exclamation-circle"></i> Provide valid email id
+          </div>
         </div>
         <!--end div for Contact Person Email Id-->
 
