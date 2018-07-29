@@ -28,25 +28,9 @@
           </thead>
           <tbody>
             <ng-container>
-              <tr class="tr-style">
-                <td class="td-style-first hideextra">
-                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Add Item(s)
-                  <i style="font-size:16px;cursor: pointer;" title="Click here" class="fa fa-plus-circle" (click)="onAddItemOpenModal()"></i>
-                </td>
-                <td class="td-style">
-
-                </td>
-                <td class="td-style">
-
-                </td>
-                <td class="td-style">
-
-                </td>
-                <td class="td-style">
-
-                </td>
-                <td class="td-style-last">
-
+              <tr class="tr-style" *ngFor="let invReportDet of invReportDeatils">
+                <td class="hideextra" *ngFor="let invRprt of invReportTable" [ngClass]="invRprt.dataClass">
+                  {{ invReportDet[invRprt.headerKey] }}
                 </td>
               </tr>
             </ng-container>
@@ -56,13 +40,13 @@
       <!--end table div-->
 
       <!--start form -->
-      <form [formGroup]="preliInvestFormGroup" autocomplete="off" (ngSubmit)="onClickPreliInvestigationReportDISubmit()">
+      <form [formGroup]="invReportFormGroup" autocomplete="off" (ngSubmit)="onClickPreliInvestigationReportDISubmit()">
         <!--start div of row manage profile form-->
         <div class="row inv-report-form-style">
           <!-- start div for Complaint Reference No [View] -->
           <div class="form-group col-xs-12 col-sm-6 col-md-6 col-lg-4" *ngIf="complaintReferenceNo">
             <label for="complaintReferenceNo">Complaint Reference No </label>
-            <input type="text" class="form-control" formControlName="complaintReferenceNo" value="{{complaintReferenceNo}}" readonly>
+            <input type="text" class="form-control" formControlName="complaintReferenceNo" readonly>
           </div>
           <!-- end div for Complaint Reference No [View] -->
 
@@ -72,13 +56,13 @@
               <div style="display:inline-block;">
                 <label>Site Visit Made</label>
                 <label class="control control--radio">Yes
-                  <input type="radio" name="siteVisitMade" formControlName="siteVisitMade" [value]="Y" [checked]=true disabled/>
+                  <input type="radio" name="siteVisitMade" formControlName="siteVisitMade" [checked]=true disabled/>
                   <div class="control__indicator"></div>
                 </label>
               </div>
               <div style="display:inline-block;">
                 <label class="control control--radio">No
-                  <input type="radio" name="siteVisitMade" formControlName="siteVisitMade" [value]="N" />
+                  <input type="radio" name="siteVisitMade" formControlName="siteVisitMade" disabled/>
                   <div class="control__indicator"></div>
                 </label>
               </div>
@@ -87,13 +71,13 @@
               <div style="display:inline-block;">
                 <label>Site Visit Made</label>
                 <label class="control control--radio">Yes
-                  <input type="radio" name="siteVisitMade" formControlName="siteVisitMade" [value]="Y" />
+                  <input type="radio" name="siteVisitMade" formControlName="siteVisitMade" disabled/>
                   <div class="control__indicator"></div>
                 </label>
               </div>
               <div style="display:inline-block;">
                 <label class="control control--radio">No
-                  <input type="radio" name="siteVisitMade" formControlName="siteVisitMade" [value]="N" [checked]=true disabled/>
+                  <input type="radio" name="siteVisitMade" formControlName="siteVisitMade" [checked]=true disabled/>
                   <div class="control__indicator"></div>
                 </label>
               </div>
@@ -105,7 +89,7 @@
           <ng-container *ngIf="invReportVar.siteVisitMadeValue === 'Y'">
             <div class="form-group col-xs-12 col-sm-6 col-md-6 col-lg-4">
               <label for="siteVisitDate">Site Visit Date</label>
-              <input type="text" class="form-control" [value]="siteVisitDt|date: 'dd-MMM-yyyy'" formControlName="siteVisitDate" readonly>
+              <input type="text" class="form-control"  formControlName="siteVisitDate" readonly>
             </div>
           </ng-container>
           <!-- end div for site visit Date -->
@@ -116,13 +100,13 @@
               <div style="display:inline-block;">
                 <label>Sample Collected</label>
                 <label class="control control--radio">Yes
-                  <input type="radio" name="sampleColleted" formControlName="sampleColleted" [value]="Y" [checked]=true disabled/>
+                  <input type="radio" name="sampleColleted" formControlName="sampleColleted"  [checked]=true disabled/>
                   <div class="control__indicator"></div>
                 </label>
               </div>
               <div style="display:inline-block;">
                 <label class="control control--radio">No
-                  <input type="radio" name="sampleColleted" formControlName="sampleColleted" [value]="N" />
+                  <input type="radio" name="sampleColleted" formControlName="sampleColleted" disabled/>
                   <div class="control__indicator"></div>
                 </label>
               </div>
@@ -131,13 +115,13 @@
               <div style="display:inline-block;">
                 <label>Sample Collected</label>
                 <label class="control control--radio">Yes
-                  <input type="radio" name="sampleColleted" formControlName="sampleColleted" [value]="Y" />
+                  <input type="radio" name="sampleColleted" formControlName="sampleColleted" disabled/>
                   <div class="control__indicator"></div>
                 </label>
               </div>
               <div style="display:inline-block;">
                 <label class="control control--radio">No
-                  <input type="radio" name="sampleColleted" formControlName="sampleColleted" [value]="N" [checked]=true disabled />
+                  <input type="radio" name="sampleColleted" formControlName="sampleColleted" [checked]=true disabled />
                   <div class="control__indicator"></div>
                 </label>
               </div>
