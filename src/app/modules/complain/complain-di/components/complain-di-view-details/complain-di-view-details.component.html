@@ -28,6 +28,7 @@
         <table class="table-style">
           <thead>
             <tr class="th-style">
+              <td class="header-style-first">Select</td>
               <td class="hideextra" *ngFor="let invRprt of invReportTable" [ngClass]="invRprt.headerClass">
                 {{ invRprt.headerDesc }}
               </td>
@@ -35,7 +36,8 @@
           </thead>
           <tbody>
 
-            <tr class="tr-style" *ngFor="let compDet of complainDetails">
+            <tr class="tr-style" *ngFor="let compDet of complainDetails; let cmpIndex = index;">
+              <td class="td-style-first" (click)="selectData(cmpIndex)"><i class="fa fa-circle-o"></i></td>
               <td class="hideextra" *ngFor="let invRprt of invReportTable" [ngClass]="invRprt.dataClass">
                 {{ compDet[invRprt.headerKey] }}
               </td>
@@ -263,13 +265,13 @@
             <div style="display:inline-block;">
               <label>Site Visit Required</label>
               <label class="control control--radio">Yes
-                <input type="radio" name="siteVisit" formControlName="siteVisit" [value]="'Y'" [checked]=true disabled/>
+                <input type="radio" name="siteVisit" formControlName="siteVisit" disabled/>
                 <div class="control__indicator"></div>
               </label>
             </div>
             <div style="display:inline-block;">
               <label class="control control--radio">No
-                <input type="radio" name="siteVisit" formControlName="siteVisit" [value]="'N'" disabled/>
+                <input type="radio" name="siteVisit" formControlName="siteVisit" disabled/>
                 <div class="control__indicator"></div>
               </label>
             </div>
