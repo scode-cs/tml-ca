@@ -88,6 +88,7 @@ export class PreliminaryInvestigationDiViewDetailsComponent implements OnInit {
   public errorConst: string = "Error";//error constant
   public infoConstant: string = "Info";//info constant
   public resErrorMsg: string;
+  public testCertificateLength:any=100;
   //for file
   public fileActivityId: number = this.localStorageService.appSettings.preliminaryInvestigationActivityId;//to get uploaded file for DI edit
   

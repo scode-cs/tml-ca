@@ -59,7 +59,7 @@ export class LoginComponent implements OnInit {
 
   }
 
-  private loginSubmit(): void {
+  public loginSubmit(): void {
     console.log("login click");
     let user: any = {};
 
