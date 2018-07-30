@@ -132,7 +132,6 @@ export class InvestigationReportDIViewComponent implements OnInit {
       console.log("preliInvReportDI selected data after pushing: ", this.selectedData);
     }//end of else
     if(viewModifyParam == 'view'){
-      this.viewComplaint();
     }
   }//end of method of getUserDetailsByCheckbox
 
@@ -155,30 +154,5 @@ export class InvestigationReportDIViewComponent implements OnInit {
   //    this.selectedData = [];//removing the array 
   //    // Not authenticated
   //   this.router.navigate([ROUTE_PATHS.RoutePreliminaryInvestigationDiAdd]);
-  // }//end of add preli method
-
-  //method for edit preli
-  editComplaint(){    
-    for(let preliReportDet of this.selectedData){
-      this.modifyPreliInvReport = preliReportDet.complaintRefNo;
-    }//end of for
-    console.log("preli investigation report for modify : ",this.modifyPreliInvReport);        
-     // Not authenticated
-    this.router.navigate([ROUTE_PATHS.RouteModifyInvestigationReportDi,this.modifyPreliInvReport]);
-  }//end of add preli method
-
-  //start method for view preli
-  viewComplaint(){
-    for(let preliReportDet of this.selectedData){
-      this.modifyPreliInvReport = preliReportDet.complaintRefNo;
-    }//end of for
-    console.log("preli investigation report for view details : ",this.viewEditParam,this.modifyPreliInvReport);
-        
-     // Not authenticated
-    this.router.navigate([ROUTE_PATHS.RouteViewDetailsInvestigationReportDi,this.viewEditParam,this.modifyPreliInvReport]);
-
-  }//end of method for view preli
-
-
-  
+  // }//end of add preli method 
 }//end of class

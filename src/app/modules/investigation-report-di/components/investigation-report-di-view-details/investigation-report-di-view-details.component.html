@@ -56,13 +56,13 @@
                 <div style="display:inline-block;">
                   <label>Site Visit Made</label>
                   <label class="control control--radio">Yes
-                    <input type="radio" name="siteVisitMade" formControlName="siteVisitMade" [checked]=true disabled/>
+                    <input type="radio" name="siteVisitMade" formControlName="siteVisitMade" [checked]=true />
                     <div class="control__indicator"></div>
                   </label>
                 </div>
                 <div style="display:inline-block;">
                   <label class="control control--radio">No
-                    <input type="radio" name="siteVisitMade" formControlName="siteVisitMade" disabled/>
+                    <input type="radio" name="siteVisitMade" formControlName="siteVisitMade" />
                     <div class="control__indicator"></div>
                   </label>
                 </div>
@@ -71,13 +71,13 @@
                 <div style="display:inline-block;">
                   <label>Site Visit Made</label>
                   <label class="control control--radio">Yes
-                    <input type="radio" name="siteVisitMade" formControlName="siteVisitMade" disabled/>
+                    <input type="radio" name="siteVisitMade" formControlName="siteVisitMade" />
                     <div class="control__indicator"></div>
                   </label>
                 </div>
                 <div style="display:inline-block;">
                   <label class="control control--radio">No
-                    <input type="radio" name="siteVisitMade" formControlName="siteVisitMade" [checked]=true disabled/>
+                    <input type="radio" name="siteVisitMade" formControlName="siteVisitMade" [checked]=true />
                     <div class="control__indicator"></div>
                   </label>
                 </div>
@@ -100,13 +100,13 @@
                 <div style="display:inline-block;">
                   <label>Sample Collected</label>
                   <label class="control control--radio">Yes
-                    <input type="radio" name="sampleCollected" formControlName="sampleCollected" value="Y" [checked]=true disabled/>
+                    <input type="radio" name="sampleCollected" formControlName="sampleCollected" value="Y" [checked]=true />
                     <div class="control__indicator"></div>
                   </label>
                 </div>
                 <div style="display:inline-block;">
                   <label class="control control--radio">No
-                    <input type="radio" name="sampleCollected" formControlName="sampleCollected" disabled/>
+                    <input type="radio" name="sampleCollected" formControlName="sampleCollected" />
                     <div class="control__indicator"></div>
                   </label>
                 </div>
@@ -115,13 +115,13 @@
                 <div style="display:inline-block;">
                   <label>Sample Collected</label>
                   <label class="control control--radio">Yes
-                    <input type="radio" name="sampleCollected" formControlName="sampleCollected" disabled/>
+                    <input type="radio" name="sampleCollected" formControlName="sampleCollected" />
                     <div class="control__indicator"></div>
                   </label>
                 </div>
                 <div style="display:inline-block;">
                   <label class="control control--radio">No
-                    <input type="radio" name="sampleCollected" formControlName="sampleCollected" value="Y" [checked]=true disabled />
+                    <input type="radio" name="sampleCollected" formControlName="sampleCollected" value="Y" [checked]=true  />
                     <div class="control__indicator"></div>
                   </label>
                 </div>
@@ -133,18 +133,18 @@
             <ng-container *ngIf="invReportVar.sampleCollectedValue === 'Y'">
               <div class="form-group col-xs-12 col-sm-6 col-md-6 col-lg-4">
                 <label for="sampleCollectedDate">Sample Collected Date</label>
-                <input type="text" class="form-control" [value]="sampleCollectedDate|date: 'dd-MMM-yyyy'" formControlName="sampleCollectedDate"
+                <input type="text" class="form-control" formControlName="sampleCollectedDate"
                   readonly/>
               </div>
             </ng-container>
             <!-- end div for Sample Collected Date -->
 
-            <!-- start div for Date -->
+            <!-- start div for Investigation Report Date -->
             <div class="form-group col-xs-12 col-sm-6 col-md-6 col-lg-4">
-              <label for="Date">Date</label>
-              <input type="text" class="form-control" formControlName="preliDate"  readonly>
+              <label>Investigation Report Date</label>
+              <input type="text" class="form-control" formControlName="investigationReportDate"  readonly>
             </div>
-            <!-- end div for Date -->
+            <!-- end div for Investigation Report Date -->
 
             <!-- item grid table will be shown -->
 
@@ -154,7 +154,7 @@
               <ul class="list-group ul-style">
                 <li class="list-group-item li-style" *ngFor="">
                   <label class="custom-control custom-checkbox">
-                    <input type="checkbox" class="custom-control-input" formControlName="unloadingEquipment" disabled/>
+                    <input type="checkbox" class="custom-control-input" formControlName="unloadingEquipment" />
                     <span class="custom-control-indicator"></span>
                     <span class="custom-control-description">
                     </span>
@@ -170,7 +170,7 @@
               <ul class="list-group ul-style">
                 <li class="list-group-item li-style" *ngFor="">
                   <label class="custom-control custom-checkbox">
-                    <input type="checkbox" class="custom-control-input" formControlName="lubricantUsed" disabled/>
+                    <input type="checkbox" class="custom-control-input" formControlName="lubricantUsed" />
                     <span class="custom-control-indicator"></span>
                     <span class="custom-control-description">
                     </span>
@@ -186,7 +186,7 @@
               <ul class="list-group ul-style">
                 <li class="list-group-item li-style" *ngFor="">
                   <label class="custom-control custom-checkbox">
-                    <input type="checkbox" class="custom-control-input" formControlName="layingPosiion" disabled/>
+                    <input type="checkbox" class="custom-control-input" formControlName="layingPosiion" />
                     <span class="custom-control-indicator"></span>
                     <span class="custom-control-description">
                     </span>
@@ -202,7 +202,7 @@
               <ul class="list-group ul-style">
                 <li class="list-group-item li-style" *ngFor="">
                   <label class="custom-control custom-checkbox">
-                    <input type="checkbox" class="custom-control-input" formControlName="jointingtype" disabled/>
+                    <input type="checkbox" class="custom-control-input" formControlName="jointingtype" />
                     <span class="custom-control-indicator"></span>
                     <span class="custom-control-description">
                     </span>
