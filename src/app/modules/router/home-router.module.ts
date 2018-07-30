@@ -199,10 +199,6 @@ export const HOME_ROUTES: Routes = [
       //   path: ROUTER_PATHS.ModifyPreliminaryInvestigationDiRouter,//modify user
       //   component: PreliminaryInvestigationDiComponent
       // },
-      {//preli modify
-        path: ROUTER_PATHS.ModifyInvestigationReportDiRouter,//modify user
-        component: InvestigationReportDiComponent
-      },
       {
         path: ROUTER_PATHS.ComplaintReferenceNoSearchRouter,//complaint ref no search of investigation report
         component: ComplaintReferenceNoSearchComponent

@@ -76,17 +76,14 @@ const ROUTE_MODIFY_COMPLAINT_PI_FULL: string = ROUTE_HOME_FULL + '/' + ROUTE_COM
 //new add for PRELIMINRY_INVESTIGATION_DI 19.07.17
 // const ROUTE_PRELIMINRY_INVESTIGATION_DI_ADD: string = 'sitevisitadddi';
 // const ROUTE_PRELIMINRY_INVESTIGATION_DI_ADD_FULL : string = ROUTE_HOME_FULL + '/' + ROUTE_PRELIMINRY_INVESTIGATION_DI_ADD;
-const ROUTE_INVESTIGATION_REPORT_DI_ADD: string = 'investigationreportdiadd';
-const ROUTE_INVESTIGATION_REPORT_DI_ADD_FULL: string = ROUTE_HOME_FULL + '/' + ROUTE_INVESTIGATION_REPORT_DI_ADD;
+const ROUTE_INVESTIGATION_REPORT_DI_ADD_CONST: string = 'investigationreportdiadd';
+const ROUTE_INVESTIGATION_REPORT_DI_ADD: string = ROUTE_INVESTIGATION_REPORT_DI_ADD_CONST + '/' + ':complaintReferenceNo'+ '/' + ':complaintStatus';
+const ROUTE_INVESTIGATION_REPORT_DI_ADD_FULL: string = ROUTE_HOME_FULL + '/' + ROUTE_INVESTIGATION_REPORT_DI_ADD_CONST;//add
 
 //new add for view INVESTIGATION_REPORT_DI (inv report view details)
 const ROUTE_INVESTIGATION_REPORT_DI_VIEW: string = 'viewinvestigationreportdi';
 const ROUTE_VIEW_DETAILS_INVESTIGATION_REPORT_DI: string =  ROUTE_INVESTIGATION_REPORT_DI_VIEW +'/' + ':complaintReferenceNo'+ '/' + ':complaintStatus';
 const ROUTE_VIEW_DETAILS_INVESTIGATION_REPORT_DI_FULL: string = ROUTE_HOME_FULL + '/' + ROUTE_INVESTIGATION_REPORT_DI_VIEW;
-
-//new add for modify PRELIMINRY_INVESTIGATION_DI 22.08.17
-const ROUTE_MODIFY_INVESTIGATION_REPORT_DI: string =  ROUTE_INVESTIGATION_REPORT_DI_ADD + '/' + ':complaintReferenceNo';
-const ROUTE_MODIFY_INVESTIGATION_REPORT_DI_FULL: string = ROUTE_HOME_FULL + '/' + ROUTE_INVESTIGATION_REPORT_DI_ADD;
 
 //new add for single view ROUTE_VIEW_DETAILS_INVESTIGATION_REPORT_DI 15.02.18
 
@@ -242,7 +239,6 @@ export const ROUTE_PATHS = {
     // RouteInvestigationReportDIViewModify: ROUTE_VIEW_MODIFY_INVESTIGATION_REPORT_DI_FULL,//from menu preli view or edit
     // RoutePreliminaryInvestigationDIView: ROUTE_PRELIMINRY_INVESTIGATION_DI_VIEW_FULL,//preli view
     //RouteModifyPreliminaryInvestigationDi: ROUTE_MODIFY_PRELIMINRY_INVESTIGATION_DI_FULL,//preli modify
-    RouteModifyInvestigationReportDi: ROUTE_MODIFY_INVESTIGATION_REPORT_DI_FULL,//preli modify
     //RouterViewDetailsPreliminaryInvestigationDi: ROUTE_VIEW_DETAILS_PRELIMINRY_INVESTIGATION_DI_FULL,//preli view details for single view
     RouteViewDetailsInvestigationReportDi: ROUTE_VIEW_DETAILS_INVESTIGATION_REPORT_DI_FULL,//preli view details for single view
     RouteComplaintReferenceNoSearch: ROUTE_COMPLAINT_REFERENCE_NO_SEARCH_FULL,//to search comp ref no of investigation reoport
@@ -308,7 +304,6 @@ export const ROUTER_PATHS = {
     // ViewModifyPreliminaryInvestigationRouter: ROUTE_VIEW_MODIFY_PRELIMINRY_INVESTIGATION_DI,//preli view edit from menu
     // ViewModifyInvestigationReportRouter: ROUTE_VIEW_MODIFY_INVESTIGATION_REPORT_DI,//preli view edit from menu
     //ModifyPreliminaryInvestigationDiRouter: ROUTE_MODIFY_PRELIMINRY_INVESTIGATION_DI,//preli modify 
-    ModifyInvestigationReportDiRouter: ROUTE_MODIFY_INVESTIGATION_REPORT_DI,//preli modify 
     //ViewDetailsPreliminaryInvestigationDiRouter:ROUTE_VIEW_DETAILS_PRELIMINRY_INVESTIGATION_DI,//single view of preli   
     ViewDetailsInvestigationReportDiRouter:ROUTE_VIEW_DETAILS_INVESTIGATION_REPORT_DI,//single view of preli    
     ComplaintReferenceNoSearchRouter: ROUTE_COMPLAINT_REFERENCE_NO_SEARCH,//to search comp ref no of investigation reoport

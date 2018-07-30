@@ -20,10 +20,21 @@ export class InvestigationReportDiViewDetailsComponent implements OnInit {
 
   public title: string = 'Investigation Report';
   //creating a FormGroup for Preliminary Investigation
-  public invReportFormGroup: FormGroup;
+  public invReportFormGroup = new FormGroup({
+    complaintReferenceNo: new FormControl(''),
+    siteVisitMade: new FormControl({value: '',disabled: true}),
+    siteVisitDate: new FormControl(''),
+    sampleCollected: new FormControl({value: '',disabled: true}),
+    sampleCollectedDate: new FormControl(''),
+    investigationReportDate: new FormControl(''),
+    unloadingEquipment: new FormControl(''),
+    lubricantUsed: new FormControl(''),
+    layingPosiion: new FormControl(''),
+    jointingtype: new FormControl('')
+  });
   public complaintReferenceNo: string;//to get complaint ref no from html and send it as a parameter
   //variable used for radio button
-  public invReportVar: any = { siteVisitMadeValue: '', sampleCollectedValue: 'Y' };
+  public invReportVar: any = { siteVisitMadeValue: '', sampleCollectedValue: '' };
   public invReportTable: any[] = [];//to store prev inv report
   public complaintStatus: number;//to fetch complaint status from route
   public invReportDeatils: any[] = [];// to store invReport deatils from response
@@ -33,15 +44,12 @@ export class InvestigationReportDiViewDetailsComponent implements OnInit {
 
   constructor(
     private activatedroute: ActivatedRoute,
-    private formBuilder: FormBuilder,
     private router: Router,
-    // private toastService: ToastService,
-    private localStorageService: LocalStorageService,
     private sessionErrorService: SessionErrorService,
     private investigationReportDIDataService: InvestigationReportDIDataService,
     private datePipe: DatePipe//for date
   ) {
-    this.buildForm();
+    // this.buildForm();
   }
 
   ngOnInit(): void {
@@ -60,35 +68,6 @@ export class InvestigationReportDiViewDetailsComponent implements OnInit {
     });
     console.log("complaintReferenceNo for view in preliminary-investigation-di-add-component: ", this.complaintReferenceNo);
   }//end of the method
-
-  //start method buildForm to build the form
-  private buildForm(): void {
-    this.invReportFormGroup = this.formBuilder.group({
-      'complaintRefNo': [''
-      ],
-      'complaintReferenceNo': [''
-      ],
-      'siteVisitMade': [''
-      ],
-      'siteVisitDate': [''
-      ],
-      'sampleCollected': [''
-      ],
-      'sampleCollectedDate': [''
-      ],
-      'preliDate': [''
-      ],
-      'unloadingEquipment': [''
-      ],
-      'lubricantUsed': [''
-      ],
-      'layingPosiion': [''
-      ],
-      'jointingtype': [''
-      ]
-    });
-  }//end of build form
-
 
   //method to get investigation report details by service call
   private getInvestigationViewDetailsWSCall() {
@@ -120,13 +99,13 @@ export class InvestigationReportDiViewDetailsComponent implements OnInit {
     this.invReportFormGroup.controls['siteVisitMade'].setValue(formData.siteVisit);
     this.invReportVar.sampleCollectedValue = formData.sampleCollected;
     this.invReportFormGroup.controls['sampleCollected'].setValue(formData.sampleCollected);
-    this.invReportFormGroup.controls['unloadingEquipement'].setValue(formData.unloadingEquipement);
+    this.invReportFormGroup.controls['sampleCollectedDate'].setValue(this.datePipe.transform(formData.sampleCollectedDate,'dd-MMM-yyyy'));
+    this.invReportFormGroup.controls['unloadingEquipment'].setValue(formData.unloadingEquipement);
     this.invReportFormGroup.controls['layingPosiion'].setValue(formData.layingPosition);
     this.invReportFormGroup.controls['lubricantUsed'].setValue(formData.lubricantUsed);
     this.invReportFormGroup.controls['jointingtype'].setValue(formData.jointingType);
-    
+    this.invReportFormGroup.controls['investigationReportDate'].setValue(this.datePipe.transform(formData.investigationReportDate,'dd-MMM-yyyy'));
   }//end method setFormValue
-
 
   //cancel method
   public onCancel(): void {
