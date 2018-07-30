@@ -102,7 +102,8 @@ export class InvestigationReportDiComponent implements OnInit {
 
   //method to get investigation report details by service call
   private getInvestigationViewDetailsWSCall() {
-    this.investigationReportDIDataService.getInvestigationReportViewDetails(this.complaintReferenceNo, this.complaintStatus).
+    let pageCompStatus: number = 40;
+    this.investigationReportDIDataService.getInvestigationReportViewDetails(this.complaintReferenceNo, pageCompStatus).
       subscribe(res => {
         //console.log("res of ref det::::",res);
         if (res.msgType === "Info") {
@@ -112,7 +113,10 @@ export class InvestigationReportDiComponent implements OnInit {
           this.invReportIndex = this.invReportDeatils ? this.invReportDeatils.length - 1 : 0;
           this.setFormValue();
           this.busySpinner = false;
-        }
+        } else {
+          this.busySpinner = false;
+          this.invReportFormGroup.controls['complaintReferenceNo'].setValue(this.complaintReferenceNo);
+        }//end of else if
       },
         err => {
           console.log(err);

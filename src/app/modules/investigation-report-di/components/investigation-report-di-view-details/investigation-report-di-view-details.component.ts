@@ -22,9 +22,9 @@ export class InvestigationReportDiViewDetailsComponent implements OnInit {
   //creating a FormGroup for Preliminary Investigation
   public invReportFormGroup = new FormGroup({
     complaintReferenceNo: new FormControl(''),
-    siteVisitMade: new FormControl({value: '',disabled: true}),
+    siteVisitMade: new FormControl({ value: '', disabled: true }),
     siteVisitDate: new FormControl(''),
-    sampleCollected: new FormControl({value: '',disabled: true}),
+    sampleCollected: new FormControl({ value: '', disabled: true }),
     sampleCollectedDate: new FormControl(''),
     investigationReportDate: new FormControl(''),
     unloadingEquipment: new FormControl(''),
@@ -38,7 +38,7 @@ export class InvestigationReportDiViewDetailsComponent implements OnInit {
   public invReportTable: any[] = [];//to store prev inv report
   public complaintStatus: number;//to fetch complaint status from route
   public invReportDeatils: any[] = [];// to store invReport deatils from response
-  public invReportIndex : number = 0;
+  public invReportIndex: number = 0;
   //busySpinner 
   public busySpinner: boolean = true;
 
@@ -71,7 +71,8 @@ export class InvestigationReportDiViewDetailsComponent implements OnInit {
 
   //method to get investigation report details by service call
   private getInvestigationViewDetailsWSCall() {
-    this.investigationReportDIDataService.getInvestigationReportViewDetails(this.complaintReferenceNo, this.complaintStatus).
+    let pageCompStatus: number = 40;
+    this.investigationReportDIDataService.getInvestigationReportViewDetails(this.complaintReferenceNo, pageCompStatus).
       subscribe(res => {
         //console.log("res of ref det::::",res);
         if (res.msgType === "Info") {
@@ -92,19 +93,19 @@ export class InvestigationReportDiViewDetailsComponent implements OnInit {
 
   //start method setFormValue to set the value in invreport form
   private setFormValue() {
-    let formData: any = this.invReportDeatils[this.invReportIndex];  
+    let formData: any = this.invReportDeatils[this.invReportIndex];
     this.invReportFormGroup.controls['complaintReferenceNo'].setValue(formData.complaintReferenceNo);
-    this.invReportFormGroup.controls['siteVisitDate'].setValue(this.datePipe.transform(formData.siteVisitDt,'dd-MMM-yyyy'));
+    this.invReportFormGroup.controls['siteVisitDate'].setValue(this.datePipe.transform(formData.siteVisitDt, 'dd-MMM-yyyy'));
     this.invReportVar.siteVisitMadeValue = formData.siteVisit;
     this.invReportFormGroup.controls['siteVisitMade'].setValue(formData.siteVisit);
     this.invReportVar.sampleCollectedValue = formData.sampleCollected;
     this.invReportFormGroup.controls['sampleCollected'].setValue(formData.sampleCollected);
-    this.invReportFormGroup.controls['sampleCollectedDate'].setValue(this.datePipe.transform(formData.sampleCollectedDate,'dd-MMM-yyyy'));
+    this.invReportFormGroup.controls['sampleCollectedDate'].setValue(this.datePipe.transform(formData.sampleCollectedDate, 'dd-MMM-yyyy'));
     this.invReportFormGroup.controls['unloadingEquipment'].setValue(formData.unloadingEquipement);
     this.invReportFormGroup.controls['layingPosiion'].setValue(formData.layingPosition);
     this.invReportFormGroup.controls['lubricantUsed'].setValue(formData.lubricantUsed);
     this.invReportFormGroup.controls['jointingtype'].setValue(formData.jointingType);
-    this.invReportFormGroup.controls['investigationReportDate'].setValue(this.datePipe.transform(formData.investigationReportDate,'dd-MMM-yyyy'));
+    this.invReportFormGroup.controls['investigationReportDate'].setValue(this.datePipe.transform(formData.investigationReportDate, 'dd-MMM-yyyy'));
   }//end method setFormValue
 
   //cancel method
