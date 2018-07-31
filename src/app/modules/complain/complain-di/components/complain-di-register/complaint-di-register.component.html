@@ -245,8 +245,9 @@
                       />
                     </td>
                     <td class="td-style hideextra">
-                      <input type="text" #batchNo value="{{selItem.batchNo}}" formControlName="batchNo" [maxlength]="batchNoInInvoiceDetailsLength"
-                        (keyup)="onKeyupBatchNo(batchNo.value,selItem.invoiceNo,selItem.itemCode)" />
+                      <input type="text" #batchNo value="{{selItem.batchNo}}" formControlName="batchNo" 
+                      (keyup)="onKeyupBatchNo(batchNo.value,selItem.invoiceNo,selItem.itemCode)" />
+                      <!-- [maxlength]="batchNoInInvoiceDetailsLength" -->
                     </td>
                     <td class="td-style hideextra">
                       {{selItem.usageGroup}}
@@ -283,16 +284,18 @@
           <!--start div for Contact Person Name-->
           <div class="form-group col-xs-12 col-sm-6 col-md-6 col-lg-4">
             <label for="contactPersonName">Customer's Contact Person</label>
-            <input type="text" id="contactPersonName" class="form-control" [maxlength]="contactPersonNameLength" [value]="contactPersonNameForModify"
-              formControlName="contactPersonName" />
+            <input type="text" id="contactPersonName" class="form-control" 
+            formControlName="contactPersonName" />
+            <!-- [maxlength]="contactPersonNameLength"  -->
           </div>
           <!--end div for Contact Person Name-->
 
           <!--start div for Contact Person Phone No-->
           <div class="form-group col-xs-12 col-sm-6 col-md-6 col-lg-4">
             <label for="contactPersonPhoneNo">Phone No</label>
-            <input type="text" id="contactPersonPhoneNo" class="form-control" [maxlength]="contactPersonPhoneNoLength" [value]="contactPersonPhoneNoForModify"
-              formControlName="contactPersonPhoneNo" />
+            <input type="text" id="contactPersonPhoneNo" class="form-control" 
+            formControlName="contactPersonPhoneNo" />
+            <!-- [maxlength]="contactPersonPhoneNoLength"  -->
             <div class="alert alert-danger" *ngIf="complaintRegisterFormGroup.get('contactPersonPhoneNo').hasError('pattern') && complaintRegisterFormGroup.get('contactPersonPhoneNo').touched && !complaintRegisterFormGroup.get('contactPersonEmailId').hasError('email') ">
               <i class="fa fa-exclamation-circle"></i> Provide valid phone No
             </div>
@@ -302,8 +305,9 @@
           <!--start div for Contact Person Email Id-->
           <div class="form-group col-xs-12 col-sm-6 col-md-6 col-lg-4">
             <label for="contactPersonEmailId">Email Id</label>
-            <input type="text" id="contactPersonEmailId" class="form-control" [maxlength]="contactPersonEmailIdLength" [value]="contactPersonEmailIdForModify"
-              formControlName="contactPersonEmailId" />
+            <input type="text" id="contactPersonEmailId" class="form-control"
+            formControlName="contactPersonEmailId" />
+            <!-- [maxlength]="contactPersonEmailIdLength"  -->
             <div class="alert alert-danger" *ngIf="complaintRegisterFormGroup.get('contactPersonEmailId').hasError('required') && complaintRegisterFormGroup.get('contactPersonEmailId').touched && !complaintRegisterFormGroup.get('contactPersonEmailId').hasError('email') ">
               <i class="fa fa-exclamation-circle"></i> Provide valid email id
             </div>
@@ -347,7 +351,8 @@
           <fieldset class="form-group col-xs-12 col-sm-6 col-md-6 col-lg-4" [disabled]="complaintReferenceNo">
             <label for="detailOfComplaint">Detail of Complaint</label>
             <textarea id="detailOfComplaint" rows="5" class="form-control hide-horizontal-scroll" #complaintDetails formControlName="complaintDetails"
-              [maxlength]="complaintDetailsLength" (keyup)="comDetsOnkeyup(complaintDetails.value)"></textarea>
+            (keyup)="comDetsOnkeyup(complaintDetails.value)"></textarea>
+            <!-- [maxlength]="complaintDetailsLength"  -->
             <!--start div for Detail of Complaint alert-->
             <div class="alert alert-danger" *ngIf="complaintRegisterFormGroup.get('complaintDetails').touched && complaintDetailsEnable==true">
               <i class="fa fa-exclamation-circle"></i> Detail of Complaint is required!
@@ -484,9 +489,9 @@
       </form>
       <!--end form for complaintRegisterFormGroup-->
 
-      <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" *ngIf="errMsgShowFlag">
+      <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" *ngIf="errorMsgObj.errMsgShowFlag">
         <div class="alert alert-danger">
-          {{errorMsg}}&nbsp;
+          {{errorMsgObj.errorMsg}}&nbsp;
           <button aria-label="Close" class="close" type="button" (click)="deleteResErrorMsgOnClick()">
             <span aria-hidden="true">×</span>
           </button>
