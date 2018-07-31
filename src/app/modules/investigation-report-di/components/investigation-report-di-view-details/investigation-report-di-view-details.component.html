@@ -21,6 +21,7 @@
         <table class="table-style">
           <thead>
             <tr class="th-style">
+              <td class="header-style-first">Select</td>
               <td class="hideextra" *ngFor="let invRprt of  invReportTable" [ngClass]="invRprt.headerClass">
                 {{ invRprt.headerDesc }}
               </td>
@@ -28,6 +29,9 @@
           </thead>
           <tbody>
             <tr class="tr-style" *ngFor="let invReportDet of invReportDeatils">
+              <td class="td-style-first" style="cursor: pointer;" (click)="selectData(invReportIndexParam)">
+                <i class="fa" [ngClass]="invReportIndex == invReportIndexParam ? 'fa-dot-circle-o' : 'fa-circle-o'"></i>
+              </td>
               <td class="hideextra" *ngFor="let invRprt of invReportTable" [ngClass]="invRprt.dataClass">
                 {{ invReportDet[invRprt.headerKey] }}
               </td>
@@ -121,7 +125,7 @@
                 </div>
                 <div style="display:inline-block;">
                   <label class="control control--radio">No
-                    <input type="radio" name="sampleCollected" formControlName="sampleCollected" value="Y" [checked]=true  />
+                    <input type="radio" name="sampleCollected" formControlName="sampleCollected" value="Y" [checked]=true />
                     <div class="control__indicator"></div>
                   </label>
                 </div>
@@ -133,8 +137,7 @@
             <ng-container *ngIf="invReportVar.sampleCollectedValue === 'Y'">
               <div class="form-group col-xs-12 col-sm-6 col-md-6 col-lg-4">
                 <label for="sampleCollectedDate">Sample Collected Date</label>
-                <input type="text" class="form-control" formControlName="sampleCollectedDate"
-                  readonly/>
+                <input type="text" class="form-control" formControlName="sampleCollectedDate" readonly/>
               </div>
             </ng-container>
             <!-- end div for Sample Collected Date -->
@@ -142,7 +145,7 @@
             <!-- start div for Investigation Report Date -->
             <div class="form-group col-xs-12 col-sm-6 col-md-6 col-lg-4">
               <label>Investigation Report Date</label>
-              <input type="text" class="form-control" formControlName="investigationReportDate"  readonly>
+              <input type="text" class="form-control" formControlName="investigationReportDate" readonly>
             </div>
             <!-- end div for Investigation Report Date -->
 

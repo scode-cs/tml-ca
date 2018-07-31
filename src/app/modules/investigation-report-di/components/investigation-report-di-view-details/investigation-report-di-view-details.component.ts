@@ -19,7 +19,7 @@ import { InvestigationReportDIDataService } from '../../services/investigation-r
 export class InvestigationReportDiViewDetailsComponent implements OnInit {
 
   public title: string = 'Investigation Report';
-  //creating a FormGroup for Preliminary Investigation
+  //creating a FormGroup for Investigation Report
   public invReportFormGroup = new FormGroup({
     complaintReferenceNo: new FormControl(''),
     siteVisitMade: new FormControl({ value: '', disabled: true }),
@@ -107,6 +107,16 @@ export class InvestigationReportDiViewDetailsComponent implements OnInit {
     this.invReportFormGroup.controls['jointingtype'].setValue(formData.jointingType);
     this.invReportFormGroup.controls['investigationReportDate'].setValue(this.datePipe.transform(formData.investigationReportDate, 'dd-MMM-yyyy'));
   }//end method setFormValue
+
+  // start method selectData
+  public selectData(invReportIndexParam: number) {
+    this.busySpinner = true;
+    this.invReportIndex = invReportIndexParam;
+    this.setFormValue();
+    setTimeout(() => {
+      this.busySpinner = false;
+    }, 500);
+  }//end method of selectData
 
   //cancel method
   public onCancel(): void {
