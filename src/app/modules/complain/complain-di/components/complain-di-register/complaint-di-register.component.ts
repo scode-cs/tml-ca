@@ -71,7 +71,7 @@ export class ComplaintDIRegisterComponent implements OnInit {
   public errorMsgObj: any = {
     errorMsg: '',
     errMsgShowFlag: false
-  }
+  };
 
   public modeOfReceiptDropDownList: any = [];
   public complaintTypeDropDownList: any[] = [];

@@ -21,26 +21,24 @@ import { CADIService } from "../../services/ca-di-add-edit.service";
     private totalFileSize: number = 0;//file upload error
     private fileSizeLimit: number = 104857600;
     private fileData: FormData;
-
     public fileList: FileList;
     public title: string = "CA";//to show titlee on html page
-    public complaintReferenceNo: string;//to get complaint reference no from route param
+
+    public routeParam: any ={
+      complaintReferenceNo:'',//to get complaint reference no from route param
+      complaintStatus:  ''//to fetch complaint status from route
+    }; 
+
     public caDIAddEditFormGroup: FormGroup;
     //for busy spinner
-    public busySpinner: any = {
-        compRefDetBusy: true,
-        submitBusy: false,//for submit spinner
-        busy: true
-    };
-    public currentDate: string;//for sysdate
-    public caAddEditDate: string;//close date
-    public selectedComplaintReferenceDetails: any = {};//to get selected complaint values  
-    public caAddEditDetails: string = "";//text area value for rca details
-    public complaintStatus: string = "";//to fetch complaint status from route
+    public busySpinner: boolean = false;
+    
+    
     //for error msg
-    public errMsgShowFlag: boolean = false;//to show the error msg div
-    public errorMsg: string;//to store the error msg
-
+    public errorMsgObj: any = {
+      errorMsg: '',
+      errMsgShowFlag: false
+    };
     constructor(
         private formBuilder: FormBuilder,
         private router: Router,
@@ -50,16 +48,13 @@ import { CADIService } from "../../services/ca-di-add-edit.service";
         private sessionErrorService: SessionErrorService,
         private caDIService: CADIService
     ){
-
+      this.buildForm();//build form
     }//end of constructor
 
     ngOnInit(): void {
         console.log("onInit of CADIAddEditComponent..");
-        this.buildForm();//build form
         this.getRouteParam();//calling method to get route param 
         this.getSystemDate();//method to get system date
-        
-        this.busySpinner.busy = false;
     }//end of on init
 
     //a method named buildform for creating the caDIAddEditFormGroup and its formControl
@@ -84,32 +79,22 @@ import { CADIService } from "../../services/ca-di-add-edit.service";
   private getRouteParam(){
     let routeSubscription: Subscription;
     routeSubscription = this.activatedroute.params.subscribe(params => {
-      this.complaintReferenceNo = params.complaintReferenceNo ? params.complaintReferenceNo : '';
-      this.complaintStatus = params.complaintStatus ? params.complaintStatus : ''; 
+      this.routeParam.complaintReferenceNo = params.complaintReferenceNo ? params.complaintReferenceNo : '';
+      this.routeParam.complaintStatus = params.complaintStatus ? params.complaintStatus : ''; 
     });
-    console.log("complaintReferenceNo for ca di add/edit: ", this.complaintReferenceNo);  
-    console.log("this.complaintStatus for ca di add/edit::",this.complaintStatus);
+    console.log("complaintReferenceNo for ca di add/edit: ", this.routeParam.complaintReferenceNo);  
+    console.log("this.complaintStatus for ca di add/edit::",this.routeParam.complaintStatus);
+    this.caDIAddEditFormGroup.controls['complaintReferenceNo'].setValue(this.routeParam.complaintReferenceNo);
   }//end of method
 
   //method to get system date
   private getSystemDate(){
     //formatting the current date
     let date = new Date();
-    this.currentDate = this.datePipe.transform(date, 'yyyy-MM-dd');
-    this.caDIAddEditFormGroup.controls["caAddEditDate"].setValue(this.currentDate);
-    this.caAddEditDate = this.datePipe.transform(this.currentDate, 'yyyy-MM-dd');
-    console.log("  rca::: this.caAddEditDate   ", this.caAddEditDate);    
+    let currentDate: string = this.datePipe.transform(date, 'yyyy-MM-dd');
+    this.caDIAddEditFormGroup.controls["caAddEditDate"].setValue(currentDate);
   }//end of method
-
-  //to load the spinner
-  private updateBusySpinner() {
-    if (this.busySpinner.compRefDetBusy || this.busySpinner.submitBusy) {
-      this.busySpinner.busy = true;
-    } else if(this.busySpinner.compRefDetBusy == false || this.busySpinner.submitBusy == false) {
-      this.busySpinner.busy = false;
-    }
-  }//end of busy spinner method
-
+  
    //file upload event  
    public fileChangeCADIAddEdit(event) {
     this.fileData = new FormData();
@@ -128,70 +113,7 @@ import { CADIService } from "../../services/ca-di-add-edit.service";
    //method of submit modify allocate complaint
    public onCADIAddEditSubmit() {
     console.log("form value of ca DI add/modify submit : ", this.caDIAddEditFormGroup.value);
-    let caDIAddEditSubmitDet: any = {};
-    caDIAddEditSubmitDet.complaintReferenceNo = "DI000010";//this.complaintReferenceNo;
-    caDIAddEditSubmitDet.rootCauseAnanysisRemarks = this.caDIAddEditFormGroup.value.caAddEditDetails;//actn det
-    caDIAddEditSubmitDet.plantType = "DI";
-    caDIAddEditSubmitDet.rootCauseAnanysisDate = this.caAddEditDate;
-    console.log("ca di submit: ", caDIAddEditSubmitDet);
-    console.log("this.totalFileSize on submit method:::::::::::", this.totalFileSize);
     
-    if (this.totalFileSize > this.fileSizeLimit) {
-       // show error msg on html page
-       this.errMsgShowFlag = true;
-       this.errorMsg = "File size should be within 100 mb !";
-    } else {
-      let jsonArr: any[] = [];//json arr to convert obj toString
-      jsonArr.push(JSON.stringify(caDIAddEditSubmitDet));
-      this.formData.append("caDet", jsonArr.toString());
-      //method to add or update preli
-      if (this.fileData != undefined) {
-        for (let i: number = 0; i < this.fileList.length; i++) {
-          console.log(" file upload", this.fileData.get('uploadFile' + i.toString()));
-          if (this.fileData.get('uploadFile' + i.toString()) != null) {
-            this.formData.append('uploadFile' + i.toString(), this.fileData.get('uploadFile' + i.toString()));
-          }//end of if
-        }//end of for
-      }//end of if fileData is !undefined
-      this.formData.append('Accept', 'application/json');
-      this.formData.append('accessToken', 'bearer ' + this.localStorageService.user.accessToken);
-      this.formData.append('menuId', 'DEFAULT1');
-      this.formData.append('userId', this.localStorageService.user.userId);
-      let formDataObj: any = {};
-      formDataObj = this.formData;
-      this.busySpinner.submitBusy = true;
-      this.updateBusySpinner();
-      this.caDIService.rcaDIAddEditSubmitWithFileUpload(formDataObj).
-        subscribe(res => {
-          console.log("rca di add Success Response: ", res);
-          this.busySpinner.submitBusy = false;
-          this.updateBusySpinner();
-          if (res.msgType === "Info") {
-            this.router.navigate([ROUTE_PATHS.RouteHome]);
-            // this.router.navigate([ROUTE_PATHS.RouteCloseComplaintDI]);//route to the previous page
-          } else {
-             // show error msg on html page
-            this.errMsgShowFlag = true;
-            this.errorMsg = res.msg;
-            // this.resErrorMsg = "Netowrk/Server Problem. Please try again.";
-            this.formData = new FormData();//new instance create of formdata
-          }
-        },
-        err => {
-          this.busySpinner.submitBusy = false;
-          this.updateBusySpinner();
-          // show error msg on html page
-          this.errMsgShowFlag = true;
-        //   this.errorMsg = err.msg;
-          if (err.status == 401) {
-            this.errorMsg = "Sorry! Unable to save data. Please try again.";
-          } else {
-            this.errorMsg = "Netowrk/Server Problem";
-          }
-          this.formData = new FormData();//new instance create of formdata
-          this.sessionErrorService.routeToLogin(err._body);
-        });
-    }//end of else
   } //end of method submit modify capa actn pi
 
   
