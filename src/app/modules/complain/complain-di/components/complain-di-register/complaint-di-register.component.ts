@@ -22,19 +22,26 @@ import { IcomplainRegDIDbFieldMaxLength } from '../../models/complain-reg-di.mod
   styleUrls: ['complaint-di-register.component.css']
 })
 export class ComplaintDIRegisterComponent implements OnInit {
-  
-  private formData: FormData = new FormData();
+
+  // private formData: FormData = new FormData();
   private compRegDbMaxLength: IcomplainRegDIDbFieldMaxLength = {
     invoiceNoLength: this.localStorageService.dbSettings.invoiceNo,
-    contactPersonNameLength : this.localStorageService.dbSettings.contactPersonName,
-    contactPersonEmailIdLength : this.localStorageService.dbSettings.contactPersonEmailId,
-    contactPersonPhoneNoLength : this.localStorageService.dbSettings.contactPersonPhoneNo,
-    complaintDetailsLength : this.localStorageService.dbSettings.complaintDetails,
-    batchNoInInvoiceDetailsLength : this.localStorageService.dbSettings.batchNoInInvoiceDetails
+    contactPersonNameLength: this.localStorageService.dbSettings.contactPersonName,
+    contactPersonEmailIdLength: this.localStorageService.dbSettings.contactPersonEmailId,
+    contactPersonPhoneNoLength: this.localStorageService.dbSettings.contactPersonPhoneNo,
+    complaintDetailsLength: this.localStorageService.dbSettings.complaintDetails,
+    batchNoInInvoiceDetailsLength: this.localStorageService.dbSettings.batchNoInInvoiceDetails
   };
-  private invData: any = {} ;//interface
+
+  //to store customer details
+  private empInfo: any = {
+    empId: this.localStorageService.user.employeeId,
+    empName: this.localStorageService.user.userDisplayName
+  };
+
+  private invData: any = {};//interface
   private complaintTypeId: string;
-  
+
   // form data for file upload
   private fileData: FormData;
   public fileList: FileList;
@@ -59,12 +66,12 @@ export class ComplaintDIRegisterComponent implements OnInit {
     siteVisit: new FormControl({ value: '' }, Validators.required),
     siteVisitByDepartmentName: new FormControl('')
   });
- 
-  
 
   public title: string = "Complaint Register";//set title
-  public errorMsg: string;
-  public errMsgShowFlag: boolean = false;
+  public errorMsgObj: any = {
+    errorMsg: '',
+    errMsgShowFlag: false
+  }
 
   public modeOfReceiptDropDownList: any = [];
   public complaintTypeDropDownList: any[] = [];
@@ -73,8 +80,6 @@ export class ComplaintDIRegisterComponent implements OnInit {
   //variable used for radio button
   public siteVisitValue: string = "";
   public invoiceNo: string;
-  
-
 
   public buttonEnable: boolean = true;
   public submitButtonEnable: boolean = true;
@@ -82,21 +87,16 @@ export class ComplaintDIRegisterComponent implements OnInit {
   public complaintReferenceNo: string;//to get complaint reference no from route param
   // public selectedComplaintReferenceDetails: any = {};//to get selected complaint values  
 
-
   public selectedItemDetails: any[] = [];
-
   //to store the itemsHeader
   public itemsHeader: any = {};
   public complaintDetailsEnable: boolean = false;
-
   //for complaint qty error
   public complaintQtyInMtrsError: boolean = true;
   //to store  selected items grid row
   public selectedItemsGrid: any[] = [];
-
   //to store customer details
   public custInfo: any = { custCode: '', custName: '', custSegment: '', salesGroup: '', salesOffice: '' };
-
   public departmentNameDropDownList: any[] = [];//for department name dropdown
   public invReportTable: any[] = [];//to store prev inv report
   //
@@ -127,6 +127,7 @@ export class ComplaintDIRegisterComponent implements OnInit {
     this.getInvDet();//method to get inv det
     this.getInvItemGridDet();//method to get inv item grid
     this.complaintQtyErrorCheck();//to check complain qty error
+    this.complaintRegisterFormGroup.controls["loggedBy"].setValue(this.empInfo.empName);//set emp name to control
   }//end of ngOnInit
 
   //method to get route param
@@ -301,17 +302,6 @@ export class ComplaintDIRegisterComponent implements OnInit {
 
   }//end method getAllDropDownVal
 
-  //onOpenModal for opening modal from modalService
-  private onOpenModal(complaintRefNo) {
-    const modalRef = this.modalService.open(NgbdModalComponent);
-    modalRef.componentInstance.modalTitle = 'Information';
-    modalRef.componentInstance.modalMessage =
-      this.complaintReferenceNo ?
-        "Complaint Reference Number(DI) " + complaintRefNo + " updated successfully."
-        : "Complaint Reference Number(DI) " + complaintRefNo + " created successfully.";
-  }
-  //end of method onOpenModal
-
   //start method tableGridDataConverterFromRes for creating table grid json array from res 
   private tableGridDataConverterFromRes(resItemsParam) {
     let disInvNoArr: string[] = [];
@@ -413,8 +403,8 @@ export class ComplaintDIRegisterComponent implements OnInit {
     if (complaintReferenceDate) {
       this.complaintRegisterFormGroup.controls["complaintReferenceDt"].setValue(complaintReferenceDate);
     }
-    
-    
+
+
     this.invData.modeId = invDet.modeId;
     if (this.invData.modeId) {
       this.complaintRegisterFormGroup.controls["modeId"].setValue(this.invData.modeId);
@@ -789,36 +779,7 @@ export class ComplaintDIRegisterComponent implements OnInit {
 
   //for clicking submit button this method will be invoked
   public onComplainSubmit(): void {
-    console.log(this.complaintRegisterFormGroup.value);
-    let user: any = {};
-    user.modeId = this.complaintRegisterFormGroup.value.modeId;
-    user.complaintReferenceDt = this.complaintRegisterFormGroup.value.complaintReferenceDt;
-    user.contactPersonName = this.complaintRegisterFormGroup.value.contactPersonName;
-    user.contactPersonPhoneNo = this.complaintRegisterFormGroup.value.contactPersonPhoneNo;
-    user.contactPersonEmailId = this.complaintRegisterFormGroup.value.contactPersonEmailId;
-    user.loggedBy = this.complaintRegisterFormGroup.value.loggedBy;
-    user.loggedOnDt = this.complaintRegisterFormGroup.value.loggedOnDt;
-    user.complaintTypeId = parseInt(this.complaintRegisterFormGroup.value.complaintTypeId);
-    user.natureOfComplaintId = parseInt(this.complaintRegisterFormGroup.value.natureOfComplaintId);
-    user.complaintDetails = this.complaintRegisterFormGroup.value.complaintDetails;
-    user.siteVisitByDepartmentName = this.complaintRegisterFormGroup.value.siteVisitByDepartmentName;
-    let selectedItemObj: any[] = [];
-    for (let selectedDet of this.selectedItemDetails) {
-      for (let selItem of selectedDet.value.selectedItem) {
-        selectedItemObj.push(selItem);
-      }
-    }
-    let itemNos: any = {};
-    itemNos.items = selectedItemObj;
-    console.log("itemNos.items: ", itemNos.items);
-    user.itemNos = itemNos;
-    console.log(" user.itemNos", user.itemNos);
-    user.siteVisit = this.complaintRegisterFormGroup.value.siteVisit;
-    if (this.complaintReferenceNo) {
-      user.complaintReferenceNo = this.complaintReferenceNo;
-    }
-    console.log("user=====>", user);
-
+    console.log("form value::",this.complaintRegisterFormGroup.value);
   }//end of method complainregDiSubmit  
 
   //onOpenModal for opening modal from modalService
@@ -839,7 +800,7 @@ export class ComplaintDIRegisterComponent implements OnInit {
 
   // method to delete error msg
   public deleteResErrorMsgOnClick() {
-    this.errMsgShowFlag = false;
+    this.errorMsgObj.errMsgShowFlag = false;
   }//end of method to delete error msg
 
   //for clicking cancel button this method will be invoked
