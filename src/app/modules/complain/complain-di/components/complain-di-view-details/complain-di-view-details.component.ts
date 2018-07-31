@@ -21,7 +21,29 @@ export class ComplainDIViewDetailsComponent implements OnInit {
 
  
   public title: string = "Complaint Register";
-  public complaintRegisterFormGroup: FormGroup;
+  //variable used for siteVisit radio button
+  public siteVisitValue: string = "";
+  //create a formgroup for complain reg
+  // public complaintRegisterFormGroup: FormGroup;
+  public complaintRegisterFormGroup = new FormGroup({
+    modeId: new FormControl(''),
+    officialDocNo: new FormControl(''),
+    complaintReferenceDt: new FormControl(''),
+    custCode: new FormControl(''),
+    custName: new FormControl(''),
+    salesGroup: new FormControl(''),
+    salesOffice: new FormControl(''),
+    contactPersonName: new FormControl(''),
+    contactPersonPhoneNo: new FormControl(''),
+    contactPersonEmailId: new FormControl(''),
+    loggedBy: new FormControl(''),
+    loggedOnDt: new FormControl(''),
+    complaintTypeId: new FormControl(''),
+    natureOfComplaintId: new FormControl(''),
+    complaintDetails: new FormControl(''),
+    siteVisit: new FormControl({ value: '', disabled: true }),
+    siteVisitByDepartmentName: new FormControl('')
+  });
   public complaintReferenceNo: string = '';//to store route param
   public complaintStatus: number ;//to store route param 
   public invReportTable: any[] = [];//to store prev complain report
@@ -38,7 +60,7 @@ export class ComplainDIViewDetailsComponent implements OnInit {
     private complaintDIRegisterDataService: ComplaintDIRegisterDataService,
     private sessionErrorService: SessionErrorService
   ) {
-    this.buildForm();//to build form
+    // this.buildForm();//to build form
   }
 
   ngOnInit(): void {
@@ -59,43 +81,43 @@ export class ComplainDIViewDetailsComponent implements OnInit {
   }//end of method
 
   //a method named buildform for creating the complaintRegisterFormGroup and its formControl
-  private buildForm(): void {
-    this.complaintRegisterFormGroup = this.formBuilder.group({
-      'modeId': [''
-      ],
-      'complaintReferenceDt': [''
-      ],
-      'custCode':[''
-      ],
-      'custName':[''
-      ],
-      'salesGroup':[''
-      ],
-      'salesOffice':[''
-      ],
-      'contactPersonName': [''
-      ],
-      'contactPersonPhoneNo': [''
-      ],
-      'contactPersonEmailId': [''
-      ],
-      'loggedBy': [''
-      ],
-      'loggedOnDt': [''
-      ],
-      'complaintTypeId': [''
-      ],
-      'natureOfComplaintId': [''
-      ],
-      'complaintDetails': [''
-      ],
-      'siteVisit': [''
-      ],
-      'siteVisitByDepartmentName':[''
-      ]
-    });
+  // private buildForm(): void {
+  //   this.complaintRegisterFormGroup = this.formBuilder.group({
+  //     'modeId': [''
+  //     ],
+  //     'complaintReferenceDt': [''
+  //     ],
+  //     'custCode':[''
+  //     ],
+  //     'custName':[''
+  //     ],
+  //     'salesGroup':[''
+  //     ],
+  //     'salesOffice':[''
+  //     ],
+  //     'contactPersonName': [''
+  //     ],
+  //     'contactPersonPhoneNo': [''
+  //     ],
+  //     'contactPersonEmailId': [''
+  //     ],
+  //     'loggedBy': [''
+  //     ],
+  //     'loggedOnDt': [''
+  //     ],
+  //     'complaintTypeId': [''
+  //     ],
+  //     'natureOfComplaintId': [''
+  //     ],
+  //     'complaintDetails': [''
+  //     ],
+  //     'siteVisit': [''
+  //     ],
+  //     'siteVisitByDepartmentName':[''
+  //     ]
+  //   });
 
-  }//end of method buildForm
+  // }//end of method buildForm
 
   //method to get complain reference details by service call
   private getviewComplainReferenceDetailsWSCall() {
@@ -137,6 +159,7 @@ export class ComplainDIViewDetailsComponent implements OnInit {
     this.complaintRegisterFormGroup.controls['complaintTypeId'].setValue(complainFormData.complaintTypeDesc);
     this.complaintRegisterFormGroup.controls['natureOfComplaintId'].setValue(complainFormData.natureOfComplaintDesc);
     this.complaintRegisterFormGroup.controls['complaintDetails'].setValue(complainFormData.complaintDetails);
+    this.siteVisitValue = complainFormData.siteVisit;
     this.complaintRegisterFormGroup.controls['siteVisit'].setValue(complainFormData.siteVisit);
     this.complaintRegisterFormGroup.controls['siteVisitByDepartmentName'].setValue(complainFormData.siteVisitByDepartmentName);
   
