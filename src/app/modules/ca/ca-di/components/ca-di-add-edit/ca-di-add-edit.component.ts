@@ -31,9 +31,8 @@ import { CADIService } from "../../services/ca-di-add-edit.service";
 
     public caDIAddEditFormGroup: FormGroup;
     //for busy spinner
-    public busySpinner: boolean = false;
-    
-    
+    public busySpinner: boolean = false;   
+   
     //for error msg
     public errorMsgObj: any = {
       errorMsg: '',

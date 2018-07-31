@@ -21,23 +21,18 @@ export class PADIViewDetailsComponent implements OnInit {
 
   // public fileList: FileList;
   public title: string = "PA";//to show titlee on html page
-  public complaintReferenceNo: string;//to get complaint reference no from route param
   public paDIAddEditFormGroup: FormGroup;
+  public routeParam: any ={
+    complaintReferenceNo:'',//to get complaint reference no from route param
+    complaintStatus:  ''//to fetch complaint status from route
+  }; 
   //for busy spinner
-  public busySpinner: any = {
-    compRefDetBusy: true,
-    submitBusy: false,//for submit spinner
-    busy: true
-  };
-  public currentDate: string;//for sysdate
-  public paAddEditDate: string;//close date
-  public selectedComplaintReferenceDetails: any = {};//to get selected complaint values  
-  public paAddEditDetails: string = "";//text area value for rca details
-  public complaintStatus: string = "";//to fetch complaint status from route
-
+  public busySpinner: boolean = false;
   //for error msg
-  public errMsgShowFlag: boolean = false;//to show the error msg div
-  public errorMsg: string;//to store the error msg
+  public errorMsgObj: any = {
+    errorMsg: '',
+    errMsgShowFlag: false
+  };
 
   constructor(
     private formBuilder: FormBuilder,
@@ -49,16 +44,13 @@ export class PADIViewDetailsComponent implements OnInit {
     private sessionErrorService: SessionErrorService,
     private pADIService: PADIService
   ) {
-
+    this.buildForm();//build form
   }//end of constructor
 
   ngOnInit(): void {
     console.log("onInit of PADIViewDetailsComponent..");
-    this.buildForm();//build form
     this.getRouteParam();//calling method to get route param 
     this.getSystemDate();//method to get system date
-
-    this.busySpinner.busy = false;
   }//end of on init
 
   //a method named buildform for creating the rcaDIAddEditFormGroup and its formControl
@@ -77,44 +69,22 @@ export class PADIViewDetailsComponent implements OnInit {
   private getRouteParam() {
     let routeSubscription: Subscription;
     routeSubscription = this.activatedroute.params.subscribe(params => {
-      this.complaintReferenceNo = params.complaintReferenceNo ? params.complaintReferenceNo : 'DI000009';
-      this.complaintStatus = params.complaintStatus ? params.complaintStatus : ''; 
+      this.routeParam.complaintReferenceNo = params.complaintReferenceNo ? params.complaintReferenceNo : 'DI000009';
+      this.routeParam.complaintStatus = params.complaintStatus ? params.complaintStatus : ''; 
     });
-    console.log("complaintReferenceNo for pa di view: ", this.complaintReferenceNo);
-    console.log("this.complaintStatus for pa di view::",this.complaintStatus);
+    console.log("complaintReferenceNo for pa di view: ", this.routeParam.complaintReferenceNo);
+    console.log("this.complaintStatus for pa di view::",this.routeParam.complaintStatus);
+    this.paDIAddEditFormGroup.controls['complaintReferenceNo'].setValue(this.routeParam.complaintReferenceNo);
+
   }//end of method
 
   //method to get system date
   private getSystemDate() {
     //formatting the current date
     let date = new Date();
-    this.currentDate = this.datePipe.transform(date, 'yyyy-MM-dd');
-    this.paDIAddEditFormGroup.controls["paAddEditDate"].setValue(this.currentDate);
-    // this.rcaAddEditDate = this.datePipe.transform(this.currentDate, 'yyyy-MM-dd');
-    this.paAddEditDate = this.datePipe.transform(this.currentDate,  'yyyy-MM-dd');
-    console.log("  rca::: this.paAddEditDate   ", this.paAddEditDate);
+    let currentDate: string =  this.datePipe.transform(date, 'yyyy-MM-dd');
+    this.paDIAddEditFormGroup.controls["paAddEditDate"].setValue(currentDate);
   }//end of method
-
-  //to load the spinner
-  private updateBusySpinner() {
-    if (this.busySpinner.compRefDetBusy || this.busySpinner.submitBusy) {
-      this.busySpinner.busy = true;
-    } else if (this.busySpinner.compRefDetBusy == false || this.busySpinner.submitBusy == false) {
-      this.busySpinner.busy = false;
-    }
-  }//end of busy spinner method
-
-  //onOpenModal for opening modal from modalService
-  private onOpenModal(complaintRefNo,modalMsg) {
-    const modalRef = this.modalService.open(NgbdModalComponent);
-    modalRef.componentInstance.modalTitle = 'Information';
-    modalRef.componentInstance.modalMessage = modalMsg;
-      // this.complaintReferenceNo ?
-      //   "Complaint Reference Number(DI) " + complaintRefNo + " updated successfully."
-      //   : "Complaint Reference Number(DI) " + complaintRefNo + " created successfully.";
-  }
-  //end of method onOpenModal
-
 
   //for clicking cancel button this method will be invoked
   public onCancel(): void {

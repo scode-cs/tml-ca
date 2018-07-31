@@ -9,93 +9,96 @@
         </ol>
     </div>
     <!--start process flow div-->
-    <app-flowmangement [complianStatus]="complaintStatus" [pageType]="'add'"></app-flowmangement>
+    <app-flowmangement [complianStatus]="routeParam.complaintStatus" [pageType]="'add'"></app-flowmangement>
     <!-- end div of process flow  -->
-    <!--start form for paDIAddEditFormGroup-->
-    <form [formGroup]="paDIAddEditFormGroup" autocomplete="off" (ngSubmit)="onCADIAddEditSubmit()">
-        <!-- start div for row form-style class-->
-        <div class="row form-style">
-            <!--start div complaint reference no -->
-            <div *ngIf="complaintReferenceNo" class="form-group col-xs-12 col-sm-6 col-md-6 col-lg-4">
-                <label for="complaintReferenceNo">Complaint Reference No</label>
-                <input type="text" class="form-control" formControlName="complaintReferenceNo" [value]="complaintReferenceNo" readonly="readonly"
-                />
-            </div>
-            <!--end of div for complaint reference no-->
-
-            <!--start div closeDate-->
-            <div class="form-group col-xs-12 col-sm-6 col-md-6 col-lg-4">
-                <label>Date</label>
-                <input type="date" class="form-control" formControlName="paAddEditDate" 
-                />
-            </div>
-            <!--end of div for closeDate-->
-
-            <!-- start div for rca details -->
-            <div class="form-group col-xs-12 col-sm-6 col-md-6 col-lg-4">
-                <label>PA Details</label>
-                <label class="red-asterick">*</label>
-                <textarea rows="5" formControlName="paAddEditDetails" [value]="paAddEditDetails" class="form-control hide-horizontal-scroll" required></textarea>
-                <div class="alert alert-danger" *ngIf="paDIAddEditFormGroup.get('paAddEditDetails').hasError('required') && paDIAddEditFormGroup.get('paAddEditDetails').touched">
-                    <i class="fa fa-exclamation-circle"></i>RCA Details is required!
+    <!-- start div for form -->
+    <div>
+        <!--start form for paDIAddEditFormGroup-->
+        <form [formGroup]="paDIAddEditFormGroup" autocomplete="off" (ngSubmit)="onPADIAddEditSubmit()">
+            <!-- start div for row form-style class-->
+            <div class="row form-style">
+                <!--start div complaint reference no -->
+                <div *ngIf="routeParam.complaintReferenceNo" class="form-group col-xs-12 col-sm-6 col-md-6 col-lg-4">
+                    <label for="complaintReferenceNo">Complaint Reference No</label>
+                    <input type="text" class="form-control" formControlName="complaintReferenceNo" readonly="readonly" />
                 </div>
-            </div>
-            <!-- end of div for rca details -->
+                <!--end of div for complaint reference no-->
 
-            <!--files-->
-            <!--start div for show files-->
-            <div class="form-group col-xs-12 col-sm-6 col-md-6 col-lg-4" *ngIf="complaintReferenceNo && selectedComplaintReferenceDetails.files?.length!=0">
-                <label>Uploaded file(s)</label>
-                <div *ngFor="let file of selectedComplaintReferenceDetails.files">
-                    <a href="{{file.fileUrl}}" target="_blank">{{file.fileName}}</a>
-                    <br/>
+                <!--start div closeDate-->
+                <div class="form-group col-xs-12 col-sm-6 col-md-6 col-lg-4">
+                    <label>Date</label>
+                    <input type="date" class="form-control" formControlName="paAddEditDate" />
                 </div>
-            </div>
-            <!--end div for show files-->
+                <!--end of div for closeDate-->
 
-            <!--start fle upload div-->
-            <div class="form-group col-xs-12 col-sm-6 col-md-6 col-lg-4">
-                <div class="form-group col-xs-12 col-sm-12 col-md-12 col-lg-12" style="padding-left: 0px;">
-                    <label for="imageFile">File(s) Upload</label>
-                    <label class="red-coloured-label">(max size 100 mb)</label>
-                    <input type="file" (change)="fileChangeCADIAddEdit($event)" multiple/>
+                <!-- start div for rca details -->
+                <div class="form-group col-xs-12 col-sm-6 col-md-6 col-lg-4">
+                    <label>PA Details</label>
+                    <label class="red-asterick">*</label>
+                    <textarea rows="5" formControlName="paAddEditDetails" class="form-control hide-horizontal-scroll"
+                        required></textarea>
+                    <div class="alert alert-danger" *ngIf="paDIAddEditFormGroup.get('paAddEditDetails').hasError('required') && paDIAddEditFormGroup.get('paAddEditDetails').touched">
+                        <i class="fa fa-exclamation-circle"></i>RCA Details is required!
+                    </div>
                 </div>
+                <!-- end of div for rca details -->
+
+                <!--files-->
+                <!--start div for show files-->
+                <!-- <div class="form-group col-xs-12 col-sm-6 col-md-6 col-lg-4" *ngIf="routeParam.complaintReferenceNo && selectedComplaintReferenceDetails.files?.length!=0">
+                    <label>Uploaded file(s)</label>
+                    <div *ngFor="let file of selectedComplaintReferenceDetails.files">
+                        <a href="{{file.fileUrl}}" target="_blank">{{file.fileName}}</a>
+                        <br/>
+                    </div>
+                </div> -->
+                <!--end div for show files-->
+
+                <!--start fle upload div-->
+                <div class="form-group col-xs-12 col-sm-6 col-md-6 col-lg-4">
+                    <div class="form-group col-xs-12 col-sm-12 col-md-12 col-lg-12" style="padding-left: 0px;">
+                        <label for="imageFile">File(s) Upload</label>
+                        <label class="red-coloured-label">(max size 100 mb)</label>
+                        <input type="file" (change)="fileChangeCADIAddEdit($event)" multiple/>
+                    </div>
+                </div>
+                <!--end of file upload div-->
+                <!-- start div for Submit  and Cancel Button-->
+                <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                    <!-- start div for Submit Button-->
+                    <div class="col-xs-12 col-sm-4 col-md-4 col-lg-2 button-holder">
+                        <button type="submit" class="btn btn-primary primary-button-style" [disabled]="!paDIAddEditFormGroup.valid">Submit
+                        </button>
+                    </div>
+                    <!-- end div for Submit Button-->
+                    <!-- start div for Cancel Button-->
+                    <div class="col-xs-12 col-sm-4 col-md-4 col-lg-2 button-holder">
+                        <button type="submit" class="btn default-button-style" (click)="onCancel()">
+                            Cancel
+                        </button>
+                    </div>
+                    <!-- end div for Cancel Button-->
+                </div>
+                <!-- start div for Submit  and Cancel Button-->
             </div>
-            <!--end of file upload div-->
-            <!-- start div for Submit  and Cancel Button-->
-            <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
-                <!-- start div for Submit Button-->
-                <div class="col-xs-12 col-sm-4 col-md-4 col-lg-2 button-holder">
-                    <button type="submit" class="btn btn-primary primary-button-style" [disabled]="!paDIAddEditFormGroup.valid">Submit
+            <!-- end div for row complaint-form class-->
+            <!-- error msg div -->
+            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" *ngIf="errorMsgObj.errMsgShowFlag">
+                <div class="alert alert-danger">
+                    {{errorMsgObj.errorMsg}}&nbsp;
+                    <button aria-label="Close" class="close" type="button" (click)="deleteResErrorMsgOnClick()">
+                        <span aria-hidden="true">×</span>
                     </button>
                 </div>
-                <!-- end div for Submit Button-->
-                <!-- start div for Cancel Button-->
-                <div class="col-xs-12 col-sm-4 col-md-4 col-lg-2 button-holder">
-                    <button type="submit" class="btn default-button-style" (click)="onCancel()">
-                        Cancel
-                    </button>
-                </div>
-                <!-- end div for Cancel Button-->
+                <br/>
+                <br/>
             </div>
-            <!-- start div for Submit  and Cancel Button-->
-        </div>
-        <!-- end div for row complaint-form class-->
-        <!-- error msg div -->
-        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" *ngIf="errMsgShowFlag">
-            <div class="alert alert-danger">
-              {{errorMsg}}&nbsp;
-              <button aria-label="Close" class="close" type="button" (click)="deleteResErrorMsgOnClick()">
-                <span aria-hidden="true">×</span>
-              </button>
-            </div>
-            <br/>
-            <br/>
-          </div>
-        <!-- end of error msg div -->
-    </form>
-    <!--end form for paDIAddEditFormGroup-->
+            <!-- end of error msg div -->
+        </form>
+        <!--end form for paDIAddEditFormGroup-->
+    </div>
+    <!-- end of div form -->
 </div>
 <!--end of div page-container-->
 
-<ispl-busy-spinner *ngIf="busySpinner.busy"></ispl-busy-spinner>
+<ispl-busy-spinner *ngIf="busySpinner"></ispl-busy-spinner>
