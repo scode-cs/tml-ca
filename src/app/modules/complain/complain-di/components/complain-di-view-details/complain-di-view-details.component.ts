@@ -99,7 +99,8 @@ export class ComplainDIViewDetailsComponent implements OnInit {
 
   //method to get complain reference details by service call
   private getviewComplainReferenceDetailsWSCall() {
-    this.complaintDIRegisterDataService.getComplaintReferenceViewDetails(this.complaintReferenceNo,this.complaintStatus).
+    let pageCompStatus: number = 10;
+    this.complaintDIRegisterDataService.getComplaintReferenceViewDetails(this.complaintReferenceNo,pageCompStatus).
       subscribe(res => {
        console.log("res of ref det::::",res);
        if(res.msgType==='Info') {
