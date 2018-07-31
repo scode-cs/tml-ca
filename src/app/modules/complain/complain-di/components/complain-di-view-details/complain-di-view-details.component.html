@@ -195,6 +195,9 @@
                   <td class="td-style">
 
                   </td>
+                  <td class="td-style">
+
+                  </td>
                   <td class="td-style-last">
 
                   </td>
@@ -262,17 +265,32 @@
 
           <!--start div for radio button-->
           <div class="form-group col-xs-12 col-sm-6 col-md-6 col-lg-4">
-            <ng-container>
+            <ng-container *ngIf="siteVisitValue === 'Y'">
               <div style="display:inline-block;">
                 <label>Site Visit Required</label>
                 <label class="control control--radio">Yes
-                  <input type="radio" name="siteVisit" formControlName="siteVisit" disabled/>
+                  <input type="radio" name="siteVisit" formControlName="siteVisit" [checked]=true/>
                   <div class="control__indicator"></div>
                 </label>
               </div>
               <div style="display:inline-block;">
                 <label class="control control--radio">No
-                  <input type="radio" name="siteVisit" formControlName="siteVisit" disabled/>
+                  <input type="radio" name="siteVisit" formControlName="siteVisit" />
+                  <div class="control__indicator"></div>
+                </label>
+              </div>
+            </ng-container>
+            <ng-container *ngIf="siteVisitValue === 'N'">
+              <div style="display:inline-block;">
+                <label>Site Visit Required</label>
+                <label class="control control--radio">Yes
+                  <input type="radio" name="siteVisit" formControlName="siteVisit" />
+                  <div class="control__indicator"></div>
+                </label>
+              </div>
+              <div style="display:inline-block;">
+                <label class="control control--radio">No
+                  <input type="radio" name="siteVisit" formControlName="siteVisit" [checked]=true/>
                   <div class="control__indicator"></div>
                 </label>
               </div>
