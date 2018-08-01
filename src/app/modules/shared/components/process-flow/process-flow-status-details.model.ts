@@ -16,5 +16,5 @@ export class ProcessFlowStatusDetailsModel {
 
     public set statusDetails(statusDetails: any[]) {
         this._statusDetails = statusDetails;
-      }
+    }
 }
