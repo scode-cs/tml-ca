@@ -1,6 +1,6 @@
 export class InvestigationDataModel {
-    private _unloadingEquipmentList: any[
-        { id: '1', desc: 'sunanda' }
+    private _unloadingEquipmentList: any[] = [
+        { id: '1', desc: 'sunanda', selected: false }
     ];
     private _lubricantUsedList: any[];
     private _layingPositionList: any[];
