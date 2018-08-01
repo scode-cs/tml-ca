@@ -32,26 +32,15 @@ export class CADIService {
 
     
     
-    //method to get complain reference details view
-    getComplaintReferenceDetailsView(complaintReferenceNo: string, fileActivityId: number) {
-        let fileActivityIdStr: string = fileActivityId.toString();
-        // complaintReferenceNo = "DIKG1718H290001";
-        this.actionUrl = AppUrlsConst.DI_COMPLAINT_REFERENCE_DETAILS_VIEW_WITHOUT_HEADER_URL + "/" + complaintReferenceNo + "/" + fileActivityIdStr;
-        this.headers = this.configService();
-        
-        return this.http.get(this.actionUrl, { headers: this.headers })
-        .map((res: Response) => { return res.json() })
-            .catch((error: Response) => { return Observable.throw(error) });
-        }//end of get getComplaintReferenceDetailsView
-        
     
-        //method to capasubmit with file upload
-        rcaDIAddEditSubmitWithFileUpload(rcaFormData: any) {        
-            this.actionUrl = AppUrlsConst.RCA_ADD_EDIT_URL;        
-            return this.http.patch(this.actionUrl, rcaFormData)
+    
+        //method to ca det submit in detail table
+        rcaDIAddEditSubmitWithFileUpload(caData: any) {        
+            this.actionUrl = AppUrlsConst.COMPLAIN_DETAIL_TABLE_ADD_URL;        
+            return this.http.post(this.actionUrl, caData)
             .map(this.successCallback)
             .catch(this.errorCallBack);
-        }//end of method capasubmit with file upload
+        }//end of method 
 
         private successCallback(res: Response) {
             return res.json();
