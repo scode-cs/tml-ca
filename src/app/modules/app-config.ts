@@ -152,7 +152,10 @@ export const AppUrlsConst: any = {
     //complain view url 
     COMPLAIN_VIEW_HEADER_URL: URL_PATH + 'api/complaintview/viewcomplaintheader',//di complain view from header table
     COMPLAIN_VIEW_DETAIL_URL: URL_PATH + 'api/complaintview/viewcomplaintdetail'//di complain view from detail table
+    COMPLAIN_VIEW_DETAIL_URL: URL_PATH + 'api/complaintview/viewcomplaintdetail',//di complain view from detail table
 
+    COMPLAIN_HEADER_TABLE_ADD_URL: URL_PATH + 'api/complaint/complaintheader',//HEADER TABLE ADD
+    COMPLAIN_DETAIL_TABLE_ADD_URL: URL_PATH + 'api/complaint/postcomplaint'//detail table add
 }
 
 export const WebServiceConst: any = {
