@@ -17,7 +17,8 @@ import { SessionErrorService } from '../../../shared/services/session-error.serv
 import { NgbdComplaintReferenceNoModalComponent } from './complaint-reference-no-modal/complaint-reference-no-modal.component';
 import { DIPolygonModel } from '../../../shared/components/process-flow/complain-di-polygon.model';
 import { InvestigationReportDIConfigModel } from '../../models/investigation-report-di-config.model';
-@Component({
+import { InvestigationDataModel } from '../../models/investigation-data-model';
+@Component({ 
   selector: 'ispl-investigation-report-di-add-form',
   templateUrl: 'investigation-report-di-add.component.html',
   // templateUrl: 'test.html',
@@ -38,7 +39,11 @@ export class InvestigationReportDiComponent implements OnInit {
   public complaintStatus: number;//to fetch complaint status from route
   public invReportDeatils: any[] = [];// to store invReport deatils from response
   public invReportIndex: number = 0;
-
+  public ivtReportDataList: any = { unloadingEquipmentList: '', lubricantUsedList: '', layingPositionList: '', jointingTypeList: '' };
+  public unloadingEquipmentList: any[] = [];
+  public lubricantUsedList: any[] = [];
+  public layingPositionList: any[] = [];
+  public jointingTypeList: any[] = [];
 
   //creating a FormGroup for Investigation Report
   public invReportFormGroup = new FormGroup({
@@ -88,6 +93,10 @@ export class InvestigationReportDiComponent implements OnInit {
     this.getRouteParam();
     this.getInvestigationViewDetailsWSCall();
     this.invReportTable = new InvestigationReportDIConfigModel().prevInvReportHeader;
+    this.ivtReportDataList.unloadingEquipmentList = new InvestigationDataModel().unloadingEquipmentList;
+    this.ivtReportDataList.lubricantUsedList = new InvestigationDataModel().lubricantUsedList;
+    this.ivtReportDataList.layingPositionList = new InvestigationDataModel().layingPositionList;
+    this.ivtReportDataList.jointingTypeList = new InvestigationDataModel().jointingTypeList;
   }//end of onInit
 
   //start method getRouteParam to get route parameter
@@ -214,4 +223,89 @@ export class InvestigationReportDiComponent implements OnInit {
       } // end of else
     }//end of else if of sampleCollected
   }//end of method onRadioClick
+
+  onclickInvoiceReportDataSelect(paramId, paramName){
+     if(paramName === "unloadingEquipmentList"){
+        if(this.unloadingEquipmentList.length === 0){
+          this.unloadingEquipmentList.push(paramId);
+        }else {
+          let indexCount: number = 0;
+          let removeFlag: boolean = false;
+          for (let data of this.unloadingEquipmentList) {
+            if (data == paramId) {
+              this.unloadingEquipmentList.splice(indexCount, 1);
+              removeFlag = true;
+              break;
+            }//end of if
+            indexCount++;
+          }//end of for
+          console.log("after pushing unloadingEquipmentList items : ", this.unloadingEquipmentList);
+          if (!removeFlag) {
+            this.unloadingEquipmentList.push(paramId);
+          }//end of if
+          console.log("after pushing unloadingEquipmentList items : ", this.unloadingEquipmentList);
+        }//end of else
+      }else if(paramName === "lubricantUsedList"){
+        if(this.lubricantUsedList.length === 0){
+          this.lubricantUsedList.push(paramId);
+        }else {
+          let indexCount: number = 0;
+          let removeFlag: boolean = false;
+          for (let data of this.lubricantUsedList) {
+            if (data == paramId) {
+              this.lubricantUsedList.splice(indexCount, 1);
+              removeFlag = true;
+              break;
+            }//end of if
+            indexCount++;
+          }//end of for
+          console.log("after pushing lubricantUsedList items : ", this.lubricantUsedList);
+          if (!removeFlag) {
+            this.unloadingEquipmentList.push(paramId);
+          }//end of if
+          console.log("after pushing lubricantUsedList items : ", this.lubricantUsedList);
+        }//end of else
+      }else if(paramName === "layingPositionList"){
+        if(this.layingPositionList.length === 0){
+          this.layingPositionList.push(paramId);
+        }else {
+          let indexCount: number = 0;
+          let removeFlag: boolean = false;
+          for (let data of this.layingPositionList) {
+            if (data == paramId) {
+              this.layingPositionList.splice(indexCount, 1);
+              removeFlag = true;
+              break;
+            }//end of if
+            indexCount++;
+          }//end of for
+          console.log("after pushing layingPositionList items : ", this.layingPositionList);
+          if (!removeFlag) {
+            this.unloadingEquipmentList.push(paramId);
+          }//end of if
+          console.log("after pushing layingPositionList items : ", this.layingPositionList);
+        }//end of else
+      }else{
+        if(this.jointingTypeList.length === 0){
+          this.jointingTypeList.push(paramId);
+        }else {
+          let indexCount: number = 0;
+          let removeFlag: boolean = false;
+          for (let data of this.jointingTypeList) {
+            if (data == paramId) {
+              this.jointingTypeList.splice(indexCount, 1);
+              removeFlag = true;
+              break;
+            }//end of if
+            indexCount++;
+          }//end of for
+          console.log("after pushing jointingTypeList items : ", this.jointingTypeList);
+          if (!removeFlag) {
+            this.jointingTypeList.push(paramId);
+          }//end of if
+          console.log("after pushing jointingTypeList items : ", this.jointingTypeList);
+        }//end of else
+      }//end of else
+    }//end of method
+  
 }//end of class
