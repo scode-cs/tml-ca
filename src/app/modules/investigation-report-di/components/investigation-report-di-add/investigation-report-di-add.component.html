@@ -205,8 +205,8 @@
               <table class="table-style">
                 <thead>
                   <tr class="th-style">
-                    <td class="hideextra" *ngFor="let invRprt of  invReportTable" [ngClass]="invRprt.headerClass">
-                      {{ invRprt.headerDesc }}
+                    <td class="hideextra" *ngFor="let invItem of  itemGridTable" [ngClass]="invItem.headerClass" >
+                      {{ invItem.headerDesc }}
                     </td>
                   </tr>
                 </thead>
@@ -215,6 +215,24 @@
                     <td class="td-style-first hideextra">
                       &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Add Item(s)
                       <i style="font-size:16px;cursor: pointer;" title="Click here" class="fa fa-plus-circle"></i>
+                    </td>
+                    <td class="td-style">
+
+                    </td>
+                    <td class="td-style">
+
+                    </td>
+                    <td class="td-style">
+
+                    </td>
+                    <td class="td-style">
+
+                    </td>
+                    <td class="td-style">
+
+                    </td>
+                    <td class="td-style">
+
                     </td>
                     <td class="td-style">
 
@@ -243,7 +261,7 @@
               <ul class="list-group ul-style">
                 <li class="list-group-item li-style" *ngFor="let unloadingEquipment of ivtReportDataList.unloadingEquipmentList">
                   <label class="custom-control custom-checkbox">
-                    <input type="checkbox" class="custom-control-input" formControlName="unloadingEquipment" [checked]="unloadingEquipment.checked" (click)="onclickInvoiceReportDataSelect(unloadingEquipment.id, unloadingEquipment.arrName)"
+                    <input type="checkbox" class="custom-control-input" [checked]="unloadingEquipment.checked" (click)="onclickUnloadingEquipmentSelect(unloadingEquipment.id)"
                     />
                     <span class="custom-control-indicator"></span>
                     <span class="custom-control-description">
@@ -261,7 +279,7 @@
               <ul class="list-group ul-style">
                 <li class="list-group-item li-style" *ngFor="let lubricantUsed of ivtReportDataList.lubricantUsedList">
                   <label class="custom-control custom-checkbox">
-                    <input type="checkbox" class="custom-control-input" formControlName="lubricantUsed" [checked]="lubricantUsed.checked" (click)="onclickInvoiceReportDataSelect(lubricantUsed.id, lubricantUsed.arrName)"
+                    <input type="checkbox" class="custom-control-input" [checked]="lubricantUsed.checked" (click)="onclickLubricantUsedSelect(lubricantUsed.id)"
                     />
                     <span class="custom-control-indicator"></span>
                     <span class="custom-control-description">
@@ -279,7 +297,7 @@
               <ul class="list-group ul-style">
                 <li class="list-group-item li-style" *ngFor="let layingPosition of ivtReportDataList.layingPositionList">
                   <label class="custom-control custom-checkbox">
-                    <input type="checkbox" class="custom-control-input" formControlName="layingPosiion" [checked]="layingPosition.checked" (click)="onclickInvoiceReportDataSelect(layingPosition.id, layingPosition.arrName)"
+                    <input type="checkbox" class="custom-control-input" [checked]="layingPosition.checked" (click)="onclickLayingPositionSelect(layingPosition.id)"
                     />
                     <span class="custom-control-indicator"></span>
                     <span class="custom-control-description">
@@ -297,7 +315,7 @@
               <ul class="list-group ul-style">
                 <li class="list-group-item li-style" *ngFor="let jointingType of ivtReportDataList.jointingTypeList">
                   <label class="custom-control custom-checkbox">
-                    <input type="checkbox" class="custom-control-input" formControlName="jointingtype" [checked]="jointingType.checked" (click)="onclickInvoiceReportDataSelect(jointingType.id, jointingType.arrName)"
+                    <input type="checkbox" class="custom-control-input" [checked]="jointingType.checked" (click)="onclickJointingTypeListSelect(jointingType.id)"
                     />
                     <span class="custom-control-indicator"></span>
                     <span class="custom-control-description">
