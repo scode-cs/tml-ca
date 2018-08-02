@@ -35,11 +35,9 @@ export class ComplaintReferenceNoSearchComponent implements OnInit {
   public searchFormGroup: FormGroup;
 
   //for busy spinner
-  public busySpinner: any = {
-    itemHeaderSpinner: true,//for grid itemHeaders
-    gridBusy: true,//for grid
-    busy: true
-  };
+  // public busySpinner: any = {
+  //   busy: true
+  // };
 
   constructor(
     private formBuilder: FormBuilder,
@@ -66,29 +64,7 @@ export class ComplaintReferenceNoSearchComponent implements OnInit {
       this.compRefNo = "";
     }
     console.log(" this.compRefNo ===>",this.compRefNo);
-
-
-    let itemNos: any = {};
-    itemNos = this.complaintDIInvoiceDetailsService.selectedItemDetails;
-    let items: any[] = itemNos.items;
-
-    for(let selItm of items){
-      this.selectedInvDet.push(selItm);
-    }
-
-    if (this.selectedInvDet.length > 0) {
-        for (let selItm of this.selectedInvDet) {
-            if (selItm.customerCode != this.custCode) {
-                this.selectedInvDet = [];
-                break;
-            }
-        }
-    }
-    
-    this.getCustomerInvDet();
-   
-
-
+ 
   }//end of onInit
 
 
@@ -97,13 +73,9 @@ export class ComplaintReferenceNoSearchComponent implements OnInit {
     this.complaintDIRegisterDataService.getInvoiceDetails(invoiceNo).
       subscribe(res => {
         this.invDetailsItemsHeader = res.invoiceDetails.itemsHeader;
-        this.busySpinner.itemHeaderSpinner = false;//to stop busy spinner
-        this.updateBusySpinner();//to stop busy spinner
       },
       err => {
         console.log(err);
-        this.busySpinner.itemHeaderSpinner = false;//to stop busy spinner
-        this.updateBusySpinner();//to stop busy spinner
         this.sessionErrorService.routeToLogin(err._body);
       });
   }//end method of getItemsVal
@@ -127,23 +99,12 @@ export class ComplaintReferenceNoSearchComponent implements OnInit {
       }//end of else if      
       console.log(" this.allInvDetails ========> ", this.allInvDetails);
       console.log(" complaintPIInvoiceDetails ", this.complaintPIInvoiceDetails);
-      this.busySpinner.gridBusy = false;//to stop the spinner
-      this.updateBusySpinner();//method to stop spinner
       },
       err => {
         console.log(err);
-        this.busySpinner.gridBusy = false;//to stop the spinner
-        this.updateBusySpinner();//method to stop spinner
         this.sessionErrorService.routeToLogin(err._body);
       });
   }//end of method 
-
-  //start method updateBusySpinner to stop the spinner
-  private updateBusySpinner(){
-    if(this.busySpinner.gridBusy == false && this.busySpinner.itemHeaderSpinner == false){
-      this.busySpinner.busy = false;
-    }//end of if
-  }//end of method update busy spinner
 
   //start method for getting distinct items row
   private selectedItemDetails(invoiceNo: string, itemCode: string, customerCode: string): boolean {
