@@ -18,7 +18,7 @@ import { NgbdComplaintReferenceNoModalComponent } from './complaint-reference-no
 import { DIPolygonModel } from '../../../shared/components/process-flow/complain-di-polygon.model';
 import { InvestigationReportDIConfigModel } from '../../models/investigation-report-di-config.model';
 import { InvestigationDataModel } from '../../models/investigation-data-model';
-@Component({ 
+@Component({
   selector: 'ispl-investigation-report-di-add-form',
   templateUrl: 'investigation-report-di-add.component.html',
   // templateUrl: 'test.html',
@@ -36,6 +36,7 @@ export class InvestigationReportDiComponent implements OnInit {
   public title: string = 'Add Investigation Report';//set the title;
 
   public invReportTable: any[] = [];//to store prev inv report
+  public itemGridTable: any[] = [];//to store item grid
   public complaintStatus: number;//to fetch complaint status from route
   public invReportDeatils: any[] = [];// to store invReport deatils from response
   public invReportIndex: number = 0;
@@ -52,11 +53,7 @@ export class InvestigationReportDiComponent implements OnInit {
     siteVisitDt: new FormControl(''),
     sampleCollected: new FormControl('', Validators.required),
     sampleCollectedDate: new FormControl(''),
-    investigationReportDate: new FormControl(''),
-    unloadingEquipment: new FormControl(''),
-    lubricantUsed: new FormControl(''),
-    layingPosiion: new FormControl(''),
-    jointingtype: new FormControl('')
+    investigationReportDate: new FormControl('')
   });
 
 
@@ -93,6 +90,7 @@ export class InvestigationReportDiComponent implements OnInit {
     this.getRouteParam();
     this.getInvestigationViewDetailsWSCall();
     this.invReportTable = new InvestigationReportDIConfigModel().prevInvReportHeader;
+    this.itemGridTable = new InvestigationReportDIConfigModel().invItemGridHeader;
     this.ivtReportDataList.unloadingEquipmentList = new InvestigationDataModel().unloadingEquipmentList;
     this.ivtReportDataList.lubricantUsedList = new InvestigationDataModel().lubricantUsedList;
     this.ivtReportDataList.layingPositionList = new InvestigationDataModel().layingPositionList;
@@ -164,6 +162,31 @@ export class InvestigationReportDiComponent implements OnInit {
   //on click investigationReportDISubmit method
   public investigationReportDISubmit(): void {
     console.log("invReportFormGroup: ", this.invReportFormGroup.value);
+    
+    let unloadingEquipment: string = "";
+    this.unloadingEquipmentList.forEach(unloadingEquip => {
+      unloadingEquipment = unloadingEquipment ? (unloadingEquipment + "," + unloadingEquip) : unloadingEquip;
+    });
+    console.log("unloadingEquipment ======== ", unloadingEquipment);
+
+    let lubricantUsed: string = "";
+    this.lubricantUsedList.forEach(lbUsed => {
+      lubricantUsed = lubricantUsed ? (lubricantUsed + "," + lbUsed) : lbUsed;
+    });
+    console.log("lubricantUsed ======== ", lubricantUsed);
+
+    let layingPosition: string = "";
+    this.layingPositionList.forEach(layPos => {
+      layingPosition = layingPosition ? (layingPosition + "," + layPos) : layPos;
+    });
+    console.log("layingPosition ======== ", layingPosition);
+
+    let jointingType: string = "";
+    this.jointingTypeList.forEach(jType => {
+      jointingType = jointingType ? (jointingType + "," + jType) : jType;
+    });
+    console.log("jointingType ======== ", jointingType);
+
   }//end of method investigationReportDISubmit
 
   // start method of deleteResErrorMsgOnClick
@@ -224,88 +247,97 @@ export class InvestigationReportDiComponent implements OnInit {
     }//end of else if of sampleCollected
   }//end of method onRadioClick
 
-  onclickInvoiceReportDataSelect(paramId, paramName){
-     if(paramName === "unloadingEquipmentList"){
-        if(this.unloadingEquipmentList.length === 0){
-          this.unloadingEquipmentList.push(paramId);
-        }else {
-          let indexCount: number = 0;
-          let removeFlag: boolean = false;
-          for (let data of this.unloadingEquipmentList) {
-            if (data == paramId) {
-              this.unloadingEquipmentList.splice(indexCount, 1);
-              removeFlag = true;
-              break;
-            }//end of if
-            indexCount++;
-          }//end of for
-          console.log("after pushing unloadingEquipmentList items : ", this.unloadingEquipmentList);
-          if (!removeFlag) {
-            this.unloadingEquipmentList.push(paramId);
-          }//end of if
-          console.log("after pushing unloadingEquipmentList items : ", this.unloadingEquipmentList);
-        }//end of else
-      }else if(paramName === "lubricantUsedList"){
-        if(this.lubricantUsedList.length === 0){
-          this.lubricantUsedList.push(paramId);
-        }else {
-          let indexCount: number = 0;
-          let removeFlag: boolean = false;
-          for (let data of this.lubricantUsedList) {
-            if (data == paramId) {
-              this.lubricantUsedList.splice(indexCount, 1);
-              removeFlag = true;
-              break;
-            }//end of if
-            indexCount++;
-          }//end of for
-          console.log("after pushing lubricantUsedList items : ", this.lubricantUsedList);
-          if (!removeFlag) {
-            this.unloadingEquipmentList.push(paramId);
-          }//end of if
-          console.log("after pushing lubricantUsedList items : ", this.lubricantUsedList);
-        }//end of else
-      }else if(paramName === "layingPositionList"){
-        if(this.layingPositionList.length === 0){
-          this.layingPositionList.push(paramId);
-        }else {
-          let indexCount: number = 0;
-          let removeFlag: boolean = false;
-          for (let data of this.layingPositionList) {
-            if (data == paramId) {
-              this.layingPositionList.splice(indexCount, 1);
-              removeFlag = true;
-              break;
-            }//end of if
-            indexCount++;
-          }//end of for
-          console.log("after pushing layingPositionList items : ", this.layingPositionList);
-          if (!removeFlag) {
-            this.unloadingEquipmentList.push(paramId);
-          }//end of if
-          console.log("after pushing layingPositionList items : ", this.layingPositionList);
-        }//end of else
-      }else{
-        if(this.jointingTypeList.length === 0){
-          this.jointingTypeList.push(paramId);
-        }else {
-          let indexCount: number = 0;
-          let removeFlag: boolean = false;
-          for (let data of this.jointingTypeList) {
-            if (data == paramId) {
-              this.jointingTypeList.splice(indexCount, 1);
-              removeFlag = true;
-              break;
-            }//end of if
-            indexCount++;
-          }//end of for
-          console.log("after pushing jointingTypeList items : ", this.jointingTypeList);
-          if (!removeFlag) {
-            this.jointingTypeList.push(paramId);
-          }//end of if
-          console.log("after pushing jointingTypeList items : ", this.jointingTypeList);
-        }//end of else
-      }//end of else
-    }//end of method
-  
+  //start method of onclickUnloadingEquipmentSelect
+  public onclickUnloadingEquipmentSelect(paramId) {
+    if (this.unloadingEquipmentList.length === 0) {
+      this.unloadingEquipmentList.push(paramId);
+    } else {
+      let indexCount: number = 0;
+      let removeFlag: boolean = false;
+      for (let data of this.unloadingEquipmentList) {
+        if (data == paramId) {
+          this.unloadingEquipmentList.splice(indexCount, 1);
+          removeFlag = true;
+          break;
+        }//end of if
+        indexCount++;
+      }//end of for
+      console.log("after pushing unloadingEquipmentList items : ", this.unloadingEquipmentList);
+      if (!removeFlag) {
+        this.unloadingEquipmentList.push(paramId);
+      }//end of if
+      console.log("after pushing unloadingEquipmentList items : ", this.unloadingEquipmentList);
+    }//end of else
+
+  }//end of onclickUnloadingEquipmentSelect
+
+  // start method of onclickLubricantUsedSelect
+  public onclickLubricantUsedSelect(paramId) {
+    if (this.lubricantUsedList.length === 0) {
+      this.lubricantUsedList.push(paramId);
+    } else {
+      let indexCount: number = 0;
+      let removeFlag: boolean = false;
+      for (let data of this.lubricantUsedList) {
+        if (data == paramId) {
+          this.lubricantUsedList.splice(indexCount, 1);
+          removeFlag = true;
+          break;
+        }//end of if
+        indexCount++;
+      }//end of for
+      console.log("after pushing lubricantUsedList items : ", this.lubricantUsedList);
+      if (!removeFlag) {
+        this.lubricantUsedList.push(paramId);
+      }//end of if
+      console.log("after pushing lubricantUsedList items : ", this.lubricantUsedList);
+    }//end of else
+  }//end method of onclickLubricantUsedSelect
+
+  // start method onclickLayingPositionSelect
+  public onclickLayingPositionSelect(paramId) {
+    if (this.layingPositionList.length === 0) {
+      this.layingPositionList.push(paramId);
+    } else {
+      let indexCount: number = 0;
+      let removeFlag: boolean = false;
+      for (let data of this.layingPositionList) {
+        if (data == paramId) {
+          this.layingPositionList.splice(indexCount, 1);
+          removeFlag = true;
+          break;
+        }//end of if
+        indexCount++;
+      }//end of for
+      console.log("after pushing layingPositionList items : ", this.layingPositionList);
+      if (!removeFlag) {
+        this.layingPositionList.push(paramId);
+      }//end of if
+      console.log("after pushing layingPositionList items : ", this.layingPositionList);
+    }//end of else
+  }//end method of onclickLayingPositionSelect
+
+  // start method onclickJointingTypeListSelect
+  public onclickJointingTypeListSelect(paramId) {
+    if (this.jointingTypeList.length === 0) {
+      this.jointingTypeList.push(paramId);
+    } else {
+      let indexCount: number = 0;
+      let removeFlag: boolean = false;
+      for (let data of this.jointingTypeList) {
+        if (data == paramId) {
+          this.jointingTypeList.splice(indexCount, 1);
+          removeFlag = true;
+          break;
+        }//end of if
+        indexCount++;
+      }//end of for
+      console.log("after pushing jointingTypeList items : ", this.jointingTypeList);
+      if (!removeFlag) {
+        this.jointingTypeList.push(paramId);
+      }//end of if
+      console.log("after pushing jointingTypeList items : ", this.jointingTypeList);
+    }//end of else
+  }//end of method onclickJointingTypeListSelect
+
 }//end of class

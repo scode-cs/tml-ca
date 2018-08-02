@@ -101,10 +101,6 @@ export class InvestigationReportDiViewDetailsComponent implements OnInit {
     this.invReportVar.sampleCollectedValue = formData.sampleCollected;
     this.invReportFormGroup.controls['sampleCollected'].setValue(formData.sampleCollected);
     this.invReportFormGroup.controls['sampleCollectedDate'].setValue(this.datePipe.transform(formData.sampleCollectedDate, 'dd-MMM-yyyy'));
-    this.invReportFormGroup.controls['unloadingEquipment'].setValue(formData.unloadingEquipement);
-    this.invReportFormGroup.controls['layingPosiion'].setValue(formData.layingPosition);
-    this.invReportFormGroup.controls['lubricantUsed'].setValue(formData.lubricantUsed);
-    this.invReportFormGroup.controls['jointingtype'].setValue(formData.jointingType);
     this.invReportFormGroup.controls['investigationReportDate'].setValue(this.datePipe.transform(formData.investigationReportDate, 'dd-MMM-yyyy'));
   }//end method setFormValue
 
