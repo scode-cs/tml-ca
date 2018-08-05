@@ -153,6 +153,8 @@ export class ComplaintPIRegisterComponent implements OnInit {
     private localStorageService: LocalStorageService,
     private sessionErrorService: SessionErrorService,
     private modalService: NgbModal) {
+
+   
   }
 
   ngOnInit(): void {
