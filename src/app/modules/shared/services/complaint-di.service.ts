@@ -9,6 +9,7 @@ import 'rxjs/add/operator/map';
 //import { LocalStorageService } from '../../../shared/services/local-storage.service';
 import { AppUrlsConst, WebServiceConst } from '../../app-config';
 import { LocalStorageService } from './local-storage.service';
+import { ComplaintDIHeaderParamModel } from '../models/complaint-di-header-param.model';
 
 @Injectable()
 export class ComplaintDIService {
@@ -35,11 +36,24 @@ export class ComplaintDIService {
  */
   public postHeader(complainHeader: any) {
     let headers: Headers = this.configService();
-    let actionUrl = AppUrlsConst.CMP_REG_RCPT_MODE_SELECT_VAL;
+    let actionUrl = AppUrlsConst.COMPLAIN_HEADER_TABLE_ADD_URL;
 
     return this.http.post(actionUrl, complainHeader, { headers: headers })
         .map((res: Response) => { return res.json() })
         .catch((error: Response) => { return Observable.throw(error) });
+  }
+  /**
+   * 
+   * @param complainHeader 
+   */
+  public getHeader(complainHeaderParam: ComplaintDIHeaderParamModel){
+    let headers: Headers = this.configService();
+    let actionUrl = AppUrlsConst.COMPLAIN_HEADER_TABLE_ADD_URL;
+
+    return this.http.get(actionUrl+complainHeaderParam, { headers: headers })
+    .map((res: Response) => { return res.json() })
+    .catch((error: Response) => { return Observable.throw(error) });
+
   }
 /**
  * 
@@ -47,7 +61,7 @@ export class ComplaintDIService {
  */
   public putHeader(complainHeader:any) {
     let headers: Headers = this.configService();
-    let actionUrl = AppUrlsConst.CMP_REG_RCPT_MODE_SELECT_VAL;
+    let actionUrl = AppUrlsConst.COMPLAIN_HEADER_TABLE_ADD_URL;
 
     return this.http.put(actionUrl, complainHeader, { headers: headers })
         .map((res: Response) => { return res.json() })
@@ -59,7 +73,7 @@ export class ComplaintDIService {
  */
   public postDetail(complainDetail: any) {
     let headers: Headers = this.configService();
-    let actionUrl = AppUrlsConst.CMP_REG_RCPT_MODE_SELECT_VAL;
+    let actionUrl = AppUrlsConst.COMPLAIN_DETAIL_TABLE_ADD_URL;
 
     return this.http.post(actionUrl, complainDetail, { headers: headers })
         .map((res: Response) => { return res.json() })
