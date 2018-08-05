@@ -14,11 +14,12 @@ import { CADIViewDetailsComponent } from './components/ca-di-view-details/ca-di-
     CommonModule,
     BrowserModule,
     BusySpinnerModule,
-    SharedModule
+    SharedModule,
+    
   ],
   declarations: [
     CADIAddEditComponent,//add/edit
-    CADIViewDetailsComponent//view
+    CADIViewDetailsComponent,//view
   ],
   
   exports: [
@@ -28,6 +29,6 @@ import { CADIViewDetailsComponent } from './components/ca-di-view-details/ca-di-
   providers : [    
     DatePipe,  
     CADIService//service  
-  ]
+  ],
 })
 export class CADIModule { }

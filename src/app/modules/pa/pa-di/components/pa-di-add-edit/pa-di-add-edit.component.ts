@@ -105,7 +105,7 @@ export class PADIAddEditComponent implements OnInit {
 
   //method of submit modify allocate complaint
   public onPADIAddEditSubmit() {
-    console.log("form value of ca DI add/modify submit : ", this.paDIAddEditFormGroup.value);
+    console.log("form value of pa DI add/modify submit : ", this.paDIAddEditFormGroup.value);
   } //end of method submit modify capa actn pi
 
   //for clicking cancel button this method will be invoked

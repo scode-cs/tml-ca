@@ -3,11 +3,13 @@ import { FormGroup, FormBuilder, Validators, FormControl } from '@angular/forms'
 import { Router, ActivatedRoute } from '@angular/router';
 import { Subscription } from 'rxjs/Subscription';//to get route param
 import { DatePipe } from '@angular/common';
+import { NgbModal, NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
+import { NgbdModalComponent } from '../../../../widget/modal/components/modal-component';
 import { ROUTE_PATHS } from '../../../../router/router-paths';
 import { LocalStorageService } from "../../../../shared/services/local-storage.service";
 import { SessionErrorService } from "../../../../shared/services/session-error.service";
 import { CADIService } from "../../services/ca-di-add-edit.service";
-
+import { ComplaintDIService } from '../../../../shared/services/complaint-di.service';
 @Component({
     selector: 'ispl-ca-di-add-edit',
     templateUrl: 'ca-di-add-edit.component.html',
@@ -43,9 +45,11 @@ import { CADIService } from "../../services/ca-di-add-edit.service";
         private router: Router,
         private activatedroute: ActivatedRoute,
         private datePipe: DatePipe,//for date
+        private modalService: NgbModal,//modal
         private localStorageService: LocalStorageService,
         private sessionErrorService: SessionErrorService,
-        private caDIService: CADIService
+        private caDIService: CADIService,
+        private complaintDIService: ComplaintDIService,
     ){
       this.buildForm();//build form
     }//end of constructor
@@ -93,32 +97,94 @@ import { CADIService } from "../../services/ca-di-add-edit.service";
     let currentDate: string = this.datePipe.transform(date, 'yyyy-MM-dd');
     this.caDIAddEditFormGroup.controls["caAddEditDate"].setValue(currentDate);
   }//end of method
-  
-   //file upload event  
-   public fileChangeCADIAddEdit(event) {
-    this.fileData = new FormData();
-    this.totalFileSize = 0;
-    this.fileList = event.target.files;
-    if (this.fileList.length > 0) {
-      for (let i: number = 0; i < this.fileList.length; i++) {
-        let file: File = this.fileList[i];
-        this.fileData.append('uploadFile' + i.toString(), file, file.name);
-        this.totalFileSize = this.totalFileSize + file.size;
-        console.log("this.totalFileSize:::::::::::", this.totalFileSize);
-      }//end of for
-    }//end of if
-  }//end of filechange method 
-  
-   //method of submit modify allocate complaint
-   public onCADIAddEditSubmit() {
-    console.log("form value of ca DI add/modify submit : ", this.caDIAddEditFormGroup.value);
-    
-  } //end of method submit modify capa actn pi
+
+  //onOpenModal for opening modal from modalService
+  private onOpenModal(modalMessage) {
+    const modalRef = this.modalService.open(NgbdModalComponent);
+    modalRef.componentInstance.modalTitle = 'Information';
+    modalRef.componentInstance.modalMessage = modalMessage;//"User Id "+ manageProfileUserId + " updated successfully."
+  }
+  //end of method onOpenModal
 
   
+  
+  //method of submit modify allocate complaint
+  public onCADIAddEditSubmit() {
+    this.busySpinner = true;//to load spinner
+    console.log("form value of ca DI add/modify submit : ", this.caDIAddEditFormGroup.value);
+    let caWsInfo: any= {};
+    caWsInfo.activityId = 60;
+    caWsInfo.plantType = this.localStorageService.user.plantType; 
+     caWsInfo.action = "";
+     let caJsonForHeaderTable: any = {};
+     caJsonForHeaderTable.lastActivityId = caWsInfo.activityId;
+     caJsonForHeaderTable.userId = this.localStorageService.user.userId;
+     caJsonForHeaderTable.complaintReferenceNo = this.caDIAddEditFormGroup.value.complaintReferenceNo;
+     console.log("ca json for header table::",caJsonForHeaderTable);
+     let caJsonForDetTable: any = {};
+     caJsonForDetTable.activityId = caWsInfo.activityId;
+     caJsonForDetTable.complaintReferenceNo = this.caDIAddEditFormGroup.value.complaintReferenceNo;
+     caJsonForDetTable.correctiveAction = this.caDIAddEditFormGroup.value.caAddEditDetails;
+     caJsonForDetTable.correctiveActionDate = this.caDIAddEditFormGroup.value.caAddEditDate;
+     caJsonForDetTable.userId = this.localStorageService.user.userId;
+     console.log("ca json for Det table::",caJsonForDetTable);
+     this.complaintDIService.putHeader(caJsonForHeaderTable, caWsInfo.plantType, caWsInfo.action).
+     subscribe(res => {
+       if (res.msgType === 'Info') {
+          this.complaintDIService.postDetail(caJsonForDetTable, caWsInfo.plantType, caWsInfo.action).
+          subscribe(res => {
+            if (res.msgType === 'Info') {
+                console.log(" ca Det submitted successfully");
+                this.onOpenModal(res.msg);//open modal to show the msg
+                this.router.navigate([ROUTE_PATHS.RouteHome]);
+              }else{
+                this.errorMsgObj.errMsgShowFlag = true;
+                this.errorMsgObj.errorMsg = res.msg;
+              }
+            },
+              err => {
+                console.log(err);
+                this.errorMsgObj.errMsgShowFlag = true;
+                this.errorMsgObj.errorMsg = err.msg;
+                this.sessionErrorService.routeToLogin(err._body);
+              });
+            }else{
+              this.errorMsgObj.errMsgShowFlag = true;
+              this.errorMsgObj.errorMsg = res.msg;
+            }
+          },
+          err => {
+            console.log(err);
+            this.errorMsgObj.errMsgShowFlag = true;
+            this.errorMsgObj.errorMsg = err.msg;
+            this.sessionErrorService.routeToLogin(err._body);
+          });
+          this.busySpinner = false;//stop spinner
+        } //end of method submit modify capa actn pi
+        
+        //file upload event  
+        public fileChangeCADIAddEdit(event) {
+         this.fileData = new FormData();
+         this.totalFileSize = 0;
+         this.fileList = event.target.files;
+         if (this.fileList.length > 0) {
+           for (let i: number = 0; i < this.fileList.length; i++) {
+             let file: File = this.fileList[i];
+             this.fileData.append('uploadFile' + i.toString(), file, file.name);
+             this.totalFileSize = this.totalFileSize + file.size;
+             console.log("this.totalFileSize:::::::::::", this.totalFileSize);
+           }//end of for
+         }//end of if
+       }//end of filechange method 
+        
   //for clicking cancel button this method will be invoked
   public onCancel(): void {
     this.router.navigate([ROUTE_PATHS.RouteHome]);
   }// end of onCancel method
+  //method to delete error msg
+  public deleteResErrorMsgOnClick() {
+    this.errorMsgObj.errMsgShowFlag = false;
+    this.errorMsgObj.errorMsg = "";
+  }//end of method delete error msg
 
   }//end of class
