@@ -33,6 +33,9 @@ export class ComplaintDIRegisterComponent implements OnInit {
     batchNoInInvoiceDetailsLength: this.localStorageService.dbSettings.batchNoInInvoiceDetails
   };
 
+  //activity Id for complain register
+  private activityId: number = 10;
+
   //to store customer details
   private empInfo: any = {
     empId: this.localStorageService.user.employeeId,
@@ -780,6 +783,29 @@ export class ComplaintDIRegisterComponent implements OnInit {
   //for clicking submit button this method will be invoked
   public onComplainSubmit(): void {
     console.log("form value::",this.complaintRegisterFormGroup.value);
+    let complainHeaderJson: any = {};
+    complainHeaderJson.lastActivityId = this.activityId;
+    complainHeaderJson.userId = this.localStorageService.user.userId;
+    console.log(" complainHeaderJson =========",complainHeaderJson);
+    let complainDetailJson: any = {};
+    complainDetailJson.activityId = this.activityId;
+    complainDetailJson.modeId = this.complaintRegisterFormGroup.value.modeId;
+    complainDetailJson.complaintReferenceNo = "";
+    complainDetailJson.siteVisit = this.siteVisitValue;
+    complainDetailJson.siteVisitByDepartmentName = this.complaintRegisterFormGroup.value.siteVisitByDepartmentName;
+    complainDetailJson.complaintReferenceDt = this.complaintRegisterFormGroup.value.complaintReferenceDt;
+    complainDetailJson.loggedOnDt = this.complaintRegisterFormGroup.value.loggedOnDt;
+    complainDetailJson.contactPersonName = this.complaintRegisterFormGroup.value.contactPersonName;
+    complainDetailJson.contactPersonPhoneNo = this.complaintRegisterFormGroup.value.contactPersonPhoneNo;
+    complainDetailJson.contactPersonEmailId = this.complaintRegisterFormGroup.value.contactPersonEmailId;
+    complainDetailJson.loggedBy = this.empInfo.empId;
+    complainDetailJson.complaintTypeId =  parseInt(this.complaintRegisterFormGroup.value.complaintTypeId);
+    complainDetailJson.natureOfComplaintId =  parseInt(this.complaintRegisterFormGroup.value.natureOfComplaintId);
+    complainDetailJson.complaintDetails = this.complaintRegisterFormGroup.value.complaintDetails;
+    complainDetailJson.custCode = this.custInfo.custCode;
+    complainDetailJson.userId = this.localStorageService.user.userId;
+    console.log(" complainDetailJson =========",complainDetailJson);
+
   }//end of method complainregDiSubmit  
 
   //onOpenModal for opening modal from modalService
