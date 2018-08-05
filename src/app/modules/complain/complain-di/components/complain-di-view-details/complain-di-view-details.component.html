@@ -47,7 +47,7 @@
 
     <div class="complaint-form">
       <!--form for complaintRegisterFormGroup-->
-      <form [formGroup]="complaintRegisterFormGroup" autocomplete="off">
+      <form  *ngIf="complaintRegisterFormGroup" [formGroup]="complaintRegisterFormGroup" autocomplete="off">
         <!-- start div for row complaint-form class-->
         <div class="row">
           <!-- start div for complaint reference no-->
@@ -265,37 +265,22 @@
 
           <!--start div for radio button-->
           <div class="form-group col-xs-12 col-sm-6 col-md-6 col-lg-4">
-            <ng-container *ngIf="siteVisitValue === 'Y'">
+            <ng-container >
               <div style="display:inline-block;">
                 <label>Site Visit Required</label>
                 <label class="control control--radio">Yes
-                  <input type="radio" name="siteVisit" formControlName="siteVisit" [checked]=true/>
+                  <input type="radio" name="siteVisit" formControlName="siteVisit" value="Y"  />
                   <div class="control__indicator"></div>
                 </label>
               </div>
               <div style="display:inline-block;">
                 <label class="control control--radio">No
-                  <input type="radio" name="siteVisit" formControlName="siteVisit" />
+                  <input type="radio" name="siteVisit" formControlName="siteVisit" value="N" />
                   <div class="control__indicator"></div>
                 </label>
               </div>
             </ng-container>
-            <ng-container *ngIf="siteVisitValue === 'N'">
-              <div style="display:inline-block;">
-                <label>Site Visit Required</label>
-                <label class="control control--radio">Yes
-                  <input type="radio" name="siteVisit" formControlName="siteVisit" />
-                  <div class="control__indicator"></div>
-                </label>
-              </div>
-              <div style="display:inline-block;">
-                <label class="control control--radio">No
-                  <input type="radio" name="siteVisit" formControlName="siteVisit" [checked]=true/>
-                  <div class="control__indicator"></div>
-                </label>
-              </div>
-            </ng-container>
-          </div>
+                    </div>
           <!--end div for radio button-->
 
           <!--start ng-container for site visit date and siteVisitValue = Y-->
