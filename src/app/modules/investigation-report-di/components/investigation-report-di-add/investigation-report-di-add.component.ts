@@ -340,4 +340,12 @@ export class InvestigationReportDiComponent implements OnInit {
     }//end of else
   }//end of method onclickJointingTypeListSelect
 
+
+   //onOpenModal for opening modal from modalService
+   public onItemsOpenModal(invoiceNo: string) {
+    const modalRef = this.modalService.open(NgbdComplaintReferenceNoModalComponent);
+    modalRef.componentInstance.modalTitle = this.title;
+    modalRef.componentInstance.invoiceNo = invoiceNo;
+  }//end of method onOpenModal
+
 }//end of class

@@ -21,7 +21,7 @@ import { SessionErrorService } from "../../../../shared/services/session-error.s
 })
 export class NgbdComplaintReferenceNoModalComponent implements OnInit {
   @Input() modalTitle;
-  @Input() complaintReferenceNo: string;
+  @Input() invoiceNo: string;
   @Input() custName: string;
   @Input() custCode: string;
 
@@ -30,9 +30,9 @@ export class NgbdComplaintReferenceNoModalComponent implements OnInit {
 
   public complaintStatus: string = "";
   //spinner
-  public busySpinner: any = {
-    busy: true
-  }
+  // public busySpinner: any = {
+  //   busy: true
+  // }
 
   constructor(public activeModal: NgbActiveModal,
     private http: Http, private el: ElementRef,
@@ -45,13 +45,13 @@ export class NgbdComplaintReferenceNoModalComponent implements OnInit {
   }//end of constructor
 
   ngOnInit(): void {
-    if (this.complaintReferenceNo != '') {
+    if (this.invoiceNo != '') {
 
-      //this.invoiceSearchDetailsModel.invNo = this.complaintReferenceNo;
-    } else if (this.complaintReferenceNo == '') {
+      //this.invoiceSearchDetailsModel.invNo = this.invoiceNo;
+    } else if (this.invoiceNo == '') {
 
       this.msgType = "Error";
-      this.busySpinner.busy = false;
+      //this.busySpinner.busy = false;
     }//end of if
   }//end of onInit
 
@@ -60,9 +60,9 @@ export class NgbdComplaintReferenceNoModalComponent implements OnInit {
   onRedirectComplaintReferenceNoSearch() {
 
 
-    if (this.complaintReferenceNo === "") {
+    if (this.invoiceNo === "") {
       this.router.navigate([ROUTE_PATHS.RouteComplaintReferenceNoSearch]);
-    } else if (this.complaintReferenceNo != "") {
+    } else if (this.invoiceNo != "") {
 
       this.router.navigate([ROUTE_PATHS.RouteComplaintReferenceNoSearch]);
     }
