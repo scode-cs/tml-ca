@@ -9,6 +9,7 @@ import { NgbdModalComponent } from '../../../../widget/modal/components/modal-co
 import { NgbModal, NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { DatePipe } from '@angular/common';
 import { LocalStorageService } from '../../../../shared/services/local-storage.service';
+import { ComplaintDIService } from '../../../../shared/services/complaint-di.service';
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 import { NgbdComplaintDIRegisterModalComponent } from './complaint-di-register-modal/complaint-di-register-modal.component';
 import { ComplaintDIRegisterEmitService } from '../../services/complaint-di-register-emit.service';
@@ -108,6 +109,7 @@ export class ComplaintDIRegisterComponent implements OnInit {
   constructor(
     private activatedroute: ActivatedRoute,
     private router: Router,
+    private complaintDIService: ComplaintDIService,
     private complaintDIRegisterDataService: ComplaintDIRegisterDataService,
     private complaintDIRegisterEmitService: ComplaintDIRegisterEmitService,
     private complaintDIInvoiceDetailsService: ComplaintDIInvoiceDetailsService,
@@ -782,15 +784,16 @@ export class ComplaintDIRegisterComponent implements OnInit {
 
   //for clicking submit button this method will be invoked
   public onComplainSubmit(): void {
-    console.log("form value::",this.complaintRegisterFormGroup.value);
+    console.log("form value::", this.complaintRegisterFormGroup.value);
     let complainHeaderJson: any = {};
     complainHeaderJson.lastActivityId = this.activityId;
     complainHeaderJson.userId = this.localStorageService.user.userId;
-    console.log(" complainHeaderJson =========",complainHeaderJson);
+    console.log(" complainHeaderJson =========", complainHeaderJson);
+    let plantType: string = this.localStorageService.user.plantType;
+    let action: string = "reg_add";
     let complainDetailJson: any = {};
     complainDetailJson.activityId = this.activityId;
     complainDetailJson.modeId = this.complaintRegisterFormGroup.value.modeId;
-    complainDetailJson.complaintReferenceNo = "";
     complainDetailJson.siteVisit = this.siteVisitValue;
     complainDetailJson.siteVisitByDepartmentName = this.complaintRegisterFormGroup.value.siteVisitByDepartmentName;
     complainDetailJson.complaintReferenceDt = this.complaintRegisterFormGroup.value.complaintReferenceDt;
@@ -799,13 +802,33 @@ export class ComplaintDIRegisterComponent implements OnInit {
     complainDetailJson.contactPersonPhoneNo = this.complaintRegisterFormGroup.value.contactPersonPhoneNo;
     complainDetailJson.contactPersonEmailId = this.complaintRegisterFormGroup.value.contactPersonEmailId;
     complainDetailJson.loggedBy = this.empInfo.empId;
-    complainDetailJson.complaintTypeId =  parseInt(this.complaintRegisterFormGroup.value.complaintTypeId);
-    complainDetailJson.natureOfComplaintId =  parseInt(this.complaintRegisterFormGroup.value.natureOfComplaintId);
+    complainDetailJson.complaintTypeId = parseInt(this.complaintRegisterFormGroup.value.complaintTypeId);
+    complainDetailJson.natureOfComplaintId = parseInt(this.complaintRegisterFormGroup.value.natureOfComplaintId);
     complainDetailJson.complaintDetails = this.complaintRegisterFormGroup.value.complaintDetails;
     complainDetailJson.custCode = this.custInfo.custCode;
     complainDetailJson.userId = this.localStorageService.user.userId;
-    console.log(" complainDetailJson =========",complainDetailJson);
+    console.log(" complainDetailJson =========", complainDetailJson);
+    this.complaintDIService.putHeader(complainHeaderJson, plantType, action).
+      subscribe(res => {
+        if (res.msgType === 'Info') {
+          complainDetailJson.complaintReferenceNo = res.value;
+          this.complaintDIService.postDetail(complainDetailJson, plantType, action).
+            subscribe(res => {
+              if (res.msgType === 'Info') {
+                console.log(" complain submitted successfully");
+              }
+            },
+              err => {
+                console.log(err);
+                this.sessionErrorService.routeToLogin(err._body);
+              });
+        }//end of if of msgType Info
 
+      },
+        err => {
+          console.log(err);
+          this.sessionErrorService.routeToLogin(err._body);
+        });
   }//end of method complainregDiSubmit  
 
   //onOpenModal for opening modal from modalService
