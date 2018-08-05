@@ -156,10 +156,4 @@ export class ComplaintDIRegisterDataService {
       .map((res: Response) => { return res.json() })
       .catch((error: Response) => { return Observable.throw(error) });
   }//end of getComplaintReferenceDetailsView
-
-  // complainHeaderSubmit(){
-  //   this.actionUrl = AppUrlsConst.COMPLAIN_HEADER_TABLE_ADD_URL
-  // }
-
-
 }

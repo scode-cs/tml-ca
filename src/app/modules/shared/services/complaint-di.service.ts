@@ -59,9 +59,10 @@ export class ComplaintDIService {
  * 
  * @param complainHeader set data to update
  */
-  public putHeader(complainHeader:any) {
+  public putHeader(complainHeader:any, plantType: string, action: string) {
     let headers: Headers = this.configService();
-    let actionUrl = AppUrlsConst.COMPLAIN_HEADER_TABLE_ADD_URL;
+    let actionUrl = AppUrlsConst.COMPLAIN_HEADER_TABLE_ADD_URL
+    +"?plantType="+plantType+"&action="+action;
 
     return this.http.put(actionUrl, complainHeader, { headers: headers })
         .map((res: Response) => { return res.json() })
@@ -71,9 +72,10 @@ export class ComplaintDIService {
  * 
  * @param complainDetail set post data
  */
-  public postDetail(complainDetail: any) {
+  public postDetail(complainDetail: any, plantType: string, action: string) {
     let headers: Headers = this.configService();
-    let actionUrl = AppUrlsConst.COMPLAIN_DETAIL_TABLE_ADD_URL;
+    let actionUrl = AppUrlsConst.COMPLAIN_DETAIL_TABLE_ADD_URL
+    +"?plantType="+plantType+"&action="+action;
 
     return this.http.post(actionUrl, complainDetail, { headers: headers })
         .map((res: Response) => { return res.json() })
