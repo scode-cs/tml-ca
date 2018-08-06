@@ -11,7 +11,6 @@ import { InvestigationReportDIViewComponent } from "./components/investigation-r
 import { SharedModule } from "../shared/shared.module";
 import { NgbdComplaintReferenceNoModalComponent } from "./components/investigation-report-di-add/complaint-reference-no-modal/complaint-reference-no-modal.component";
 import { ComplaintReferenceNoSearchComponent } from "./components/investigation-report-di-add/complaint-reference-no-search/complaint-reference-no-search.component";
-
 @NgModule({
   imports:      [
     ReactiveFormsModule,

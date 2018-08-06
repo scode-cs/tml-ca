@@ -13,7 +13,7 @@ import { HomeModule } from "./modules/home/home.module";
 import { ToastrModule } from 'ngx-toastr';
 import { LocalStorageService } from "./modules/shared/services/local-storage.service";
 //for modal
-import { NgbdModalComponent } from './modules/widget/modal/components/modal-component';
+import { ModalModule } from './modules/widget/modal/modal.module';
 import { SessionErrorService } from "./modules/shared/services/session-error.service";
 
 
@@ -32,18 +32,18 @@ import { SessionErrorService } from "./modules/shared/services/session-error.ser
     HomeModule,
     LoginModule,
     ROUTER_MODULE,
-   
+    ModalModule
   ],
   declarations: [
     AppComponent,
-   // NgbdModalComponent,
+  //  NgbdModalComponent,
    
   ],
   //new add for modal
-  entryComponents:[
-    //NgbdModalComponent,
+  // entryComponents:[
+  //   NgbdModalComponent,
     
-  ],
+  // ],
   
   providers: [
     LocalStorageService,

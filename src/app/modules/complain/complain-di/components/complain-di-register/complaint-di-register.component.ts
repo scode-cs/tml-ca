@@ -34,6 +34,9 @@ export class ComplaintDIRegisterComponent implements OnInit {
     batchNoInInvoiceDetailsLength: this.localStorageService.dbSettings.batchNoInInvoiceDetails
   };
 
+   //busySpinner 
+   public busySpinner: boolean = true;
+
   //activity Id for complain register
   private activityId: number = 10;
 
@@ -272,7 +275,8 @@ export class ComplaintDIRegisterComponent implements OnInit {
 
   //method to get all values from ComplaintDIRegisterDataService  
   private getAllDropDownVal() {
-    //getting all values of ReceiptMode
+    this.busySpinner = true;
+    //getting all values of ReceiptMode 
     this.complaintDIRegisterDataService.getSelectValReceiptMode().
       subscribe(res => {
         this.modeOfReceiptDropDownList = res.details;
@@ -283,9 +287,11 @@ export class ComplaintDIRegisterComponent implements OnInit {
             break;
           }//end if
         }//end for
+        this.busySpinner = false;
       },
         err => {
           console.log(err);
+          this.busySpinner = false;
           this.sessionErrorService.routeToLogin(err._body);
         });
 
@@ -299,9 +305,11 @@ export class ComplaintDIRegisterComponent implements OnInit {
             break;
           }//end if
         }//end for
+        this.busySpinner = false;
       },
         err => {
           console.log(err);
+          this.busySpinner = false;
           this.sessionErrorService.routeToLogin(err._body);
         });
 
@@ -529,9 +537,11 @@ export class ComplaintDIRegisterComponent implements OnInit {
       subscribe(res => {
         //getting the items object array for webservice and initialing it to a publically defind array named items 
         this.itemsHeader = res.invoiceDetails.itemsHeader;
+        this.busySpinner = false;
       },
         err => {
           console.log(err);
+          this.busySpinner = false;
           this.sessionErrorService.routeToLogin(err._body);
         });
   }//end method of getItemsVal
@@ -578,7 +588,14 @@ export class ComplaintDIRegisterComponent implements OnInit {
         break;
       }//end of if
     }//end of for
-  }//end of the method complaintQtyErrorCorrection  
+  }//end of the method complaintQtyErrorCorrection 
+  
+  //onOpenModal for opening modal from modalService
+  private onOpenModal(msgBody: string) {
+    const modalRef = this.modalService.open(NgbdModalComponent);
+    modalRef.componentInstance.modalTitle = 'Information';
+    modalRef.componentInstance.modalMessage = msgBody;
+  }//end of method onOpenModal
 
   //start method onKeyupComplaintQty
   public onKeyupComplaintQty(complaintQtyInMtrsParam, invoiceNo, itemCode, invoiceQtyInMtrsParam) {
@@ -634,7 +651,7 @@ export class ComplaintDIRegisterComponent implements OnInit {
       ]
       this.complaintRegisterFormGroup.controls["natureOfComplaintId"].setValue("");
     } else {
-
+      this.busySpinner = true;
       this.complaintDIRegisterDataService.getSelectValNatureOfComplaint(this.complaintTypeId).
         subscribe(res => {
           this.natureOfComDropDownList = res.details;
@@ -658,9 +675,11 @@ export class ComplaintDIRegisterComponent implements OnInit {
               }//end of if
             }//end of else if
           }//end for
+          this.busySpinner = false;
         },
           err => {
             console.log(err);
+            this.busySpinner = false;
             this.sessionErrorService.routeToLogin(err._body);
           });
     }//end else
@@ -808,6 +827,7 @@ export class ComplaintDIRegisterComponent implements OnInit {
     complainDetailJson.custCode = this.custInfo.custCode;
     complainDetailJson.userId = this.localStorageService.user.userId;
     console.log(" complainDetailJson =========", complainDetailJson);
+    this.busySpinner = true;
     this.complaintDIService.putHeader(complainHeaderJson, plantType, action).
       subscribe(res => {
         if (res.msgType === 'Info') {
@@ -817,9 +837,12 @@ export class ComplaintDIRegisterComponent implements OnInit {
               if (res.msgType === 'Info') {
                 console.log(" complain submitted successfully");
               }
+              this.busySpinner = false;
+              this.onOpenModal(res.msg);
             },
               err => {
                 console.log(err);
+                this.busySpinner = false;
                 this.sessionErrorService.routeToLogin(err._body);
               });
         }//end of if of msgType Info
@@ -827,6 +850,7 @@ export class ComplaintDIRegisterComponent implements OnInit {
       },
         err => {
           console.log(err);
+          this.busySpinner = false;
           this.sessionErrorService.routeToLogin(err._body);
         });
   }//end of method complainregDiSubmit  
