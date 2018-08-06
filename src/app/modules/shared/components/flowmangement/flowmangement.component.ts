@@ -73,7 +73,7 @@ export class FlowmangementComponent implements OnInit, OnChanges {
       else if (process.statusId == this.complianStatus) {
         flowStructure.flowClass = 'step-complete';
         flowStructure.isRoutable = true;
-        flowStructure.route = process.viewRoute + "/" + this.complainNo + "/" + this.complianStatus;
+        flowStructure.route = process.editRoute + "/" + this.complainNo + "/" + this.complianStatus;
 
         stopFlag = true;
       }
@@ -101,9 +101,10 @@ export class FlowmangementComponent implements OnInit, OnChanges {
         flowStructure.isRoutable = false;
       }
       else if (process.statusId == this.complianStatus) {
-        flowStructure.flowClass = 'step-active';
+        flowStructure.flowClass = 'step-complete';
         flowStructure.isRoutable = true;
-        flowStructure.route = process.viewRoute + "/" + this.complainNo + "/" + this.complianStatus;
+        flowStructure.route = (this.complianStatus == 80) ? process.viewRoute : process.editRoute;
+        flowStructure.route = flowStructure.route + "/" + this.complainNo + "/" + this.complianStatus;
 
         stopFlag = true;
       }
