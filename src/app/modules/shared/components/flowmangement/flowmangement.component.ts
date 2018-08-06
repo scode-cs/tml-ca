@@ -36,6 +36,7 @@ export class FlowmangementComponent implements OnInit, OnChanges {
     this.processFlowData = new ProcessFlowStatusDetailsModel().statusDetails;
     console.log(this.processFlowData);
 
+    this.complainNo;
     this.pageType;
     this.complianStatus;
 
@@ -93,7 +94,7 @@ export class FlowmangementComponent implements OnInit, OnChanges {
       if (process.statusId != this.complianStatus && !stopFlag) {
         flowStructure.flowClass = 'step-active';
         flowStructure.isRoutable = true;
-        flowStructure.route = process.viewRoute;
+        flowStructure.route = process.viewRoute + "/" + this.complainNo + "/" + this.complianStatus;
       }
       else if (process.statusId != this.complianStatus && stopFlag) {
         flowStructure.flowClass = 'step-inactive';
@@ -102,7 +103,7 @@ export class FlowmangementComponent implements OnInit, OnChanges {
       else if (process.statusId == this.complianStatus) {
         flowStructure.flowClass = 'step-active';
         flowStructure.isRoutable = true;
-        flowStructure.route = process.viewRoute;
+        flowStructure.route = process.viewRoute + "/" + this.complainNo + "/" + this.complianStatus;
 
         stopFlag = true;
       }
