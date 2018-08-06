@@ -177,4 +177,11 @@ export class PADIAddEditComponent implements OnInit {
     this.router.navigate([ROUTE_PATHS.RouteHome]);
   }// end of onCancel method
 
+   //method to delete error msg
+   public deleteResErrorMsgOnClick() {
+    this.errorMsgObj.errMsgShowFlag = false;
+    this.errorMsgObj.errorMsg = "";
+  }//end of method delete error msg
+
+
 }//end of class
