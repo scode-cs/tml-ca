@@ -10,6 +10,7 @@ export interface IflowStructure {
   styleUrls: ['./flowmangement.component.css']
 })
 export class FlowmangementComponent implements OnInit, OnChanges {
+  @Input() complainNo;
   @Input() complianStatus;
   @Input() pageType;
 
@@ -62,7 +63,7 @@ export class FlowmangementComponent implements OnInit, OnChanges {
       if (process.statusId != this.complianStatus && !stopFlag) {
         flowStructure.flowClass = 'step-active';
         flowStructure.isRoutable = true;
-        flowStructure.route = process.viewRoute;
+        flowStructure.route = process.viewRoute + "/" + this.complainNo + "/" + this.complianStatus;
       }
       else if (process.statusId != this.complianStatus && stopFlag) {
         flowStructure.flowClass = 'step-inactive';
@@ -71,7 +72,7 @@ export class FlowmangementComponent implements OnInit, OnChanges {
       else if (process.statusId == this.complianStatus) {
         flowStructure.flowClass = 'step-complete';
         flowStructure.isRoutable = true;
-        flowStructure.route = process.viewRoute;
+        flowStructure.route = process.viewRoute + "/" + this.complainNo + "/" + this.complianStatus;
 
         stopFlag = true;
       }

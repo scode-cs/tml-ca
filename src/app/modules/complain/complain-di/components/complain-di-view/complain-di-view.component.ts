@@ -4,7 +4,7 @@ import { LocalStorageService } from '../../../../shared/services/local-storage.s
 import { ViewComplaintDIDataService } from '../../services/complaint-di-view-data.service';
 import { Router, ActivatedRoute } from '@angular/router';
 import { Subscription } from 'rxjs/Subscription';//to get route param
-import { ROUTE_PATHS } from '../../../../router/router-paths';
+import { ROUTE_PATHS, ROUTER_PATHS } from '../../../../router/router-paths';
 import { ComplainDIViewModel } from '../../models/complain-di-view.model';
 import { TilesInteractionService } from '../../../../dashboard/services/tiles-interaction.service';
 import { SessionErrorService } from '../../../../shared/services/session-error.service';
@@ -85,6 +85,8 @@ export class ComplainDIViewComponent implements OnInit {
   public complaintLoggedActivityId: number = this.localStorageService.appSettings.complaintRegistrationActivityId;
   public headerparams: ComplaintDIHeaderParamModel;
 
+
+
   constructor(
     private formBuilder: FormBuilder,
     private localStorageService: LocalStorageService,
@@ -143,8 +145,6 @@ export class ComplainDIViewComponent implements OnInit {
     } else {
 
 
-
-
     }
   }//end of checking if parameter have value or not
 
@@ -163,7 +163,7 @@ export class ComplainDIViewComponent implements OnInit {
   }
 
 
-  getComplaintDetailsOnSelect(complaintDetail: any, viewParam?: string) {
+  public getComplaintDetailsOnSelect(complaintDetail: any, viewParam?: string) {
     console.log("checked : ", complaintDetail);
     this.processFlowStatusDet = new ProcessFlowStatusDetailsModel().statusDetails;
     console.log("this.processFlowStatusDet======", this.processFlowStatusDet);
@@ -172,26 +172,54 @@ export class ComplainDIViewComponent implements OnInit {
     let complainNo: string = complaintDetail.complaintReferenceNo;
     let complainStatusId: string = complaintDetail.lastActivityId;
 
+    // RegisterAdd -> ROUTE_PATHS.RouteComplainDIRegister + '/' + complainNo;
+    // RegisterView -> ROUTE_PATHS.RouteComplainDIView + '/' + complainNo + '/' + complainStatusId;
+
+    // InvestigationRepAdd -> RouteInvestigationReportDiAdd
+    // InvestigationRepView -> RouteViewDetailsInvestigationReportDi
+
+    // RCA Add -> RouteAddRCADI
+    // RCA View -> RouteViewDetailsRCADI
+
+    // CA Add -> RouteAddCADI
+    // CA View -> RouteViewDetailsCADI
+
+    // PA Add -> RouteAddPADI
+    // PA View -> RouteViewDetailsPADI
+
+    // Closed Add -> RouteAddCloseComplainDI
+    // Closed VIew -> RouteViewDetailsCloseComplainDI
+
+    let routePath: string = '';
     switch (complainStatusId) {
       case '10': {
-
+        //viewcomplaindi/DI000009/10
+        routePath = ROUTE_PATHS.RouteInvestigationReportDiAdd + '/' + complainNo + '/' + 40;
+        break;
       };
       case '40': {
-
+        routePath = ROUTE_PATHS.RouteAddRCADI + '/' + complainNo + '/' + 50;
+        break;
       };
       case '50': {
-
+        routePath = ROUTE_PATHS.RouteAddCADI + '/' + complainNo + '/' + 60;
+        break;
       };
       case '60': {
-
+        routePath = ROUTE_PATHS.RouteAddPADI + '/' + complainNo + '/' + 70;
+        break;
       };
       case '70': {
-
+        routePath = ROUTE_PATHS.RouteAddCloseComplainDI + '/' + complainNo + '/' + 80;
+        break;
       };
       case '80': {
-
+        routePath = ROUTE_PATHS.RouteViewDetailsCloseComplainDI + '/' + complainNo + '/' + complainStatusId;
+        break;
       }
     }
+
+    this.router.navigate([routePath]);
 
     //TODO: Need to add route logic
 
