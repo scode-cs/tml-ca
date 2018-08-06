@@ -9,16 +9,16 @@
         </ol>
     </div>
     <!--start process flow div-->
-    <app-flowmangement [complainNo]="complaintReferenceNo"  [complianStatus]="complaintStatus" [pageType]="'add'"></app-flowmangement>
+    <app-flowmangement [complainNo]="routeParam.complaintReferenceNo"  [complianStatus]="routeParam.complaintStatus" [pageType]="'add'"></app-flowmangement>
     <!-- end div of process flow  -->
     <!--start form for rcaDIAddEditFormGroup-->
     <form [formGroup]="rcaDIAddEditFormGroup" autocomplete="off">
         <!-- start div for row form-style class-->
         <div class="row form-style">
             <!--start div complaint reference no -->
-            <div *ngIf="complaintReferenceNo" class="form-group col-xs-12 col-sm-6 col-md-6 col-lg-4">
+            <div *ngIf="routeParam.complaintReferenceNo" class="form-group col-xs-12 col-sm-6 col-md-6 col-lg-4">
                 <label for="complaintReferenceNo">Complaint Reference No</label>
-                <input type="text" class="form-control" formControlName="complaintReferenceNo" [value]="complaintReferenceNo" readonly="readonly"
+                <input type="text" class="form-control" formControlName="complaintReferenceNo" readonly="readonly"
                 />
             </div>
             <!--end of div for complaint reference no-->
@@ -34,7 +34,7 @@
             <div class="form-group col-xs-12 col-sm-6 col-md-6 col-lg-4">
                 <label>RCA Details</label>
                 <label class="red-asterick">*</label>
-                <textarea rows="5" formControlName="rcaAddEditDetails" [value]="rcaAddEditDetails" class="form-control hide-horizontal-scroll"
+                <textarea rows="5" formControlName="rcaAddEditDetails" class="form-control hide-horizontal-scroll"
                     required></textarea>
                 <div class="alert alert-danger" *ngIf="rcaDIAddEditFormGroup.get('rcaAddEditDetails').hasError('required') && rcaDIAddEditFormGroup.get('rcaAddEditDetails').touched">
                     <i class="fa fa-exclamation-circle"></i>RCA Details is required!
@@ -44,13 +44,13 @@
 
             <!--files-->
             <!--start div for show files-->
-            <div class="form-group col-xs-12 col-sm-6 col-md-6 col-lg-4" *ngIf="complaintReferenceNo && selectedComplaintReferenceDetails.files?.length!=0">
+            <!-- <div class="form-group col-xs-12 col-sm-6 col-md-6 col-lg-4" *ngIf="complaintReferenceNo && selectedComplaintReferenceDetails.files?.length!=0">
                 <label>Uploaded file(s)</label>
                 <div *ngFor="let file of selectedComplaintReferenceDetails.files">
                     <a href="{{file.fileUrl}}" target="_blank">{{file.fileName}}</a>
                     <br/>
                 </div>
-            </div>
+            </div> -->
             <!--end div for show files-->
 
             <!--start fle upload div-->
@@ -82,9 +82,9 @@
         </div>
         <!-- end div for row complaint-form class-->
         <!-- error msg div -->
-        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" *ngIf="errMsgShowFlag">
+        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" *ngIf="errorMsgObj.errMsgShowFlag">
             <div class="alert alert-danger">
-                {{errorMsg}}&nbsp;
+                {{errorMsgObj.errorMsg}}&nbsp;
                 <button aria-label="Close" class="close" type="button" (click)="deleteResErrorMsgOnClick()">
                     <span aria-hidden="true">×</span>
                 </button>
@@ -98,4 +98,4 @@
 </div>
 <!--end of div page-container-->
 
-<ispl-busy-spinner *ngIf="busySpinner.busy"></ispl-busy-spinner>
+<ispl-busy-spinner *ngIf="busySpinner"></ispl-busy-spinner>
