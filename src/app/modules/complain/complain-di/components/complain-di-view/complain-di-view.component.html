@@ -59,14 +59,14 @@
                         class="fa fa-sort-desc"></i>
                       <i *ngIf="sortSelection.sortData != 'CMPLNT_REF_NO' || sortSelection.orderType == ''" class="fa fa-sort"></i>
                     </td>
-                    <td class="header-style hideextra" (click)="sortdata(complaintDIViewDetails.header.complaintReferenceDt)">
+                    <td class="header-style hideextra" (click)="sortdata('CMPLNT_REF_DATE')">
                       Complaint Date
 
-                      <!-- <i *ngIf="sortSelection.sortData == complaintDIViewDetails.header?.complaintReferenceDt && sortSelection.orderType == 'ASC'"
+                      <i *ngIf="sortSelection.sortData == 'CMPLNT_REF_DATE' && sortSelection.orderType == 'ASC'"
                         class="fa fa-sort-asc"></i>
-                      <i *ngIf="sortSelection.sortData == complaintDIViewDetails.header?.complaintReferenceDt && sortSelection.orderType == 'DESC'"
-                        class="fa fa-sort-desc"></i> -->
-                      <i *ngIf="sortSelection.orderType == ''" class="fa fa-sort"></i>
+                      <i *ngIf="sortSelection.sortData == 'CMPLNT_REF_DATE' && sortSelection.orderType == 'DESC'"
+                        class="fa fa-sort-desc"></i>
+                      <i *ngIf="sortSelection.sortData != 'CMPLNT_REF_DATE' || sortSelection.orderType == ''" class="fa fa-sort"></i>
                     </td>
 
                     <td class="header-style hideextra" (click)="sortdata('CUSTOMER_NAME')">
