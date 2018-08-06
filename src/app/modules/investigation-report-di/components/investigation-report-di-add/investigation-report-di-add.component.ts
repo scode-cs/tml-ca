@@ -10,6 +10,7 @@ import { Subject } from 'rxjs/Subject';
 import { Subscription } from 'rxjs/Subscription';//to get route param
 import { LocalStorageService } from '../../../shared/services/local-storage.service';
 import { InvestigationReportDIDataService } from '../../services/investigation-report-di.service';
+import { ComplaintDIService } from '../../../shared/services/complaint-di.service';
 import { NgbdModalComponent } from '../../../widget/modal/components/modal-component';
 import { AppUrlsConst, WebServiceConst } from '../../../app-config';
 import { DatePipe } from '@angular/common';
@@ -34,6 +35,9 @@ export class InvestigationReportDiComponent implements OnInit {
   public fileList: FileList;
 
   public title: string = 'Add Investigation Report';//set the title;
+
+  //activity Id for complain register
+  private activityId: number = 40;
 
   public invReportTable: any[] = [];//to store prev inv report
   public itemGridTable: any[] = [];//to store item grid
@@ -76,6 +80,7 @@ export class InvestigationReportDiComponent implements OnInit {
   constructor(
     private activatedroute: ActivatedRoute,
     private router: Router,
+    private complaintDIService: ComplaintDIService,
     private localStorageService: LocalStorageService,
     private investigationReportDIDataService: InvestigationReportDIDataService,
     private modalService: NgbModal,//modal
@@ -159,33 +164,88 @@ export class InvestigationReportDiComponent implements OnInit {
     }//end of else of inv report date value
   }//end method setFormValue
 
+  //onOpenModal for opening modal from modalService
+  private onOpenModal(msgBody: string) {
+    const modalRef = this.modalService.open(NgbdModalComponent);
+    modalRef.componentInstance.modalTitle = 'Information';
+    modalRef.componentInstance.modalMessage = msgBody;
+  }//end of method onOpenModal
+
   //on click investigationReportDISubmit method
   public investigationReportDISubmit(): void {
+    let invReportHeaderJson: any = {};
+    invReportHeaderJson.lastActivityId = this.activityId;
+    invReportHeaderJson.userId = this.localStorageService.user.userId;
+    invReportHeaderJson.complaintReferenceNo = this.invReportFormGroup.value.complaintReferenceNo;
+    console.log(" invReportHeaderJson =========", invReportHeaderJson);
+    let plantType: string = this.localStorageService.user.plantType;
+    let action: string = "";
+    let invReportDetailJson: any = {};
+    invReportDetailJson.activityId = this.activityId;
+    invReportDetailJson.userId = this.localStorageService.user.userId;
     console.log("invReportFormGroup: ", this.invReportFormGroup.value);
+    invReportDetailJson.complaintReferenceNo = this.invReportFormGroup.value.complaintReferenceNo;
+    invReportDetailJson.investigationReportDate = this.invReportFormGroup.value.investigationReportDate;
+    invReportDetailJson.sampleCollected = this.invReportFormGroup.value.sampleCollected;
+    invReportDetailJson.sampleCollectedDate = this.invReportFormGroup.value.sampleCollectedDate;
+    invReportDetailJson.siteVisitMade = this.invReportFormGroup.value.siteVisit;
+    invReportDetailJson.siteVisitMadeDate = this.invReportFormGroup.value.siteVisitDt;
     
     let unloadingEquipment: string = "";
     this.unloadingEquipmentList.forEach(unloadingEquip => {
       unloadingEquipment = unloadingEquipment ? (unloadingEquipment + "," + unloadingEquip) : unloadingEquip;
     });
     console.log("unloadingEquipment ======== ", unloadingEquipment);
+    invReportDetailJson.unloadingEquipement = unloadingEquipment;
 
     let lubricantUsed: string = "";
     this.lubricantUsedList.forEach(lbUsed => {
       lubricantUsed = lubricantUsed ? (lubricantUsed + "," + lbUsed) : lbUsed;
     });
     console.log("lubricantUsed ======== ", lubricantUsed);
+    invReportDetailJson.lubricantUsed = lubricantUsed;
 
     let layingPosition: string = "";
     this.layingPositionList.forEach(layPos => {
       layingPosition = layingPosition ? (layingPosition + "," + layPos) : layPos;
     });
     console.log("layingPosition ======== ", layingPosition);
+    invReportDetailJson.layingPosition = layingPosition;
 
     let jointingType: string = "";
     this.jointingTypeList.forEach(jType => {
       jointingType = jointingType ? (jointingType + "," + jType) : jType;
     });
     console.log("jointingType ======== ", jointingType);
+    invReportDetailJson.jointingType = jointingType;
+
+    console.log("invReportDetailJson====== ",invReportDetailJson);
+    this.busySpinner = true;
+    this.complaintDIService.putHeader(invReportHeaderJson, plantType, action).
+      subscribe(res => {
+        if (res.msgType === 'Info') {
+          invReportDetailJson.complaintReferenceNo = res.value;
+          this.complaintDIService.postDetail(invReportDetailJson, plantType, action).
+            subscribe(res => {
+              if (res.msgType === 'Info') {
+                console.log(" complain submitted successfully");
+              }
+              this.busySpinner = false;
+              this.onOpenModal(res.msg);
+            },
+              err => {
+                console.log(err);
+                this.busySpinner = false;
+                this.sessionErrorService.routeToLogin(err._body);
+              });
+        }//end of if of msgType Info
+
+      },
+        err => {
+          console.log(err);
+          this.busySpinner = false;
+          this.sessionErrorService.routeToLogin(err._body);
+        });
 
   }//end of method investigationReportDISubmit
 
