@@ -20,7 +20,7 @@ export class PADIAddEditComponent implements OnInit {
   private totalFileSize: number = 0;//file upload error
   private fileSizeLimit: number = 104857600;
   private fileData: FormData;
-  public fileList: FileList;
+  private fileList: FileList;
   public paDIAddEditFormGroup: FormGroup;
   public title: string = "PA";//to show titlee on html page
   public routeParam: any = {
@@ -170,7 +170,7 @@ export class PADIAddEditComponent implements OnInit {
           this.errorMsgObj.errorMsg = err.msg;
           this.sessionErrorService.routeToLogin(err._body);
         });
-  } //end of method submit modify capa actn pi
+  } //end of method 
 
   //for clicking cancel button this method will be invoked
   public onCancel(): void {
