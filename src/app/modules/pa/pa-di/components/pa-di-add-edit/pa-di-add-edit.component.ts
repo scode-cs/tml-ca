@@ -3,11 +3,13 @@ import { FormGroup, FormBuilder, Validators, FormControl } from '@angular/forms'
 import { Router, ActivatedRoute } from '@angular/router';
 import { Subscription } from 'rxjs/Subscription';//to get route param
 import { DatePipe } from '@angular/common';
+import { NgbModal, NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
+import { NgbdModalComponent } from '../../../../widget/modal/components/modal-component';
 import { ROUTE_PATHS } from '../../../../router/router-paths';
 import { LocalStorageService } from "../../../../shared/services/local-storage.service";
 import { SessionErrorService } from "../../../../shared/services/session-error.service";
 import { PADIService } from "../../services/pa-di-add-edit.service";
-
+import { ComplaintDIService } from '../../../../shared/services/complaint-di.service';
 @Component({
   selector: 'ispl-pa-di-add-edit',
   templateUrl: 'pa-di-add-edit.component.html',
@@ -37,9 +39,11 @@ export class PADIAddEditComponent implements OnInit {
     private router: Router,
     private activatedroute: ActivatedRoute,
     private datePipe: DatePipe,//for date
+    private modalService: NgbModal,//modal
     private localStorageService: LocalStorageService,
     private sessionErrorService: SessionErrorService,
-    private paDIService: PADIService
+    private paDIService: PADIService,
+    private complaintDIService: ComplaintDIService
   ) {
     this.buildForm();//build form
   }//end of constructor
@@ -88,6 +92,14 @@ export class PADIAddEditComponent implements OnInit {
     this.paDIAddEditFormGroup.controls["paAddEditDate"].setValue(currentDate);
   }//end of method
 
+   //onOpenModal for opening modal from modalService
+   private onOpenModal(modalMessage) {
+    const modalRef = this.modalService.open(NgbdModalComponent);
+    modalRef.componentInstance.modalTitle = 'Information';
+    modalRef.componentInstance.modalMessage = modalMessage;//"User Id "+ manageProfileUserId + " updated successfully."
+  }
+  //end of method onOpenModal
+
   //file upload event  
   public fileChangeCADIAddEdit(event) {
     this.fileData = new FormData();
@@ -105,7 +117,59 @@ export class PADIAddEditComponent implements OnInit {
 
   //method of submit modify allocate complaint
   public onPADIAddEditSubmit() {
+    this.busySpinner = true;//to load spinner
     console.log("form value of pa DI add/modify submit : ", this.paDIAddEditFormGroup.value);
+    let paWsInfo: any = {};
+    paWsInfo.activityId = 70;
+    paWsInfo.plantType = this.localStorageService.user.plantType;
+    paWsInfo.action = "";
+    let paJsonForHeaderTable: any = {};
+    paJsonForHeaderTable.lastActivityId = paWsInfo.activityId;
+    paJsonForHeaderTable.userId = this.localStorageService.user.userId;
+    paJsonForHeaderTable.complaintReferenceNo = this.paDIAddEditFormGroup.value.complaintReferenceNo;
+    console.log("pa json for header table::", paJsonForHeaderTable);
+    let paJsonForDetTable: any = {};
+    paJsonForDetTable.activityId = paWsInfo.activityId;
+    paJsonForDetTable.complaintReferenceNo = this.paDIAddEditFormGroup.value.complaintReferenceNo;
+    paJsonForDetTable.preventiveAction = this.paDIAddEditFormGroup.value.paAddEditDetails;
+    paJsonForDetTable.preventiveActionDate = this.paDIAddEditFormGroup.value.paAddEditDate;
+    paJsonForDetTable.userId = this.localStorageService.user.userId;
+    console.log("pa json for Det table::", paJsonForDetTable);
+    this.complaintDIService.putHeader(paJsonForHeaderTable, paWsInfo.plantType, paWsInfo.action).
+      subscribe(res => {
+        if (res.msgType === 'Info') {
+          this.complaintDIService.postDetail(paJsonForDetTable, paWsInfo.plantType, paWsInfo.action).
+            subscribe(res => {
+              if (res.msgType === 'Info') {
+                console.log(" pa Det submitted successfully");
+                this.onOpenModal(res.msg);//open modal to show the msg
+                this.router.navigate([ROUTE_PATHS.RouteComplainDIView]);
+              } else {
+                this.errorMsgObj.errMsgShowFlag = true;
+                this.errorMsgObj.errorMsg = res.msg;
+              }
+              this.busySpinner = false;//to stop spinner
+            },
+              err => {
+                console.log(err);
+                this.errorMsgObj.errMsgShowFlag = true;
+                this.errorMsgObj.errorMsg = err.msg;
+                this.busySpinner = false;//to stop spinner
+                this.sessionErrorService.routeToLogin(err._body);
+              });
+        } else {
+          this.errorMsgObj.errMsgShowFlag = true;
+          this.errorMsgObj.errorMsg = res.msg;
+          this.busySpinner = false;//to stop spinner
+        }
+      },
+        err => {
+          console.log(err);
+          this.busySpinner = false;//to stop spinner
+          this.errorMsgObj.errMsgShowFlag = true;
+          this.errorMsgObj.errorMsg = err.msg;
+          this.sessionErrorService.routeToLogin(err._body);
+        });
   } //end of method submit modify capa actn pi
 
   //for clicking cancel button this method will be invoked
