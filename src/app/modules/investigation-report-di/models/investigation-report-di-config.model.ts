@@ -8,14 +8,14 @@ export class InvestigationReportDIConfigModel {
     ]
 
     private _invItemGridHeader: any[] = [
-        { headerKey: 'complaintReferenceNo', headerDesc: 'Complaint Ref. No', headerClass: 'header-style-first visible-style', dataClass: 'td-style visible-style' },
-        { headerKey: 'complaintDetailsAutoId', headerDesc: 'Complaint Ref. Auto Id', headerClass: 'header-style visible-style', dataClass: 'td-style visible-style' },
-        { headerKey: 'invoiceNo', headerDesc: 'Official Document No', headerClass: 'header-style visible-style', dataClass: 'td-style-first visible-style' },
-        { headerKey: 'invoiceDt', headerDesc: 'Official Document Date', headerClass: 'header-style visible-style', dataClass: 'td-style visible-style' },
-        { headerKey: 'itemCode', headerDesc: 'Item Code', headerClass: 'header-style visible-style', dataClass: 'td-style visible-style' },
-        { headerKey: 'itemDesc', headerDesc: 'Item Description', headerClass: 'header-style visible-style', dataClass: 'td-style visible-style' },
+        { headerKey: 'complaintReferenceNo', headerDesc: 'Complaint Ref. No', headerClass: 'header-style-first visible-style', dataClass: 'td-style-first visible-style' },
+        { headerKey: 'complaintDetailAutoId', headerDesc: 'Complaint Ref. Auto Id', headerClass: 'header-style visible-style', dataClass: 'td-style visible-style' },
+        { headerKey: 'invoiceNo', headerDesc: 'Official Document No', headerClass: 'header-style visible-style', dataClass: 'td-style visible-style' },
+        { headerKey: 'invoiceDate', headerDesc: 'Official Document Date', headerClass: 'header-style visible-style', dataClass: 'td-style visible-style' },
+        { headerKey: 'itemNo', headerDesc: 'Item Code', headerClass: 'header-style visible-style', dataClass: 'td-style visible-style' },
+        { headerKey: 'itemName', headerDesc: 'Item Description', headerClass: 'header-style visible-style', dataClass: 'td-style visible-style' },
         { headerKey: 'invoiceQtyInMtrs', headerDesc: 'Invoice Qty(in Mtrs)', headerClass: 'header-style visible-style', dataClass: 'td-style visible-style' },
-        { headerKey: 'complainQtyInMtrs', headerDesc: 'Complain Qty(in Mtrs)', headerClass: 'header-style visible-style', dataClass: 'td-style visible-style' },
+        { headerKey: 'complaintQtyInMtrs', headerDesc: 'Complain Qty(in Mtrs)', headerClass: 'header-style visible-style', dataClass: 'td-style visible-style', inputType:' <input type="text"></input>' },
         { headerKey: 'customerName', headerDesc: 'Customer Name', headerClass: 'header-style visible-style', dataClass: 'td-style visible-style' },
         { headerKey: 'customerCode', headerDesc: 'Customer Code', headerClass: 'header-style visible-style', dataClass: 'td-style visible-style' },
         { headerKey: 'projectName', headerDesc: 'Project Name', headerClass: 'header-style visible-style', dataClass: 'td-style visible-style' },
