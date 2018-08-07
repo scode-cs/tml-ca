@@ -154,7 +154,11 @@ export const AppUrlsConst: any = {
     COMPLAIN_VIEW_DETAIL_URL: URL_PATH + 'api/complaintview/viewcomplaintdetail',//di complain view from detail table
 
     COMPLAIN_HEADER_TABLE_ADD_URL: URL_PATH + 'api/complaint/complaintheader',//HEADER TABLE ADD
-    COMPLAIN_DETAIL_TABLE_ADD_URL: URL_PATH + 'api/complaint/complaintdetail'//detail table add
+    COMPLAIN_DETAIL_TABLE_ADD_URL: URL_PATH + 'api/complaint/complaintdetail',//detail table add
+
+    COMPLAIN_INVOICE_ITEM_DETAIL_VIEW_URL: URL_PATH + 'api/complaintview/viewinvoicedetail',//di complain view invoice item detail
+    COMPLAIN_INVOICE_ITEM_DETAIL_ADD_URL: URL_PATH + 'api/complaint/addinvoice',//di complain add invoice item detail
+    COMPLAIN_INVOICE_ITEM_DETAIL_DELETE_URL: URL_PATH + 'api/complaint/delinvoice'//di complain delete invoice detail
 }
 
 export const WebServiceConst: any = {
