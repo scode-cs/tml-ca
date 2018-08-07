@@ -17,7 +17,7 @@
     <!-- main div -->
     <div class="form-div-style">
       <!-- start table div -->
-      <div *ngIf="invReportDeatils.length > 1" class="col-lg-12 col-md-12 col-xs-12 scroll-bar prev-inv-report-table-style">
+      <div *ngIf="invReportDetails.length > 1" class="col-lg-12 col-md-12 col-xs-12 scroll-bar prev-inv-report-table-style">
         <table class="table-style">
           <thead>
             <tr class="th-style">
@@ -27,7 +27,7 @@
             </tr>
           </thead>
           <tbody>
-            <tr class="tr-style" *ngFor="let invReportDet of invReportDeatils">
+            <tr class="tr-style" *ngFor="let invReportDet of invReportDetails">
               <td class="hideextra" *ngFor="let invRprt of invReportTable" [ngClass]="invRprt.dataClass">
                 {{ invReportDet[invRprt.headerKey] }}
               </td>
@@ -211,7 +211,13 @@
                   </tr>
                 </thead>
                 <tbody>
+                  <tr class="tr-style" *ngFor="let invItemDet of invItemDetails">
+                        <td class="hideextra" *ngFor="let itmGrid of itemGridTable" [ngClass]="itmGrid.dataClass">
+                          {{ invItemDet[itmGrid.headerKey] }}
+                        </td>
+                  </tr>
                   <tr class="tr-style">
+                      <!-- invItemDetails -->
                     <td class="td-style-first hideextra">
                       &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Add Item(s)
                       <i style="font-size:16px;cursor: pointer;" title="Click here" class="fa fa-plus-circle" (click)="onItemsOpenModal('')"></i>

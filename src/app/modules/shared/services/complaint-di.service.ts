@@ -93,6 +93,21 @@ export class ComplaintDIService {
         .catch((error: Response) => { return Observable.throw(error) });
   }
 
+  /**
+   * 
+   * @param activityIdFieldName 
+   */
+  public getInvoiceItemDetail(compRefNo: string, activityIdFieldName: number){
+    let headers: Headers = this.configService();
+    let actionUrl = AppUrlsConst.COMPLAIN_INVOICE_ITEM_DETAIL_VIEW_URL;
+    let param = "filter="+this.localStorageService.appSettings.complaintReferenceNoFieldName+"='"+compRefNo+"'&"+this.localStorageService.appSettings.activityIdFieldName+"="+activityIdFieldName+"&sortData=&orderBy=";
+
+    return this.http.get((actionUrl+'?'+param), { headers: headers })
+    .map((res: Response) => { return res.json() })
+    .catch((error: Response) => { return Observable.throw(error) });
+
+  }
+
   
 
 }

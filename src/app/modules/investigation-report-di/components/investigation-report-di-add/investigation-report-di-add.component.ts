@@ -42,7 +42,8 @@ export class InvestigationReportDiComponent implements OnInit {
   public invReportTable: any[] = [];//to store prev inv report
   public itemGridTable: any[] = [];//to store item grid
   public complaintStatus: number;//to fetch complaint status from route
-  public invReportDeatils: any[] = [];// to store invReport deatils from response
+  public invReportDetails: any[] = [];// to store invReport deatils from response
+  public invItemDetails:  any[] = [];// to store inv item deatils from response
   public invReportIndex: number = 0;
   public ivtReportDataList: any = { unloadingEquipmentList: '', lubricantUsedList: '', layingPositionList: '', jointingTypeList: '' };
   public unloadingEquipmentList: any[] = [];
@@ -94,6 +95,7 @@ export class InvestigationReportDiComponent implements OnInit {
     this.busySpinner = true;
     this.getRouteParam();
     this.getInvestigationViewDetailsWSCall();
+    this.getInvoiceItemDetailWSCall();
     this.invReportTable = new InvestigationReportDIConfigModel().prevInvReportHeader;
     this.itemGridTable = new InvestigationReportDIConfigModel().invItemGridHeader;
     this.ivtReportDataList.unloadingEquipmentList = new InvestigationDataModel().unloadingEquipmentList;
@@ -120,9 +122,9 @@ export class InvestigationReportDiComponent implements OnInit {
         //console.log("res of ref det::::",res);
         if (res.msgType === "Info") {
           let invReportDeatilsJson: any = JSON.parse(res.mapDetails);
-          this.invReportDeatils = invReportDeatilsJson;
-          console.log("res of inv Report Deatils::::", this.invReportDeatils);
-          this.invReportIndex = this.invReportDeatils ? this.invReportDeatils.length - 1 : 0;
+          this.invReportDetails = invReportDeatilsJson;
+          console.log("res of inv Report Deatils::::", this.invReportDetails);
+          this.invReportIndex = this.invReportDetails ? this.invReportDetails.length - 1 : 0;
           this.setFormValue();
           this.busySpinner = false;
         } else {
@@ -137,9 +139,29 @@ export class InvestigationReportDiComponent implements OnInit {
         });
   }//end of method
 
+  //start method getInvoiceItemDetailWSCall to get item details
+  private getInvoiceItemDetailWSCall(){
+    let activityId: number = 10;
+    this.busySpinner = true;
+    this.complaintDIService.getInvoiceItemDetail(this.complaintReferenceNo,activityId).
+    subscribe(res => {
+      if (res.msgType === "Info") {
+        let invItemDeatilsJson: any = JSON.parse(res.mapDetails);
+        this.invItemDetails = invItemDeatilsJson;
+        this.busySpinner = false;
+        console.log("item details =========.........>>>>>>>>>",this.invItemDetails);
+      }//end of if
+    },
+    err => {
+      console.log(err);
+      this.busySpinner = false;
+      this.sessionErrorService.routeToLogin(err._body);
+    });
+  }//end method of getInvoiceItemDetailWSCall
+
   //start method setFormValue to set the value in invreport form
   private setFormValue() {
-    let formData: any = this.invReportDeatils[this.invReportIndex];
+    let formData: any = this.invReportDetails[this.invReportIndex];
     this.invReportFormGroup.controls['complaintReferenceNo'].setValue(formData.complaintReferenceNo);
     this.invReportVar.siteVisitMadeValue = formData.siteVisit;
     this.invReportFormGroup.controls['siteVisit'].setValue(formData.siteVisit);
@@ -153,12 +175,12 @@ export class InvestigationReportDiComponent implements OnInit {
       this.invReportFormGroup.controls['sampleCollectedDate'].setValue(this.datePipe.transform(formData.sampleCollectedDate, 'yyyy-MM-dd'));
       this.invReportFormGroup.controls['sampleCollectedDate'].setValidators(Validators.required);
     }
-    this.invReportFormGroup.controls['unloadingEquipment'].setValue(formData.unloadingEquipement);
-    this.invReportFormGroup.controls['layingPosiion'].setValue(formData.layingPosition);
-    this.invReportFormGroup.controls['lubricantUsed'].setValue(formData.lubricantUsed);
-    this.invReportFormGroup.controls['jointingtype'].setValue(formData.jointingType);
+    // this.invReportFormGroup.controls['unloadingEquipment'].setValue(formData.unloadingEquipement);
+    // this.invReportFormGroup.controls['layingPosiion'].setValue(formData.layingPosition);
+    // this.invReportFormGroup.controls['lubricantUsed'].setValue(formData.lubricantUsed);
+    // this.invReportFormGroup.controls['jointingtype'].setValue(formData.jointingType);
     if (formData.investigationReportDate) {
-      this.invReportFormGroup.controls['investigationReportDate'].setValue(this.datePipe.transform(formData.investigationReportDate, 'yyyy-MM-dd'));
+      this.invReportFormGroup.controls['investigationReportDate'].setValue(this.datePipe.transform(formData.investigationReportDate, 'dd-MM-yyyy'));
     } else {
       this.invReportFormGroup.controls['investigationReportDate'].setValue(formData.investigationReportDate);
     }//end of else of inv report date value
