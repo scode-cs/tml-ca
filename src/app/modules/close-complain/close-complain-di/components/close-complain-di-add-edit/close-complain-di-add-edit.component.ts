@@ -3,8 +3,10 @@ import { FormGroup, FormBuilder, Validators, FormControl } from '@angular/forms'
 import { Subscription } from 'rxjs/Subscription';//to get route param
 import { Router, ActivatedRoute } from '@angular/router';
 import { DatePipe } from '@angular/common';
+import { NgbModal, NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
+import { NgbdModalComponent } from '../../../../widget/modal/components/modal-component';
 import { ROUTE_PATHS } from '../../../../router/router-paths';
-import { CloseComplaintDIService } from '../../../../close-complaint/close-complaint-di/services/close-complaint-di.service';
+import { ComplaintDIService } from '../../../../shared/services/complaint-di.service';
 import { LocalStorageService } from "../../../../shared/services/local-storage.service";
 import { SessionErrorService } from "../../../../shared/services/session-error.service";
 // import {NgbModal, NgbActiveModal} from '@ng-bootstrap/ng-bootstrap';
@@ -16,70 +18,51 @@ import { SessionErrorService } from "../../../../shared/services/session-error.s
 
 })
 export class CloseComplainDIAddEditComponent {
-  private plantType: string;
+
   public title: string = "Close Complain";
-
   public closeComplainDIFormGroup: FormGroup;
-  public complaintReferenceNo: string;//to get complaint reference no from route param
-  public complaintStatus: string = "";//to fetch complaint status from route
-
-  public fileActivityId: number = this.localStorageService.appSettings.closeComplaintActivityId;//to load the files
-  //for busy spinner
-  public busySpinner: any = {
-    compRefDetBusy: true,
-    submitBusy: false,//for submit spinner
-    busy: true
-  };
-  public currentDate: string;//for sysdate
-  public closeDate: string;//close date
-
-  public selectedComplaintReferenceDetails: any = {};//to get selected complaint values  
-  //for view in html page
-  public remarksDetails: string = "";//text area value for remarks details
-  public acknoledgementReceived: string;//radio value for acknoledgement received
-
-  // form data for file upload
-  private formData: FormData = new FormData();
-  private totalFileSize: number = 0;//file upload error
-  private fileSizeLimit: number = 104857600;
-  private fileData: FormData;
-  public fileList: FileList;
-
-  //for error msg
-  public errMsgShowFlag: boolean = false;//to show the error msg div
-  public errorMsg: string;//to store the error msg
-
   public closeRemarksLength: number = this.localStorageService.dbSettings.closeRemarks;
+  public fileActivityId: number = this.localStorageService.appSettings.closeComplaintActivityId;//to load the files
+
+  public routeParam: any = {
+    complaintReferenceNo: '',//to get complaint reference no from route param
+    complaintStatus: ''//to fetch complaint status from route
+  };
+  //for busy spinner
+  public busySpinner: boolean = false;
+  //for error msg
+  public errorMsgObj: any = {
+    errorMsg: '',
+    errMsgShowFlag: false
+  };
 
   constructor(
     private activatedroute: ActivatedRoute,
     private formBuilder: FormBuilder,
     private router: Router,
-    private closeComplaintDIService: CloseComplaintDIService,
+    private modalService: NgbModal,//modal
+    private datePipe: DatePipe,//for date
     private localStorageService: LocalStorageService,
     private sessionErrorService: SessionErrorService,
-    private datePipe: DatePipe//for date
-  ) { }
+    private complaintDIService: ComplaintDIService
+  ) {
+    this.buildForm();//build form
+  }
 
   ngOnInit(): void {
-    this.buildForm();//build form
     this.getRouteParam();//calling method to get route param 
-    // this.getSystemDate();//method to get system date
-    //checking if route param has value or not 
-    if (this.complaintReferenceNo == '') {
-    } else {
-      this.getComplaintReferenceDetails(this.complaintReferenceNo, this.fileActivityId);
-    }
+    this.getSystemDate();//method to get system date
   }//end of onInit
 
   //method to get route param
   private getRouteParam() {
     let routeSubscription: Subscription;
     routeSubscription = this.activatedroute.params.subscribe(params => {
-      this.complaintReferenceNo = params.complaintReferenceNo ? params.complaintReferenceNo : '';
-      this.complaintStatus = params.complaintStatus ? params.complaintStatus : ''; 
+      this.routeParam.complaintReferenceNo = params.complaintReferenceNo ? params.complaintReferenceNo : '';
+      this.routeParam.complaintStatus = params.complaintStatus ? params.complaintStatus : '';
     });
-    console.log("complaintReferenceNo for complaint close di add: ", this.complaintReferenceNo);
+    console.log("complaintReferenceNo for complaint close di add: ", this.routeParam.complaintReferenceNo);
+    this.closeComplainDIFormGroup.controls['complaintReferenceNo'].setValue(this.routeParam.complaintReferenceNo);
   }//end of method
 
   //a method named buildform for creating the closeComplainDIFormGroup and its formControl
@@ -102,160 +85,89 @@ export class CloseComplainDIAddEditComponent {
   private getSystemDate() {
     //formatting the current date
     let date = new Date();
-    this.currentDate = this.datePipe.transform(date, 'dd-MMM-yyyy');
-    this.closeComplainDIFormGroup.controls["closeDate"].setValue(this.currentDate);
-    this.closeDate = this.datePipe.transform(this.currentDate, 'dd-MMM-yyyy');
-    console.log("  preli::: this.closeDate   ", this.closeDate);
+    let currentDate: string = this.datePipe.transform(date,'yyyy-MM-dd'); //'dd-MMM-yyyy');
+    this.closeComplainDIFormGroup.controls["closeDate"].setValue(currentDate);
   }//end of method
 
-  //to load the spinner
-  private updateBusySpinner() {
-    if (this.busySpinner.compRefDetBusy || this.busySpinner.submitBusy) {
-      this.busySpinner.busy = true;
-    } else if (this.busySpinner.compRefDetBusy == false && this.busySpinner.submitBusy == false) {
-      this.busySpinner.busy = false;
-    }
-  }//end of busy spinner method
-
-  //radio button click method of acknoledgement received
-  public onAcknoledgementReceivedRadioClick(acknoledgementvalue) {
-    console.log("acknoledgementvalue:: ", acknoledgementvalue);
-    this.acknoledgementReceived = acknoledgementvalue;
-    this.closeComplainDIFormGroup.controls["acknoledgementReceived"].setValue(this.acknoledgementReceived);
-  }//end of method
-
-  //method to get complaint ref details and set the values to the html page
-  public getComplaintReferenceDetails(complaintReferenceNo: string, fileActivityId: number) {
-    this.closeComplaintDIService.getComplaintReferenceDetailsView(complaintReferenceNo, fileActivityId)
-      .subscribe(res => {
-        //getting the comp ref details from webservice 
-        console.log("res for edit comp: ", res);
-        this.selectedComplaintReferenceDetails = res.details[0];
-        if (res.msgType == "Info") {
-          let remarksDetRes: string = this.selectedComplaintReferenceDetails.closeRemarks;
-          this.remarksDetails = remarksDetRes.trim();
-          this.closeComplainDIFormGroup.controls["remarks"].setValue(this.remarksDetails);
-          //close date
-          let resCloseDate = this.selectedComplaintReferenceDetails.closeDate.trim();
-          if (resCloseDate) {
-            this.closeDate = resCloseDate;
-          } else {
-            this.getSystemDate();
-          }
-
-          //plant type
-          this.plantType = this.selectedComplaintReferenceDetails.plantType;
-          //acknoledgement receive
-          let acknoledgementReceivedCloseRes: string = this.selectedComplaintReferenceDetails.acknoledgementReceived;
-          if (acknoledgementReceivedCloseRes) {//checking acknoledgementReceivedCloseRes has value dn substring the value
-            acknoledgementReceivedCloseRes = acknoledgementReceivedCloseRes.substring(0, 1);
-          }
-          this.acknoledgementReceived = acknoledgementReceivedCloseRes;
-          this.closeComplainDIFormGroup.controls["acknoledgementReceived"].setValue(this.acknoledgementReceived);
-        } else {
-          // show error msg on html page
-          this.errMsgShowFlag = true;
-          this.errorMsg = "Sorry! Netowrk/Server Problem. Please try again.";
-        }//end of else
-        this.busySpinner.compRefDetBusy = false;//busy spinner
-        this.updateBusySpinner();//method for busy spinner
-      },
-        err => {
-          console.log(err);
-          this.busySpinner.compRefDetBusy = false;//busy spinner
-          this.updateBusySpinner();//method for busy spinner
-          this.sessionErrorService.routeToLogin(err._body);
-        });
-  }//end of method to get complaint ref details and set the values to the html page 
+  //onOpenModal for opening modal from modalService
+  private onOpenModal(modalMessage) {
+    const modalRef = this.modalService.open(NgbdModalComponent);
+    modalRef.componentInstance.modalTitle = 'Information';
+    modalRef.componentInstance.modalMessage = modalMessage;//"User Id "+ manageProfileUserId + " updated successfully."
+  }
+  //end of method onOpenModal
 
   //method of submit modify allocate complaint
   public onComplaintResolutionPISubmit() {
-    console.log("form value of Close complain di add/modify submit : ", this.closeComplainDIFormGroup.value);
-    let complaintCloseSubmitDet: any = {};
-    complaintCloseSubmitDet.complaintReferenceNo = this.complaintReferenceNo;
-    complaintCloseSubmitDet.closeRemarks = this.closeComplainDIFormGroup.value.remarks;//actn det
-    complaintCloseSubmitDet.plantType = this.plantType;
-    complaintCloseSubmitDet.acknoledgementReceived = this.acknoledgementReceived;
-    complaintCloseSubmitDet.closeDate = this.closeDate;
-    console.log("onComplaintResolutionPISubmit: ", complaintCloseSubmitDet);
-    console.log("this.totalFileSize on submit method:::::::::::", this.totalFileSize);
+    console.log("form value of Close complain di submit : ", this.closeComplainDIFormGroup.value);
+    let closeComplainWsInfo: any = {};
+    closeComplainWsInfo.activityId = 80;
+    closeComplainWsInfo.plantType = this.localStorageService.user.plantType;
+    closeComplainWsInfo.action = "";
+    let closeComplainJsonForHeaderTable: any = {};
+    closeComplainJsonForHeaderTable.lastActivityId = closeComplainWsInfo.activityId;
+    closeComplainJsonForHeaderTable.userId = this.localStorageService.user.userId;
+    closeComplainJsonForHeaderTable.complaintReferenceNo = this.closeComplainDIFormGroup.value.complaintReferenceNo;
+    console.log("close complain json for header table::", closeComplainJsonForHeaderTable);
+    let closeComplainJsonForDetTable: any = {};
+    closeComplainJsonForDetTable.activityId = closeComplainWsInfo.activityId;
+    closeComplainJsonForDetTable.complaintReferenceNo = this.closeComplainDIFormGroup.value.complaintReferenceNo;
+    closeComplainJsonForDetTable.closeRemarks = this.closeComplainDIFormGroup.value.remarks;
+    closeComplainJsonForDetTable.acknoledgementReceived = this.closeComplainDIFormGroup.value.acknoledgementReceived;
+    closeComplainJsonForDetTable.closeDate = this.closeComplainDIFormGroup.value.closeDate;
+    closeComplainJsonForDetTable.userId = this.localStorageService.user.userId;
+    console.log("close complain json for Det table::", closeComplainJsonForDetTable);
+    this.complaintDIService.putHeader(closeComplainJsonForHeaderTable, closeComplainWsInfo.plantType, closeComplainWsInfo.action).
+      subscribe(res => {
+        if (res.msgType === 'Info') {
+          this.complaintDIService.postDetail(closeComplainJsonForDetTable, closeComplainWsInfo.plantType, closeComplainWsInfo.action).
+            subscribe(res => {
+              if (res.msgType === 'Info') {
+                console.log(" ca Det submitted successfully");
+                this.onOpenModal(res.msg);//open modal to show the msg
+                this.router.navigate([ROUTE_PATHS.RouteComplainDIView]);
+              } else {
+                this.errorMsgObj.errMsgShowFlag = true;
+                this.errorMsgObj.errorMsg = res.msg;
+              }
+              this.busySpinner = false;//to stop spinner
+            },
+              err => {
+                console.log(err);
+                this.errorMsgObj.errMsgShowFlag = true;
+                this.errorMsgObj.errorMsg = err.msg;
+                this.busySpinner = false;//to stop spinner
+                this.sessionErrorService.routeToLogin(err._body);
+              });
+        } else {
+          this.errorMsgObj.errMsgShowFlag = true;
+          this.errorMsgObj.errorMsg = res.msg;
+          this.busySpinner = false;//to stop spinner
+        }
+      },
+        err => {
+          console.log(err);
+          this.busySpinner = false;//to stop spinner
+          this.errorMsgObj.errMsgShowFlag = true;
+          this.errorMsgObj.errorMsg = err.msg;
+          this.sessionErrorService.routeToLogin(err._body);
+        });
 
-    if (this.totalFileSize > this.fileSizeLimit) {
-      this.errMsgShowFlag = true;
-      this.errorMsg = "File size should be within 100 mb !";
-    } else {
-      let jsonArr: any[] = [];//json arr to convert obj toString
-      jsonArr.push(JSON.stringify(complaintCloseSubmitDet));
-      this.formData.append("closeComplaintDet", jsonArr.toString());
-      //method to add or update preli
-      if (this.fileData != undefined) {
-        for (let i: number = 0; i < this.fileList.length; i++) {
-          console.log(" file upload", this.fileData.get('uploadFile' + i.toString()));
-          if (this.fileData.get('uploadFile' + i.toString()) != null) {
-            this.formData.append('uploadFile' + i.toString(), this.fileData.get('uploadFile' + i.toString()));
-          }//end of if
-        }//end of for
-      }//end of if fileData is !undefined
-      this.formData.append('Accept', 'application/json');
-      this.formData.append('accessToken', 'bearer ' + this.localStorageService.user.accessToken);
-      this.formData.append('menuId', 'DEFAULT1');
-      this.formData.append('userId', this.localStorageService.user.userId);
-      let formDataObj: any = {};
-      formDataObj = this.formData;
-      this.busySpinner.submitBusy = true;
-      this.updateBusySpinner();
-      this.closeComplaintDIService.closeComplaintSubmitWithFileUpload(formDataObj).
-        subscribe(res => {
-          console.log("complaint close di add Success Response: ", res);
-          this.busySpinner.submitBusy = false;
-          this.updateBusySpinner();
-          if (res.msgType === "Info") {
-            this.router.navigate([ROUTE_PATHS.RouteCloseComplaintDI]);//route to the previous page
-          } else {
-            this.errMsgShowFlag = true;
-            this.errorMsg = "Netowrk/Server Problem. Please try again.";
-            this.formData = new FormData();//new instance create of formdata
-          }
-        },
-          err => {
-            this.busySpinner.submitBusy = false;
-            this.updateBusySpinner();
-            this.errMsgShowFlag = true;
-            if (err.status == 401) {
-              this.errorMsg = "Sorry! Unable to save data. Please try again.";
-            } else {
-              this.errorMsg = "Netowrk/Server Problem";
-            }
-            this.formData = new FormData();//new instance create of formdata
-            this.sessionErrorService.routeToLogin(err._body);
-          });
-    }//end of else
-  } //end of method submit modify capa actn pi
-  //file upload event  
-  public fileChange(event) {
-    this.fileData = new FormData();
-    this.totalFileSize = 0;
-    this.fileList = event.target.files;
-    if (this.fileList.length > 0) {
-      for (let i: number = 0; i < this.fileList.length; i++) {
-        let file: File = this.fileList[i];
-        this.fileData.append('uploadFile' + i.toString(), file, file.name);
-        this.totalFileSize = this.totalFileSize + file.size;
-        console.log("this.totalFileSize:::::::::::", this.totalFileSize);
-      }//end of for
-    }//end of if
-  }//end of filechange method  
-
-  // start method of deleteResErrorMsgOnClick
-  public deleteResErrorMsgOnClick() {
-    this.errMsgShowFlag = false;
-    this.errorMsg = "";
-  }//method to delete error msg
+  } //end of method submit close di add
 
   //for clicking cancel button this method will be invoked
   public onCancel(): void {
     this.router.navigate([ROUTE_PATHS.RouteHome]);
   }// end of onCancel method
 
+  //method to delete error msg
+  public deleteResErrorMsgOnClick() {
+    this.errorMsgObj.errMsgShowFlag = false;
+    this.errorMsgObj.errorMsg = "";
+  }//end of method delete error msg
 
+  //file change
+  public fileChange(evt){
+
+  }//
 }//end of class
