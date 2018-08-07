@@ -8,7 +8,6 @@ import { NgbdModalComponent } from '../../../../widget/modal/components/modal-co
 import { ROUTE_PATHS } from '../../../../router/router-paths';
 import { LocalStorageService } from "../../../../shared/services/local-storage.service";
 import { SessionErrorService } from "../../../../shared/services/session-error.service";
-import { CADIService } from "../../services/ca-di-add-edit.service";
 import { ComplaintDIService } from '../../../../shared/services/complaint-di.service';
 @Component({
   selector: 'ispl-ca-di-add-edit',
@@ -48,7 +47,6 @@ export class CADIAddEditComponent implements OnInit {
     private modalService: NgbModal,//modal
     private localStorageService: LocalStorageService,
     private sessionErrorService: SessionErrorService,
-    private caDIService: CADIService,
     private complaintDIService: ComplaintDIService,
   ) {
     this.buildForm();//build form
