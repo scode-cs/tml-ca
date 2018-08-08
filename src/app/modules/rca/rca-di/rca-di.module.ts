@@ -6,7 +6,6 @@ import { BusySpinnerModule } from "../../widget/busy-spinner/busy-spinner.module
 import { DatePipe } from '@angular/common';
 import { SharedModule } from "../../shared/shared.module";
 import { RCADIAddEditComponent } from "./components/rca-di-add-edit/rca-di-add-edit.component";
-import { RCADIService } from "./services/rca-di-add-edit.service";
 import { RCADIViewDetailsComponent } from "./components/rca-di-view-details/rca-di-view-details.component";
 
 @NgModule({
@@ -27,8 +26,7 @@ import { RCADIViewDetailsComponent } from "./components/rca-di-view-details/rca-
     RCADIViewDetailsComponent//view details
   ],
   providers : [    
-    DatePipe,  
-    RCADIService//service  
+    DatePipe
   ]
 })
 export class RCADIModule { }
