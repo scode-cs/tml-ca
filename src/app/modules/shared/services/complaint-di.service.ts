@@ -110,16 +110,42 @@ export class ComplaintDIService {
 
   /**
  * 
- * @param complainHeader set data to post header
+ * @param items 
  */
-public postInvoiceItemDetail(complainHeader: any) {
+public postInvoiceItemDetail(items: any,plantType: string) {
   let headers: Headers = this.configService();
-  let actionUrl = AppUrlsConst.COMPLAIN_HEADER_TABLE_ADD_URL;
-
-  return this.http.post(actionUrl, complainHeader, { headers: headers })
+  let actionUrl = AppUrlsConst.COMPLAIN_INVOICE_ITEM_DETAIL_ADD_URL
+  +"?plantType="+plantType;
+  return this.http.post(actionUrl, items, { headers: headers })
       .map((res: Response) => { return res.json() })
       .catch((error: Response) => { return Observable.throw(error) });
 }
+
+ /**
+ * 
+ * @param items 
+ */
+public deleteInvoiceItemDetail(items: any,plantType: string) {
+  let headers: Headers = this.configService();
+  let actionUrl = AppUrlsConst.COMPLAIN_INVOICE_ITEM_DETAIL_ADD_URL
+  +"?plantType="+plantType;
+  // return this.http.delete(actionUrl, items, { headers: headers })
+  //     .map((res: Response) => { return res.json() })
+  //     .catch((error: Response) => { return Observable.throw(error) });
+}
+
+//method to get complain reference details view
+getComplainViewDetails(complaintReferenceNo: string, activityIdFieldName: number) {
+  let headers: Headers = this.configService();
+  let actionUrl = AppUrlsConst.COMPLAIN_VIEW_DETAIL_URL;
+    let param = "filter="+this.localStorageService.appSettings.complaintReferenceNoFieldName+"='"+complaintReferenceNo+"' AND "+
+    this.localStorageService.appSettings.activityIdFieldName+"="+activityIdFieldName+"&sortData=&orderBy=";
+
+  return this.http.get(actionUrl+'?'+param, { headers: headers })
+    .map((res: Response) => { return res.json() })
+    .catch((error: Response) => { return Observable.throw(error) });
+}//end of get getComplaintReferenceDetailsView
+
 
   
 

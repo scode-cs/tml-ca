@@ -124,7 +124,7 @@ export class ComplaintDIRegisterComponent implements OnInit {
 
   ngOnInit(): void {
     this.getRouteParam();//to get route param
-    this.invReportTable = new ComplaintDIConfigModel().prevInvReportHeader;//getting prev complain report details  
+    this.invReportTable = new ComplaintDIConfigModel().prevComplainHeader;//getting prev complain report details  
     this.getItemsVal("ispl");//get item header by ws call   
     this.getAllDropDownVal();//ws call to get all dropdown val
     this.getDepartmentNameValues();//method to get department name value

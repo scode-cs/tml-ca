@@ -139,21 +139,4 @@ export class ComplaintDIRegisterDataService {
       .catch(this.errorCallBack);
   }//end of method to update complaint
 
-
-  //method to get complain reference details view
-  getComplaintReferenceViewDetails(complaintReferenceNo: string,complainStatus: number) {
-    
-    this.actionUrl = AppUrlsConst.COMPLAIN_VIEW_DETAIL_URL 
-    +"?filter="
-    +this.localStorageService.appSettings.complaintReferenceNoFieldName+"='"
-    +complaintReferenceNo+"' AND "
-    +this.localStorageService.appSettings.activityIdFieldName+"="+complainStatus
-    +"&sortData="+"&orderBy=";
-    this.headers = this.configService();
-    // console.log("this.actionUrl::",this.actionUrl);
-
-    return this.http.get(this.actionUrl, { headers: this.headers })
-      .map((res: Response) => { return res.json() })
-      .catch((error: Response) => { return Observable.throw(error) });
-  }//end of getComplaintReferenceDetailsView
 }
