@@ -2,64 +2,43 @@
   /* margin-top: 54px; */
   overflow-x: hidden;
 }
-
-.complaint-title {
-  width: 100%;
-  height: 40px;
-  padding-left: 15px;
-  color: black;
-}
-
 .grid-table-style{
   padding-left: 30px;
   padding-right: 30px
 }
-
-h1.complaint-title {
-  font-size: 30px;
-}
-
 .complaint-form {
   padding-right: 30px;
   padding-left: 30px;
   margin-bottom: 30px;
   margin-top: 15px;
 }
-
 .compliant-submit-button-div{
   padding-left: 15px;
 }
-
 .button-holder {
   float: left;
 }
-
 .compliant-submit-button-size{
   width: 100%;
   position: relative;
   margin-left: -15px;
 }
-
 .button-gaps {
   height: 10px;
   width: 100%;
 }
-
 input:focus {
   border: 1px solid #0098DF;
   border-left: 5px solid #0098DF;
   box-shadow: 0 0 6px #78ABC4;
 }
-
 .ng-valid[required], .ng-valid.required  {
   border-left: 5px solid #42A948; /* green */
 }
-
 .breadcrumb-custom {
   border-bottom: 1px solid #DADADA;
   box-shadow: 0px 2px 2px #E7E7E7;
 }
-
 .primary-button-style {
   width: 100%;
   height: 40px;
@@ -68,11 +47,9 @@ input:focus {
   cursor: pointer;
   margin-left: -15px;
 }
-
 .primary-button-style:hover {
   background-color: #0073B0;
 }
-
 .default-button-style {
   width: 100%;
   height: 40px;
@@ -82,11 +59,9 @@ input:focus {
   cursor: pointer;
   margin-left: -15px;
 }
-
 .default-button-style:hover {
   background-color: #514E4E;
 }
-
 /* scroll ul style and li style */
 .ul-style{
     height:112px;
@@ -128,11 +103,7 @@ input:focus {
   color: #cc100c;
 }
 /*end of asterick style*/
-
-
-
 /* start style for radio button*/
-
  /*Box to contain form controls*/
 .control {
 	font-size: 18px;
@@ -142,14 +113,11 @@ input:focus {
 	padding-left: 30px;
 	cursor: pointer;
 }
-
 .control input {
 	position: absolute;
 	z-index: -1;
 	opacity: 0;
 }
-  
-
 .control__indicator {
 	position: absolute;
 	top: 2px;
@@ -158,7 +126,6 @@ input:focus {
 	height: 20px;
 	background: #e6e6e6;
 }
-
 .control--radio .control__indicator {
 	border-radius: 50%;
 }
@@ -167,38 +134,32 @@ input:focus {
 .control input:focus ~ .control__indicator {
 	background: #ccc;
 }
-
 /* Checked state */
 .control input:checked ~ .control__indicator {
 	/*background: #0e647d;*/
   background: rgb(10, 118, 214); 
 }
-
 /* Hover state whilst checked */
 .control:hover input:not([disabled]):checked ~ .control__indicator,
 .control input:checked:focus ~ .control__indicator {
 	background: rgb(10, 118, 214);  
 }
-
 /* Disabled state */
 .control input:disabled ~ .control__indicator {
 	pointer-events: none;
 	opacity: .6;
 	background: #e6e6e6;
 }
-
 /* Check mark */
 .control__indicator:after {
 	position: absolute;
 	display: none;
 	content: '';
 }
-
 /* Show check mark */
 .control input:checked ~ .control__indicator:after {
 	display: block;
 }
-
 /* Radio button inner circle */
 .control--radio .control__indicator:after {
 	top: 7px;
@@ -208,15 +169,11 @@ input:focus {
 	border-radius: 50%;
 	background: #fff;
 }
-
 /* Disabled circle colour */
 .control--radio input:disabled ~ .control__indicator:after {
 	background: #7b7b7b;
 }
-
 /* end style for radio button*/
-
-
 /*start style div for faceted-data-div*/
 .faceted-data-div{
     border-bottom: 1px solid #dbdada;
@@ -230,12 +187,10 @@ input:focus {
     padding: 5px 10px;
     border-radius: 10px;
 }
-
 .faceted-data-div:hover{
   cursor: pointer;
   /*text-decoration: line-through;*/
 }
-
 .faceted-data-div:hover .close {
   opacity: 1;
   color: #000;
@@ -243,7 +198,6 @@ input:focus {
 .alert-danger {
   cursor: pointer;
 }
-
 .alert-danger:hover .close {
   opacity: 1;
   color: #000;
