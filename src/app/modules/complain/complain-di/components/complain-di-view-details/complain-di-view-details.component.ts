@@ -10,6 +10,7 @@ import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 import { ComplaintDIConfigModel } from '../../models/complain-di-config.model';
 import { ComplaintDIRegisterDataService } from "../../services/complaint-di-register-data.service";
 import { SessionErrorService } from '../../../../shared/services/session-error.service';
+import { ComplaintDIService } from '../../../../shared/services/complaint-di.service';
 
 
 @Component({
@@ -28,7 +29,9 @@ export class ComplainDIViewDetailsComponent implements OnInit {
   public complaintReferenceNo: string = '';//to store route param
   public complaintStatus: number;//to store route param 
   public invReportTable: any[] = [];//to store prev complain report
+  public itemGridTable: any[] = [];//to store item grid
   public complainDetails: any[] = [];//to store complain reference detailS
+  public invItemDetails:  any[] = [];// to store inv item deatils from response
 
   public complainIndex: number = 0;
   public busySpinner: boolean = true;
@@ -38,6 +41,7 @@ export class ComplainDIViewDetailsComponent implements OnInit {
     private activatedroute: ActivatedRoute,
     private datePipe: DatePipe,//for date
     private formBuilder: FormBuilder,
+    private complaintDIService: ComplaintDIService,
     private complaintDIRegisterDataService: ComplaintDIRegisterDataService,
     private sessionErrorService: SessionErrorService
   ) {
@@ -48,8 +52,10 @@ export class ComplainDIViewDetailsComponent implements OnInit {
     this.busySpinner = true;
     this.initform();
     this.getRouteParam();//to get route param 
-    this.invReportTable = new ComplaintDIConfigModel().prevInvReportHeader;//getting prev inv report details
+    this.invReportTable = new ComplaintDIConfigModel().prevComplainHeader;//getting prev inv report details
+    this.itemGridTable = new ComplaintDIConfigModel().invItemGridHeader;
     this.getviewComplainReferenceDetailsWSCall();//service call
+    this.getInvoiceItemDetailWSCall();
   }
   //end of on init
 
@@ -90,7 +96,7 @@ export class ComplainDIViewDetailsComponent implements OnInit {
   }
   private getviewComplainReferenceDetailsWSCall() {
     let pageCompStatus: number = 10;
-    this.complaintDIRegisterDataService.getComplaintReferenceViewDetails(this.complaintReferenceNo, pageCompStatus).
+    this.complaintDIService.getComplainViewDetails(this.complaintReferenceNo, pageCompStatus).
       subscribe(res => {
         console.log("res of ref det::::", res);
         if (res.msgType === 'Info') {
@@ -110,6 +116,26 @@ export class ComplainDIViewDetailsComponent implements OnInit {
           this.sessionErrorService.routeToLogin(err._body);
         });
   }//end of method
+
+  //start method getInvoiceItemDetailWSCall to get item details
+  private getInvoiceItemDetailWSCall(){
+    let activityId: number = 10;
+    this.busySpinner = true;
+    this.complaintDIService.getInvoiceItemDetail(this.complaintReferenceNo,activityId).
+    subscribe(res => {
+      if (res.msgType === "Info") {
+        let invItemDeatilsJson: any = JSON.parse(res.mapDetails);
+        this.invItemDetails = invItemDeatilsJson;
+        this.busySpinner = false;
+        console.log("item details =========.........>>>>>>>>>",this.invItemDetails);
+      }//end of if
+    },
+    err => {
+      console.log(err);
+      this.busySpinner = false;
+      this.sessionErrorService.routeToLogin(err._body);
+    });
+  }//end method of getInvoiceItemDetailWSCall
 
   //method to set res value to form
   private setResValToForm() {

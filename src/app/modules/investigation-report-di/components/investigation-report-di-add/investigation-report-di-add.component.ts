@@ -117,7 +117,7 @@ export class InvestigationReportDiComponent implements OnInit {
   //method to get investigation report details by service call
   private getInvestigationViewDetailsWSCall() {
     let pageCompStatus: number = 40;
-    this.investigationReportDIDataService.getInvestigationReportViewDetails(this.complaintReferenceNo, pageCompStatus).
+    this.complaintDIService.getComplainViewDetails(this.complaintReferenceNo, pageCompStatus).
       subscribe(res => {
         //console.log("res of ref det::::",res);
         if (res.msgType === "Info") {

@@ -216,20 +216,4 @@ export class InvestigationReportDIDataService {
       .catch((error: Response) => { return Observable.throw(error) });
   }//end of method to getPreliViewDetForUpdate 
 
-  //method to get complain reference details view
-  getInvestigationReportViewDetails(complaintReferenceNo: string, complainStatus: number) {
-    this.actionUrl = AppUrlsConst.COMPLAIN_VIEW_DETAIL_URL
-      + "?filter=" +
-      // +this.localStorageService.appSettings.complaintReferenceNo+'="'
-      "CMPLNT_REF_NO='"
-      + complaintReferenceNo + "' AND "
-      + this.localStorageService.appSettings.activityIdFieldName + "=" + complainStatus
-      + "&sortData=" + "&orderBy=";
-    this.headers = this.configService();
-    console.log("this.actionUrl::", this.actionUrl);
-
-    return this.http.get(this.actionUrl, { headers: this.headers })
-      .map((res: Response) => { return res.json() })
-      .catch((error: Response) => { return Observable.throw(error) });
-  }//end of get getComplaintReferenceDetailsView
 }//end of class

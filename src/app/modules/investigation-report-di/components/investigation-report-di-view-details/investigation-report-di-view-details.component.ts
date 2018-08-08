@@ -9,6 +9,7 @@ import { DatePipe } from '@angular/common';
 import { SessionErrorService } from "../../../shared/services/session-error.service";
 import { InvestigationReportDIConfigModel } from '../../models/investigation-report-di-config.model';
 import { InvestigationReportDIDataService } from '../../services/investigation-report-di.service';
+import { ComplaintDIService } from '../../../shared/services/complaint-di.service';
 
 @Component({
   selector: 'ispl-investigation-report-di-view-details-form',
@@ -36,9 +37,11 @@ export class InvestigationReportDiViewDetailsComponent implements OnInit {
   //variable used for radio button
   public invReportVar: any = { siteVisitMadeValue: '', sampleCollectedValue: '' };
   public invReportTable: any[] = [];//to store prev inv report
+  public itemGridTable: any[] = [];//to store item grid
   public complaintStatus: number;//to fetch complaint status from route
   public invReportDeatils: any[] = [];// to store invReport deatils from response
   public invReportIndex: number = 0;
+  public invItemDetails:  any[] = [];// to store inv item deatils from response
   //busySpinner 
   public busySpinner: boolean = true;
 
@@ -46,6 +49,7 @@ export class InvestigationReportDiViewDetailsComponent implements OnInit {
     private activatedroute: ActivatedRoute,
     private router: Router,
     private sessionErrorService: SessionErrorService,
+    private complaintDIService: ComplaintDIService,
     private investigationReportDIDataService: InvestigationReportDIDataService,
     private datePipe: DatePipe//for date
   ) {
@@ -56,7 +60,9 @@ export class InvestigationReportDiViewDetailsComponent implements OnInit {
     this.busySpinner = true;
     this.getRouteParam();
     this.invReportTable = new InvestigationReportDIConfigModel().prevInvReportHeader;
+    this.itemGridTable = new InvestigationReportDIConfigModel().invItemGridHeader;
     this.getInvestigationViewDetailsWSCall();
+    this.getInvoiceItemDetailWSCall();
   }//end of onInit
 
   //start method getRouteParam to get route parameter
@@ -72,7 +78,7 @@ export class InvestigationReportDiViewDetailsComponent implements OnInit {
   //method to get investigation report details by service call
   private getInvestigationViewDetailsWSCall() {
     let pageCompStatus: number = 40;
-    this.investigationReportDIDataService.getInvestigationReportViewDetails(this.complaintReferenceNo, pageCompStatus).
+    this.complaintDIService.getComplainViewDetails(this.complaintReferenceNo, pageCompStatus).
       subscribe(res => {
         //console.log("res of ref det::::",res);
         if (res.msgType === "Info") {
@@ -90,6 +96,26 @@ export class InvestigationReportDiViewDetailsComponent implements OnInit {
           this.sessionErrorService.routeToLogin(err._body);
         });
   }//end of method
+
+  //start method getInvoiceItemDetailWSCall to get item details
+  private getInvoiceItemDetailWSCall(){
+    let activityId: number = 10;
+    this.busySpinner = true;
+    this.complaintDIService.getInvoiceItemDetail(this.complaintReferenceNo,activityId).
+    subscribe(res => {
+      if (res.msgType === "Info") {
+        let invItemDeatilsJson: any = JSON.parse(res.mapDetails);
+        this.invItemDetails = invItemDeatilsJson;
+        this.busySpinner = false;
+        console.log("item details =========.........>>>>>>>>>",this.invItemDetails);
+      }//end of if
+    },
+    err => {
+      console.log(err);
+      this.busySpinner = false;
+      this.sessionErrorService.routeToLogin(err._body);
+    });
+  }//end method of getInvoiceItemDetailWSCall
 
   //start method setFormValue to set the value in invreport form
   private setFormValue() {
