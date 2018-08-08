@@ -8,7 +8,7 @@ import { ROUTE_PATHS } from '../../../../router/router-paths';
 import { LocalStorageService } from "../../../../shared/services/local-storage.service";
 import { SessionErrorService } from "../../../../shared/services/session-error.service";
 import { RCADIConfigModel } from '../../models/rca-di-config.model';
-
+import { ComplaintDIService } from '../../../../shared/services/complaint-di.service';
 
 @Component({
   selector: 'ispl-rca-di-view-details',
@@ -21,19 +21,26 @@ export class RCADIViewDetailsComponent implements OnInit {
   // public fileList: FileList;
   public title: string = "RCA";//to show titlee on html page
   public rcaDIAddEditFormGroup: FormGroup;
-  public complaintReferenceNo: string = '';//to store route param
-  public complaintStatus: number;//to store route param 
+  public routeParam: any = {
+    complaintReferenceNo: '',//to get complaint reference no from route param
+    complaintStatus: ''//to fetch complaint status from route
+  };
   public rcaReportTable: any[] = [];//to store prev rca report
   public rcaDetails: any[] = [];//to store complain reference detailS
   public rcaIndex: number = 0;
   public busySpinner: boolean = true;
+  //for error msg
+  public errorMsgObj: any = {
+    errorMsg: '',
+    errMsgShowFlag: false
+  };
 
   constructor(
     private formBuilder: FormBuilder,
     private router: Router,
     private activatedroute: ActivatedRoute,
     private datePipe: DatePipe,//for date
-    // private modalService: NgbModal,
+    private complaintDIService: ComplaintDIService,
     private localStorageService: LocalStorageService,
     private sessionErrorService: SessionErrorService,
   ) {
@@ -42,37 +49,21 @@ export class RCADIViewDetailsComponent implements OnInit {
 
   ngOnInit(): void {
     console.log("onInit of RCADIViewDetailsComponent..");
-    // this.buildForm();//build form
-    // this.getRouteParam();//calling method to get route param 
-    // this.getSystemDate();//method to get system date
     this.initform();
     this.getRouteParam();//to get route param 
     this.rcaReportTable = new RCADIConfigModel().rcaReportHeader;//getting prev inv report details
-    this.busySpinner= false;
-    // this.getviewComplainReferenceDetailsWSCall();//service call
+    this.getviewComplainReferenceDetailsWSCall();//service call
   }//end of on init
-
-  // //a method named buildform for creating the rcaDIAddEditFormGroup and its formControl
-  // private buildForm(): void {
-  //   this.rcaDIAddEditFormGroup = this.formBuilder.group({
-  //     'complaintReferenceNo': [''
-  //     ],
-  //     'rcaAddEditDate': [''
-  //     ],
-  //     'rcaAddEditDetails': [''
-  //     ]
-  //   });
-  // }//end of method buildForm
 
   //method to get route param
   private getRouteParam() {
     let routeSubscription: Subscription;
     routeSubscription = this.activatedroute.params.subscribe(params => {
-      this.complaintReferenceNo = params.complaintReferenceNo ? params.complaintReferenceNo : '';
-      this.complaintStatus = params.complaintStatus ? params.complaintStatus : '';
+      this.routeParam.complaintReferenceNo = params.complaintReferenceNo ? params.complaintReferenceNo : '';
+      this.routeParam.complaintStatus = params.complaintStatus ? params.complaintStatus : '';
     });
-    console.log("complaintReferenceNo for rca di view: ", this.complaintReferenceNo);
-    console.log("this.complaintStatus for pa di view::", this.complaintStatus);
+    console.log("complaintReferenceNo for rca di view: ", this.routeParam.complaintReferenceNo);
+    console.log("this.complaintStatus for pa di view::", this.routeParam.complaintStatus);
   }//end of method
 
   /**
@@ -86,35 +77,39 @@ export class RCADIViewDetailsComponent implements OnInit {
     });
   }
 
-  // private getviewComplainReferenceDetailsWSCall() {
-  //   let pageCompStatus: number = 10;
-  //   this.complaintDIRegisterDataService.getComplaintReferenceViewDetails(this.complaintReferenceNo, pageCompStatus).
-  //     subscribe(res => {
-  //       console.log("res of ref det::::", res);
-  //       if (res.msgType === 'Info') {
-  //         let json: any = JSON.parse(res.mapDetails);
-  //         console.log("json::::", json);
-  //         this.rcaDetails = json;
-  //         this.rcaIndex = this.rcaDetails ? this.rcaDetails.length - 1 : 0;
-  //         this.setResValToForm();
-  //         this.busySpinner = false;
-  //       } else {
-  //         this.busySpinner = false;
-  //       }
-  //     },
-  //       err => {
-  //         console.log(err);
-  //         this.busySpinner = false;
-  //         this.sessionErrorService.routeToLogin(err._body);
-  //       });
-  // }//end of method
+  private getviewComplainReferenceDetailsWSCall() {
+    let pageCompStatus: number = 50;
+    this.complaintDIService.getComplainViewDetails(this.routeParam.complaintReferenceNo, pageCompStatus).
+      subscribe(res => {
+        console.log("res of ref det::::", res);
+        if (res.msgType === 'Info') {
+          let json: any = JSON.parse(res.mapDetails);
+          console.log("json::::", json);
+          this.rcaDetails = json;
+          this.rcaIndex = this.rcaDetails ? this.rcaDetails.length - 1 : 0;
+          this.setResValToForm();
+          this.busySpinner = false;
+        } else {
+          this.errorMsgObj.errMsgShowFlag = true;
+          this.errorMsgObj.errorMsg = res.msg;
+          this.busySpinner = false;
+        }
+      },
+        err => {
+          console.log(err);
+          this.errorMsgObj.errMsgShowFlag = true;
+          this.errorMsgObj.errorMsg = err.msg;
+          this.busySpinner = false;
+          this.sessionErrorService.routeToLogin(err._body);
+        });
+  }//end of method
 
   //method to set res value to form
   private setResValToForm() {
     let rcaFormData: any = this.rcaDetails[this.rcaIndex];
     this.rcaDIAddEditFormGroup.controls['complaintReferenceNo'].setValue(rcaFormData.complaintReferenceNo);
-    this.rcaDIAddEditFormGroup.controls['rcaAddEditDate'].setValue(this.datePipe.transform(rcaFormData.rcaAddEditDate, 'dd-MMM-yyyy'));
-    this.rcaDIAddEditFormGroup.controls['rcaAddEditDetails'].setValue(rcaFormData.rcaAddEditDetails);
+    this.rcaDIAddEditFormGroup.controls['rcaAddEditDate'].setValue(this.datePipe.transform(rcaFormData.rootCauseAnanysisDate, 'dd-MMM-yyyy'));
+    this.rcaDIAddEditFormGroup.controls['rcaAddEditDetails'].setValue(rcaFormData.rootCauseAnanysisRemarks);
   }//end of method 
 
   //for clicking cancel button this method will be invoked
@@ -129,6 +124,12 @@ export class RCADIViewDetailsComponent implements OnInit {
     setTimeout(() => {
       this.busySpinner = false;
     }, 300);
-
   }
+
+  //method to delete error msg
+  public deleteResErrorMsgOnClick() {
+    this.errorMsgObj.errMsgShowFlag = false;
+    this.errorMsgObj.errorMsg = "";
+  }//end of method delete error msg
+  
 }//end of class

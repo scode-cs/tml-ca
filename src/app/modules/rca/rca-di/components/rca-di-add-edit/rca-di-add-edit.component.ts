@@ -7,7 +7,6 @@ import { NgbModal, NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { ROUTE_PATHS } from '../../../../router/router-paths';
 import { LocalStorageService } from "../../../../shared/services/local-storage.service";
 import { SessionErrorService } from "../../../../shared/services/session-error.service";
-import { RCADIService } from "../../services/rca-di-add-edit.service";
 import { NgbdModalComponent } from '../../../../widget/modal/components/modal-component';
 import { ComplaintDIService } from '../../../../shared/services/complaint-di.service';
 
@@ -47,7 +46,6 @@ export class RCADIAddEditComponent implements OnInit {
     private modalService: NgbModal,
     private localStorageService: LocalStorageService,
     private sessionErrorService: SessionErrorService,
-    private rCADIService: RCADIService,
     private complaintDIService: ComplaintDIService
   ) {
     this.buildForm();//build form
