@@ -23,9 +23,9 @@ export class InvestigationReportDiViewDetailsComponent implements OnInit {
   //creating a FormGroup for Investigation Report
   public invReportFormGroup = new FormGroup({
     complaintReferenceNo: new FormControl(''),
-    siteVisitMade: new FormControl({ value: '', disabled: true }),
+    siteVisitMade: new FormControl({ value: 'N', disabled: true }),
     siteVisitDate: new FormControl(''),
-    sampleCollected: new FormControl({ value: '', disabled: true }),
+    sampleCollected: new FormControl({ value: 'N', disabled: true }),
     sampleCollectedDate: new FormControl(''),
     investigationReportDate: new FormControl(''),
     unloadingEquipment: new FormControl(''),
@@ -39,7 +39,7 @@ export class InvestigationReportDiViewDetailsComponent implements OnInit {
   public invReportTable: any[] = [];//to store prev inv report
   public itemGridTable: any[] = [];//to store item grid
   public complaintStatus: number;//to fetch complaint status from route
-  public invReportDeatils: any[] = [];// to store invReport deatils from response
+  public invReportDetails: any[] = [];// to store invReport deatils from response
   public invReportIndex: number = 0;
   public invItemDetails:  any[] = [];// to store inv item deatils from response
   //busySpinner 
@@ -82,10 +82,10 @@ export class InvestigationReportDiViewDetailsComponent implements OnInit {
       subscribe(res => {
         //console.log("res of ref det::::",res);
         if (res.msgType === "Info") {
-          let invReportDeatilsJson: any = JSON.parse(res.mapDetails);
-          this.invReportDeatils = invReportDeatilsJson;
-          console.log("res of inv Report Deatils::::", this.invReportDeatils);
-          this.invReportIndex = this.invReportDeatils ? this.invReportDeatils.length - 1 : 0;
+          let invReportDetailsJson: any = JSON.parse(res.mapDetails);
+          this.invReportDetails = invReportDetailsJson;
+          console.log("res of inv Report Deatils::::", this.invReportDetails);
+          this.invReportIndex = this.invReportDetails ? this.invReportDetails.length - 1 : 0;
           this.setFormValue();
           this.busySpinner = false;
         }
@@ -119,26 +119,26 @@ export class InvestigationReportDiViewDetailsComponent implements OnInit {
 
   //start method setFormValue to set the value in invreport form
   private setFormValue() {
-    let formData: any = this.invReportDeatils[this.invReportIndex];
+    let formData: any = this.invReportDetails[this.invReportIndex];
     this.invReportFormGroup.controls['complaintReferenceNo'].setValue(formData.complaintReferenceNo);
     this.invReportFormGroup.controls['siteVisitDate'].setValue(this.datePipe.transform(formData.siteVisitDt, 'dd-MMM-yyyy'));
-    this.invReportVar.siteVisitMadeValue = formData.siteVisit;
-    this.invReportFormGroup.controls['siteVisitMade'].setValue(formData.siteVisit);
+    this.invReportVar.siteVisitMadeValue = formData.siteVisitMade;
+    this.invReportFormGroup.controls['siteVisitMade'].setValue(formData.siteVisitMade);
     this.invReportVar.sampleCollectedValue = formData.sampleCollected;
     this.invReportFormGroup.controls['sampleCollected'].setValue(formData.sampleCollected);
     this.invReportFormGroup.controls['sampleCollectedDate'].setValue(this.datePipe.transform(formData.sampleCollectedDate, 'dd-MMM-yyyy'));
     this.invReportFormGroup.controls['investigationReportDate'].setValue(this.datePipe.transform(formData.investigationReportDate, 'dd-MMM-yyyy'));
   }//end method setFormValue
 
-  // start method selectData
-  public selectData(invReportIndexParam: number) {
+  //start method selectData
+  public selectData(invRepIndex: number) {
     this.busySpinner = true;
-    this.invReportIndex = invReportIndexParam;
+    this.invReportIndex = invRepIndex;
     this.setFormValue();
     setTimeout(() => {
       this.busySpinner = false;
     }, 500);
-  }//end method of selectData
+  }//end method of selectDatas
 
   //cancel method
   public onCancel(): void {

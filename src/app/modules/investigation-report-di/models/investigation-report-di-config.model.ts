@@ -1,6 +1,6 @@
 export class InvestigationReportDIConfigModel {
     private _prevInvReportHeader: any[] = [
-        { headerKey: 'complaintReferenceNo', headerDesc: 'Complaint Ref. No', headerClass: 'header-style-first', dataClass: 'td-style-first' },
+        { headerKey: 'complaintReferenceNo', headerDesc: 'Complaint Ref. No', headerClass: 'header-style', dataClass: 'td-style' },
         { headerKey: 'investigationReportDate', headerDesc: 'Investigation Report Date', headerClass: 'header-style', dataClass: 'td-style' },
         { headerKey: 'customerName', headerDesc: 'Customer Name', headerClass: 'header-style', dataClass: 'td-style' },
         { headerKey: 'siteVisitMade', headerDesc: 'Site Visit Made', headerClass: 'header-style', dataClass: 'td-style' },
@@ -15,7 +15,7 @@ export class InvestigationReportDIConfigModel {
         { headerKey: 'itemNo', headerDesc: 'Item Code', headerClass: 'header-style visible-style', dataClass: 'td-style visible-style' },
         { headerKey: 'itemName', headerDesc: 'Item Description', headerClass: 'header-style visible-style', dataClass: 'td-style visible-style' },
         { headerKey: 'invoiceQtyInMtrs', headerDesc: 'Invoice Qty(in Mtrs)', headerClass: 'header-style visible-style', dataClass: 'td-style visible-style' },
-        { headerKey: 'complaintQtyInMtrs', headerDesc: 'Complain Qty(in Mtrs)', headerClass: 'header-style visible-style', dataClass: 'td-style visible-style', inputType:' <input type="text"></input>' },
+        { headerKey: 'complaintQtyInMtrs', headerDesc: 'Complaint Qty(in Mtrs)', headerClass: 'header-style visible-style', dataClass: 'td-style visible-style', inputType:' <input type="text"></input>' },
         { headerKey: 'customerName', headerDesc: 'Customer Name', headerClass: 'header-style visible-style', dataClass: 'td-style visible-style' },
         { headerKey: 'customerCode', headerDesc: 'Customer Code', headerClass: 'header-style visible-style', dataClass: 'td-style visible-style' },
         { headerKey: 'projectName', headerDesc: 'Project Name', headerClass: 'header-style visible-style', dataClass: 'td-style visible-style' },

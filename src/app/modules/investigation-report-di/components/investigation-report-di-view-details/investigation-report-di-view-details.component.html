@@ -17,26 +17,27 @@
     <!-- main div -->
     <div class="form-div-style">
       <!-- start table div -->
-      <div *ngIf="invReportDeatils.length > 1" class="col-lg-12 col-md-12 col-xs-12 scroll-bar prev-inv-report-table-style">
+      <div *ngIf="invReportDetails.length > 1" class="col-lg-12 col-md-12 col-xs-12 scroll-bar prev-inv-report-table-style">
         <table class="table-style">
-          <thead>
-            <tr class="th-style">
-              <td class="header-style-first">Select</td>
-              <td class="hideextra" *ngFor="let invRprt of  invReportTable" [ngClass]="invRprt.headerClass">
-                {{ invRprt.headerDesc }}
-              </td>
-            </tr>
-          </thead>
-          <tbody>
-            <tr class="tr-style" *ngFor="let invReportDet of invReportDeatils">
-              <td class="td-style-first" style="cursor: pointer;" (click)="selectData(invReportIndexParam)">
-                <i class="fa" [ngClass]="invReportIndex == invReportIndexParam ? 'fa-dot-circle-o' : 'fa-circle-o'"></i>
-              </td>
-              <td class="hideextra" *ngFor="let invRprt of invReportTable" [ngClass]="invRprt.dataClass">
-                {{ invReportDet[invRprt.headerKey] }}
-              </td>
-            </tr>
-          </tbody>
+            <thead>
+                <tr class="th-style">
+                  <td class="header-style-first">Select</td>
+                  <td class="hideextra" *ngFor="let invRprt of  invReportTable" [ngClass]="invRprt.headerClass">
+                    {{ invRprt.headerDesc }}
+                  </td>
+                </tr>
+              </thead>
+              <tbody>
+                <tr class="tr-style" *ngFor="let invReportDet of invReportDetails; let invRepIndex = index;" >
+                  <td class="td-style-first" style="cursor: pointer;" (click)="selectData(invRepIndex)">
+                    <i class="fa" [ngClass]="invReportIndex == invRepIndex ? 'fa-dot-circle-o' : 'fa-circle-o'"></i>
+                  </td>
+    
+                  <td class="hideextra" *ngFor="let invRprt of invReportTable" [ngClass]="invRprt.dataClass">
+                    {{ invReportDet[invRprt.headerKey] }}
+                  </td>
+                </tr>
+              </tbody>
         </table>
       </div>
       <!--end table div-->
@@ -56,36 +57,19 @@
 
             <!-- start div of Site Visit Made radio button -->
             <div class="form-group col-xs-12 col-sm-6 col-md-6 col-lg-4">
-              <ng-container *ngIf="invReportVar.siteVisitMadeValue =='Y'">
                 <div style="display:inline-block;">
                   <label>Site Visit Made</label>
                   <label class="control control--radio">Yes
-                    <input type="radio" name="siteVisitMade" formControlName="siteVisitMade" [checked]=true />
+                    <input type="radio" name="siteVisitMade" formControlName="siteVisitMade" value="Y" />
                     <div class="control__indicator"></div>
                   </label>
                 </div>
                 <div style="display:inline-block;">
                   <label class="control control--radio">No
-                    <input type="radio" name="siteVisitMade" formControlName="siteVisitMade" />
+                    <input type="radio" name="siteVisitMade" formControlName="siteVisitMade" value="N"/>
                     <div class="control__indicator"></div>
                   </label>
                 </div>
-              </ng-container>
-              <ng-container *ngIf="invReportVar.siteVisitMadeValue =='N'">
-                <div style="display:inline-block;">
-                  <label>Site Visit Made</label>
-                  <label class="control control--radio">Yes
-                    <input type="radio" name="siteVisitMade" formControlName="siteVisitMade" />
-                    <div class="control__indicator"></div>
-                  </label>
-                </div>
-                <div style="display:inline-block;">
-                  <label class="control control--radio">No
-                    <input type="radio" name="siteVisitMade" formControlName="siteVisitMade" [checked]=true />
-                    <div class="control__indicator"></div>
-                  </label>
-                </div>
-              </ng-container>
             </div>
             <!-- end div of Site Visit Made requied -->
 
@@ -100,36 +84,19 @@
 
             <!-- start div of Sample Collected radio button -->
             <div class="form-group col-xs-12 col-sm-6 col-md-6 col-lg-4">
-              <ng-container *ngIf="invReportVar.sampleCollectedValue =='Y'">
                 <div style="display:inline-block;">
                   <label>Sample Collected</label>
                   <label class="control control--radio">Yes
-                    <input type="radio" name="sampleCollected" formControlName="sampleCollected" value="Y" [checked]=true />
+                    <input type="radio" name="sampleCollected" formControlName="sampleCollected" value="Y"/>
                     <div class="control__indicator"></div>
                   </label>
                 </div>
                 <div style="display:inline-block;">
                   <label class="control control--radio">No
-                    <input type="radio" name="sampleCollected" formControlName="sampleCollected" />
+                    <input type="radio" name="sampleCollected" formControlName="sampleCollected" value="N"/>
                     <div class="control__indicator"></div>
                   </label>
                 </div>
-              </ng-container>
-              <ng-container *ngIf="invReportVar.sampleCollectedValue =='N'">
-                <div style="display:inline-block;">
-                  <label>Sample Collected</label>
-                  <label class="control control--radio">Yes
-                    <input type="radio" name="sampleCollected" formControlName="sampleCollected" />
-                    <div class="control__indicator"></div>
-                  </label>
-                </div>
-                <div style="display:inline-block;">
-                  <label class="control control--radio">No
-                    <input type="radio" name="sampleCollected" formControlName="sampleCollected" value="Y" [checked]=true />
-                    <div class="control__indicator"></div>
-                  </label>
-                </div>
-              </ng-container>
             </div>
             <!-- end div of Sample Collected-->
 
@@ -154,55 +121,15 @@
               <table class="table-style">
                 <thead>
                   <tr class="th-style">
-                    <td class="hideextra" *ngFor="let invItem of  itemGridTable" [ngClass]="invItem.headerClass" >
+                    <td class="hideextra" *ngFor="let invItem of  itemGridTable" [ngClass]="invItem.headerClass">
                       {{ invItem.headerDesc }}
                     </td>
                   </tr>
                 </thead>
                 <tbody>
                   <tr class="tr-style" *ngFor="let invItemDet of invItemDetails">
-                        <td class="hideextra" *ngFor="let itmGrid of itemGridTable" [ngClass]="itmGrid.dataClass">
-                          {{ invItemDet[itmGrid.headerKey] }}
-                        </td>
-                  </tr>
-                  <tr class="tr-style">
-                      <!-- invItemDetails -->
-                    <td class="td-style-first hideextra">
-                      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Add Item(s)
-                      <i style="font-size:16px;cursor: pointer;" title="Click here" class="fa fa-plus-circle" (click)="onItemsOpenModal('')"></i>
-                    </td>
-                    <td class="td-style">
-
-                    </td>
-                    <td class="td-style">
-
-                    </td>
-                    <td class="td-style">
-
-                    </td>
-                    <td class="td-style">
-
-                    </td>
-                    <td class="td-style">
-
-                    </td>
-                    <td class="td-style">
-
-                    </td>
-                    <td class="td-style">
-
-                    </td>
-                    <td class="td-style">
-
-                    </td>
-                    <td class="td-style">
-
-                    </td>
-                    <td class="td-style">
-
-                    </td>
-                    <td class="td-style-last">
-
+                    <td class="hideextra" *ngFor="let itmGrid of itemGridTable" [ngClass]="itmGrid.dataClass">
+                      {{ invItemDet[itmGrid.headerKey] }}
                     </td>
                   </tr>
                 </tbody>
