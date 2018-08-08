@@ -4,7 +4,6 @@ import { BrowserModule } from '@angular/platform-browser';
 import { CommonModule } from '@angular/common';
 import { BusySpinnerModule } from '../../widget/busy-spinner/busy-spinner.module';
 import { SharedModule } from '../../shared/shared.module';
-import { CloseComplainDIService } from './services/close-complain-di.service';
 import { CloseComplainDIAddEditComponent } from './components/close-complain-di-add-edit/close-complain-di-add-edit.component';
 import { CloseComplainDIViewDetailsComponent } from './components/close-complain-di-view-details/close-complain-di-view-details.component';
 
@@ -25,9 +24,6 @@ import { CloseComplainDIViewDetailsComponent } from './components/close-complain
     CloseComplainDIAddEditComponent,//close complain add/edit
     CloseComplainDIViewDetailsComponent//close complain view details
   ]
-  ,
-  providers : [
-    CloseComplainDIService
-  ]
+ 
 })
 export class CloseComplainDIModule { }

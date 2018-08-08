@@ -3,13 +3,11 @@ import { FormGroup, FormBuilder, Validators, FormControl } from '@angular/forms'
 import { Router, ActivatedRoute } from '@angular/router';
 import { Subscription } from 'rxjs/Subscription';//to get route param
 import { DatePipe } from '@angular/common';
-// import { NgbModal, NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { ROUTE_PATHS } from '../../../../router/router-paths';
-import { LocalStorageService } from "../../../../shared/services/local-storage.service";
+// import { LocalStorageService } from "../../../../shared/services/local-storage.service";
 import { SessionErrorService } from "../../../../shared/services/session-error.service";
-import { CADIService } from "../../services/ca-di-add-edit.service";
-// import { NgbdModalComponent } from '../../../../widget/modal/components/modal-component';
-
+import { CADIConfigModel } from '../../models/ca-di-config.model';
+import { ComplaintDIService } from '../../../../shared/services/complaint-di.service';
 
 @Component({
   selector: 'ispl-ca-di-view-details',
@@ -25,8 +23,10 @@ export class CADIViewDetailsComponent implements OnInit {
     complaintReferenceNo:'',//to get complaint reference no from route param
     complaintStatus:  ''//to fetch complaint status from route
   }; 
-  //for busy spinner
-  public busySpinner: boolean = false;
+  public caReportTable: any[] = [];//to store prev rca report
+  public caDetails: any[] = [];//to store complain reference detailS
+  public caIndex: number = 0;
+  public busySpinner: boolean = true;//spinner
   //for error msg
   public errorMsgObj: any = {
     errorMsg: '',
@@ -37,30 +37,18 @@ export class CADIViewDetailsComponent implements OnInit {
     private router: Router,
     private activatedroute: ActivatedRoute,
     private datePipe: DatePipe,//for date
-    private localStorageService: LocalStorageService,
     private sessionErrorService: SessionErrorService,
-    private cADIService: CADIService
+    private complaintDIService: ComplaintDIService,
   ) {
-    this.buildForm();//build form
   }//end of constructor
 
   ngOnInit(): void {
     console.log("onInit of CADIViewDetailsComponent..");
-    this.getRouteParam();//calling method to get route param 
-    this.getSystemDate();//method to get system date
+    this.initform();
+    this.getRouteParam();//to get route param 
+    this.caReportTable = new CADIConfigModel().caReportHeader;//getting prev report details
+    this.getviewComplainReferenceDetailsWSCall();//service call
   }//end of on init
-  
-  //a method named buildform for creating the caDIAddEditFormGroup and its formControl
-  private buildForm(): void {
-    this.caDIAddEditFormGroup = this.formBuilder.group({
-      'complaintReferenceNo': [''
-      ],
-      'caAddEditDate': [''
-      ],
-      'caAddEditDetails': [''
-      ]
-    });
-  }//end of method buildForm
 
   //method to get route param
   private getRouteParam() {
@@ -73,18 +61,71 @@ export class CADIViewDetailsComponent implements OnInit {
     console.log("this.complaintStatus for ca di view::",this.routeParam.complaintStatus);
     this.caDIAddEditFormGroup.controls['complaintReferenceNo'].setValue(this.routeParam.complaintReferenceNo);
   }//end of method
+  
+  /**
+   * @description initform data
+   */
+  initform() {
+    this.caDIAddEditFormGroup = new FormGroup({
+      complaintReferenceNo: new FormControl(''),
+      caAddEditDate: new FormControl(''),
+      caAddEditDetails: new FormControl(''),
+    });
+  }//end of init form
+//method to get complain det by comp ref no
+private getviewComplainReferenceDetailsWSCall() {
+  let pageCompStatus: number = 60;
+  this.complaintDIService.getComplainViewDetails(this.routeParam.complaintReferenceNo, pageCompStatus).
+    subscribe(res => {
+      console.log("res of ref det::::", res);
+      if (res.msgType === 'Info') {
+        let json: any = JSON.parse(res.mapDetails);
+        console.log("json::::", json);
+        this.caDetails = json;
+        this.caIndex = this.caDetails ? this.caDetails.length - 1 : 0;
+        this.setResValToForm();
+        this.busySpinner = false;
+      } else {
+        this.errorMsgObj.errMsgShowFlag = true;
+        this.errorMsgObj.errorMsg = res.msg;
+        this.busySpinner = false;
+      }
+    },
+      err => {
+        console.log(err);
+        this.errorMsgObj.errMsgShowFlag = true;
+        this.errorMsgObj.errorMsg = err.msg;
+        this.busySpinner = false;
+        this.sessionErrorService.routeToLogin(err._body);
+      });
+}//end of method
 
-  //method to get system date
-  private getSystemDate() {
-    //formatting the current date
-    let date = new Date();
-    let currentDate: string = this.datePipe.transform(date, 'yyyy-MM-dd');
-    this.caDIAddEditFormGroup.controls["caAddEditDate"].setValue(currentDate);
-  }//end of method
+//method to set res value to form
+private setResValToForm() {
+  let caFormData: any = this.caDetails[this.caIndex];
+  this.caDIAddEditFormGroup.controls['complaintReferenceNo'].setValue(caFormData.complaintReferenceNo);
+  this.caDIAddEditFormGroup.controls['caAddEditDate'].setValue(this.datePipe.transform(caFormData.correctiveActionDate, 'dd-MMM-yyyy'));
+  this.caDIAddEditFormGroup.controls['caAddEditDetails'].setValue(caFormData.correctiveAction);
+}//end of method 
 
-  //for clicking cancel button this method will be invoked
-  public onCancel(): void {
-    this.router.navigate([ROUTE_PATHS.RouteHome]);
-  }// end of onCancel method
+//for clicking cancel button this method will be invoked
+public onCancel(): void {
+  this.router.navigate([ROUTE_PATHS.RouteHome]);
+}// end of onCancel method
+
+public selectData(cmpIndex: number) {
+  this.busySpinner = true;
+  this.caIndex = cmpIndex;
+  this.setResValToForm();
+  setTimeout(() => {
+    this.busySpinner = false;
+  }, 300);
+}
+
+//method to delete error msg
+public deleteResErrorMsgOnClick() {
+  this.errorMsgObj.errMsgShowFlag = false;
+  this.errorMsgObj.errorMsg = "";
+}//end of method delete error msg
 
 }//end of class

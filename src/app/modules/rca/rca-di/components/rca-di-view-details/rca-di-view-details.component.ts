@@ -3,9 +3,8 @@ import { FormGroup, FormBuilder, Validators, FormControl } from '@angular/forms'
 import { Router, ActivatedRoute } from '@angular/router';
 import { Subscription } from 'rxjs/Subscription';//to get route param
 import { DatePipe } from '@angular/common';
-// import { NgbModal, NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { ROUTE_PATHS } from '../../../../router/router-paths';
-import { LocalStorageService } from "../../../../shared/services/local-storage.service";
+// import { LocalStorageService } from "../../../../shared/services/local-storage.service";
 import { SessionErrorService } from "../../../../shared/services/session-error.service";
 import { RCADIConfigModel } from '../../models/rca-di-config.model';
 import { ComplaintDIService } from '../../../../shared/services/complaint-di.service';
@@ -41,7 +40,7 @@ export class RCADIViewDetailsComponent implements OnInit {
     private activatedroute: ActivatedRoute,
     private datePipe: DatePipe,//for date
     private complaintDIService: ComplaintDIService,
-    private localStorageService: LocalStorageService,
+    // private localStorageService: LocalStorageService,
     private sessionErrorService: SessionErrorService,
   ) {
 
@@ -64,6 +63,7 @@ export class RCADIViewDetailsComponent implements OnInit {
     });
     console.log("complaintReferenceNo for rca di view: ", this.routeParam.complaintReferenceNo);
     console.log("this.complaintStatus for pa di view::", this.routeParam.complaintStatus);
+    this.rcaDIAddEditFormGroup.controls['complaintReferenceNo'].setValue(this.routeParam.complaintReferenceNo);
   }//end of method
 
   /**
@@ -75,8 +75,8 @@ export class RCADIViewDetailsComponent implements OnInit {
       rcaAddEditDate: new FormControl(''),
       rcaAddEditDetails: new FormControl(''),
     });
-  }
-
+  }//end of init form
+  //method to get complain det by comp ref no
   private getviewComplainReferenceDetailsWSCall() {
     let pageCompStatus: number = 50;
     this.complaintDIService.getComplainViewDetails(this.routeParam.complaintReferenceNo, pageCompStatus).
