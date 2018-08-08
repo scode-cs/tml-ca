@@ -90,6 +90,17 @@
 }
 /* end of hide horizontal scroll */
 
+.grid-table-style{
+  padding-left: 30px;
+  padding-right: 30px
+}
+.complaint-form {
+  padding-right: 30px;
+  padding-left: 30px;
+  margin-bottom: 30px;
+  margin-top: 15px;
+}
+
   /*table grid style*/
 .table-style {
   width: 100%;

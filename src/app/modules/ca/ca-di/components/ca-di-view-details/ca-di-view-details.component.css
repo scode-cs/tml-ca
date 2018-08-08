@@ -83,24 +83,122 @@
   .default-button-style:hover {
     background-color: #514E4E;
   }
- 
-
-/*red asterick style*/
-.red-asterick{
-    color: #cc100c;
-    font-weight: bolder;
-}
-/*end of asterick style*/
-.red-coloured-label{
-    color: #cc100c;
-}
-/*end of asterick style*/
 
 /* start hide horizontal scroll */
 .hide-horizontal-scroll{
   overflow-x: hidden;
 }
 /* end of hide horizontal scroll */
+
+
+.grid-table-style{
+  padding-left: 30px;
+  padding-right: 30px
+}
+.complaint-form {
+  padding-right: 30px;
+  padding-left: 30px;
+  margin-bottom: 30px;
+  margin-top: 15px;
+}
+
+  /*table grid style*/
+.table-style {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0 8px;
+  border: 1px solid #FEFEFE !important;
+  background-color: #FFFFFF;
+}
+
+.th-style {
+  background-color: #dbdada;
+  font-family: sans-serif;
+  font-size: 15px;
+  color: #000000;
+  letter-spacing: 1px;
+  padding-left: 10px;
+  border: 1px solid #7B7B7B;
+  box-shadow: 0px 1px 5px #D1D1D1;
+  height: 34px;
+}
+
+.tr-style {
+  font-size: 15px;
+  font-family: sans-serif;
+  color : #69696B;
+  height: 50px;
+  box-shadow: 0px 1px 5px #CBCBCB;
+  border: 1px solid #BCBCBC;
+}
+
+.td-style {
+  padding-left: 10px;
+  border-bottom: 1px solid #CACACA;
+  border-top: 1px solid #CACACA;
+  /*border-left: 1px solid #EFEFEF;*/
+}
+
+.td-style-first {
+  padding-left: 10px;
+  border-bottom: 1px solid #CACACA;
+  border-top: 1px solid #CACACA;
+  border-left: 3px solid #0098DF;
+}
+
+.td-style-last {
+  padding-left: 10px;
+  padding-right: 6px;
+  border-bottom: 1px solid #CACACA;
+  border-top: 1px solid #CACACA;
+  border-right: 1px solid #CACACA;
+}
+
+.header-style {
+  padding-left: 10px;
+  border-bottom: 1px solid #BCBCBC;
+  border-top: 1px solid #BCBCBC;
+}
+
+.header-style-first {
+  padding-left: 10px;
+  border-bottom: 1px solid #BCBCBC;
+  border-top: 1px solid #BCBCBC;
+  border-left: 1px solid #BCBCBC;
+}
+
+.header-style-last {
+  padding-left: 10px;
+  border-bottom: 1px solid #BCBCBC;
+  border-top: 1px solid #BCBCBC;
+  border-right: 1px solid #BCBCBC;
+}
+
+.even {
+  background-color: #FFFFFF;
+}
+
+.even:hover {
+  background-color: #0098DF;
+  color: #FFFFFF;
+  cursor: pointer;
+}
+
+.odd {
+  /*background-color: #F4F4F4;*/
+  background-color: #FFFFFF;
+}
+.odd:hover {
+  background-color: #0098DF;
+  color: #FFFFFF;
+  cursor: pointer;
+}
+
+.table-hover {
+  background-color: #E9E9E9;
+  cursor: pointer;
+}
+/* end of table grid style */
 
   
   

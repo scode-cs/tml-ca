@@ -4,10 +4,10 @@ import { Subscription } from 'rxjs/Subscription';//to get route param
 import { Router, ActivatedRoute } from '@angular/router';
 import { DatePipe } from '@angular/common';
 import { ROUTE_PATHS } from '../../../../router/router-paths';
-import { CloseComplaintDIService } from '../../../../close-complaint/close-complaint-di/services/close-complaint-di.service';
 import { LocalStorageService } from '../../../../shared/services/local-storage.service';
 import { SessionErrorService } from '../../../../shared/services/session-error.service';
-// import {NgbModal, NgbActiveModal} from '@ng-bootstrap/ng-bootstrap';
+import { CloseDIConfigModel } from '../../models/close-di-config.model';
+import { ComplaintDIService } from '../../../../shared/services/complaint-di.service';
 
 @Component({
   selector: 'ispl-close-complain-di-view-details',
@@ -19,75 +19,116 @@ export class CloseComplainDIViewDetailsComponent {
   
   public title: string = 'Close Complain';
   public closeComplainDIFormGroup: FormGroup;
-  public complaintReferenceNo: string;//to get complaint reference no from route param
-  public complaintStatus: string;//to get complaint status from route
-  public fileActivityId: number = this.localStorageService.appSettings.closeComplaintActivityId;//to load the files
-  //for busy spinner
-  public busySpinner: boolean = false;
-  
+  public routeParam: any ={
+    complaintReferenceNo:'',//to get complaint reference no from route param
+    complaintStatus:  ''//to fetch complaint status from route
+  }; 
+  public closeReportTable: any[] = [];//to store prev rca report
+  public closeDetails: any[] = [];//to store complain reference detailS
+  public closeIndex: number = 0;
+  public busySpinner: boolean = true;//spinner
   //for error msg
-  public errMsgShowFlag: boolean = false;//to show the error msg div
-  public errorMsg: string;//to store the error msg
-
+  public errorMsgObj: any = {
+    errorMsg: '',
+    errMsgShowFlag: false
+  };
 
 
   constructor(
     private activatedroute: ActivatedRoute,
     private formBuilder: FormBuilder,
-    private router: Router,
-    private closeComplaintDIService: CloseComplaintDIService,
-    private localStorageService: LocalStorageService,
+    private router: Router,   
+    private datePipe: DatePipe,//for date
     private sessionErrorService: SessionErrorService,
-    private datePipe: DatePipe//for date
+    private complaintDIService: ComplaintDIService
   ) { 
-    this.buildForm();//build form
+
   }
 
   ngOnInit(): void {
-    this.getRouteParam();//calling method to get route param 
+    this.initform();
+    this.getRouteParam();//to get route param 
+    this.closeReportTable = new CloseDIConfigModel().closeReportHeader;//getting prev report details
+    this.getviewComplainReferenceDetailsWSCall();//service call
   }//end of onInit
 
   //method to get route param
   private getRouteParam() {
     let routeSubscription: Subscription;
     routeSubscription = this.activatedroute.params.subscribe(params => {
-      this.complaintReferenceNo = params.complaintReferenceNo ? params.complaintReferenceNo : '';
-      this.complaintStatus = params.complaintStatus ? params.complaintStatus : ''; 
+      this.routeParam.complaintReferenceNo = params.complaintReferenceNo ? params.complaintReferenceNo : '';
+      this.routeParam.complaintStatus = params.complaintStatus ? params.complaintStatus : ''; 
     });
-    console.log('complaintReferenceNo for complain close di view: ', this.complaintReferenceNo);
+    console.log('complaintReferenceNo for complain close di view: ', this.routeParam.complaintReferenceNo);
   }//end of method
-
-  //a method named buildform for creating the closeComplainDIFormGroup and its formControl
-  private buildForm(): void {
-    this.closeComplainDIFormGroup = this.formBuilder.group({
-      'complaintReferenceNo': [''
-      ],
-      'closeDate': [''
-      ],
-      'acknoledgementReceived': [''
-      ],
-      'remarks': [''
-      ]
+   
+  /**
+   * @description initform data
+   */
+  initform() {
+    this.closeComplainDIFormGroup = new FormGroup({
+      complaintReferenceNo: new FormControl(''),
+      closeDate: new FormControl(''),
+      acknoledgementReceived: new FormControl({value:'N',disabled:true}),
+      remarks: new FormControl('')
     });
-  }//end of method buildForm
-  //method to get system date
-  private getSystemDate() {
-    //formatting the current date
-    let date = new Date();
-    let currentDate: string = this.datePipe.transform(date, 'dd-MMM-yyyy');
-    this.closeComplainDIFormGroup.controls['closeDate'].setValue(currentDate);
-  }//end of method
-  
-  // start method of deleteResErrorMsgOnClick
-  public deleteResErrorMsgOnClick() {
-    this.errMsgShowFlag = false;
-    this.errorMsg = '';
-  }//method to delete error msg
+  }//end of init form
+//method to get complain det by comp ref no
+private getviewComplainReferenceDetailsWSCall() {
+  let pageCompStatus: number = 80;
+  this.complaintDIService.getComplainViewDetails(this.routeParam.complaintReferenceNo, pageCompStatus).
+    subscribe(res => {
+      console.log("res of ref det::::", res);
+      if (res.msgType === 'Info') {
+        let json: any = JSON.parse(res.mapDetails);
+        console.log("json::::", json);
+        this.closeDetails = json;
+        this.closeIndex = this.closeDetails ? this.closeDetails.length - 1 : 0;
+        this.setResValToForm();
+        this.busySpinner = false;
+      } else {
+        this.errorMsgObj.errMsgShowFlag = true;
+        this.errorMsgObj.errorMsg = res.msg;
+        this.busySpinner = false;
+      }
+    },
+      err => {
+        console.log(err);
+        this.errorMsgObj.errMsgShowFlag = true;
+        this.errorMsgObj.errorMsg = err.msg;
+        this.busySpinner = false;
+        this.sessionErrorService.routeToLogin(err._body);
+      });
+}//end of method
 
-  //for clicking cancel button this method will be invoked
-  public onCancel(): void {
-    this.router.navigate([ROUTE_PATHS.RouteHome]);
-  }// end of onCancel method
+//method to set res value to form
+private setResValToForm() {
+  let closeFormData: any = this.closeDetails[this.closeIndex];
+  this.closeComplainDIFormGroup.controls['complaintReferenceNo'].setValue(closeFormData.complaintReferenceNo);
+  this.closeComplainDIFormGroup.controls['closeDate'].setValue(this.datePipe.transform(closeFormData.closeDate, 'dd-MMM-yyyy'));
+  this.closeComplainDIFormGroup.controls['acknoledgementReceived'].setValue(closeFormData.acknoledgementReceived);
+  this.closeComplainDIFormGroup.controls['remarks'].setValue(closeFormData.closeRemarks);
+}//end of method 
+
+//for clicking cancel button this method will be invoked
+public onCancel(): void {
+  this.router.navigate([ROUTE_PATHS.RouteHome]);
+}// end of onCancel method
+
+public selectData(cmpIndex: number) {
+  this.busySpinner = true;
+  this.closeIndex = cmpIndex;
+  this.setResValToForm();
+  setTimeout(() => {
+    this.busySpinner = false;
+  }, 300);
+}
+
+//method to delete error msg
+public deleteResErrorMsgOnClick() {
+  this.errorMsgObj.errMsgShowFlag = false;
+  this.errorMsgObj.errorMsg = "";
+}//end of method delete error msg
 
 
 }//end of class

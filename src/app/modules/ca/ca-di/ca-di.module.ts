@@ -6,7 +6,6 @@ import { BusySpinnerModule } from '../../widget/busy-spinner/busy-spinner.module
 import { DatePipe } from '@angular/common';
 import { SharedModule } from '../../shared/shared.module';
 import { CADIAddEditComponent } from './components/ca-di-add-edit/ca-di-add-edit.component';
-import { CADIService } from './services/ca-di-add-edit.service';
 import { CADIViewDetailsComponent } from './components/ca-di-view-details/ca-di-view-details.component';
 @NgModule({
   imports:      [
@@ -27,8 +26,7 @@ import { CADIViewDetailsComponent } from './components/ca-di-view-details/ca-di-
     CADIViewDetailsComponent//view
   ],
   providers : [    
-    DatePipe,  
-    CADIService//service  
+    DatePipe  
   ],
 })
 export class CADIModule { }

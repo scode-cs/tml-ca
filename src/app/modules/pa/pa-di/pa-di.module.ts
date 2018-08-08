@@ -6,7 +6,6 @@ import { BusySpinnerModule } from '../../widget/busy-spinner/busy-spinner.module
 import { DatePipe } from '@angular/common';
 import { SharedModule } from '../../shared/shared.module';
 import { PADIAddEditComponent } from './components/pa-di-add-edit/pa-di-add-edit.component';
-import { PADIService } from './services/pa-di-add-edit.service';
 import { PADIViewDetailsComponent } from './components/pa-di-view-details/pa-di-view-details.component';
 @NgModule({
   imports:      [
@@ -27,7 +26,6 @@ import { PADIViewDetailsComponent } from './components/pa-di-view-details/pa-di-
   ],
   providers : [    
     DatePipe,  
-    PADIService//service  
   ]
 })
 export class PADIModule { }

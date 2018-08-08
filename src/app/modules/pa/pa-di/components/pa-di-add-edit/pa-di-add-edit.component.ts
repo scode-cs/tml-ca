@@ -8,7 +8,6 @@ import { NgbdModalComponent } from '../../../../widget/modal/components/modal-co
 import { ROUTE_PATHS } from '../../../../router/router-paths';
 import { LocalStorageService } from "../../../../shared/services/local-storage.service";
 import { SessionErrorService } from "../../../../shared/services/session-error.service";
-import { PADIService } from "../../services/pa-di-add-edit.service";
 import { ComplaintDIService } from '../../../../shared/services/complaint-di.service';
 @Component({
   selector: 'ispl-pa-di-add-edit',
@@ -42,7 +41,6 @@ export class PADIAddEditComponent implements OnInit {
     private modalService: NgbModal,//modal
     private localStorageService: LocalStorageService,
     private sessionErrorService: SessionErrorService,
-    private paDIService: PADIService,
     private complaintDIService: ComplaintDIService
   ) {
     this.buildForm();//build form
