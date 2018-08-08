@@ -123,16 +123,20 @@ public postInvoiceItemDetail(items: any,plantType: string) {
 
  /**
  * 
- * @param items 
+ * @param plantType 
  */
-public deleteInvoiceItemDetail(items: any,plantType: string) {
+//method to delete item
+public deleteInvoiceItemDetail(plantType: string,complaintReferenceNo: string,complaintDetailsAutoId: number,activityId: number) {
   let headers: Headers = this.configService();
-  let actionUrl = AppUrlsConst.COMPLAIN_INVOICE_ITEM_DETAIL_ADD_URL
-  +"?plantType="+plantType;
-  // return this.http.delete(actionUrl, items, { headers: headers })
-  //     .map((res: Response) => { return res.json() })
-  //     .catch((error: Response) => { return Observable.throw(error) });
-}
+  let actionUrl = AppUrlsConst.COMPLAIN_INVOICE_ITEM_DETAIL_ADD_URL;
+  let param = "plantType="+plantType+"&complaintReferenceNo="+complaintReferenceNo+"&complaintDetailsAutoId="+complaintDetailsAutoId
+  +"&activityId="+activityId;
+  return this.http.delete(actionUrl+'?'+param, { headers: headers })
+      .map((res: Response) => { return res.json() })
+      .catch((error: Response) => { return Observable.throw(error) });
+}//end of the method of deleteInvoiceItemDetail
+
+
 
 //method to get complain reference details view
 getComplainViewDetails(complaintReferenceNo: string, activityIdFieldName: number) {
@@ -145,6 +149,49 @@ getComplainViewDetails(complaintReferenceNo: string, activityIdFieldName: number
     .map((res: Response) => { return res.json() })
     .catch((error: Response) => { return Observable.throw(error) });
 }//end of get getComplaintReferenceDetailsView
+
+/**
+ * 
+ * @param plantType 
+ */
+//method to delete item
+public deleteFile(plantType: string,files: any) {
+  let headers: Headers = this.configService();
+  let actionUrl = AppUrlsConst.COMPLAIN_FILE_DELETE_URL;
+  let param = "plantType="+plantType;
+  return this.http.put(actionUrl+'?'+param,files, { headers: headers })
+      .map((res: Response) => { return res.json() })
+      .catch((error: Response) => { return Observable.throw(error) });
+}//end of the method of deleteInvoiceItemDetail
+
+
+/**
+ * 
+ * @param plantType 
+ */
+//start method of postFile to upolad a file
+public postFile(plantType: string,files: any,complaintReferenceNo:string,complaintDetailsAutoId: number, activityId: number){
+  let headers: Headers = this.configService();
+  let actionUrl = AppUrlsConst.COMPLAIN_FILE_UPLOAD_URL;
+  let param = "plantType="+plantType+"&complaintReferenceNo="+complaintReferenceNo+"&complaintDetailsAutoId="+complaintDetailsAutoId
+  +"&activityId="+activityId;
+  return this.http.post(actionUrl+'?'+param,files, { headers: headers })
+      .map((res: Response) => { return res.json() })
+      .catch((error: Response) => { return Observable.throw(error) });
+}//end method of postFile
+
+
+
+//start method of viewFile to view a file
+// public viewFile(plantType: string,files: any,complaintReferenceNo:string,complaintDetailsAutoId: number, activityId: number){
+//   let headers: Headers = this.configService();
+//   let actionUrl = AppUrlsConst.COMPLAIN_FILE_VIEW_URL;
+//   let param = "filter=&sortData=&orderBy=";
+//   return this.http.get(actionUrl+'?'+param, { headers: headers })
+//       .map((res: Response) => { return res.json() })
+//       .catch((error: Response) => { return Observable.throw(error) });
+// }//end method of viewFile
+
 
 
   

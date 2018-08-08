@@ -158,7 +158,11 @@ export const AppUrlsConst: any = {
 
     COMPLAIN_INVOICE_ITEM_DETAIL_VIEW_URL: URL_PATH + 'api/complaintview/viewinvoicedetail',//di complain view invoice item detail
     COMPLAIN_INVOICE_ITEM_DETAIL_ADD_URL: URL_PATH + 'api/complaint/addinvoice',//di complain add invoice item detail
-    COMPLAIN_INVOICE_ITEM_DETAIL_DELETE_URL: URL_PATH + 'api/complaint/delinvoice'//di complain delete invoice detail
+    COMPLAIN_INVOICE_ITEM_DETAIL_DELETE_URL: URL_PATH + 'api/complaint/delinvoice',//di complain delete invoice detail
+
+    COMPLAIN_FILE_DELETE_URL: URL_PATH + 'api/complaint/modfile',//to delete file
+    COMPLAIN_FILE_UPLOAD_URL: URL_PATH + 'api/complaint/uploadfile',//to upload file
+    COMPLAIN_FILE_VIEW_URL: URL_PATH + 'api/complaintview/viewfiledetail'//to view file
 }
 
 export const WebServiceConst: any = {

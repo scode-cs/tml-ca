@@ -21,13 +21,18 @@
         <table class="table-style">
           <thead>
             <tr class="th-style">
+              <td class="header-style-first">Select</td>
               <td class="hideextra" *ngFor="let invRprt of  invReportTable" [ngClass]="invRprt.headerClass">
                 {{ invRprt.headerDesc }}
               </td>
             </tr>
           </thead>
           <tbody>
-            <tr class="tr-style" *ngFor="let invReportDet of invReportDetails">
+            <tr class="tr-style" *ngFor="let invReportDet of invReportDetails; let invRepIndex = index;" >
+              <td class="td-style-first" style="cursor: pointer;" (click)="selectData(invRepIndex)">
+                <i class="fa" [ngClass]="invReportIndex == invRepIndex ? 'fa-dot-circle-o' : 'fa-circle-o'"></i>
+              </td>
+
               <td class="hideextra" *ngFor="let invRprt of invReportTable" [ngClass]="invRprt.dataClass">
                 {{ invReportDet[invRprt.headerKey] }}
               </td>
@@ -205,21 +210,28 @@
               <table class="table-style">
                 <thead>
                   <tr class="th-style">
-                    <td class="hideextra" *ngFor="let invItem of  itemGridTable" [ngClass]="invItem.headerClass" >
+                    <td class="hideextra" *ngFor="let invItem of  itemGridTable" [ngClass]="invItem.headerClass">
                       {{ invItem.headerDesc }}
                     </td>
                   </tr>
                 </thead>
                 <tbody>
                   <tr class="tr-style" *ngFor="let invItemDet of invItemDetails">
-                        <td class="hideextra" *ngFor="let itmGrid of itemGridTable" [ngClass]="itmGrid.dataClass">
-                          {{ invItemDet[itmGrid.headerKey] }}
-                        </td>
+                    <td class="hideextra" *ngFor="let itmGrid of itemGridTable" [ngClass]="itmGrid.dataClass">
+                      <ng-container *ngIf="itmGrid.headerKey === 'complaintQtyInMtrs' then thenblock; else elseblock">
+                      </ng-container>
+                      <ng-template #thenblock>
+                        <input type="number" value={{invItemDet[itmGrid.headerKey]}} />
+                      </ng-template>
+                      <ng-template #elseblock>
+                        {{ invItemDet[itmGrid.headerKey] }}
+                      </ng-template>
+                    </td>
                   </tr>
                   <tr class="tr-style">
-                      <!-- invItemDetails -->
+                    <!-- invItemDetails -->
                     <td class="td-style-first hideextra">
-                      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Add Item(s)
+                       Add Item(s)
                       <i style="font-size:16px;cursor: pointer;" title="Click here" class="fa fa-plus-circle" (click)="onItemsOpenModal('')"></i>
                     </td>
                     <td class="td-style">
@@ -271,7 +283,7 @@
                     />
                     <span class="custom-control-indicator"></span>
                     <span class="custom-control-description">
-                        {{unloadingEquipment.desc}}
+                      {{unloadingEquipment.desc}}
                     </span>
                   </label>
                 </li>
@@ -289,7 +301,7 @@
                     />
                     <span class="custom-control-indicator"></span>
                     <span class="custom-control-description">
-                        {{lubricantUsed.desc}}
+                      {{lubricantUsed.desc}}
                     </span>
                   </label>
                 </li>
@@ -325,7 +337,7 @@
                     />
                     <span class="custom-control-indicator"></span>
                     <span class="custom-control-description">
-                        {{jointingType.desc}}
+                      {{jointingType.desc}}
                     </span>
                   </label>
                 </li>

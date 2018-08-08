@@ -43,7 +43,7 @@ export class InvestigationReportDiComponent implements OnInit {
   public itemGridTable: any[] = [];//to store item grid
   public complaintStatus: number;//to fetch complaint status from route
   public invReportDetails: any[] = [];// to store invReport deatils from response
-  public invItemDetails:  any[] = [];// to store inv item deatils from response
+  public invItemDetails: any[] = [];// to store inv item deatils from response
   public invReportIndex: number = 0;
   public ivtReportDataList: any = { unloadingEquipmentList: '', lubricantUsedList: '', layingPositionList: '', jointingTypeList: '' };
   public unloadingEquipmentList: any[] = [];
@@ -77,7 +77,7 @@ export class InvestigationReportDiComponent implements OnInit {
   public resErrorMsg: string;
   //for file
   private fileActivityId: number = this.localStorageService.appSettings.preliminaryInvestigationActivityId;//to get uploaded file for DI edit
-
+  private plantType: string = this.localStorageService.user.plantType;
   constructor(
     private activatedroute: ActivatedRoute,
     private router: Router,
@@ -140,23 +140,23 @@ export class InvestigationReportDiComponent implements OnInit {
   }//end of method
 
   //start method getInvoiceItemDetailWSCall to get item details
-  private getInvoiceItemDetailWSCall(){
+  private getInvoiceItemDetailWSCall() {
     let activityId: number = 10;
     this.busySpinner = true;
-    this.complaintDIService.getInvoiceItemDetail(this.complaintReferenceNo,activityId).
-    subscribe(res => {
-      if (res.msgType === "Info") {
-        let invItemDeatilsJson: any = JSON.parse(res.mapDetails);
-        this.invItemDetails = invItemDeatilsJson;
-        this.busySpinner = false;
-        console.log("item details =========.........>>>>>>>>>",this.invItemDetails);
-      }//end of if
-    },
-    err => {
-      console.log(err);
-      this.busySpinner = false;
-      this.sessionErrorService.routeToLogin(err._body);
-    });
+    this.complaintDIService.getInvoiceItemDetail(this.complaintReferenceNo, activityId).
+      subscribe(res => {
+        if (res.msgType === "Info") {
+          let invItemDeatilsJson: any = JSON.parse(res.mapDetails);
+          this.invItemDetails = invItemDeatilsJson;
+          this.busySpinner = false;
+          console.log("item details =========.........>>>>>>>>>", this.invItemDetails);
+        }//end of if
+      },
+        err => {
+          console.log(err);
+          this.busySpinner = false;
+          this.sessionErrorService.routeToLogin(err._body);
+        });
   }//end method of getInvoiceItemDetailWSCall
 
   //start method setFormValue to set the value in invreport form
@@ -193,6 +193,77 @@ export class InvestigationReportDiComponent implements OnInit {
     modalRef.componentInstance.modalMessage = msgBody;
   }//end of method onOpenModal
 
+  //start method deleteInvoiceItemDetailWSCall to delete item details
+  private deleteInvoiceItemDetailWSCall() {
+    let activityId: number = 40;
+    this.busySpinner = true;
+    let complaintDetailsAutoId: number = this.invItemDetails[0].complaintDetailsAutoId
+    this.complaintDIService.deleteInvoiceItemDetail(this.plantType, this.complaintReferenceNo, complaintDetailsAutoId, activityId).
+      subscribe(res => {
+        if (res.msgType === "Info") {
+          console.log("delete item msg====   ", res.msg);
+          this.busySpinner = false;
+        }//end of if
+      },
+        err => {
+          console.log(err);
+          this.busySpinner = false;
+          this.sessionErrorService.routeToLogin(err._body);
+        });
+  }//end of the method
+
+  //start method postInvoiceItemDetailWsCall to post item details
+  private postInvoiceItemDetailWsCall() {
+    this.busySpinner = true;
+    this.complaintDIService.postInvoiceItemDetail(this.invItemDetails, this.plantType).
+      subscribe(res => {
+        if (res.msgType === 'Info') {
+          console.log("submit item msg====   ", res.msg);
+        }//end of if of msgType Info
+      },
+        err => {
+          console.log(err);
+          this.busySpinner = false;
+          this.sessionErrorService.routeToLogin(err._body);
+        });
+  }//end of the method of postInvoiceItemDetailWsCall
+
+  //start method uploadInvoiceItemDetails
+  private uploadInvoiceItemDetails(){
+    //this.deleteInvoiceItemDetailWSCall();
+    this.postInvoiceItemDetailWsCall();
+  }//end of the method uploadInvoiceItemDetails
+
+  //start method of submitInvReportDIDetWSCall to submit invReport details
+  private submitInvReportDIDetWSCall(invReportHeaderJson: any, invReportDetailJson: any, action: string){
+    this.busySpinner = true;
+    this.complaintDIService.putHeader(invReportHeaderJson, this.plantType, action).
+      subscribe(res => {
+        if (res.msgType === 'Info') {
+          invReportDetailJson.complaintReferenceNo = res.value;
+          this.complaintDIService.postDetail(invReportDetailJson, this.plantType, action).
+            subscribe(res => {
+              if (res.msgType === 'Info') {
+                console.log(" complain submitted successfully");
+              }
+              this.busySpinner = false;
+              this.onOpenModal(res.msg);
+            },
+              err => {
+                console.log(err);
+                this.busySpinner = false;
+                this.sessionErrorService.routeToLogin(err._body);
+              });
+        }//end of if of msgType Info
+
+      },
+        err => {
+          console.log(err);
+          this.busySpinner = false;
+          this.sessionErrorService.routeToLogin(err._body);
+        });
+  }//end of the method of submitInvReportDIDetWSCall
+
   //on click investigationReportDISubmit method
   public investigationReportDISubmit(): void {
     let invReportHeaderJson: any = {};
@@ -200,7 +271,6 @@ export class InvestigationReportDiComponent implements OnInit {
     invReportHeaderJson.userId = this.localStorageService.user.userId;
     invReportHeaderJson.complaintReferenceNo = this.invReportFormGroup.value.complaintReferenceNo;
     console.log(" invReportHeaderJson =========", invReportHeaderJson);
-    let plantType: string = this.localStorageService.user.plantType;
     let action: string = "";
     let invReportDetailJson: any = {};
     invReportDetailJson.activityId = this.activityId;
@@ -212,7 +282,7 @@ export class InvestigationReportDiComponent implements OnInit {
     invReportDetailJson.sampleCollectedDate = this.invReportFormGroup.value.sampleCollectedDate;
     invReportDetailJson.siteVisitMade = this.invReportFormGroup.value.siteVisit;
     invReportDetailJson.siteVisitMadeDate = this.invReportFormGroup.value.siteVisitDt;
-    
+
     let unloadingEquipment: string = "";
     this.unloadingEquipmentList.forEach(unloadingEquip => {
       unloadingEquipment = unloadingEquipment ? (unloadingEquipment + "," + unloadingEquip) : unloadingEquip;
@@ -241,33 +311,10 @@ export class InvestigationReportDiComponent implements OnInit {
     console.log("jointingType ======== ", jointingType);
     invReportDetailJson.jointingType = jointingType;
 
-    console.log("invReportDetailJson====== ",invReportDetailJson);
-    this.busySpinner = true;
-    this.complaintDIService.putHeader(invReportHeaderJson, plantType, action).
-      subscribe(res => {
-        if (res.msgType === 'Info') {
-          invReportDetailJson.complaintReferenceNo = res.value;
-          this.complaintDIService.postDetail(invReportDetailJson, plantType, action).
-            subscribe(res => {
-              if (res.msgType === 'Info') {
-                console.log(" complain submitted successfully");
-              }
-              this.busySpinner = false;
-              this.onOpenModal(res.msg);
-            },
-              err => {
-                console.log(err);
-                this.busySpinner = false;
-                this.sessionErrorService.routeToLogin(err._body);
-              });
-        }//end of if of msgType Info
+    console.log("invReportDetailJson====== ", invReportDetailJson);
 
-      },
-        err => {
-          console.log(err);
-          this.busySpinner = false;
-          this.sessionErrorService.routeToLogin(err._body);
-        });
+    this.submitInvReportDIDetWSCall(invReportHeaderJson,invReportDetailJson,action);//calling the me
+    this.uploadInvoiceItemDetails();
 
   }//end of method investigationReportDISubmit
 
@@ -422,9 +469,18 @@ export class InvestigationReportDiComponent implements OnInit {
     }//end of else
   }//end of method onclickJointingTypeListSelect
 
+  //start method selectData
+  public selectData(invRepIndex: number) {
+    this.busySpinner = true;
+    this.invReportIndex = invRepIndex;
+    this.setFormValue();
+    setTimeout(() => {
+      this.busySpinner = false;
+    }, 500);
+  }//end method of selectData
 
-   //onOpenModal for opening modal from modalService
-   public onItemsOpenModal(invoiceNo: string) {
+  //onOpenModal for opening modal from modalService
+  public onItemsOpenModal(invoiceNo: string) {
     const modalRef = this.modalService.open(NgbdComplaintReferenceNoModalComponent);
     modalRef.componentInstance.modalTitle = this.title;
     modalRef.componentInstance.invoiceNo = invoiceNo;
