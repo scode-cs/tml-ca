@@ -108,6 +108,19 @@ export class ComplaintDIService {
 
   }
 
+  /**
+ * 
+ * @param complainHeader set data to post header
+ */
+public postInvoiceItemDetail(complainHeader: any) {
+  let headers: Headers = this.configService();
+  let actionUrl = AppUrlsConst.COMPLAIN_HEADER_TABLE_ADD_URL;
+
+  return this.http.post(actionUrl, complainHeader, { headers: headers })
+      .map((res: Response) => { return res.json() })
+      .catch((error: Response) => { return Observable.throw(error) });
+}
+
   
 
 }
