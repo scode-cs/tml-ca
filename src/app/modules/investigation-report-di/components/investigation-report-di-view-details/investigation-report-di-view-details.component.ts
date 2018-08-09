@@ -10,6 +10,7 @@ import { SessionErrorService } from "../../../shared/services/session-error.serv
 import { InvestigationReportDIConfigModel } from '../../models/investigation-report-di-config.model';
 import { InvestigationReportDIDataService } from '../../services/investigation-report-di.service';
 import { ComplaintDIService } from '../../../shared/services/complaint-di.service';
+import { InvestigationDataModel } from '../../models/investigation-data-model';
 
 @Component({
   selector: 'ispl-investigation-report-di-view-details-form',
@@ -42,6 +43,8 @@ export class InvestigationReportDiViewDetailsComponent implements OnInit {
   public invReportDetails: any[] = [];// to store invReport deatils from response
   public invReportIndex: number = 0;
   public invItemDetails:  any[] = [];// to store inv item deatils from response
+  public jointingTypeDesc: any[] = [];
+  public ivtReportDataList: any = { unloadingEquipmentList: '', lubricantUsedList: '', layingPositionList: '', jointingTypeList: '' };
   //busySpinner 
   public busySpinner: boolean = true;
 
@@ -61,8 +64,8 @@ export class InvestigationReportDiViewDetailsComponent implements OnInit {
     this.getRouteParam();
     this.invReportTable = new InvestigationReportDIConfigModel().prevInvReportHeader;
     this.itemGridTable = new InvestigationReportDIConfigModel().invItemGridHeader;
+    this.ivtReportDataList.jointingTypeList = new InvestigationDataModel().jointingTypeList;
     this.getInvestigationViewDetailsWSCall();
-    this.getInvoiceItemDetailWSCall();
   }//end of onInit
 
   //start method getRouteParam to get route parameter
@@ -87,6 +90,9 @@ export class InvestigationReportDiViewDetailsComponent implements OnInit {
           console.log("res of inv Report Deatils::::", this.invReportDetails);
           this.invReportIndex = this.invReportDetails ? this.invReportDetails.length - 1 : 0;
           this.setFormValue();
+          let complainDetailsAutoId: number = this.invReportDetails[this.invReportIndex].complaintDetailAutoId;
+          let itemActivityId: number = 10;
+          this.getInvoiceItemDetailWSCall(this.complaintReferenceNo, itemActivityId, complainDetailsAutoId);//inv item details
           this.busySpinner = false;
         }
       },
@@ -97,25 +103,24 @@ export class InvestigationReportDiViewDetailsComponent implements OnInit {
         });
   }//end of method
 
-  //start method getInvoiceItemDetailWSCall to get item details
-  private getInvoiceItemDetailWSCall(){
-    let activityId: number = 10;
-    this.busySpinner = true;
-    this.complaintDIService.getInvoiceItemDetail(this.complaintReferenceNo,activityId).
+ //start method getInvoiceItemDetailWSCall to get item details
+ private getInvoiceItemDetailWSCall(complaintReferenceNo: string, pageActivityId: number, complainDetailsAutoId: number) {
+  this.busySpinner = true;
+  this.complaintDIService.getInvoiceItemDetail(complaintReferenceNo, pageActivityId,complainDetailsAutoId).
     subscribe(res => {
       if (res.msgType === "Info") {
         let invItemDeatilsJson: any = JSON.parse(res.mapDetails);
         this.invItemDetails = invItemDeatilsJson;
         this.busySpinner = false;
-        console.log("item details =========.........>>>>>>>>>",this.invItemDetails);
+        console.log("item details =========.........>>>>>>>>>", this.invItemDetails);
       }//end of if
     },
-    err => {
-      console.log(err);
-      this.busySpinner = false;
-      this.sessionErrorService.routeToLogin(err._body);
-    });
-  }//end method of getInvoiceItemDetailWSCall
+      err => {
+        console.log(err);
+        this.busySpinner = false;
+        this.sessionErrorService.routeToLogin(err._body);
+      });
+}//end method of getInvoiceItemDetailWSCall
 
   //start method setFormValue to set the value in invreport form
   private setFormValue() {
@@ -128,7 +133,22 @@ export class InvestigationReportDiViewDetailsComponent implements OnInit {
     this.invReportFormGroup.controls['sampleCollected'].setValue(formData.sampleCollected);
     this.invReportFormGroup.controls['sampleCollectedDate'].setValue(this.datePipe.transform(formData.sampleCollectedDate, 'dd-MMM-yyyy'));
     this.invReportFormGroup.controls['investigationReportDate'].setValue(this.datePipe.transform(formData.investigationReportDate, 'dd-MMM-yyyy'));
+    let jointingType: string ="["+formData.jointingType+"]"; 
+    let jointingTypeKey: any[] = JSON.parse(jointingType);
+    this.jointingTypeDesc = this.getSelectedCheckedItemVal(this.ivtReportDataList.jointingTypeList,jointingTypeKey);
   }//end method setFormValue
+
+  private getSelectedCheckedItemVal(keyValueArr: any[],selectedKeyArr: any[]): any[]{
+    let selectedValueArr: any[] = [];
+    keyValueArr.forEach(kVEl => {
+      selectedKeyArr.forEach(selKeyEl => {
+        if(selKeyEl == kVEl.id){
+          selectedValueArr.push(kVEl.desc);
+        }
+      });
+    });
+    return selectedValueArr;
+  }
 
   //start method selectData
   public selectData(invRepIndex: number) {
