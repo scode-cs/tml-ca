@@ -182,15 +182,18 @@ public postFile(plantType: string,files: any,complaintReferenceNo:string,complai
 
 
 
-//start method of viewFile to view a file
-// public viewFile(plantType: string,files: any,complaintReferenceNo:string,complaintDetailsAutoId: number, activityId: number){
-//   let headers: Headers = this.configService();
-//   let actionUrl = AppUrlsConst.COMPLAIN_FILE_VIEW_URL;
-//   let param = "filter=&sortData=&orderBy=";
-//   return this.http.get(actionUrl+'?'+param, { headers: headers })
-//       .map((res: Response) => { return res.json() })
-//       .catch((error: Response) => { return Observable.throw(error) });
-// }//end method of viewFile
+// start method of viewFile to view a file
+public viewFile(complaintReferenceNo:string, activityId: number, complaintDetailsAutoId: number){
+  let headers: Headers = this.configService();
+  let actionUrl = AppUrlsConst.COMPLAIN_FILE_VIEW_URL;
+  let param = "filter="+this.localStorageService.appSettings.complaintReferenceNoFieldName+"='"+complaintReferenceNo+"' AND "+
+  this.localStorageService.appSettings.activityIdFieldName+"="+activityId+" AND "+
+  this.localStorageService.appSettings.complaintDetailsAutoIdFieldName+"="+complaintDetailsAutoId+
+  "&sortData=&orderBy=";
+  return this.http.get(actionUrl+'?'+param, { headers: headers })
+      .map((res: Response) => { return res.json() })
+      .catch((error: Response) => { return Observable.throw(error) });
+}//end method of viewFile
 
 
 

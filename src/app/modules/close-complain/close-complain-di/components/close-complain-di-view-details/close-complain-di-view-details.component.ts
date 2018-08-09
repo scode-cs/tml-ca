@@ -25,6 +25,7 @@ export class CloseComplainDIViewDetailsComponent {
   }; 
   public closeReportTable: any[] = [];//to store prev rca report
   public closeDetails: any[] = [];//to store complain reference detailS
+  public fileDetails: any[] = [];//to store file details
   public closeIndex: number = 0;
   public busySpinner: boolean = true;//spinner
   //for error msg
@@ -32,7 +33,7 @@ export class CloseComplainDIViewDetailsComponent {
     errorMsg: '',
     errMsgShowFlag: false
   };
-
+  public prevCompDetShowFlag: boolean = false;//a flag to show previous complain det
 
   constructor(
     private activatedroute: ActivatedRoute,
@@ -85,6 +86,8 @@ private getviewComplainReferenceDetailsWSCall() {
         this.closeDetails = json;
         this.closeIndex = this.closeDetails ? this.closeDetails.length - 1 : 0;
         this.setResValToForm();
+        let complainDetailsAutoId: number = this.closeDetails[this.closeIndex].complaintDetailAutoId;
+        this.getFileWSCall(this.routeParam.complaintReferenceNo, pageCompStatus ,complainDetailsAutoId);//to get file
         this.busySpinner = false;
       } else {
         this.errorMsgObj.errMsgShowFlag = true;
@@ -109,6 +112,26 @@ private setResValToForm() {
   this.closeComplainDIFormGroup.controls['acknoledgementReceived'].setValue(closeFormData.acknoledgementReceived);
   this.closeComplainDIFormGroup.controls['remarks'].setValue(closeFormData.closeRemarks);
 }//end of method 
+
+//method to get file
+private getFileWSCall(complaintReferenceNo: string, pageActivityId: number, complainDetailsAutoId: number) {
+  this.complaintDIService.viewFile(complaintReferenceNo, pageActivityId,complainDetailsAutoId).
+  subscribe(res => {
+    console.log("res of file det::::", res);
+    if (res.msgType === 'Info') {
+      let json: any = JSON.parse(res.mapDetails);
+      console.log("json::::", json);
+      this.fileDetails = json;
+      console.log("File details::::",this.fileDetails);
+      this.busySpinner = false;
+    }
+  },
+    err => {
+      console.log(err);
+      this.busySpinner = false;
+      this.sessionErrorService.routeToLogin(err._body);
+    });
+}//end of method to get file
 
 //for clicking cancel button this method will be invoked
 public onCancel(): void {

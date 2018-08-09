@@ -33,12 +33,7 @@ export class LoginComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    
-    // let s =  "[{\"complaintReferenceNo\":\"DI000001\",\"lastActivityId\":\"20\",\"userId\":\"7553\",\"\":\"6/14/2018 12:12:37 PM\",\"plantType\":\"DI\",\"activityDesc\":\"Acknowledgement of Complaints\"},{\"complaintReferenceNo\":\"DI000002\",\"lastActivityId\":\"60\",\"userId\":\"7553\",\"\":\"1/31/2018 4:51:38 PM\",\"plantType\":\"DI\",\"activityDesc\":\"CA\"},{\"complaintReferenceNo\":\"DI000003\",\"lastActivityId\":\"40\",\"userId\":\"7372\",\"\":\"2/7/2018 4:57:13 PM\",\"plantType\":\"DI\",\"activityDesc\":\"Investigation Report\"},{\"complaintReferenceNo\":\"DI000006\",\"lastActivityId\":\"80\",\"userId\":\"7439\",\"\":\"6/27/2018 1:15:09 PM\",\"plantType\":\"DI\",\"activityDesc\":\"Closed\"},{\"complaintReferenceNo\":\"DI000007\",\"lastActivityId\":\"80\",\"userId\":\"7370\",\"\":\"4/16/2018 5:10:26 PM\",\"plantType\":\"DI\",\"activityDesc\":\"Closed\"},{\"complaintReferenceNo\":\"DI000008\",\"lastActivityId\":\"80\",\"userId\":\"7377\",\"\":\"7/19/2018 5:34:25 PM\",\"plantType\":\"DI\",\"activityDesc\":\"Closed\"},{\"complaintReferenceNo\":\"DI000009\",\"lastActivityId\":\"10\",\"userId\":\"7527\",\"\":\"\",\"plantType\":\"DI\",\"activityDesc\":\"Registration\"},{\"complaintReferenceNo\":\"DI000010\",\"lastActivityId\":\"50\",\"userId\":\"7527\",\"\":\"7/19/2018 12:02:10 PM\",\"plantType\":\"DI\",\"activityDesc\":\"Root Cause Analysis\"},{\"complaintReferenceNo\":\"DI000011\",\"lastActivityId\":\"80\",\"userId\":\"7527\",\"\":\"\",\"plantType\":\"DI\",\"activityDesc\":\"Closed\"},{\"complaintReferenceNo\":\"DI000012\",\"lastActivityId\":\"70\",\"userId\":\"7527\",\"\":\"\",\"plantType\":\"DI\",\"activityDesc\":\"PA\"}]";
-    // // let testStr: string =  '[{"SLNO":"1","AUTO_ID":"1"},{"SLNO":"2","AUTO_ID":"2"}]';    
-    // let json : any = JSON.parse(s);
-    // console.log("json==== ",json);
-    // this.tstJson = json;
+    console.log("Login component..");
   }
 
   private buildForm(): void {
@@ -113,6 +108,7 @@ export class LoginComponent implements OnInit {
     appSettingsModel.resolutionOfComplaintsAtCustomerPlaceActivityId = resDetails.appSettingsDetails.resolutionOfComplaintsAtCustomerPlaceActivityId;
     appSettingsModel.analyseCustomerComplaintsAndActionPlanActivityId = resDetails.appSettingsDetails.analyseCustomerComplaintsAndActionPlanActivityId;
     appSettingsModel.activityIdFieldName = resDetails.appSettingsDetails.activityIdFieldName;
+    appSettingsModel.complaintDetailsAutoIdFieldName = resDetails.appSettingsDetails.complaintDetailsAutoIdFieldName;
     appSettingsModel.menuDetails = resDetails.userDetails.menuDetails;
     //new add for field name
     appSettingsModel.validComplaintFieldName = resDetails.appSettingsDetails.validComplaintFieldName;
