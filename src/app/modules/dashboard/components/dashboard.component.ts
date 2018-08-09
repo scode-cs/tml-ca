@@ -64,9 +64,9 @@ export class DashboardComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.getDataTile1();//registered complaint
-    this.getDataTile2();//closed complaint
-    this.getDataTile3();//open complaint
+    // this.getDataTile1();//registered complaint
+    // this.getDataTile2();//closed complaint
+    // this.getDataTile3();//open complaint
   }
 
   //for view complaint -- DI registered complaint

@@ -183,10 +183,13 @@ export class ComplainDIViewDetailsComponent implements OnInit {
           this.fileDetails = json;
           console.log("File details::::", this.fileDetails);
           this.busySpinner = false;
+        }else{
+          this.fileDetails = [];
         }
       },
         err => {
           console.log(err);
+          this.fileDetails = [];
           this.busySpinner = false;
           this.sessionErrorService.routeToLogin(err._body);
         });
