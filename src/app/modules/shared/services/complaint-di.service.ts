@@ -97,10 +97,13 @@ export class ComplaintDIService {
    * 
    * @param activityIdFieldName 
    */
-  public getInvoiceItemDetail(compRefNo: string, activityIdFieldName: number){
+  public getInvoiceItemDetail(compRefNo: string, activityId: number, complaintDetailsAutoId: number){
     let headers: Headers = this.configService();
     let actionUrl = AppUrlsConst.COMPLAIN_INVOICE_ITEM_DETAIL_VIEW_URL;
-    let param = "filter="+this.localStorageService.appSettings.complaintReferenceNoFieldName+"='"+compRefNo+"'&"+this.localStorageService.appSettings.activityIdFieldName+"="+activityIdFieldName+"&sortData=&orderBy=";
+    let param = "filter="+this.localStorageService.appSettings.complaintReferenceNoFieldName+"='"+compRefNo+"'&"
+    +this.localStorageService.appSettings.activityIdFieldName+"="+activityId+"&"+
+    +this.localStorageService.appSettings.complaintDetailsAutoIdFieldName+"="+complaintDetailsAutoId+
+    "&sortData=&orderBy=";
 
     return this.http.get((actionUrl+'?'+param), { headers: headers })
     .map((res: Response) => { return res.json() })

@@ -26,16 +26,23 @@ export class ComplainDIViewDetailsComponent implements OnInit {
   public siteVisitValue: string = "";
   //create a formgroup for complain reg
   complaintRegisterFormGroup: FormGroup;
-  public complaintReferenceNo: string = '';//to store route param
-  public complaintStatus: number;//to store route param 
+  public routeParam: any = {
+    complaintReferenceNo: '',//to get complaint reference no from route param
+    complaintStatus: ''//to fetch complaint status from route
+  };
   public invReportTable: any[] = [];//to store prev complain report
   public itemGridTable: any[] = [];//to store item grid
   public complainDetails: any[] = [];//to store complain reference detailS
-  public invItemDetails:  any[] = [];// to store inv item deatils from response
+  public fileDetails: any[] = [];//to store file details 
+  public invItemDetails: any[] = [];// to store inv item deatils from response
 
   public complainIndex: number = 0;
   public busySpinner: boolean = true;
-
+  //for error msg
+  public errorMsgObj: any = {
+    errorMsg: '',
+    errMsgShowFlag: false
+  };
   constructor(
     private router: Router,
     private activatedroute: ActivatedRoute,
@@ -55,7 +62,6 @@ export class ComplainDIViewDetailsComponent implements OnInit {
     this.invReportTable = new ComplaintDIConfigModel().prevComplainHeader;//getting prev inv report details
     this.itemGridTable = new ComplaintDIConfigModel().invItemGridHeader;
     this.getviewComplainReferenceDetailsWSCall();//service call
-    this.getInvoiceItemDetailWSCall();
   }
   //end of on init
 
@@ -63,8 +69,8 @@ export class ComplainDIViewDetailsComponent implements OnInit {
   private getRouteParam() {
     let routeSubscription: Subscription;
     routeSubscription = this.activatedroute.params.subscribe(params => {
-      this.complaintReferenceNo = params.complaintReferenceNo ? params.complaintReferenceNo : '';
-      this.complaintStatus = params.complaintStatus ? params.complaintStatus : '';
+      this.routeParam.complaintReferenceNo = params.complaintReferenceNo ? params.complaintReferenceNo : '';
+      this.routeParam.complaintStatus = params.complaintStatus ? params.complaintStatus : '';
     });
     // console.log("complaintReferenceNo for view Complaint di: ", this.complaintReferenceNo);
   }//end of method
@@ -89,14 +95,14 @@ export class ComplainDIViewDetailsComponent implements OnInit {
       complaintTypeId: new FormControl(''),
       natureOfComplaintId: new FormControl(''),
       complaintDetails: new FormControl(''),
-      siteVisit: new FormControl({value:'N',disabled:true}),
+      siteVisit: new FormControl({ value: 'N', disabled: true }),
       siteVisitByDepartmentName: new FormControl('')
     });
 
   }
   private getviewComplainReferenceDetailsWSCall() {
     let pageCompStatus: number = 10;
-    this.complaintDIService.getComplainViewDetails(this.complaintReferenceNo, pageCompStatus).
+    this.complaintDIService.getComplainViewDetails(this.routeParam.complaintReferenceNo, pageCompStatus).
       subscribe(res => {
         console.log("res of ref det::::", res);
         if (res.msgType === 'Info') {
@@ -105,37 +111,24 @@ export class ComplainDIViewDetailsComponent implements OnInit {
           this.complainDetails = json;
           this.complainIndex = this.complainDetails ? this.complainDetails.length - 1 : 0;
           this.setResValToForm();
+          let complainDetailsAutoId: number = this.complainDetails[this.complainIndex].complaintDetailAutoId;
+          this.getInvoiceItemDetailWSCall(this.routeParam.complaintReferenceNo, pageCompStatus, complainDetailsAutoId);//inv item details
+          this.getFileWSCall(this.routeParam.complaintReferenceNo, pageCompStatus, complainDetailsAutoId);//to get file
           this.busySpinner = false;
         } else {
+          this.errorMsgObj.errMsgShowFlag = true;
+          this.errorMsgObj.errorMsg = res.msg;
           this.busySpinner = false;
         }
       },
         err => {
           console.log(err);
           this.busySpinner = false;
+          this.errorMsgObj.errMsgShowFlag = true;
+          this.errorMsgObj.errorMsg = err.msg;
           this.sessionErrorService.routeToLogin(err._body);
         });
   }//end of method
-
-  //start method getInvoiceItemDetailWSCall to get item details
-  private getInvoiceItemDetailWSCall(){
-    let activityId: number = 10;
-    this.busySpinner = true;
-    this.complaintDIService.getInvoiceItemDetail(this.complaintReferenceNo,activityId).
-    subscribe(res => {
-      if (res.msgType === "Info") {
-        let invItemDeatilsJson: any = JSON.parse(res.mapDetails);
-        this.invItemDetails = invItemDeatilsJson;
-        this.busySpinner = false;
-        console.log("item details =========.........>>>>>>>>>",this.invItemDetails);
-      }//end of if
-    },
-    err => {
-      console.log(err);
-      this.busySpinner = false;
-      this.sessionErrorService.routeToLogin(err._body);
-    });
-  }//end method of getInvoiceItemDetailWSCall
 
   //method to set res value to form
   private setResValToForm() {
@@ -160,19 +153,68 @@ export class ComplainDIViewDetailsComponent implements OnInit {
     //console.log('got the value',this.complaintRegisterFormGroup.value.siteVisit);
   }//end of method 
 
+   //start method getInvoiceItemDetailWSCall to get item details
+   private getInvoiceItemDetailWSCall(complaintReferenceNo: string, pageActivityId: number, complainDetailsAutoId: number) {
+    this.busySpinner = true;
+    this.complaintDIService.getInvoiceItemDetail(complaintReferenceNo, pageActivityId,complainDetailsAutoId).
+      subscribe(res => {
+        if (res.msgType === "Info") {
+          let invItemDeatilsJson: any = JSON.parse(res.mapDetails);
+          this.invItemDetails = invItemDeatilsJson;
+          this.busySpinner = false;
+          console.log("item details =========.........>>>>>>>>>", this.invItemDetails);
+        }//end of if
+      },
+        err => {
+          console.log(err);
+          this.busySpinner = false;
+          this.sessionErrorService.routeToLogin(err._body);
+        });
+  }//end method of getInvoiceItemDetailWSCall
+
+  //method to get file
+  private getFileWSCall(complaintReferenceNo: string, pageActivityId: number, complainDetailsAutoId: number) {
+    this.complaintDIService.viewFile(complaintReferenceNo, pageActivityId, complainDetailsAutoId).
+      subscribe(res => {
+        console.log("res of file det::::", res);
+        if (res.msgType === 'Info') {
+          let json: any = JSON.parse(res.mapDetails);
+          console.log("json::::", json);
+          this.fileDetails = json;
+          console.log("File details::::", this.fileDetails);
+          this.busySpinner = false;
+        }
+      },
+        err => {
+          console.log(err);
+          this.busySpinner = false;
+          this.sessionErrorService.routeToLogin(err._body);
+        });
+  }//end of method to get file
+
+
   //for clicking cancel button this method will be invoked
   public onCancel(): void {
     this.router.navigate([ROUTE_PATHS.RouteHome]);
   }// end of onCancel method
 
   public selectData(cmpIndex: number) {
+    let pageCompStatus: number = 10;
     this.busySpinner = true;
     this.complainIndex = cmpIndex;
     this.setResValToForm();
+    let complainDetailsAutoId: number = this.complainDetails[this.complainIndex].complaintDetailAutoId;
+    this.getInvoiceItemDetailWSCall(this.routeParam.complaintReferenceNo, pageCompStatus, complainDetailsAutoId);//inv item details
+    this.getFileWSCall(this.routeParam.complaintReferenceNo, pageCompStatus, complainDetailsAutoId);//to get file
     setTimeout(() => {
       this.busySpinner = false;
     }, 500);
+  }//end of method
 
-  }
+  //method to delete error msg
+  public deleteResErrorMsgOnClick() {
+    this.errorMsgObj.errMsgShowFlag = false;
+    this.errorMsgObj.errorMsg = "";
+  }//end of method delete error msg
 
 }//end of class
