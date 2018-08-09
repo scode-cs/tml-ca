@@ -10,6 +10,7 @@ import { BusySpinnerModule } from "../widget/busy-spinner/busy-spinner.module";
 import { InvestigationReportDIViewComponent } from "./components/investigation-report-di-view/investigation-report-di-view.component";
 import { SharedModule } from "../shared/shared.module";
 import { NgbdComplaintReferenceNoModalComponent } from "./components/investigation-report-di-add/complaint-reference-no-modal/complaint-reference-no-modal.component";
+import { InvestigationReportInvoiceDetailsService } from "./services/investigation-report-invoice-details.service";
 import { ComplaintReferenceNoSearchComponent } from "./components/investigation-report-di-add/complaint-reference-no-search/complaint-reference-no-search.component";
 @NgModule({
   imports:      [
@@ -34,6 +35,7 @@ import { ComplaintReferenceNoSearchComponent } from "./components/investigation-
   providers: [
     InvestigationReportDIDataService,//preli add
     InvestigationReportDIViewDataService,//preli view
+    InvestigationReportInvoiceDetailsService
   ],
   entryComponents: [
     NgbdComplaintReferenceNoModalComponent//comp ref no modal

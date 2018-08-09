@@ -1,12 +1,12 @@
 <div class="modal-header">
-  <h4 class="modal-title">Complaint Reference Search</h4>
+  <h4 class="modal-title">Item Search</h4>
   <button type="button" class="close" aria-label="Close" (click)="activeModal.dismiss('Cross click')">
     <span aria-hidden="true">&times;</span>
   </button>
 </div>
 <div class="modal-body">
   <!-- start div for searching through blank Complaint Reference No-->
-  <div class="form-group col-xs-12 col-sm-12 col-md-12 col-lg-12" *ngIf="invoiceNo===''">
+  <div class="form-group col-xs-12 col-sm-12 col-md-12 col-lg-12">
     Do you want to add more items?
   </div>
   <!-- end div for searching through blank Complaint Reference No -->
@@ -14,8 +14,8 @@
 <div class="modal-footer">
   <!-- <button type="button" class="btn btn-primary" (click)="chooseItem()" *ngIf="msgType!='Error' && customerCodeError==false" [disabled]="checkedItemArr.length==0">Choose</button>
   <button type="button" class="btn btn-secondary" (click)="activeModal.close('Close click')" *ngIf="invoiceNo!=''">Cancel</button> -->
-  <button type="button" class="btn btn-primary" (click)=" onRedirectComplaintReferenceNoSearch()" *ngIf="invoiceNo==''">Yes</button>
-  <button type="button" class="btn btn-secondary" (click)="activeModal.close('Close click')" *ngIf="invoiceNo==''">No</button>
+  <button type="button" class="btn btn-primary" (click)=" onRedirectComplaintReferenceNoSearch()">Yes</button>
+  <button type="button" class="btn btn-secondary" (click)="activeModal.close('Close click')">No</button>
 </div>
 <!-- spinner -->
 <!-- <ispl-busy-spinner *ngIf="busySpinner.busy">

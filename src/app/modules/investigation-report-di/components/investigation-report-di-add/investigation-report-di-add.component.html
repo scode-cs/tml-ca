@@ -17,7 +17,7 @@
     <!-- main div -->
     <div class="form-div-style">
       <!-- start table div -->
-      <div *ngIf="invReportDetails.length > 1" class="col-lg-12 col-md-12 col-xs-12 scroll-bar prev-inv-report-table-style">
+      <div *ngIf="invReportDetails.length > 1 && prevInvReportShowFlag" class="col-lg-12 col-md-12 col-xs-12 scroll-bar prev-inv-report-table-style" >
         <table class="table-style">
           <thead>
             <tr class="th-style">
@@ -28,7 +28,7 @@
             </tr>
           </thead>
           <tbody>
-            <tr class="tr-style" *ngFor="let invReportDet of invReportDetails; let invRepIndex = index;" >
+            <tr class="tr-style" *ngFor="let invReportDet of invReportDetails; let invRepIndex = index;">
               <td class="td-style-first" style="cursor: pointer;" (click)="selectData(invRepIndex)">
                 <i class="fa" [ngClass]="invReportIndex == invRepIndex ? 'fa-dot-circle-o' : 'fa-circle-o'"></i>
               </td>
@@ -205,6 +205,21 @@
             </div>
             <!-- end div for Investigation Report Date -->
 
+            <!-- start div for Customer Code -->
+            <div class="form-group col-xs-12 col-sm-6 col-md-6 col-lg-4">
+                <label>Customer Code</label>
+                <input type="text" class="form-control" formControlName="customerCode" readonly>
+            </div>
+            <!-- end div for Customer Code -->
+
+            <!-- start div for Customer Name -->
+            <div class="form-group col-xs-12 col-sm-6 col-md-6 col-lg-4">
+                <label>Customer Name</label>
+                <input type="text" class="form-control" formControlName="customerName" readonly>
+            </div>
+            <!-- end div for Customer Name -->
+
+
             <!-- start table div -->
             <div class="col-lg-12 col-md-12 col-xs-12 scroll-bar">
               <table class="table-style">
@@ -231,8 +246,8 @@
                   <tr class="tr-style">
                     <!-- invItemDetails -->
                     <td class="td-style-first hideextra">
-                       Add Item(s)
-                      <i style="font-size:16px;cursor: pointer;" title="Click here" class="fa fa-plus-circle" (click)="onItemsOpenModal('')"></i>
+                      Add Item(s)
+                      <i style="font-size:16px;cursor: pointer;" title="Click here" class="fa fa-plus-circle" (click)="onItemsOpenModal()"></i>
                     </td>
                     <td class="td-style">
 
@@ -272,6 +287,9 @@
               </table>
             </div>
             <!--end table div-->
+
+            <div class="form-group col-xs-12 col-sm-12 col-md-12 col-lg-12" style="padding-bottom: 10px;">
+            </div>
 
             <!--start div for Unloading Equipment [add]-->
             <div class="form-group col-xs-12 col-sm-6 col-md-6 col-lg-4">

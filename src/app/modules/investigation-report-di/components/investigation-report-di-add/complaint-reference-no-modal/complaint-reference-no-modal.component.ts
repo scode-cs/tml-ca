@@ -7,9 +7,6 @@ import "rxjs/add/operator/map";
 import { Observable } from 'rxjs';
 import { LocalStorageService } from "../../../../shared/services/local-storage.service";
 // import { AppUrlsConst, WebServiceConst } from "../../../../app-config';
-import { ComplaintDIRegisterDataService } from "../../../../complain/complain-di/services/complaint-di-register-data.service";
-import { ComplaintDIRegisterEmitService } from "../../../../complain/complain-di/services/complaint-di-register-emit.service";
-import { ComplaintDIInvoiceDetailsService } from "../../../../complain/complain-di/services/complaint-di-invoice-details.service";
 import { ROUTE_PATHS } from '../../../../router/router-paths';
 import { Router, ActivatedRoute } from '@angular/router';
 import { SessionErrorService } from "../../../../shared/services/session-error.service";
@@ -38,34 +35,16 @@ export class NgbdComplaintReferenceNoModalComponent implements OnInit {
     private http: Http, private el: ElementRef,
     private router: Router,
     private localStorageService: LocalStorageService,
-    private complaintDIRegisterDataService: ComplaintDIRegisterDataService,
-    private complaintDIInvoiceDetailsService: ComplaintDIInvoiceDetailsService,
-    private sessionErrorService: SessionErrorService,
-    private complaintDIRegisterEmitService: ComplaintDIRegisterEmitService) {
+    private sessionErrorService: SessionErrorService) {
   }//end of constructor
 
   ngOnInit(): void {
-    if (this.invoiceNo != '') {
-
-      //this.invoiceSearchDetailsModel.invNo = this.invoiceNo;
-    } else if (this.invoiceNo == '') {
-
-      this.msgType = "Error";
-      //this.busySpinner.busy = false;
-    }//end of if
   }//end of onInit
 
 
   // start method onRedirectComplaintReferenceNoSearch for redirecting to complaint ref no search page
   onRedirectComplaintReferenceNoSearch() {
-
-
-    if (this.invoiceNo === "") {
-      this.router.navigate([ROUTE_PATHS.RouteComplaintReferenceNoSearch]);
-    } else if (this.invoiceNo != "") {
-
-      this.router.navigate([ROUTE_PATHS.RouteComplaintReferenceNoSearch]);
-    }
+    this.router.navigate([ROUTE_PATHS.RouteComplaintReferenceNoSearch]);
     this.activeModal.close('Close click');
   }//end of the method onRedirectComplaintReferenceNoSearch
 
