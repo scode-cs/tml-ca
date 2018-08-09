@@ -87,9 +87,9 @@
 
                     <!--files-->
                     <!--start div for show files-->
-                    <div class="form-group col-xs-12 col-sm-6 col-md-6 col-lg-4" *ngIf="routeParam.complaintReferenceNo && fileDetails.files?.length>0">
+                    <div class="form-group col-xs-12 col-sm-6 col-md-6 col-lg-4" *ngIf="routeParam.complaintReferenceNo && fileDetails?.length>0">
                         <label>Uploaded file(s)</label>
-                        <div *ngFor="let file of fileDetails.files">
+                        <div *ngFor="let file of fileDetails">
                             <a href="{{file.fileUrl}}" target="_blank">{{file.fileName}}</a>
                             <br/>
                         </div>

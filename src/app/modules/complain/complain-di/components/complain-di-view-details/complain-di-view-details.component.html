@@ -14,7 +14,7 @@
   <!-- end div for breadcrumb-->
 
   <!--start process flow div-->
-  <app-flowmangement [complainNo]="complaintReferenceNo" [complianStatus]="complaintStatus" [pageType]="'view'"></app-flowmangement>
+  <app-flowmangement [complainNo]="routeParam.complaintReferenceNo" [complianStatus]="routeParam.complaintStatus" [pageType]="'view'"></app-flowmangement>
   <!-- end div of process flow  -->
 
   <!-- start div for complaintRegister body-->
@@ -51,7 +51,7 @@
         <!-- start div for row complaint-form class-->
         <div class="row">
           <!-- start div for complaint reference no-->
-          <div class="form-group col-xs-12 col-sm-6 col-md-6 col-lg-4" *ngIf="complaintReferenceNo">
+          <div class="form-group col-xs-12 col-sm-6 col-md-6 col-lg-4" *ngIf="routeParam.complaintReferenceNo">
             <label>Complaint Reference No</label>
             <input type="text" class="form-control" [value]="complaintReferenceNo" readonly/>
           </div>
@@ -97,14 +97,14 @@
           <!-- end div for cust code ,custname ,sales group, sales office -->
 
           <!-- start div for Official Document No bubble  -->
-          <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+          <!-- <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
             <b>Selected Official Document No(s):</b>
             <br/>
             <div class="faceted-data-div" style="display:inline-block;margin: 4px;">
               &nbsp;
             </div>
             <br/>
-          </div>
+          </div> -->
           <!-- end div for Official Document No bubble -->
 
           <!-- start div for  selected invoice details heading -->
@@ -114,98 +114,6 @@
             </span>
           </div>
           <!-- end div for selected invoice details heading -->
-
-          <!-- start table div -->
-          <!-- <div class="col-lg-12 col-md-12 col-xs-12 scroll-bar" style="margin-bottom: 15px; margin-top: 5px;">
-            <table class="table-style">
-              <thead>
-                <tr class="th-style ">
-                  <td class="header-style-first hideextra">
-                    Official Document No
-                  </td>
-                  <td class="header-style hideextra">
-                    Billing Date
-                  </td>
-                  <td class="header-style hideextra">
-                    Material Code
-                  </td>
-                  <td class="header-style hideextra">
-                    Material Name
-                  </td>
-                  <td class="header-style hideextra">
-                    Invoice Qty
-                  </td>
-                  <td class="header-style hideextra">
-                    Complaint Qty
-                  </td>
-                  <td class="header-style hideextra">
-                    Batch No
-                  </td>
-                  <td class="header-style hideextra">
-                    Usage Group
-                  </td>
-                  <td class="header-style hideextra">
-                    State/ Region
-                  </td>
-                  <td class="header-style hideextra">
-                    Purchase Order No
-                  </td>
-                  <td class="header-style hideextra">
-                    Sales Order No
-                  </td>
-                  <td class="header-style hideextra">
-                    Inspection Vendor Name
-                  </td>
-                  <td class="header-style-last hideextra">
-                    Loading Vendor Name Truck No
-                  </td>
-                </tr>
-              </thead>
-              <tbody>
-                <tr class="tr-style">
-                  <td class="td-style-first">
-                  </td>
-                  <td class="td-style">
-
-                  </td>
-                  <td class="td-style">
-
-                  </td>
-                  <td class="td-style">
-
-                  </td>
-                  <td class="td-style">
-
-                  </td>
-                  <td class="td-style">
-
-                  </td>
-                  <td class="td-style">
-
-                  </td>
-                  <td class="td-style">
-
-                  </td>
-                  <td class="td-style">
-
-                  </td>
-                  <td class="td-style">
-
-                  </td>
-                  <td class="td-style">
-
-                  </td>
-                  <td class="td-style">
-
-                  </td>
-                  <td class="td-style-last">
-
-                  </td>
-                </tr>
-              </tbody>
-            </table>
-          </div> -->
-          <!--end table div-->
 
           <!-- start table div -->
           <div class="col-lg-12 col-md-12 col-xs-12 scroll-bar">
@@ -313,14 +221,14 @@
           <!-- end of div for site visit by department name -->
 
           <!--start div for show files-->
-          <div class="form-group col-xs-12 col-sm-6 col-md-6 col-lg-4">
+          <div class="form-group col-xs-12 col-sm-6 col-md-6 col-lg-4" *ngIf="routeParam.complaintReferenceNo && fileDetails?.length>0">
             <label>Uploaded file(s)</label>
-            <!-- <div *ngFor="let file of selectedComplaintReferenceDetails.files">
-            <a href="{{file.fileUrl}}" target="_blank">{{file.fileName}}</a>
-            <br/>
-          </div> -->
-          </div>
-          <!--end div for show files-->
+            <div *ngFor="let file of fileDetails">
+                <a href="{{file.fileUrl}}" target="_blank">{{file.fileName}}</a>
+                <br/>
+            </div>
+        </div>
+        <!--end div for show files-->
 
 
           <!-- start div for Submit  and Cancel Button-->
