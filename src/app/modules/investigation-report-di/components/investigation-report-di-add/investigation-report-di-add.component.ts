@@ -19,6 +19,7 @@ import { NgbdComplaintReferenceNoModalComponent } from './complaint-reference-no
 import { DIPolygonModel } from '../../../shared/components/process-flow/complain-di-polygon.model';
 import { InvestigationReportDIConfigModel } from '../../models/investigation-report-di-config.model';
 import { InvestigationDataModel } from '../../models/investigation-data-model';
+import { InvestigationReportInvoiceDetailsService } from "../../services/investigation-report-invoice-details.service";
 @Component({
   selector: 'ispl-investigation-report-di-add-form',
   templateUrl: 'investigation-report-di-add.component.html',
@@ -58,7 +59,9 @@ export class InvestigationReportDiComponent implements OnInit {
     siteVisitDt: new FormControl(''),
     sampleCollected: new FormControl('', Validators.required),
     sampleCollectedDate: new FormControl(''),
-    investigationReportDate: new FormControl('')
+    investigationReportDate: new FormControl(''),
+    customerCode: new FormControl(''),
+    customerName: new FormControl('')
   });
 
 
@@ -66,6 +69,8 @@ export class InvestigationReportDiComponent implements OnInit {
 
   //busySpinner 
   public busySpinner: boolean = true;
+
+  public prevInvReportShowFlag: boolean = false;
 
 
   //variable used for radio button
@@ -84,6 +89,7 @@ export class InvestigationReportDiComponent implements OnInit {
     private complaintDIService: ComplaintDIService,
     private localStorageService: LocalStorageService,
     private investigationReportDIDataService: InvestigationReportDIDataService,
+    private investigationReportInvoiceDetailsService: InvestigationReportInvoiceDetailsService,
     private modalService: NgbModal,//modal
     private formBuilder: FormBuilder,
     private sessionErrorService: SessionErrorService,
@@ -92,9 +98,9 @@ export class InvestigationReportDiComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.busySpinner = true;
     this.getRouteParam();
-    //this.getInvestigationViewDetailsWSCall();
+    this.getSystemDate();
+    this.getInvestigationViewDetailsWSCall();
     this.invReportTable = new InvestigationReportDIConfigModel().prevInvReportHeader;
     this.itemGridTable = new InvestigationReportDIConfigModel().invItemGridHeader;
     this.ivtReportDataList.unloadingEquipmentList = new InvestigationDataModel().unloadingEquipmentList;
@@ -114,6 +120,14 @@ export class InvestigationReportDiComponent implements OnInit {
     this.invReportFormGroup.controls['complaintReferenceNo'].setValue(this.complaintReferenceNo);
   }//end of the method
 
+  //method to get system date
+  private getSystemDate() {
+    //formatting the current date
+    let date = new Date();
+    let currentDate: string = this.datePipe.transform(date, 'dd-MM-yyyy');
+    this.invReportFormGroup.controls['investigationReportDate'].setValue(currentDate);
+  }//end of method
+
   //method to get investigation report details by service call
   private getInvestigationViewDetailsWSCall() {
     let pageCompStatus: number = 40;
@@ -125,11 +139,12 @@ export class InvestigationReportDiComponent implements OnInit {
           this.invReportDetails = invReportDeatilsJson;
           console.log("res of inv Report Deatils::::", this.invReportDetails);
           this.invReportIndex = this.invReportDetails ? this.invReportDetails.length - 1 : 0;
-          this.setFormValue();
-          this.busySpinner = false;
+          let pageActivityId: number = 10;
+          let complainDetailsAutoId: number = this.invReportDetails[this.invReportIndex].complainDetailsAutoId;
+          this.getInvoiceItemDetailWSCall(this.complaintReferenceNo,pageActivityId,complainDetailsAutoId);
+          //this.setFormValue()
         } else {
           this.busySpinner = false;
-          this.invReportFormGroup.controls['complaintReferenceNo'].setValue(this.complaintReferenceNo);
         }//end of else if
       },
         err => {
@@ -140,23 +155,25 @@ export class InvestigationReportDiComponent implements OnInit {
   }//end of method
 
   //start method getInvoiceItemDetailWSCall to get item details
-  // private getInvoiceItemDetailWSCall(complaintReferenceNo: string, pageActivityId: number, complainDetailsAutoId: number) {
-  //   this.busySpinner = true;
-  //   this.complaintDIService.getInvoiceItemDetail(complaintReferenceNo, pageActivityId,complainDetailsAutoId).
-  //     subscribe(res => {
-  //       if (res.msgType === "Info") {
-  //         let invItemDeatilsJson: any = JSON.parse(res.mapDetails);
-  //         this.invItemDetails = invItemDeatilsJson;
-  //         this.busySpinner = false;
-  //         console.log("item details =========.........>>>>>>>>>", this.invItemDetails);
-  //       }//end of if
-  //     },
-  //       err => {
-  //         console.log(err);
-  //         this.busySpinner = false;
-  //         this.sessionErrorService.routeToLogin(err._body);
-  //       });
-  // }//end method of getInvoiceItemDetailWSCall
+  private getInvoiceItemDetailWSCall(complaintReferenceNo: string, pageActivityId: number, complainDetailsAutoId: number) {
+    this.busySpinner = true;
+    this.complaintDIService.getInvoiceItemDetail(complaintReferenceNo, pageActivityId,complainDetailsAutoId).
+      subscribe(res => {
+        if (res.msgType === "Info") {
+          let invItemDeatilsJson: any = JSON.parse(res.mapDetails);
+          this.invItemDetails = invItemDeatilsJson;
+          this.busySpinner = false;
+          console.log("item details =========.........>>>>>>>>>", this.invItemDetails);
+          this.invReportFormGroup.controls['customerCode'].setValue(this.invItemDetails[0].customerCode);
+          this.invReportFormGroup.controls['customerName'].setValue(this.invItemDetails[0].customerName);
+        }//end of if
+      },
+        err => {
+          console.log(err);
+          this.busySpinner = false;
+          this.sessionErrorService.routeToLogin(err._body);
+        });
+  }//end method of getInvoiceItemDetailWSCall
 
   //start method setFormValue to set the value in invreport form
   private setFormValue() {
@@ -174,10 +191,7 @@ export class InvestigationReportDiComponent implements OnInit {
       this.invReportFormGroup.controls['sampleCollectedDate'].setValue(this.datePipe.transform(formData.sampleCollectedDate, 'yyyy-MM-dd'));
       this.invReportFormGroup.controls['sampleCollectedDate'].setValidators(Validators.required);
     }
-    // this.invReportFormGroup.controls['unloadingEquipment'].setValue(formData.unloadingEquipement);
-    // this.invReportFormGroup.controls['layingPosiion'].setValue(formData.layingPosition);
-    // this.invReportFormGroup.controls['lubricantUsed'].setValue(formData.lubricantUsed);
-    // this.invReportFormGroup.controls['jointingtype'].setValue(formData.jointingType);
+    
     if (formData.investigationReportDate) {
       this.invReportFormGroup.controls['investigationReportDate'].setValue(this.datePipe.transform(formData.investigationReportDate, 'dd-MM-yyyy'));
     } else {
@@ -479,10 +493,13 @@ export class InvestigationReportDiComponent implements OnInit {
   }//end method of selectData
 
   //onOpenModal for opening modal from modalService
-  public onItemsOpenModal(invoiceNo: string) {
+  public onItemsOpenModal() {
     const modalRef = this.modalService.open(NgbdComplaintReferenceNoModalComponent);
     modalRef.componentInstance.modalTitle = this.title;
-    modalRef.componentInstance.invoiceNo = invoiceNo;
+    let customerCode: string = this.invReportFormGroup.value.customerCode;
+    this.investigationReportInvoiceDetailsService.custCode = customerCode;
+    let customerName: string = this.invReportFormGroup.value.customerName;
+    this.investigationReportInvoiceDetailsService.custName = customerName;
   }//end of method onOpenModal
 
 }//end of class

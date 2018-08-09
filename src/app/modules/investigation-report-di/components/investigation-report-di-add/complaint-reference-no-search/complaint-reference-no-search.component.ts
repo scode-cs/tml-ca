@@ -7,7 +7,7 @@ import { ROUTE_PATHS } from '../../../../router/router-paths';
 import { LocalStorageService } from "../../../../shared/services/local-storage.service";
 import { ComplaintDIRegisterDataService } from "../../../../complain/complain-di/services/complaint-di-register-data.service";
 import { ComplaintDIRegisterEmitService } from "../../../../complain/complain-di/services/complaint-di-register-emit.service";
-import { ComplaintDIInvoiceDetailsService } from "../../../../complain/complain-di/services/complaint-di-invoice-details.service";
+import { InvestigationReportInvoiceDetailsService } from "../../../services/investigation-report-invoice-details.service";
 import { SessionErrorService } from "../../../../shared/services/session-error.service";
 
 @Component({
@@ -44,7 +44,7 @@ export class ComplaintReferenceNoSearchComponent implements OnInit {
     private router: Router,
     private complaintDIRegisterDataService: ComplaintDIRegisterDataService,
     private sessionErrorService: SessionErrorService,
-    private complaintDIInvoiceDetailsService: ComplaintDIInvoiceDetailsService
+    private investigationReportInvoiceDetailsService: InvestigationReportInvoiceDetailsService
   ) {
   }//end of constructor
 
@@ -55,15 +55,16 @@ export class ComplaintReferenceNoSearchComponent implements OnInit {
 
 
     // this.title = this.complaintDIInvoiceDetailsService.title;
-    this.custCode = this.complaintDIInvoiceDetailsService.custCode;
-    this.custName = this.complaintDIInvoiceDetailsService.custName;
-    this.salesGroup = this.complaintDIInvoiceDetailsService.salesGroup;
-    this.salesOffice = this.complaintDIInvoiceDetailsService.salesOffice;
-    this.compRefNo = this.complaintDIInvoiceDetailsService.compRefNo;
+    this.custCode = this.investigationReportInvoiceDetailsService.custCode;
+    this.custName = this.investigationReportInvoiceDetailsService.custName;
+    this.salesGroup = this.investigationReportInvoiceDetailsService.salesGroup;
+    this.salesOffice = this.investigationReportInvoiceDetailsService.salesOffice;
+    this.compRefNo = this.investigationReportInvoiceDetailsService.compRefNo;
     if(this.compRefNo == undefined){
       this.compRefNo = "";
     }
     console.log(" this.compRefNo ===>",this.compRefNo);
+    this.getCustomerInvDet();
  
   }//end of onInit
 
@@ -232,14 +233,14 @@ export class ComplaintReferenceNoSearchComponent implements OnInit {
     }
     prevSelItmDet.items = items;
 
-    this.complaintDIInvoiceDetailsService.selectedItemDetails = prevSelItmDet;
+    this.investigationReportInvoiceDetailsService.selectedItemDetails = prevSelItmDet;
 
-    this.router.navigate([ROUTE_PATHS.RouteComplainDIRegister]);    
+    this.router.navigate([ROUTE_PATHS.RouteInvestigationReportDiAdd]);    
   }//end of the method onSubmitSelectedInvDet
 
   onCancel() {
-    console.log(" this.complaintDIInvoiceDetailsService.selectedItemDetails ",this.complaintDIInvoiceDetailsService.selectedItemDetails)
-    this.router.navigate([ROUTE_PATHS.RouteComplainDIRegister]);
+    console.log(" this.complaintDIInvoiceDetailsService.selectedItemDetails ",this.investigationReportInvoiceDetailsService.selectedItemDetails)
+    this.router.navigate([ROUTE_PATHS.RouteInvestigationReportDiAdd]);
   }
 
 }//end of class
