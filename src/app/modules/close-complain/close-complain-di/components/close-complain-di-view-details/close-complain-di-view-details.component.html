@@ -14,7 +14,8 @@
     <!-- start ca body  -->
     <div>
         <!-- start table div -->
-        <div *ngIf="closeDetails.length > 1" class="col-lg-12 col-md-12 col-xs-12 scroll-bar grid-table-style" style="margin-top: 5px;">
+        <div *ngIf="prevCompDetShowFlag && closeDetails.length > 1" class="col-lg-12 col-md-12 col-xs-12 scroll-bar grid-table-style"
+            style="margin-top: 5px;">
             <table class="table-style">
                 <thead>
                     <tr class="th-style">
@@ -44,18 +45,18 @@
             <form [formGroup]="closeComplainDIFormGroup" autocomplete="off">
                 <!-- start div for row complaint-form class-->
                 <div class="row">
-                <!-- class="row complaint-form"> -->
+                    <!-- class="row complaint-form"> -->
                     <!--start div complaint reference no -->
                     <div *ngIf="routeParam.complaintReferenceNo" class="form-group col-xs-12 col-sm-6 col-md-6 col-lg-4">
                         <label for="complaintReferenceNo">Complaint Reference No</label>
-                        <input type="text" class="form-control" formControlName="complaintReferenceNo" readonly="readonly"/>
+                        <input type="text" class="form-control" formControlName="complaintReferenceNo" readonly="readonly" />
                     </div>
                     <!--end of div for complaint reference no-->
 
                     <!--start div closeDate-->
                     <div class="form-group col-xs-12 col-sm-6 col-md-6 col-lg-4">
                         <label>Date</label>
-                        <input type="text" class="form-control" formControlName="closeDate" readonly="readonly"/>
+                        <input type="text" class="form-control" formControlName="closeDate" readonly="readonly" />
                     </div>
                     <!--end of div for closeDate-->
 
@@ -86,13 +87,13 @@
 
                     <!--files-->
                     <!--start div for show files-->
-                    <!-- <div class="form-group col-xs-12 col-sm-6 col-md-6 col-lg-4" *ngIf="complaintReferenceNo && selectedComplaintReferenceDetails.files?.length!=0">
-                <label>Uploaded file(s)</label>
-                <div *ngFor="let file of selectedComplaintReferenceDetails.files">
-                    <a href="{{file.fileUrl}}" target="_blank">{{file.fileName}}</a>
-                    <br/>
-                </div>
-            </div> -->
+                    <div class="form-group col-xs-12 col-sm-6 col-md-6 col-lg-4" *ngIf="routeParam.complaintReferenceNo && fileDetails.files?.length>0">
+                        <label>Uploaded file(s)</label>
+                        <div *ngFor="let file of fileDetails.files">
+                            <a href="{{file.fileUrl}}" target="_blank">{{file.fileName}}</a>
+                            <br/>
+                        </div>
+                    </div>
                     <!--end div for show files-->
 
 
