@@ -29,10 +29,10 @@ export class InvestigationReportDiViewDetailsComponent implements OnInit {
     sampleCollected: new FormControl({ value: 'N', disabled: true }),
     sampleCollectedDate: new FormControl(''),
     investigationReportDate: new FormControl(''),
-    unloadingEquipment: new FormControl(''),
-    lubricantUsed: new FormControl(''),
-    layingPosiion: new FormControl(''),
-    jointingtype: new FormControl('')
+    unloadingEquipment: new FormControl({value: '', disabled: true}),
+    lubricantUsed: new FormControl({value: '', disabled: true}),
+    layingPosition: new FormControl({value: '', disabled: true}),
+    jointingtype: new FormControl({value: '', disabled: true})
   });
   public complaintReferenceNo: string;//to get complaint ref no from html and send it as a parameter
   //variable used for radio button
@@ -43,7 +43,7 @@ export class InvestigationReportDiViewDetailsComponent implements OnInit {
   public invReportDetails: any[] = [];// to store invReport deatils from response
   public invReportIndex: number = 0;
   public invItemDetails:  any[] = [];// to store inv item deatils from response
-  public jointingTypeDesc: any[] = [];
+  public selectedIvtReportDataList: any = { unloadingEquipment: [] , lubricantUsedDesc: [], layingPositionDesc: [], jointingTypeDesc:[] };
   public ivtReportDataList: any = { unloadingEquipmentList: '', lubricantUsedList: '', layingPositionList: '', jointingTypeList: '' };
   //busySpinner 
   public busySpinner: boolean = true;
@@ -64,6 +64,9 @@ export class InvestigationReportDiViewDetailsComponent implements OnInit {
     this.getRouteParam();
     this.invReportTable = new InvestigationReportDIConfigModel().prevInvReportHeader;
     this.itemGridTable = new InvestigationReportDIConfigModel().invItemGridHeader;
+    this.ivtReportDataList.unloadingEquipmentList = new InvestigationDataModel().unloadingEquipmentList;
+    this.ivtReportDataList.lubricantUsedList = new InvestigationDataModel().lubricantUsedList;
+    this.ivtReportDataList.layingPositionList = new InvestigationDataModel().layingPositionList;
     this.ivtReportDataList.jointingTypeList = new InvestigationDataModel().jointingTypeList;
     this.getInvestigationViewDetailsWSCall();
   }//end of onInit
@@ -93,7 +96,6 @@ export class InvestigationReportDiViewDetailsComponent implements OnInit {
           let complainDetailsAutoId: number = this.invReportDetails[this.invReportIndex].complaintDetailAutoId;
           let itemActivityId: number = 10;
           this.getInvoiceItemDetailWSCall(this.complaintReferenceNo, itemActivityId, complainDetailsAutoId);//inv item details
-          this.busySpinner = false;
         }
       },
         err => {
@@ -133,22 +135,36 @@ export class InvestigationReportDiViewDetailsComponent implements OnInit {
     this.invReportFormGroup.controls['sampleCollected'].setValue(formData.sampleCollected);
     this.invReportFormGroup.controls['sampleCollectedDate'].setValue(this.datePipe.transform(formData.sampleCollectedDate, 'dd-MMM-yyyy'));
     this.invReportFormGroup.controls['investigationReportDate'].setValue(this.datePipe.transform(formData.investigationReportDate, 'dd-MMM-yyyy'));
-    let jointingType: string ="["+formData.jointingType+"]"; 
+    
+    let unloadingEquipment: string = "["+formData.unloadingEquipement+"]";
+    let unloadingEquipmentKey: any[] = JSON.parse(unloadingEquipment); 
+    this.selectedIvtReportDataList.unloadingEquipmentDesc = this.getSelectedCheckedItemVal(this.ivtReportDataList.unloadingEquipmentList,unloadingEquipmentKey);
+
+    let lubricantUsed: string = "["+formData.lubricantUsed+"]";
+    let lubricantUsedKey: any[] = JSON.parse(lubricantUsed); 
+    this.selectedIvtReportDataList.lubricantUsedDesc = this.getSelectedCheckedItemVal(this.ivtReportDataList.lubricantUsedList,lubricantUsedKey);
+    
+    let layingPosition: string = "["+formData.layingPosition+"]";
+    let layingPositionKey: any[] = JSON.parse(layingPosition); 
+    this.selectedIvtReportDataList.layingPositionDesc = this.getSelectedCheckedItemVal(this.ivtReportDataList.layingPositionList,layingPositionKey);
+    
+    let jointingType: string = "["+formData.jointingType+"]"; 
     let jointingTypeKey: any[] = JSON.parse(jointingType);
-    this.jointingTypeDesc = this.getSelectedCheckedItemVal(this.ivtReportDataList.jointingTypeList,jointingTypeKey);
+    this.selectedIvtReportDataList.jointingTypeDesc = this.getSelectedCheckedItemVal(this.ivtReportDataList.jointingTypeList,jointingTypeKey);
   }//end method setFormValue
 
+  //start method to rearrange selected checkbox desc
   private getSelectedCheckedItemVal(keyValueArr: any[],selectedKeyArr: any[]): any[]{
     let selectedValueArr: any[] = [];
     keyValueArr.forEach(kVEl => {
       selectedKeyArr.forEach(selKeyEl => {
         if(selKeyEl == kVEl.id){
           selectedValueArr.push(kVEl.desc);
-        }
+        }//end of if
       });
     });
     return selectedValueArr;
-  }
+  }//end of the method of getSelectedCheckedItemVal
 
   //start method selectData
   public selectData(invRepIndex: number) {
