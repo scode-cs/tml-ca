@@ -48,31 +48,19 @@ export class ComplaintDIRegisterComponent implements OnInit {
 
   private invData: any = {};//interface
   private complaintTypeId: string;
-
+  private totalFileSize: number = 0;//file upload
+  private fileSizeLimit: number = 104857600;
   // form data for file upload
+  private formData: FormData = new FormData();
   private fileData: FormData;
   public fileList: FileList;
+
   private items: any[] = [];
   private complaintTypeName: string;
   private natureCmpName: string;
 
   //create a formgroup for complain reg
-  public complaintRegisterFormGroup = new FormGroup({
-    modeId: new FormControl({ value: '' }, Validators.required),
-    officialDocNo: new FormControl('', Validators.maxLength(3)),
-    complaintReferenceDt: new FormControl(''),
-    batchNo: new FormControl(''),
-    contactPersonName: new FormControl(''),
-    contactPersonPhoneNo: new FormControl('', Validators.pattern(/^-?(0|[1-9]\d*)?$/)),
-    contactPersonEmailId: new FormControl('', Validators.email),
-    loggedBy: new FormControl(''),
-    loggedOnDt: new FormControl(''),
-    complaintTypeId: new FormControl({ value: '' }, Validators.required),
-    natureOfComplaintId: new FormControl({ value: '' }, Validators.required),
-    complaintDetails: new FormControl(''),
-    siteVisit: new FormControl({ value: '' }, Validators.required),
-    siteVisitByDepartmentName: new FormControl('')
-  });
+  public complaintRegisterFormGroup: FormGroup;
 
   public title: string = "Complaint Register";//set title
   public errorMsgObj: any = {
@@ -108,6 +96,7 @@ export class ComplaintDIRegisterComponent implements OnInit {
   public invReportTable: any[] = [];//to store prev inv report
   //
   public complaintStatus = '10';
+  public prevCompDetShowFlag: boolean = false;//to show prev comp det
 
   constructor(
     private activatedroute: ActivatedRoute,
@@ -123,6 +112,7 @@ export class ComplaintDIRegisterComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    this.initform();
     this.getRouteParam();//to get route param
     this.invReportTable = new ComplaintDIConfigModel().prevComplainHeader;//getting prev complain report details  
     this.getItemsVal("ispl");//get item header by ws call   
@@ -137,6 +127,28 @@ export class ComplaintDIRegisterComponent implements OnInit {
     this.complaintQtyErrorCheck();//to check complain qty error
     this.complaintRegisterFormGroup.controls["loggedBy"].setValue(this.empInfo.empName);//set emp name to control
   }//end of ngOnInit
+
+  /**
+   * @description init form data
+   */
+  initform(){
+    this.complaintRegisterFormGroup =  new FormGroup({
+      modeId: new FormControl({ value: '' }, Validators.required),
+      officialDocNo: new FormControl('', Validators.maxLength(3)),
+      complaintReferenceDt: new FormControl(''),
+      batchNo: new FormControl(''),
+      contactPersonName: new FormControl(''),
+      contactPersonPhoneNo: new FormControl('', Validators.pattern(/^-?(0|[1-9]\d*)?$/)),
+      contactPersonEmailId: new FormControl('', Validators.email),
+      loggedBy: new FormControl(''),
+      loggedOnDt: new FormControl(''),
+      complaintTypeId: new FormControl({ value: '' }, Validators.required),
+      natureOfComplaintId: new FormControl({ value: '' }, Validators.required),
+      complaintDetails: new FormControl(''),
+      siteVisit: new FormControl({ value: 'N' }, Validators.required),
+      siteVisitByDepartmentName: new FormControl('')
+    });
+  }//end of method
 
   //method to get route param
   private getRouteParam() {
@@ -591,11 +603,58 @@ export class ComplaintDIRegisterComponent implements OnInit {
   }//end of the method complaintQtyErrorCorrection 
   
   //onOpenModal for opening modal from modalService
-  private onOpenModal(msgBody: string) {
+  private onOpenModal(complaintReferenceNo:string,msgBody: string) {
     const modalRef = this.modalService.open(NgbdModalComponent);
-    modalRef.componentInstance.modalTitle = 'Information';
+    modalRef.componentInstance.modalTitle = 'Complaint Reference Number: '+complaintReferenceNo;//'Information';
     modalRef.componentInstance.modalMessage = msgBody;
   }//end of method onOpenModal
+
+  //method to file upload
+  private fileUploadWSCall(plantType:string,complaintReferenceNo: string,activityId: number,complainDetailsAutoId: number): string {
+    let fileSuccessErrReturnMsg: string = "";
+    if (this.totalFileSize > this.fileSizeLimit) {
+      fileSuccessErrReturnMsg = "Error";
+      this.errorMsgObj.errMsgShowFlag = true;
+      this.errorMsgObj.errorMsg = "File size should be within 100 mb !";
+      this.busySpinner = false;
+    } else {
+      if (this.fileData != undefined) {
+        for (let i: number = 0; i < this.fileList.length; i++) {
+          console.log(" file upload", this.fileData.get('uploadFile' + i.toString()));
+          if (this.fileData.get('uploadFile' + i.toString()) != null) {
+            this.formData.append('uploadFile' + i.toString(), this.fileData.get('uploadFile' + i.toString()));
+          }
+        }//end of for
+      }//end of if fileData is !undefined
+      this.formData.append('Accept', 'application/json');
+      this.formData.append('accessToken', 'bearer ' + this.localStorageService.user.accessToken);
+      this.formData.append('menuId', 'DEFAULT1');
+      this.formData.append('userId', this.localStorageService.user.userId);
+      let formDataObj: any = {};
+      formDataObj = this.formData;
+      this.complaintDIService.postFile(plantType,this.formData,complaintReferenceNo,complainDetailsAutoId,activityId).
+      subscribe(res=>{
+        if(res.msgType === 'Info'){
+          fileSuccessErrReturnMsg = "Success";
+          this.busySpinner = false;
+          console.log("file uploaded successfully..");
+        }else{
+          fileSuccessErrReturnMsg = "Error";
+        this.errorMsgObj.errMsgShowFlag = true;
+        this.errorMsgObj.errorMsg = res.msg;
+        this.busySpinner = false;
+        }
+      },err=>{
+        console.log(err);
+        fileSuccessErrReturnMsg = "Error";
+        this.errorMsgObj.errMsgShowFlag = true;
+        this.errorMsgObj.errorMsg = err.msg;
+        this.busySpinner = false;
+        this.sessionErrorService.routeToLogin(err._body);
+      });
+    }
+    return fileSuccessErrReturnMsg;
+  }//end of method
 
   //start method onKeyupComplaintQty
   public onKeyupComplaintQty(complaintQtyInMtrsParam, invoiceNo, itemCode, invoiceQtyInMtrsParam) {
@@ -701,7 +760,7 @@ export class ComplaintDIRegisterComponent implements OnInit {
     this.complaintDetailsEnable = false;
     this.natureCmpName = args.target.options[args.target.selectedIndex].text;
     console.log("natureCmpIdParam", this.natureCmpName);
-    if (this.natureCmpName == "Others") {
+    if (this.natureCmpName == ("Others" || "Marking & Stenciling")) {
       this.complaintDetailsEnable = true;
       this.complaintRegisterFormGroup.controls['complaintDetails'].markAsTouched();
     }
@@ -792,15 +851,18 @@ export class ComplaintDIRegisterComponent implements OnInit {
   //file upload event  
   public fileChange(event) {
     this.fileData = new FormData();
+    this.totalFileSize = 0;
     this.fileList = event.target.files;
     if (this.fileList.length > 0) {
       for (let i: number = 0; i < this.fileList.length; i++) {
         let file: File = this.fileList[i];
         this.fileData.append('uploadFile' + i.toString(), file, file.name);
+        this.totalFileSize = this.totalFileSize + file.size;
+        console.log("this.totalFileSize:::::::::::", this.totalFileSize);
       }//end of for
     }//end of if
-  }//end of filechange method
-
+  }//end of filechange method  
+  
   //for clicking submit button this method will be invoked
   public onComplainSubmit(): void {
     console.log("form value::", this.complaintRegisterFormGroup.value);
@@ -834,18 +896,30 @@ export class ComplaintDIRegisterComponent implements OnInit {
           complainDetailJson.complaintReferenceNo = res.value;
           this.complaintDIService.postDetail(complainDetailJson, plantType, action).
             subscribe(res => {
-              if (res.msgType === 'Info') {
+              if (res.msgType === 'Info') {                
                 console.log(" complain submitted successfully");
-              }
-              this.busySpinner = false;
-              this.onOpenModal(res.msg);
+                let fileSuccessErrReturnMsg: string = "";
+                if(this.totalFileSize > 0){
+                  fileSuccessErrReturnMsg = this.fileUploadWSCall(plantType,res.value,this.activityId,res.valueSub);
+                  console.log("fileSuccessErrReturnMsg",fileSuccessErrReturnMsg);
+                }else{
+                  this.busySpinner = false;
+                  fileSuccessErrReturnMsg = "Success";
+                }
+                if(fileSuccessErrReturnMsg === "Success"){
+                  this.onOpenModal(res.value,res.msg);
+                  this.router.navigate([ROUTE_PATHS.RouteHome]);
+                }                
+              }              
             },
               err => {
                 console.log(err);
                 this.busySpinner = false;
                 this.sessionErrorService.routeToLogin(err._body);
               });
-        }//end of if of msgType Info
+        }else{
+          this.busySpinner = false;
+        }
 
       },
         err => {
@@ -874,6 +948,7 @@ export class ComplaintDIRegisterComponent implements OnInit {
   // method to delete error msg
   public deleteResErrorMsgOnClick() {
     this.errorMsgObj.errMsgShowFlag = false;
+    this.errorMsgObj.errorMsg = "";
   }//end of method to delete error msg
 
   //for clicking cancel button this method will be invoked

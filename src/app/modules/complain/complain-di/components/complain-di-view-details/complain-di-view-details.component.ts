@@ -43,6 +43,7 @@ export class ComplainDIViewDetailsComponent implements OnInit {
     errorMsg: '',
     errMsgShowFlag: false
   };
+  
   constructor(
     private router: Router,
     private activatedroute: ActivatedRoute,
@@ -74,7 +75,6 @@ export class ComplainDIViewDetailsComponent implements OnInit {
     });
     // console.log("complaintReferenceNo for view Complaint di: ", this.complaintReferenceNo);
   }//end of method
-  //method to get complain reference details by service 
   /**
    * @description initform data
    */
@@ -98,8 +98,8 @@ export class ComplainDIViewDetailsComponent implements OnInit {
       siteVisit: new FormControl({ value: 'N', disabled: true }),
       siteVisitByDepartmentName: new FormControl('')
     });
-
-  }
+  }//end of method
+  //method to get complain reference details by service 
   private getviewComplainReferenceDetailsWSCall() {
     let pageCompStatus: number = 10;
     this.complaintDIService.getComplainViewDetails(this.routeParam.complaintReferenceNo, pageCompStatus).
@@ -153,10 +153,10 @@ export class ComplainDIViewDetailsComponent implements OnInit {
     //console.log('got the value',this.complaintRegisterFormGroup.value.siteVisit);
   }//end of method 
 
-   //start method getInvoiceItemDetailWSCall to get item details
-   private getInvoiceItemDetailWSCall(complaintReferenceNo: string, pageActivityId: number, complainDetailsAutoId: number) {
+  //start method getInvoiceItemDetailWSCall to get item details
+  private getInvoiceItemDetailWSCall(complaintReferenceNo: string, pageActivityId: number, complainDetailsAutoId: number) {
     this.busySpinner = true;
-    this.complaintDIService.getInvoiceItemDetail(complaintReferenceNo, pageActivityId,complainDetailsAutoId).
+    this.complaintDIService.getInvoiceItemDetail(complaintReferenceNo, pageActivityId, complainDetailsAutoId).
       subscribe(res => {
         if (res.msgType === "Info") {
           let invItemDeatilsJson: any = JSON.parse(res.mapDetails);
@@ -183,7 +183,7 @@ export class ComplainDIViewDetailsComponent implements OnInit {
           this.fileDetails = json;
           console.log("File details::::", this.fileDetails);
           this.busySpinner = false;
-        }else{
+        } else {
           this.fileDetails = [];
         }
       },
