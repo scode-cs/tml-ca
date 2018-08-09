@@ -19,25 +19,25 @@
       <!-- start table div -->
       <div *ngIf="invReportDetails.length > 1" class="col-lg-12 col-md-12 col-xs-12 scroll-bar prev-inv-report-table-style">
         <table class="table-style">
-            <thead>
-                <tr class="th-style">
-                  <td class="header-style-first">Select</td>
-                  <td class="hideextra" *ngFor="let invRprt of  invReportTable" [ngClass]="invRprt.headerClass">
-                    {{ invRprt.headerDesc }}
-                  </td>
-                </tr>
-              </thead>
-              <tbody>
-                <tr class="tr-style" *ngFor="let invReportDet of invReportDetails; let invRepIndex = index;" >
-                  <td class="td-style-first" style="cursor: pointer;" (click)="selectData(invRepIndex)">
-                    <i class="fa" [ngClass]="invReportIndex == invRepIndex ? 'fa-dot-circle-o' : 'fa-circle-o'"></i>
-                  </td>
-    
-                  <td class="hideextra" *ngFor="let invRprt of invReportTable" [ngClass]="invRprt.dataClass">
-                    {{ invReportDet[invRprt.headerKey] }}
-                  </td>
-                </tr>
-              </tbody>
+          <thead>
+            <tr class="th-style">
+              <td class="header-style-first">Select</td>
+              <td class="hideextra" *ngFor="let invRprt of  invReportTable" [ngClass]="invRprt.headerClass">
+                {{ invRprt.headerDesc }}
+              </td>
+            </tr>
+          </thead>
+          <tbody>
+            <tr class="tr-style" *ngFor="let invReportDet of invReportDetails; let invRepIndex = index;">
+              <td class="td-style-first" style="cursor: pointer;" (click)="selectData(invRepIndex)">
+                <i class="fa" [ngClass]="invReportIndex == invRepIndex ? 'fa-dot-circle-o' : 'fa-circle-o'"></i>
+              </td>
+
+              <td class="hideextra" *ngFor="let invRprt of invReportTable" [ngClass]="invRprt.dataClass">
+                {{ invReportDet[invRprt.headerKey] }}
+              </td>
+            </tr>
+          </tbody>
         </table>
       </div>
       <!--end table div-->
@@ -57,19 +57,19 @@
 
             <!-- start div of Site Visit Made radio button -->
             <div class="form-group col-xs-12 col-sm-6 col-md-6 col-lg-4">
-                <div style="display:inline-block;">
-                  <label>Site Visit Made</label>
-                  <label class="control control--radio">Yes
-                    <input type="radio" name="siteVisitMade" formControlName="siteVisitMade" value="Y" />
-                    <div class="control__indicator"></div>
-                  </label>
-                </div>
-                <div style="display:inline-block;">
-                  <label class="control control--radio">No
-                    <input type="radio" name="siteVisitMade" formControlName="siteVisitMade" value="N"/>
-                    <div class="control__indicator"></div>
-                  </label>
-                </div>
+              <div style="display:inline-block;">
+                <label>Site Visit Made</label>
+                <label class="control control--radio">Yes
+                  <input type="radio" name="siteVisitMade" formControlName="siteVisitMade" value="Y" />
+                  <div class="control__indicator"></div>
+                </label>
+              </div>
+              <div style="display:inline-block;">
+                <label class="control control--radio">No
+                  <input type="radio" name="siteVisitMade" formControlName="siteVisitMade" value="N" />
+                  <div class="control__indicator"></div>
+                </label>
+              </div>
             </div>
             <!-- end div of Site Visit Made requied -->
 
@@ -84,19 +84,19 @@
 
             <!-- start div of Sample Collected radio button -->
             <div class="form-group col-xs-12 col-sm-6 col-md-6 col-lg-4">
-                <div style="display:inline-block;">
-                  <label>Sample Collected</label>
-                  <label class="control control--radio">Yes
-                    <input type="radio" name="sampleCollected" formControlName="sampleCollected" value="Y"/>
-                    <div class="control__indicator"></div>
-                  </label>
-                </div>
-                <div style="display:inline-block;">
-                  <label class="control control--radio">No
-                    <input type="radio" name="sampleCollected" formControlName="sampleCollected" value="N"/>
-                    <div class="control__indicator"></div>
-                  </label>
-                </div>
+              <div style="display:inline-block;">
+                <label>Sample Collected</label>
+                <label class="control control--radio">Yes
+                  <input type="radio" name="sampleCollected" formControlName="sampleCollected" value="Y" />
+                  <div class="control__indicator"></div>
+                </label>
+              </div>
+              <div style="display:inline-block;">
+                <label class="control control--radio">No
+                  <input type="radio" name="sampleCollected" formControlName="sampleCollected" value="N" />
+                  <div class="control__indicator"></div>
+                </label>
+              </div>
             </div>
             <!-- end div of Sample Collected-->
 
@@ -191,11 +191,12 @@
             <div class="form-group col-xs-12 col-sm-6 col-md-6 col-lg-4">
               <label for="stencil">Jointing Type</label>
               <ul class="list-group ul-style">
-                <li class="list-group-item li-style" *ngFor="">
+                <li class="list-group-item li-style" *ngFor="let jointingType of jointingTypeDesc">
                   <label class="custom-control custom-checkbox">
-                    <input type="checkbox" class="custom-control-input" formControlName="jointingtype" />
+                    <input type="checkbox" class="custom-control-input" [checked]="true" />
                     <span class="custom-control-indicator"></span>
                     <span class="custom-control-description">
+                      {{jointingType}}
                     </span>
                   </label>
                 </li>

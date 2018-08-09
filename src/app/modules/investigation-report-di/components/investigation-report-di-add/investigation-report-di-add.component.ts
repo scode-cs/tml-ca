@@ -94,8 +94,7 @@ export class InvestigationReportDiComponent implements OnInit {
   ngOnInit(): void {
     this.busySpinner = true;
     this.getRouteParam();
-    this.getInvestigationViewDetailsWSCall();
-    this.getInvoiceItemDetailWSCall();
+    //this.getInvestigationViewDetailsWSCall();
     this.invReportTable = new InvestigationReportDIConfigModel().prevInvReportHeader;
     this.itemGridTable = new InvestigationReportDIConfigModel().invItemGridHeader;
     this.ivtReportDataList.unloadingEquipmentList = new InvestigationDataModel().unloadingEquipmentList;
@@ -112,6 +111,7 @@ export class InvestigationReportDiComponent implements OnInit {
       this.complaintStatus = params.complaintStatus ? params.complaintStatus : '';
     });
     console.log("complaintReferenceNo investigation-report-di-add-component: ", this.complaintReferenceNo);
+    this.invReportFormGroup.controls['complaintReferenceNo'].setValue(this.complaintReferenceNo);
   }//end of the method
 
   //method to get investigation report details by service call
@@ -140,24 +140,23 @@ export class InvestigationReportDiComponent implements OnInit {
   }//end of method
 
   //start method getInvoiceItemDetailWSCall to get item details
-  private getInvoiceItemDetailWSCall() {
-    let activityId: number = 10;
-    this.busySpinner = true;
-    this.complaintDIService.getInvoiceItemDetail(this.complaintReferenceNo, activityId).
-      subscribe(res => {
-        if (res.msgType === "Info") {
-          let invItemDeatilsJson: any = JSON.parse(res.mapDetails);
-          this.invItemDetails = invItemDeatilsJson;
-          this.busySpinner = false;
-          console.log("item details =========.........>>>>>>>>>", this.invItemDetails);
-        }//end of if
-      },
-        err => {
-          console.log(err);
-          this.busySpinner = false;
-          this.sessionErrorService.routeToLogin(err._body);
-        });
-  }//end method of getInvoiceItemDetailWSCall
+  // private getInvoiceItemDetailWSCall(complaintReferenceNo: string, pageActivityId: number, complainDetailsAutoId: number) {
+  //   this.busySpinner = true;
+  //   this.complaintDIService.getInvoiceItemDetail(complaintReferenceNo, pageActivityId,complainDetailsAutoId).
+  //     subscribe(res => {
+  //       if (res.msgType === "Info") {
+  //         let invItemDeatilsJson: any = JSON.parse(res.mapDetails);
+  //         this.invItemDetails = invItemDeatilsJson;
+  //         this.busySpinner = false;
+  //         console.log("item details =========.........>>>>>>>>>", this.invItemDetails);
+  //       }//end of if
+  //     },
+  //       err => {
+  //         console.log(err);
+  //         this.busySpinner = false;
+  //         this.sessionErrorService.routeToLogin(err._body);
+  //       });
+  // }//end method of getInvoiceItemDetailWSCall
 
   //start method setFormValue to set the value in invreport form
   private setFormValue() {
