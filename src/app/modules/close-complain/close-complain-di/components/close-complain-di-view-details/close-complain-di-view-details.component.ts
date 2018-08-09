@@ -88,7 +88,6 @@ private getviewComplainReferenceDetailsWSCall() {
         this.setResValToForm();
         let complainDetailsAutoId: number = this.closeDetails[this.closeIndex].complaintDetailAutoId;
         this.getFileWSCall(this.routeParam.complaintReferenceNo, pageCompStatus ,complainDetailsAutoId);//to get file
-        this.busySpinner = false;
       } else {
         this.errorMsgObj.errMsgShowFlag = true;
         this.errorMsgObj.errorMsg = res.msg;
@@ -124,10 +123,14 @@ private getFileWSCall(complaintReferenceNo: string, pageActivityId: number, comp
       this.fileDetails = json;
       console.log("File details::::",this.fileDetails);
       this.busySpinner = false;
+    }else{
+      this.fileDetails = [];
+      this.busySpinner = false;
     }
   },
     err => {
       console.log(err);
+      this.fileDetails = [];
       this.busySpinner = false;
       this.sessionErrorService.routeToLogin(err._body);
     });
