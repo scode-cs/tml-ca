@@ -20,7 +20,7 @@
   <!-- main div -->
   <div class="form-div-style">
     <!-- start table div -->
-    <div class="col-lg-12 col-md-12 col-xs-12 scroll-bar grid-table-style" style="margin-bottom: 15px; margin-top: 5px;">
+    <div *ngIf="prevCompDetShowFlag" class="col-lg-12 col-md-12 col-xs-12 scroll-bar grid-table-style" style="margin-bottom: 15px; margin-top: 5px;">
       <table class="table-style">
         <thead>
           <tr class="th-style">
@@ -73,8 +73,7 @@
           <!-- <fieldset class="form-group col-xs-12 col-sm-6 col-md-6 col-lg-4" [disabled]="complaintReferenceNo!=''"> -->
           <div class="form-group col-xs-12 col-sm-6 col-md-6 col-lg-4">
             <label for="compliantReferenceDateTime">Compliant Reference Date</label>
-            <input type="text" class="form-control"  formControlName="complaintReferenceDt"
-            readonly/>
+            <input type="text" class="form-control" formControlName="complaintReferenceDt" readonly/>
           </div>
           <!--end div for Compliant Reference Date-->
 
@@ -84,7 +83,8 @@
           <div class="form-group col-xs-12 col-sm-6 col-md-6 col-lg-4">
             <label for="invoiceNo">Official Document No</label>
             <div class="input-group input-group-sm search-div" style="float: left;">
-              <input type="text" class="form-control" formControlName="officialDocNo" #invoiceNo placeholder="Enter Your Official Document No" style="font-size:16px" />
+              <input type="text" class="form-control" formControlName="officialDocNo" #invoiceNo placeholder="Enter Your Official Document No"
+                style="font-size:16px" />
               <!--[maxlength]="invoiveNoLength" -->
               <span class="input-group-btn">
                 <button class="btn btn-primary invoice-search-button" type="button" (click)="onInvoiceNoOpenModal(invoiceNo.value);invoiceNo.value=''">
@@ -245,8 +245,8 @@
                       />
                     </td>
                     <td class="td-style hideextra">
-                      <input type="text" #batchNo value="{{selItem.batchNo}}" formControlName="batchNo" 
-                      (keyup)="onKeyupBatchNo(batchNo.value,selItem.invoiceNo,selItem.itemCode)" />
+                      <input type="text" #batchNo value="{{selItem.batchNo}}" formControlName="batchNo" (keyup)="onKeyupBatchNo(batchNo.value,selItem.invoiceNo,selItem.itemCode)"
+                      />
                       <!-- [maxlength]="batchNoInInvoiceDetailsLength" -->
                     </td>
                     <td class="td-style hideextra">
@@ -284,8 +284,7 @@
           <!--start div for Contact Person Name-->
           <div class="form-group col-xs-12 col-sm-6 col-md-6 col-lg-4">
             <label for="contactPersonName">Customer's Contact Person</label>
-            <input type="text" id="contactPersonName" class="form-control" 
-            formControlName="contactPersonName" />
+            <input type="text" id="contactPersonName" class="form-control" formControlName="contactPersonName" />
             <!-- [maxlength]="contactPersonNameLength"  -->
           </div>
           <!--end div for Contact Person Name-->
@@ -293,8 +292,7 @@
           <!--start div for Contact Person Phone No-->
           <div class="form-group col-xs-12 col-sm-6 col-md-6 col-lg-4">
             <label for="contactPersonPhoneNo">Phone No</label>
-            <input type="text" id="contactPersonPhoneNo" class="form-control" 
-            formControlName="contactPersonPhoneNo" />
+            <input type="text" id="contactPersonPhoneNo" class="form-control" formControlName="contactPersonPhoneNo" />
             <!-- [maxlength]="contactPersonPhoneNoLength"  -->
             <div class="alert alert-danger" *ngIf="complaintRegisterFormGroup.get('contactPersonPhoneNo').hasError('pattern') && complaintRegisterFormGroup.get('contactPersonPhoneNo').touched && !complaintRegisterFormGroup.get('contactPersonEmailId').hasError('email') ">
               <i class="fa fa-exclamation-circle"></i> Provide valid phone No
@@ -305,8 +303,7 @@
           <!--start div for Contact Person Email Id-->
           <div class="form-group col-xs-12 col-sm-6 col-md-6 col-lg-4">
             <label for="contactPersonEmailId">Email Id</label>
-            <input type="text" id="contactPersonEmailId" class="form-control"
-            formControlName="contactPersonEmailId" />
+            <input type="text" id="contactPersonEmailId" class="form-control" formControlName="contactPersonEmailId" />
             <!-- [maxlength]="contactPersonEmailIdLength"  -->
             <div class="alert alert-danger" *ngIf="complaintRegisterFormGroup.get('contactPersonEmailId').hasError('required') && complaintRegisterFormGroup.get('contactPersonEmailId').touched && !complaintRegisterFormGroup.get('contactPersonEmailId').hasError('email') ">
               <i class="fa fa-exclamation-circle"></i> Provide valid email id
@@ -318,7 +315,7 @@
           <!--end div for Contact Person Email Id-->
 
           <!--start div for Complaint Type-->
-          <fieldset class="form-group col-xs-12 col-sm-6 col-md-6 col-lg-4" [disabled]="complaintReferenceNo!=''">
+          <div class="form-group col-xs-12 col-sm-6 col-md-6 col-lg-4">
             <label for="complaintType">Complaint Type</label>
             <select class="custom-select col-xs-12 col-sm-6 col-md-6 col-lg-4" formControlName="complaintTypeId" (change)="onComplaintTypeSelect($event,$event.target.value)"
               required>
@@ -329,11 +326,11 @@
               <i class="fa fa-exclamation-circle"></i> Complaint Type is required!
             </div>
             <!--end div for Complaint Type alert-->
-          </fieldset>
+          </div>
           <!--end div for Complaint Type-->
 
           <!--start div for Nature of Complaint-->
-          <fieldset class="form-group col-xs-12 col-sm-6 col-md-6 col-lg-4" [disabled]="complaintReferenceNo!=''">
+          <div class="form-group col-xs-12 col-sm-6 col-md-6 col-lg-4">
             <label for="natureOfcomplaint col-xs-12 col-sm-6 col-md-6 col-lg-4">Nature of Complaint</label>
             <select class="custom-select col-xs-12 col-sm-6 col-md-6 col-lg-4" formControlName="natureOfComplaintId" (change)="onNatureTypeSelect($event)"
               required>
@@ -344,26 +341,26 @@
               <i class="fa fa-exclamation-circle"></i> Nature of Complaint is required!
             </div>
             <!--end div for Nature of Complaint alert-->
-          </fieldset>
+          </div>
           <!--end div for Nature of Complaint-->
 
           <!--start div for Detail of Complaint-->
-          <fieldset class="form-group col-xs-12 col-sm-6 col-md-6 col-lg-4" [disabled]="complaintReferenceNo">
+          <div class="form-group col-xs-12 col-sm-6 col-md-6 col-lg-4">
             <label for="detailOfComplaint">Detail of Complaint</label>
             <textarea id="detailOfComplaint" rows="5" class="form-control hide-horizontal-scroll" #complaintDetails formControlName="complaintDetails"
-            (keyup)="comDetsOnkeyup(complaintDetails.value)"></textarea>
+              (keyup)="comDetsOnkeyup(complaintDetails.value)"></textarea>
             <!-- [maxlength]="complaintDetailsLength"  -->
             <!--start div for Detail of Complaint alert-->
             <div class="alert alert-danger" *ngIf="complaintRegisterFormGroup.get('complaintDetails').touched && complaintDetailsEnable==true">
               <i class="fa fa-exclamation-circle"></i> Detail of Complaint is required!
             </div>
-          </fieldset>
+          </div>
           <!--end div for Detail of Complaint-->
 
           <!--start div for Complaint Logged By-->
-          <div  class="form-group col-xs-12 col-sm-6 col-md-6 col-lg-4">
-            <label >Complaint Logged By </label>
-            <input type="text" class="form-control" formControlName="loggedBy" readonly/>        
+          <div class="form-group col-xs-12 col-sm-6 col-md-6 col-lg-4">
+            <label>Complaint Logged By </label>
+            <input type="text" class="form-control" formControlName="loggedBy" readonly/>
           </div>
           <!--end div for Complaint Logged By-->
 
@@ -376,54 +373,20 @@
 
           <!--start div for radio button-->
           <div class="form-group col-xs-12 col-sm-6 col-md-6 col-lg-4">
-            <ng-container *ngIf="siteVisitValue ==''">
-              <div style="display:inline-block;">
-                <label>Site Visit Required</label>
-                <label class="red-asterick">*</label>
-                <label class="control control--radio">Yes
-                  <input type="radio" name="siteVisit" formControlName="siteVisit" [value]="Y" (click)="onRadioClick('Y')" />
-                  <div class="control__indicator"></div>
-                </label>
-              </div>
-              <div style="display:inline-block;">
-                <label class="control control--radio">No
-                  <input type="radio" name="siteVisit" formControlName="siteVisit" [value]="N" (click)="onRadioClick('N')" />
-                  <div class="control__indicator"></div>
-                </label>
-              </div>
-            </ng-container>
-            <ng-container *ngIf="siteVisitValue =='Y'">
-              <div style="display:inline-block;">
-                <label>Site Visit Required</label>
-                <label class="red-asterick">*</label>
-                <label class="control control--radio">Yes
-                  <input type="radio" name="siteVisit" formControlName="siteVisit" [value]="Y" [checked]=true (click)="onRadioClick('Y')" />
-                  <div class="control__indicator"></div>
-                </label>
-              </div>
-              <div style="display:inline-block;">
-                <label class="control control--radio">No
-                  <input type="radio" name="siteVisit" formControlName="siteVisit" [value]="N" (click)="onRadioClick('N')" />
-                  <div class="control__indicator"></div>
-                </label>
-              </div>
-            </ng-container>
-            <ng-container *ngIf="siteVisitValue =='N'">
-              <div style="display:inline-block;">
-                <label>Site Visit Required</label>
-                <label class="red-asterick">*</label>
-                <label class="control control--radio">Yes
-                  <input type="radio" name="siteVisit" formControlName="siteVisit" [value]="Y" (click)="onRadioClick('Y')" />
-                  <div class="control__indicator"></div>
-                </label>
-              </div>
-              <div style="display:inline-block;">
-                <label class="control control--radio">No
-                  <input type="radio" name="siteVisit" formControlName="siteVisit" [value]="N" [checked]=true (click)="onRadioClick('N')" />
-                  <div class="control__indicator"></div>
-                </label>
-              </div>
-            </ng-container>
+            <div style="display:inline-block;">
+              <label>Site Visit Required</label>
+              <label class="red-asterick">*</label>
+              <label class="control control--radio">Yes
+                <input type="radio" name="siteVisit" formControlName="siteVisit" value="Y" (click)="onRadioClick('Y')" />
+                <div class="control__indicator"></div>
+              </label>
+            </div>
+            <div style="display:inline-block;">
+              <label class="control control--radio">No
+                <input type="radio" name="siteVisit" formControlName="siteVisit" value="N" (click)="onRadioClick('N')" />
+                <div class="control__indicator"></div>
+              </label>
+            </div>
           </div>
           <!--end div for radio button-->
 
@@ -467,8 +430,8 @@
 
             <!-- start div for Submit Button-->
             <div class="col-xs-12 col-sm-4 col-md-4 col-lg-2 button-holder">
-              <button type="submit" class="btn btn-primary primary-button-style" >Submit
-              <!-- [disabled]="!(complaintRegisterFormGroup.valid && submitButtonEnable && complaintDetailsEnable===false && selectedItemDetails.length > 0 && complaintQtyInMtrsError == false)">Submit -->
+              <button type="submit" class="btn btn-primary primary-button-style">Submit
+                <!-- [disabled]="!(complaintRegisterFormGroup.valid && submitButtonEnable && complaintDetailsEnable===false && selectedItemDetails.length > 0 && complaintQtyInMtrsError == false)">Submit -->
               </button>
             </div>
             <!-- end div for Submit Button-->
