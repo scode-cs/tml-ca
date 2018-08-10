@@ -331,7 +331,7 @@
 
           <!--start div for Nature of Complaint-->
           <div class="form-group col-xs-12 col-sm-6 col-md-6 col-lg-4">
-            <label for="natureOfcomplaint col-xs-12 col-sm-6 col-md-6 col-lg-4">Nature of Complaint</label>
+            <label>Nature of Complaint</label>
             <select class="custom-select col-xs-12 col-sm-6 col-md-6 col-lg-4" formControlName="natureOfComplaintId" (change)="onNatureTypeSelect($event)"
               required>
               <option *ngFor="let natureCmp of natureOfComDropDownList" value="{{ natureCmp.Key }}">{{ natureCmp.Value }}</option>
@@ -346,7 +346,7 @@
 
           <!--start div for Detail of Complaint-->
           <div class="form-group col-xs-12 col-sm-6 col-md-6 col-lg-4">
-            <label for="detailOfComplaint">Detail of Complaint</label>
+            <label>Detail of Complaint</label>
             <textarea id="detailOfComplaint" rows="5" class="form-control hide-horizontal-scroll" #complaintDetails formControlName="complaintDetails"
               (keyup)="comDetsOnkeyup(complaintDetails.value)"></textarea>
             <!-- [maxlength]="complaintDetailsLength"  -->
@@ -411,18 +411,18 @@
           <div class="form-group col-xs-12 col-sm-6 col-md-6 col-lg-6">
             <label for="imageFile">File(s) Upload</label>
             <label class="red-coloured-label">(max size 100 mb)</label>
-            <input type="file" (change)="fileChange($event)" multiple/>
+            <input type="file" #fileInput (change)="fileChange($event)"/>
           </div>
           <!--end of file upload div-->
 
           <!--start div for show files-->
-          <!-- <div class="form-group col-xs-12 col-sm-6 col-md-6 col-lg-4" *ngIf="complaintReferenceNo && selectedComplaintReferenceDetails.files?.length!=0">
+          <div class="form-group col-xs-12 col-sm-6 col-md-6 col-lg-4" *ngIf="fileArr?.length!=0">
             <label>Uploaded file(s)</label>
-            <div *ngFor="let file of selectedComplaintReferenceDetails.files">
+            <div *ngFor="let file of fileArr">
               <a href="{{file.fileUrl}}" target="_blank">{{file.fileName}}</a>
               <br/>
             </div>
-          </div> -->
+          </div>
           <!--end div for show files-->
 
           <!-- start div for Submit  and Cancel Button-->

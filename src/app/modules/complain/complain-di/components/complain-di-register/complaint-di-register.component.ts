@@ -1,5 +1,5 @@
 /* tslint:disable: member-ordering forin */
-import { Component, OnInit, Input, OnChanges } from '@angular/core';
+import { Component, OnInit, Input, OnChanges, ViewChild } from '@angular/core';
 import { FormGroup, Validators, FormControl, MaxLengthValidator } from '@angular/forms';
 import { Subscription } from 'rxjs/Subscription';//to get route param
 import { Router, ActivatedRoute } from '@angular/router';
@@ -23,7 +23,8 @@ import { IcomplainRegDIDbFieldMaxLength } from '../../models/complain-reg-di.mod
   styleUrls: ['complaint-di-register.component.css']
 })
 export class ComplaintDIRegisterComponent implements OnInit {
-
+  @ViewChild('fileInput')
+  fileInputVariable: any;
   // private formData: FormData = new FormData();
   private compRegDbMaxLength: IcomplainRegDIDbFieldMaxLength = {
     invoiceNoLength: this.localStorageService.dbSettings.invoiceNo,
@@ -96,6 +97,7 @@ export class ComplaintDIRegisterComponent implements OnInit {
   public invReportTable: any[] = [];//to store prev inv report
   //
   public complaintStatus = '10';
+  public fileArr: any[] = [];//to store file details from file upload response
   public prevCompDetShowFlag: boolean = false;//to show prev comp det
 
   constructor(
@@ -609,52 +611,85 @@ export class ComplaintDIRegisterComponent implements OnInit {
     modalRef.componentInstance.modalMessage = msgBody;
   }//end of method onOpenModal
 
+  private wsErrorCall(err){
+    this.errorMsgObj.errMsgShowFlag = true;
+    this.errorMsgObj.errorMsg = err.msg;
+    this.busySpinner = false;
+    this.sessionErrorService.routeToLogin(err._body);
+  }//end of method
+
+  //for clicking submit button this method will be invoked
+  private setInvoiceItemArrForSubmit(complaintReferenceNo: string, activityId: number, valueSub: string, natureOfComplaintId: number, complainDetails: string): any[] {
+    console.log("form value::", this.complaintRegisterFormGroup.value);
+    console.log("selectedItem grid::", this.selectedItemDetails);
+    let invoiceItemArr: any[] = [];
+    this.selectedItemDetails.forEach(keyEl => {
+      let selectedItem: any[] = keyEl.value.selectedItem;
+      selectedItem.forEach(element => {
+        let itemarrEl: any = {};
+        itemarrEl.activityId = activityId;
+        itemarrEl.complaintReferenceNo = complaintReferenceNo;
+        itemarrEl.complaintDetailsAutoId = parseInt(valueSub);
+        itemarrEl.natureOfComplaintId = natureOfComplaintId;
+        itemarrEl.complaintDetails = complainDetails;
+        itemarrEl.invoiceNo = element.invoiceNo;
+        itemarrEl.itemCode = element.itemCode;
+        itemarrEl.invoiceQtyInMtrs = element.invoiceQtyInMtrs;
+        itemarrEl.invoiceQtyInTons = element.invoiceQtyInTons;
+        itemarrEl.userId = this.localStorageService.user.userId;
+        itemarrEl.batchNo = element.batchNo;
+        itemarrEl.cameFrom = element.cameFrom;
+        invoiceItemArr.push(itemarrEl);
+      });
+    });
+    console.log("invoiceItemArr::::", invoiceItemArr);
+    return invoiceItemArr;
+  }//end of method
+
+  //method of complaint details submit service call
+  private complaintDetailsSubmitWSCall(complainDetailJson:any, plantType:string, action:string){
+    this.complaintDIService.postDetail(complainDetailJson, plantType, action).
+    subscribe(res => {
+      if (res.msgType === 'Info') {
+        console.log(" complain submitted successfully");
+        if (this.selectedItemDetails.length > 0) {
+          let invArr: any = this.setInvoiceItemArrForSubmit(complainDetailJson.complaintReferenceNo, this.activityId, res.valueSub, complainDetailJson.natureOfComplaintId, complainDetailJson.complaintDetails);//calling the method to set item grid array
+          console.log("selectedItem grid invArr::", invArr);
+          this.invoiceItemDetailSubmitWSCall(invArr, plantType);
+        }
+        // this.fileUploadWSCall(plantType, res.value, this.activityId, res.valueSub, res.msg, res.value);
+      }
+    },
+      err => {
+        console.log(err);
+        this.wsErrorCall(err);
+      });
+  }//end of method
+
+  //method to item submit
+  private invoiceItemDetailSubmitWSCall(items: any[], plantType: string) {
+    this.complaintDIService.postInvoiceItemDetail(items, plantType).
+      subscribe(res => {
+        if (res.msgType === 'Info') {
+          console.log("Invoice items uploaded successfully");
+        } else {
+          this.errorMsgObj.errMsgShowFlag = true;
+          this.errorMsgObj.errorMsg = res.msg;
+          this.busySpinner = false;
+        }
+      }, err => {
+        console.log(err);
+        this.wsErrorCall(err);
+        // this.errorMsgObj.errMsgShowFlag = true;
+        // this.errorMsgObj.errorMsg = err.msg;
+        // this.busySpinner = false;
+        // this.sessionErrorService.routeToLogin(err._body);
+      });
+  }//end of method
+
   //method to file upload
   private fileUploadWSCall(plantType: string, complaintReferenceNo: string, activityId: number, complainDetailsAutoId: number, resmsg: string, resvalue: string) {
-    if (this.totalFileSize > 0) {
-      if (this.totalFileSize > this.fileSizeLimit) {
-        this.errorMsgObj.errMsgShowFlag = true;
-        this.errorMsgObj.errorMsg = "File size should be within 100 mb !";
-        this.busySpinner = false;
-      } else {
-        if (this.fileData != undefined) {
-          for (let i: number = 0; i < this.fileList.length; i++) {
-            console.log(" file upload", this.fileData.get('uploadFile' + i.toString()));
-            if (this.fileData.get('uploadFile' + i.toString()) != null) {
-              this.formData.append('uploadFile' + i.toString(), this.fileData.get('uploadFile' + i.toString()));
-            }
-          }//end of for
-        }//end of if fileData is !undefined
-        this.formData.append('Accept', 'application/json');
-        this.formData.append('accessToken', 'bearer ' + this.localStorageService.user.accessToken);
-        this.formData.append('menuId', 'DEFAULT1');
-        this.formData.append('userId', this.localStorageService.user.userId);
-        let formDataObj: any = {};
-        formDataObj = this.formData;
-        this.complaintDIService.postFile(plantType, this.formData, complaintReferenceNo, complainDetailsAutoId, activityId).
-          subscribe(res => {
-            if (res.msgType === 'Info') {
-              this.busySpinner = false;
-              console.log("file uploaded successfully..");
-              this.onOpenModal(resvalue, resmsg);
-              this.router.navigate([ROUTE_PATHS.RouteHome]);
-            } else {
-              this.errorMsgObj.errMsgShowFlag = true;
-              this.errorMsgObj.errorMsg = res.msg;
-              this.busySpinner = false;
-            }
-          }, err => {
-            console.log(err);
-            this.errorMsgObj.errMsgShowFlag = true;
-            this.errorMsgObj.errorMsg = err.msg;
-            this.busySpinner = false;
-            this.sessionErrorService.routeToLogin(err._body);
-          });
-      }
-    } else {
-      this.onOpenModal(resvalue, resmsg);
-      this.router.navigate([ROUTE_PATHS.RouteHome]);
-    }
+
   }//end of method
 
   //start method onKeyupComplaintQty
@@ -835,14 +870,11 @@ export class ComplaintDIRegisterComponent implements OnInit {
     this.siteVisitValue = radioValue;
     //  if siteVisitValue is Y then this if condition will be executed
     if (this.siteVisitValue == "Y") {
-
       this.complaintRegisterFormGroup.controls["siteVisit"].setValue(this.siteVisitValue);
-
       //set sitevisitby field mandatory
       this.complaintRegisterFormGroup.get('siteVisitByDepartmentName').setValidators(Validators.required);
       // this.complaintRegisterFormGroup.controls['siteVisitByDepartmentName'].markAsTouched();
     } else if (this.siteVisitValue == "N") { // siteVisitValue is N then this if condition will be executed
-
       this.complaintRegisterFormGroup.get('siteVisitByDepartmentName').setValidators(null);
       this.complaintRegisterFormGroup.get('siteVisitByDepartmentName').updateValueAndValidity();
       this.complaintRegisterFormGroup.controls['siteVisitByDepartmentName'].markAsUntouched();
@@ -851,21 +883,69 @@ export class ComplaintDIRegisterComponent implements OnInit {
 
   //file upload event  
   public fileChange(event) {
+    let plantType: string = this.localStorageService.user.plantType;
     this.fileData = new FormData();
     this.totalFileSize = 0;
     this.fileList = event.target.files;
+    // console.log("this.fileList.length::",this.fileList.length);
     if (this.fileList.length > 0) {
+      this.busySpinner = true;
       for (let i: number = 0; i < this.fileList.length; i++) {
         let file: File = this.fileList[i];
-        this.fileData.append('uploadFile' + i.toString(), file, file.name);
+        this.fileData.append('uploadFile', file, file.name);
         this.totalFileSize = this.totalFileSize + file.size;
         console.log("this.totalFileSize:::::::::::", this.totalFileSize);
       }//end of for
+      if (this.totalFileSize > this.fileSizeLimit) {
+        this.errorMsgObj.errMsgShowFlag = true;
+        this.errorMsgObj.errorMsg = "File size should be within 100 mb !";
+        this.busySpinner = false;
+      } else {
+        if (this.fileData != undefined) {
+          for (let i: number = 0; i < this.fileList.length; i++) {
+            console.log(" file upload", this.fileData.get('uploadFile'));
+            if (this.fileData.get('uploadFile') != null) {
+              this.formData.append('uploadFile', this.fileData.get('uploadFile'));
+            }
+          }//end of for
+        }//end of if fileData is !undefined
+        this.formData.append('Accept', 'application/json');
+        this.formData.append('accessToken', 'bearer ' + this.localStorageService.user.accessToken);
+        this.formData.append('menuId', 'DEFAULT1');
+        this.formData.append('userId', this.localStorageService.user.userId);
+        // let formDataObj: any = {};
+        // formDataObj = this.formData;
+        this.complaintDIService.postFileInTempTable(plantType, this.formData).
+          subscribe(res => {
+            if (res.msgType === 'Info') {
+              this.busySpinner = false;
+              console.log("file uploaded successfully..");
+              this.fileArr.push({ fileAutoId: res.valueAdv, fileName: res.value, fileUrl: res.valueSub });
+              console.log("this.fileArr:: ", this.fileArr);
+              // this.resetFileInput();//to reset file input
+              this.fileInputVariable.nativeElement.value = "";//reset file
+            } else {
+              this.errorMsgObj.errMsgShowFlag = true;
+              this.errorMsgObj.errorMsg = res.msg;
+              this.formData = new FormData();
+              this.busySpinner = false;
+            }
+          }, err => {
+            console.log(err);
+            this.formData = new FormData();
+            this.wsErrorCall(err);
+            // this.errorMsgObj.errMsgShowFlag = true;
+            // this.errorMsgObj.errorMsg = err.msg;
+            // this.busySpinner = false;
+            // this.sessionErrorService.routeToLogin(err._body);
+          });
+      }
     }//end of if
   }//end of filechange method  
 
-  //for clicking submit button this method will be invoked
+  //submit method
   public onComplainSubmit(): void {
+    this.busySpinner = true;
     console.log("form value::", this.complaintRegisterFormGroup.value);
     let complainHeaderJson: any = {};
     complainHeaderJson.lastActivityId = this.activityId;
@@ -890,37 +970,20 @@ export class ComplaintDIRegisterComponent implements OnInit {
     complainDetailJson.custCode = this.custInfo.custCode;
     complainDetailJson.userId = this.localStorageService.user.userId;
     console.log(" complainDetailJson =========", complainDetailJson);
-    this.busySpinner = true;
     this.complaintDIService.putHeader(complainHeaderJson, plantType, action).
       subscribe(res => {
         if (res.msgType === 'Info') {
           complainDetailJson.complaintReferenceNo = res.value;
-          this.complaintDIService.postDetail(complainDetailJson, plantType, action).
-            subscribe(res => {
-              if (res.msgType === 'Info') {
-                console.log(" complain submitted successfully");
-                let fileSuccessErrReturnMsg: string = "";
-
-                this.fileUploadWSCall(plantType, res.value, this.activityId, res.valueSub, res.msg, res.value);
-
-
-
-              }
-            },
-              err => {
-                console.log(err);
-                this.busySpinner = false;
-                this.sessionErrorService.routeToLogin(err._body);
-              });
+          this.complaintDetailsSubmitWSCall(complainDetailJson, plantType, action);//details submit ws call 
         } else {
+          this.errorMsgObj.errMsgShowFlag = true;
+          this.errorMsgObj.errorMsg = res.msg;
           this.busySpinner = false;
         }
-
       },
         err => {
           console.log(err);
-          this.busySpinner = false;
-          this.sessionErrorService.routeToLogin(err._body);
+          this.wsErrorCall(err);
         });
   }//end of method complainregDiSubmit  
 

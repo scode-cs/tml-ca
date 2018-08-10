@@ -139,8 +139,6 @@ public deleteInvoiceItemDetail(plantType: string,complaintReferenceNo: string,co
       .catch((error: Response) => { return Observable.throw(error) });
 }//end of the method of deleteInvoiceItemDetail
 
-
-
 //method to get complain reference details view
 getComplainViewDetails(complaintReferenceNo: string, activityIdFieldName: number) {
   let headers: Headers = this.configService();
@@ -172,13 +170,24 @@ public deleteFile(plantType: string,files: any) {
  * 
  * @param plantType 
  */
-//start method of postFile to upolad a file
-public postFile(plantType: string,formDataBody: any,complaintReferenceNo:string,complaintDetailsAutoId: number, activityId: number){
-  // let headers: Headers = this.configService();
-  let actionUrl = AppUrlsConst.COMPLAIN_FILE_UPLOAD_URL;
-  let param = "plantType="+plantType+"&complaintReferenceNo="+complaintReferenceNo+"&complaintDetailsAutoId="+complaintDetailsAutoId
-  +"&activityId="+activityId;
+//start method of postFileInTempTable to upolad a file in temp table
+public postFileInTempTable(plantType: string,formDataBody: any){
+  let actionUrl = AppUrlsConst.COMPLAIN_FILE_UPLOAD_TEMP_TABLE_URL;
+  let param = "plantType="+plantType;
   return this.http.post(actionUrl+'?'+param,formDataBody)
+      .map((res: Response) => { return res.json() })
+      .catch((error: Response) => { return Observable.throw(error) });
+}//end method of postFile in temp table
+
+/**
+ * 
+ * @param plantType 
+ */
+//start method of postFile to upolad a file
+public postFile(plantType: string,fileDet: any){
+  let actionUrl = AppUrlsConst.COMPLAIN_FILE_UPLOAD_URL;
+  let param = "plantType="+plantType;
+  return this.http.post(actionUrl+'?'+param,fileDet)
       .map((res: Response) => { return res.json() })
       .catch((error: Response) => { return Observable.throw(error) });
 }//end method of postFile
