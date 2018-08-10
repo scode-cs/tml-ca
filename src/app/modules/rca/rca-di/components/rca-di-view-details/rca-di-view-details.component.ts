@@ -34,6 +34,7 @@ export class RCADIViewDetailsComponent implements OnInit {
     errorMsg: '',
     errMsgShowFlag: false
   };
+  public prevCompDetShowFlag: boolean = false;//a flag to show previous complain det
 
   constructor(
     private formBuilder: FormBuilder,
