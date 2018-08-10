@@ -30,7 +30,7 @@ export class ComplainDIViewDetailsComponent implements OnInit {
     complaintReferenceNo: '',//to get complaint reference no from route param
     complaintStatus: ''//to fetch complaint status from route
   };
-  public invReportTable: any[] = [];//to store prev complain report
+  public prevComplainReportTable: any[] = [];//to store prev complain report
   public itemGridTable: any[] = [];//to store item grid
   public complainDetails: any[] = [];//to store complain reference detailS
   public fileDetails: any[] = [];//to store file details 
@@ -43,7 +43,7 @@ export class ComplainDIViewDetailsComponent implements OnInit {
     errorMsg: '',
     errMsgShowFlag: false
   };
-  
+
   constructor(
     private router: Router,
     private activatedroute: ActivatedRoute,
@@ -57,10 +57,10 @@ export class ComplainDIViewDetailsComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.busySpinner = true;
+    // this.busySpinner = true;
     this.initform();
     this.getRouteParam();//to get route param 
-    this.invReportTable = new ComplaintDIConfigModel().prevComplainHeader;//getting prev inv report details
+    this.prevComplainReportTable = new ComplaintDIConfigModel().prevComplainHeader;//getting prev inv report details
     this.itemGridTable = new ComplaintDIConfigModel().invItemGridHeader;
     this.getviewComplainReferenceDetailsWSCall();//service call
   }
@@ -111,10 +111,10 @@ export class ComplainDIViewDetailsComponent implements OnInit {
           this.complainDetails = json;
           this.complainIndex = this.complainDetails ? this.complainDetails.length - 1 : 0;
           this.setResValToForm();
-          let complainDetailsAutoId: number = this.complainDetails[this.complainIndex].complaintDetailAutoId;
+          let complainDetailsAutoId: number = this.complainDetails[this.complainIndex].complaintDetailsAutoId;
           this.getInvoiceItemDetailWSCall(this.routeParam.complaintReferenceNo, pageCompStatus, complainDetailsAutoId);//inv item details
           this.getFileWSCall(this.routeParam.complaintReferenceNo, pageCompStatus, complainDetailsAutoId);//to get file
-          this.busySpinner = false;
+          // this.busySpinner = false;
         } else {
           this.errorMsgObj.errMsgShowFlag = true;
           this.errorMsgObj.errorMsg = res.msg;
@@ -129,6 +129,49 @@ export class ComplainDIViewDetailsComponent implements OnInit {
           this.sessionErrorService.routeToLogin(err._body);
         });
   }//end of method
+
+  //start method getInvoiceItemDetailWSCall to get item details
+  private getInvoiceItemDetailWSCall(complaintReferenceNo: string, pageActivityId: number, complainDetailsAutoId: number) {
+    this.busySpinner = true;
+    this.complaintDIService.getInvoiceItemDetail(complaintReferenceNo, pageActivityId, complainDetailsAutoId).
+      subscribe(res => {
+        if (res.msgType === "Info") {
+          let invItemDeatilsJson: any = JSON.parse(res.mapDetails);
+          this.invItemDetails = invItemDeatilsJson;
+          // this.busySpinner = false;
+          console.log("item details =========.........>>>>>>>>>", this.invItemDetails);
+        }//end of if
+      },
+        err => {
+          console.log(err);
+          // this.busySpinner = false;
+          this.sessionErrorService.routeToLogin(err._body);
+        });
+  }//end method of getInvoiceItemDetailWSCall
+
+  //method to get file
+  private getFileWSCall(complaintReferenceNo: string, pageActivityId: number, complainDetailsAutoId: number) {
+    this.complaintDIService.viewFile(complaintReferenceNo, pageActivityId, complainDetailsAutoId).
+      subscribe(res => {
+        console.log("res of file det::::", res);
+        if (res.msgType === 'Info') {
+          let json: any = JSON.parse(res.mapDetails);
+          console.log("json::::", json);
+          this.fileDetails = json;
+          console.log("File details::::", this.fileDetails);
+          this.busySpinner = false;
+        } else {
+          this.fileDetails = [];
+          this.busySpinner = false;
+        }
+      },
+        err => {
+          console.log(err);
+          this.fileDetails = [];
+          this.busySpinner = false;
+          this.sessionErrorService.routeToLogin(err._body);
+        });
+  }//end of method to get file
 
   //method to set res value to form
   private setResValToForm() {
@@ -153,65 +196,17 @@ export class ComplainDIViewDetailsComponent implements OnInit {
     //console.log('got the value',this.complaintRegisterFormGroup.value.siteVisit);
   }//end of method 
 
-  //start method getInvoiceItemDetailWSCall to get item details
-  private getInvoiceItemDetailWSCall(complaintReferenceNo: string, pageActivityId: number, complainDetailsAutoId: number) {
-    this.busySpinner = true;
-    this.complaintDIService.getInvoiceItemDetail(complaintReferenceNo, pageActivityId, complainDetailsAutoId).
-      subscribe(res => {
-        if (res.msgType === "Info") {
-          let invItemDeatilsJson: any = JSON.parse(res.mapDetails);
-          this.invItemDetails = invItemDeatilsJson;
-          this.busySpinner = false;
-          console.log("item details =========.........>>>>>>>>>", this.invItemDetails);
-        }//end of if
-      },
-        err => {
-          console.log(err);
-          this.busySpinner = false;
-          this.sessionErrorService.routeToLogin(err._body);
-        });
-  }//end method of getInvoiceItemDetailWSCall
-
-  //method to get file
-  private getFileWSCall(complaintReferenceNo: string, pageActivityId: number, complainDetailsAutoId: number) {
-    this.complaintDIService.viewFile(complaintReferenceNo, pageActivityId, complainDetailsAutoId).
-      subscribe(res => {
-        console.log("res of file det::::", res);
-        if (res.msgType === 'Info') {
-          let json: any = JSON.parse(res.mapDetails);
-          console.log("json::::", json);
-          this.fileDetails = json;
-          console.log("File details::::", this.fileDetails);
-          this.busySpinner = false;
-        } else {
-          this.fileDetails = [];
-        }
-      },
-        err => {
-          console.log(err);
-          this.fileDetails = [];
-          this.busySpinner = false;
-          this.sessionErrorService.routeToLogin(err._body);
-        });
-  }//end of method to get file
-
-
-  //for clicking cancel button this method will be invoked
-  public onCancel(): void {
-    this.router.navigate([ROUTE_PATHS.RouteHome]);
-  }// end of onCancel method
-
   public selectData(cmpIndex: number) {
     let pageCompStatus: number = 10;
     this.busySpinner = true;
     this.complainIndex = cmpIndex;
     this.setResValToForm();
-    let complainDetailsAutoId: number = this.complainDetails[this.complainIndex].complaintDetailAutoId;
+    let complainDetailsAutoId: number = this.complainDetails[this.complainIndex].complaintDetailsAutoId;
     this.getInvoiceItemDetailWSCall(this.routeParam.complaintReferenceNo, pageCompStatus, complainDetailsAutoId);//inv item details
     this.getFileWSCall(this.routeParam.complaintReferenceNo, pageCompStatus, complainDetailsAutoId);//to get file
-    setTimeout(() => {
-      this.busySpinner = false;
-    }, 500);
+    // setTimeout(() => {
+    //   this.busySpinner = false;
+    // }, 500);
   }//end of method
 
   //method to delete error msg
@@ -219,5 +214,10 @@ export class ComplainDIViewDetailsComponent implements OnInit {
     this.errorMsgObj.errMsgShowFlag = false;
     this.errorMsgObj.errorMsg = "";
   }//end of method delete error msg
+
+  //for clicking cancel button this method will be invoked
+  public onCancel(): void {
+    this.router.navigate([ROUTE_PATHS.RouteComplainDIView]);
+  }// end of onCancel method
 
 }//end of class

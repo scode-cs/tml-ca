@@ -86,7 +86,7 @@ private getviewComplainReferenceDetailsWSCall() {
         this.closeDetails = json;
         this.closeIndex = this.closeDetails ? this.closeDetails.length - 1 : 0;
         this.setResValToForm();
-        let complainDetailsAutoId: number = this.closeDetails[this.closeIndex].complaintDetailAutoId;
+        let complainDetailsAutoId: number = this.closeDetails[this.closeIndex].complaintDetailsAutoId;
         this.getFileWSCall(this.routeParam.complaintReferenceNo, pageCompStatus ,complainDetailsAutoId);//to get file
       } else {
         this.errorMsgObj.errMsgShowFlag = true;

@@ -90,7 +90,7 @@ export class RCADIViewDetailsComponent implements OnInit {
           this.rcaDetails = json;
           this.rcaIndex = this.rcaDetails ? this.rcaDetails.length - 1 : 0;
           this.setResValToForm();
-          let complainDetailsAutoId: number = this.rcaDetails[this.rcaIndex].complaintDetailAutoId;
+          let complainDetailsAutoId: number = this.rcaDetails[this.rcaIndex].complaintDetailsAutoId;
           this.getFileWSCall(this.routeParam.complaintReferenceNo, pageCompStatus, complainDetailsAutoId);//to get file
         } else {
           this.errorMsgObj.errMsgShowFlag = true;

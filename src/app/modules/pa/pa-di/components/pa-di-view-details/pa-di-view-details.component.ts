@@ -29,7 +29,7 @@ export class PADIViewDetailsComponent implements OnInit {
   public paIndex: number = 0;
   public fileDetails: any[] = [];//to store file details
   //for busy spinner
-  public busySpinner: boolean = false;
+  public busySpinner: boolean = true;
   //for error msg
   public errorMsgObj: any = {
     errorMsg: '',
@@ -91,7 +91,7 @@ private getviewComplainReferenceDetailsWSCall() {
         this.paDetails = json;
         this.paIndex = this.paDetails ? this.paDetails.length - 1 : 0;
         this.setResValToForm();
-        let complainDetailsAutoId: number = this.paDetails[this.paIndex].complaintDetailAutoId;
+        let complainDetailsAutoId: number = this.paDetails[this.paIndex].complaintDetailsAutoId;
         this.getFileWSCall(this.routeParam.complaintReferenceNo, pageCompStatus, complainDetailsAutoId);//to get file
         // this.busySpinner = false;
       } else {

@@ -25,7 +25,7 @@
         <thead>
           <tr class="th-style">
             <td class="header-style-first">Select</td>
-            <td class="hideextra" *ngFor="let invRprt of invReportTable" [ngClass]="invRprt.headerClass">
+            <td class="hideextra" *ngFor="let invRprt of prevComplainReportTable" [ngClass]="invRprt.headerClass">
               {{ invRprt.headerDesc }}
             </td>
           </tr>
@@ -36,7 +36,7 @@
             <td class="td-style-first" style="cursor: pointer;" (click)="selectData(cmpIndex)">
               <i class="fa" [ngClass]="complainIndex == cmpIndex ? 'fa-dot-circle-o' : 'fa-circle-o'"></i>
             </td>
-            <td class="hideextra" *ngFor="let invRprt of invReportTable" [ngClass]="invRprt.dataClass">
+            <td class="hideextra" *ngFor="let invRprt of prevComplainReportTable" [ngClass]="invRprt.dataClass">
               {{ compDet[invRprt.headerKey] }}
             </td>
           </tr>
