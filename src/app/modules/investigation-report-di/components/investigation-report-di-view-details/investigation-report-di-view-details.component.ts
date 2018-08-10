@@ -22,18 +22,7 @@ export class InvestigationReportDiViewDetailsComponent implements OnInit {
 
   public title: string = 'Investigation Report';
   //creating a FormGroup for Investigation Report
-  public invReportFormGroup = new FormGroup({
-    complaintReferenceNo: new FormControl(''),
-    siteVisitMade: new FormControl({ value: 'N', disabled: true }),
-    siteVisitDate: new FormControl(''),
-    sampleCollected: new FormControl({ value: 'N', disabled: true }),
-    sampleCollectedDate: new FormControl(''),
-    investigationReportDate: new FormControl(''),
-    unloadingEquipment: new FormControl({value: '', disabled: true}),
-    lubricantUsed: new FormControl({value: '', disabled: true}),
-    layingPosition: new FormControl({value: '', disabled: true}),
-    jointingtype: new FormControl({value: '', disabled: true})
-  });
+  public invReportFormGroup: FormGroup;
   public complaintReferenceNo: string;//to get complaint ref no from html and send it as a parameter
   //variable used for radio button
   public invReportVar: any = { siteVisitMadeValue: '', sampleCollectedValue: '' };
@@ -42,12 +31,17 @@ export class InvestigationReportDiViewDetailsComponent implements OnInit {
   public complaintStatus: number;//to fetch complaint status from route
   public invReportDetails: any[] = [];// to store invReport deatils from response
   public invReportIndex: number = 0;
-  public invItemDetails:  any[] = [];// to store inv item deatils from response
+  public invItemDetails: any[] = [];// to store inv item deatils from response
   public fileDetails: any[] = [];//to store file details 
-  public selectedIvtReportDataList: any = { unloadingEquipment: [] , lubricantUsedDesc: [], layingPositionDesc: [], jointingTypeDesc:[] };
+  public selectedIvtReportDataList: any = { unloadingEquipment: [], lubricantUsedDesc: [], layingPositionDesc: [], jointingTypeDesc: [] };
   public ivtReportDataList: any = { unloadingEquipmentList: '', lubricantUsedList: '', layingPositionList: '', jointingTypeList: '' };
   //busySpinner 
   public busySpinner: boolean = true;
+  //for error msg
+  public errorMsgObj: any = {
+    errorMsg: '',
+    errMsgShowFlag: false
+  };
 
   constructor(
     private activatedroute: ActivatedRoute,
@@ -61,7 +55,8 @@ export class InvestigationReportDiViewDetailsComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.busySpinner = true;
+    // this.busySpinner = true;
+    this.initform();
     this.getRouteParam();
     this.invReportTable = new InvestigationReportDIConfigModel().prevInvReportHeader;
     this.itemGridTable = new InvestigationReportDIConfigModel().invItemGridHeader;
@@ -82,6 +77,24 @@ export class InvestigationReportDiViewDetailsComponent implements OnInit {
     console.log("complaintReferenceNo for view in preliminary-investigation-di-add-component: ", this.complaintReferenceNo);
   }//end of the method
 
+  /**
+  * @description initform data
+  */
+  initform() {
+    this.invReportFormGroup = new FormGroup({
+      complaintReferenceNo: new FormControl(''),
+      siteVisitMade: new FormControl({ value: 'N', disabled: true }),
+      siteVisitDate: new FormControl(''),
+      sampleCollected: new FormControl({ value: 'N', disabled: true }),
+      sampleCollectedDate: new FormControl(''),
+      investigationReportDate: new FormControl(''),
+      unloadingEquipment: new FormControl({ value: '', disabled: true }),
+      lubricantUsed: new FormControl({ value: '', disabled: true }),
+      layingPosition: new FormControl({ value: '', disabled: true }),
+      jointingtype: new FormControl({ value: '', disabled: true })
+    });
+  }//end of initform
+
   //method to get investigation report details by service call
   private getInvestigationViewDetailsWSCall() {
     let pageCompStatus: number = 40;
@@ -94,36 +107,66 @@ export class InvestigationReportDiViewDetailsComponent implements OnInit {
           console.log("res of inv Report Deatils::::", this.invReportDetails);
           this.invReportIndex = this.invReportDetails ? this.invReportDetails.length - 1 : 0;
           this.setFormValue();
-          let complainDetailsAutoId: number = this.invReportDetails[this.invReportIndex].complaintDetailAutoId;
-          let itemActivityId: number = 10;
-          this.getInvoiceItemDetailWSCall(this.complaintReferenceNo, itemActivityId, complainDetailsAutoId);//inv item details
+          let complainDetailsAutoId: number = this.invReportDetails[this.invReportIndex].complaintDetailsAutoId;
+          this.getInvoiceItemDetailWSCall(this.complaintReferenceNo, pageCompStatus, complainDetailsAutoId);//inv item details
+          this.getFileWSCall(this.complaintReferenceNo, pageCompStatus, complainDetailsAutoId);//to get file
+        } else {
+          this.errorMsgObj.errMsgShowFlag = true;
+          this.errorMsgObj.errorMsg = res.msg;
+          this.busySpinner = false;
         }
       },
         err => {
           console.log(err);
           this.busySpinner = false;
+          this.errorMsgObj.errMsgShowFlag = true;
+          this.errorMsgObj.errorMsg = err.msg;
           this.sessionErrorService.routeToLogin(err._body);
         });
   }//end of method
 
- //start method getInvoiceItemDetailWSCall to get item details
- private getInvoiceItemDetailWSCall(complaintReferenceNo: string, pageActivityId: number, complainDetailsAutoId: number) {
-  this.busySpinner = true;
-  this.complaintDIService.getInvoiceItemDetail(complaintReferenceNo, pageActivityId,complainDetailsAutoId).
-    subscribe(res => {
-      if (res.msgType === "Info") {
-        let invItemDeatilsJson: any = JSON.parse(res.mapDetails);
-        this.invItemDetails = invItemDeatilsJson;
-        this.busySpinner = false;
-        console.log("item details =========.........>>>>>>>>>", this.invItemDetails);
-      }//end of if
-    },
-      err => {
-        console.log(err);
-        this.busySpinner = false;
-        this.sessionErrorService.routeToLogin(err._body);
-      });
-}//end method of getInvoiceItemDetailWSCall
+  //start method getInvoiceItemDetailWSCall to get item details
+  private getInvoiceItemDetailWSCall(complaintReferenceNo: string, pageActivityId: number, complainDetailsAutoId: number) {
+    this.busySpinner = true;
+    this.complaintDIService.getInvoiceItemDetail(complaintReferenceNo, pageActivityId, complainDetailsAutoId).
+      subscribe(res => {
+        if (res.msgType === "Info") {
+          let invItemDeatilsJson: any = JSON.parse(res.mapDetails);
+          this.invItemDetails = invItemDeatilsJson;
+          // this.busySpinner = false;
+          console.log("item details =========.........>>>>>>>>>", this.invItemDetails);
+        }//end of if
+      },
+        err => {
+          console.log(err);
+          // this.busySpinner = false;
+          this.sessionErrorService.routeToLogin(err._body);
+        });
+  }//end method of getInvoiceItemDetailWSCall
+
+  //method to get file
+  private getFileWSCall(complaintReferenceNo: string, pageActivityId: number, complainDetailsAutoId: number) {
+    this.complaintDIService.viewFile(complaintReferenceNo, pageActivityId, complainDetailsAutoId).
+      subscribe(res => {
+        console.log("res of file det::::", res);
+        if (res.msgType === 'Info') {
+          let json: any = JSON.parse(res.mapDetails);
+          console.log("json::::", json);
+          this.fileDetails = json;
+          console.log("File details::::", this.fileDetails);
+          this.busySpinner = false;
+        } else {
+          this.fileDetails = [];
+          this.busySpinner = false;
+        }
+      },
+        err => {
+          console.log(err);
+          this.fileDetails = [];
+          this.busySpinner = false;
+          this.sessionErrorService.routeToLogin(err._body);
+        });
+  }//end of method to get file
 
   //start method setFormValue to set the value in invreport form
   private setFormValue() {
@@ -136,30 +179,30 @@ export class InvestigationReportDiViewDetailsComponent implements OnInit {
     this.invReportFormGroup.controls['sampleCollected'].setValue(formData.sampleCollected);
     this.invReportFormGroup.controls['sampleCollectedDate'].setValue(this.datePipe.transform(formData.sampleCollectedDate, 'dd-MMM-yyyy'));
     this.invReportFormGroup.controls['investigationReportDate'].setValue(this.datePipe.transform(formData.investigationReportDate, 'dd-MMM-yyyy'));
-    
-    let unloadingEquipment: string = "["+formData.unloadingEquipement+"]";
-    let unloadingEquipmentKey: any[] = JSON.parse(unloadingEquipment); 
-    this.selectedIvtReportDataList.unloadingEquipmentDesc = this.getSelectedCheckedItemVal(this.ivtReportDataList.unloadingEquipmentList,unloadingEquipmentKey);
 
-    let lubricantUsed: string = "["+formData.lubricantUsed+"]";
-    let lubricantUsedKey: any[] = JSON.parse(lubricantUsed); 
-    this.selectedIvtReportDataList.lubricantUsedDesc = this.getSelectedCheckedItemVal(this.ivtReportDataList.lubricantUsedList,lubricantUsedKey);
-    
-    let layingPosition: string = "["+formData.layingPosition+"]";
-    let layingPositionKey: any[] = JSON.parse(layingPosition); 
-    this.selectedIvtReportDataList.layingPositionDesc = this.getSelectedCheckedItemVal(this.ivtReportDataList.layingPositionList,layingPositionKey);
-    
-    let jointingType: string = "["+formData.jointingType+"]"; 
+    let unloadingEquipment: string = "[" + formData.unloadingEquipement + "]";
+    let unloadingEquipmentKey: any[] = JSON.parse(unloadingEquipment);
+    this.selectedIvtReportDataList.unloadingEquipmentDesc = this.getSelectedCheckedItemVal(this.ivtReportDataList.unloadingEquipmentList, unloadingEquipmentKey);
+
+    let lubricantUsed: string = "[" + formData.lubricantUsed + "]";
+    let lubricantUsedKey: any[] = JSON.parse(lubricantUsed);
+    this.selectedIvtReportDataList.lubricantUsedDesc = this.getSelectedCheckedItemVal(this.ivtReportDataList.lubricantUsedList, lubricantUsedKey);
+
+    let layingPosition: string = "[" + formData.layingPosition + "]";
+    let layingPositionKey: any[] = JSON.parse(layingPosition);
+    this.selectedIvtReportDataList.layingPositionDesc = this.getSelectedCheckedItemVal(this.ivtReportDataList.layingPositionList, layingPositionKey);
+
+    let jointingType: string = "[" + formData.jointingType + "]";
     let jointingTypeKey: any[] = JSON.parse(jointingType);
-    this.selectedIvtReportDataList.jointingTypeDesc = this.getSelectedCheckedItemVal(this.ivtReportDataList.jointingTypeList,jointingTypeKey);
+    this.selectedIvtReportDataList.jointingTypeDesc = this.getSelectedCheckedItemVal(this.ivtReportDataList.jointingTypeList, jointingTypeKey);
   }//end method setFormValue
 
   //start method to rearrange selected checkbox desc
-  private getSelectedCheckedItemVal(keyValueArr: any[],selectedKeyArr: any[]): any[]{
+  private getSelectedCheckedItemVal(keyValueArr: any[], selectedKeyArr: any[]): any[] {
     let selectedValueArr: any[] = [];
     keyValueArr.forEach(kVEl => {
       selectedKeyArr.forEach(selKeyEl => {
-        if(selKeyEl == kVEl.id){
+        if (selKeyEl == kVEl.id) {
           selectedValueArr.push(kVEl.desc);
         }//end of if
       });
@@ -169,18 +212,22 @@ export class InvestigationReportDiViewDetailsComponent implements OnInit {
 
   //start method selectData
   public selectData(invRepIndex: number) {
+    let pageCompStatus: number = 40;
     this.busySpinner = true;
     this.invReportIndex = invRepIndex;
     this.setFormValue();
-    setTimeout(() => {
-      this.busySpinner = false;
-    }, 500);
+    let complainDetailsAutoId: number = this.invReportDetails[this.invReportIndex].complaintDetailsAutoId;
+    this.getInvoiceItemDetailWSCall(this.complaintReferenceNo, pageCompStatus, complainDetailsAutoId);//inv item details
+    this.getFileWSCall(this.complaintReferenceNo, pageCompStatus, complainDetailsAutoId);//to get file
+    // setTimeout(() => {
+    //   this.busySpinner = false;
+    // }, 500);
   }//end method of selectDatas
 
   //cancel method
   public onCancel(): void {
     // Not authenticated
-    // this.router.navigate([ROUTE_PATHS.RouteHome]);
+    this.router.navigate([ROUTE_PATHS.RouteComplainDIView]);
   }//end of cancel method
 
 }//end of class

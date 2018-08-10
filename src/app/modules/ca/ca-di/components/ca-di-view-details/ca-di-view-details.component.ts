@@ -87,7 +87,7 @@ private getviewComplainReferenceDetailsWSCall() {
         this.caDetails = json;
         this.caIndex = this.caDetails ? this.caDetails.length - 1 : 0;
         this.setResValToForm();
-        let complainDetailsAutoId: number = this.caDetails[this.caIndex].complaintDetailAutoId;
+        let complainDetailsAutoId: number = this.caDetails[this.caIndex].complaintDetailsAutoId;
         this.getFileWSCall(this.routeParam.complaintReferenceNo, pageCompStatus, complainDetailsAutoId);//to get file
         // this.busySpinner = false;
       } else {
