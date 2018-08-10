@@ -130,8 +130,9 @@ export class InvestigationReportDiComponent implements OnInit {
 
   //method to get investigation report details by service call
   private getInvestigationViewDetailsWSCall() {
-    let pageCompStatus: number = 40;
-    this.complaintDIService.getComplainViewDetails(this.complaintReferenceNo, pageCompStatus).
+    // let pageCompStatus: number = 40;
+    let prevCompStatus: number = 10;
+    this.complaintDIService.getComplainViewDetails(this.complaintReferenceNo, prevCompStatus).
       subscribe(res => {
         //console.log("res of ref det::::",res);
         if (res.msgType === "Info") {
@@ -140,9 +141,9 @@ export class InvestigationReportDiComponent implements OnInit {
           console.log("res of inv Report Deatils::::", this.invReportDetails);
           this.invReportIndex = this.invReportDetails ? this.invReportDetails.length - 1 : 0;
           let pageActivityId: number = 10;
-          let complainDetailsAutoId: number = this.invReportDetails[this.invReportIndex].complainDetailsAutoId;
-          this.getInvoiceItemDetailWSCall(this.complaintReferenceNo,pageActivityId,complainDetailsAutoId);
-          //this.setFormValue()
+          let complaintDetailsAutoId: number = this.invReportDetails[this.invReportIndex].complaintDetailAutoId;
+          this.getInvoiceItemDetailWSCall(this.complaintReferenceNo,pageActivityId,complaintDetailsAutoId);
+          //this.setFormValue();
         } else {
           this.busySpinner = false;
         }//end of else if
@@ -155,9 +156,9 @@ export class InvestigationReportDiComponent implements OnInit {
   }//end of method
 
   //start method getInvoiceItemDetailWSCall to get item details
-  private getInvoiceItemDetailWSCall(complaintReferenceNo: string, pageActivityId: number, complainDetailsAutoId: number) {
+  private getInvoiceItemDetailWSCall(complaintReferenceNo: string, pageActivityId: number, complaintDetailsAutoId: number) {
     this.busySpinner = true;
-    this.complaintDIService.getInvoiceItemDetail(complaintReferenceNo, pageActivityId,complainDetailsAutoId).
+    this.complaintDIService.getInvoiceItemDetail(complaintReferenceNo, pageActivityId,complaintDetailsAutoId).
       subscribe(res => {
         if (res.msgType === "Info") {
           let invItemDeatilsJson: any = JSON.parse(res.mapDetails);
@@ -166,7 +167,9 @@ export class InvestigationReportDiComponent implements OnInit {
           console.log("item details =========.........>>>>>>>>>", this.invItemDetails);
           this.invReportFormGroup.controls['customerCode'].setValue(this.invItemDetails[0].customerCode);
           this.invReportFormGroup.controls['customerName'].setValue(this.invItemDetails[0].customerName);
-        }//end of if
+        }else{
+          this.busySpinner = false;
+        }
       },
         err => {
           console.log(err);

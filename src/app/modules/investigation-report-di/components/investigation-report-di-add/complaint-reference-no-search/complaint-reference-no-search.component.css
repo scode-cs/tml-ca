@@ -14,10 +14,6 @@
     font-size: 30px;
   }
   
-  .complaint-form {
-    padding: 30px 30px;
-  }
-  
   .compliant-submit-button-div{
     padding-left: 15px;
   }
@@ -480,6 +476,18 @@
   cursor: pointer;
   /*border-style: solid;*/
   /*border-color: #AEAEAE;*/
+}
+
+.form-div-style{
+  /* padding-left: 30px; */
+  /* padding-right: 30px; */
+  padding-top: 3px;
+}
+
+.complaint-form {
+  padding-top: 0px!important;
+  padding-left: 30px;
+  padding-right: 30px;
 }
 
 /*end of style for close button*/
