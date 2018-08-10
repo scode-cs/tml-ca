@@ -34,8 +34,8 @@ export class ComplaintDIRegisterComponent implements OnInit {
     batchNoInInvoiceDetailsLength: this.localStorageService.dbSettings.batchNoInInvoiceDetails
   };
 
-   //busySpinner 
-   public busySpinner: boolean = true;
+  //busySpinner 
+  public busySpinner: boolean = true;
 
   //activity Id for complain register
   private activityId: number = 10;
@@ -131,8 +131,8 @@ export class ComplaintDIRegisterComponent implements OnInit {
   /**
    * @description init form data
    */
-  initform(){
-    this.complaintRegisterFormGroup =  new FormGroup({
+  initform() {
+    this.complaintRegisterFormGroup = new FormGroup({
       modeId: new FormControl({ value: '' }, Validators.required),
       officialDocNo: new FormControl('', Validators.maxLength(3)),
       complaintReferenceDt: new FormControl(''),
@@ -601,59 +601,60 @@ export class ComplaintDIRegisterComponent implements OnInit {
       }//end of if
     }//end of for
   }//end of the method complaintQtyErrorCorrection 
-  
+
   //onOpenModal for opening modal from modalService
-  private onOpenModal(complaintReferenceNo:string,msgBody: string) {
+  private onOpenModal(complaintReferenceNo: string, msgBody: string) {
     const modalRef = this.modalService.open(NgbdModalComponent);
-    modalRef.componentInstance.modalTitle = 'Complaint Reference Number: '+complaintReferenceNo;//'Information';
+    modalRef.componentInstance.modalTitle = 'Complaint Reference Number: ' + complaintReferenceNo;//'Information';
     modalRef.componentInstance.modalMessage = msgBody;
   }//end of method onOpenModal
 
   //method to file upload
-  private fileUploadWSCall(plantType:string,complaintReferenceNo: string,activityId: number,complainDetailsAutoId: number): string {
-    let fileSuccessErrReturnMsg: string = "";
-    if (this.totalFileSize > this.fileSizeLimit) {
-      fileSuccessErrReturnMsg = "Error";
-      this.errorMsgObj.errMsgShowFlag = true;
-      this.errorMsgObj.errorMsg = "File size should be within 100 mb !";
-      this.busySpinner = false;
+  private fileUploadWSCall(plantType: string, complaintReferenceNo: string, activityId: number, complainDetailsAutoId: number, resmsg: string, resvalue: string) {
+    if (this.totalFileSize > 0) {
+      if (this.totalFileSize > this.fileSizeLimit) {
+        this.errorMsgObj.errMsgShowFlag = true;
+        this.errorMsgObj.errorMsg = "File size should be within 100 mb !";
+        this.busySpinner = false;
+      } else {
+        if (this.fileData != undefined) {
+          for (let i: number = 0; i < this.fileList.length; i++) {
+            console.log(" file upload", this.fileData.get('uploadFile' + i.toString()));
+            if (this.fileData.get('uploadFile' + i.toString()) != null) {
+              this.formData.append('uploadFile' + i.toString(), this.fileData.get('uploadFile' + i.toString()));
+            }
+          }//end of for
+        }//end of if fileData is !undefined
+        this.formData.append('Accept', 'application/json');
+        this.formData.append('accessToken', 'bearer ' + this.localStorageService.user.accessToken);
+        this.formData.append('menuId', 'DEFAULT1');
+        this.formData.append('userId', this.localStorageService.user.userId);
+        let formDataObj: any = {};
+        formDataObj = this.formData;
+        this.complaintDIService.postFile(plantType, this.formData, complaintReferenceNo, complainDetailsAutoId, activityId).
+          subscribe(res => {
+            if (res.msgType === 'Info') {
+              this.busySpinner = false;
+              console.log("file uploaded successfully..");
+              this.onOpenModal(resvalue, resmsg);
+              this.router.navigate([ROUTE_PATHS.RouteHome]);
+            } else {
+              this.errorMsgObj.errMsgShowFlag = true;
+              this.errorMsgObj.errorMsg = res.msg;
+              this.busySpinner = false;
+            }
+          }, err => {
+            console.log(err);
+            this.errorMsgObj.errMsgShowFlag = true;
+            this.errorMsgObj.errorMsg = err.msg;
+            this.busySpinner = false;
+            this.sessionErrorService.routeToLogin(err._body);
+          });
+      }
     } else {
-      if (this.fileData != undefined) {
-        for (let i: number = 0; i < this.fileList.length; i++) {
-          console.log(" file upload", this.fileData.get('uploadFile' + i.toString()));
-          if (this.fileData.get('uploadFile' + i.toString()) != null) {
-            this.formData.append('uploadFile' + i.toString(), this.fileData.get('uploadFile' + i.toString()));
-          }
-        }//end of for
-      }//end of if fileData is !undefined
-      this.formData.append('Accept', 'application/json');
-      this.formData.append('accessToken', 'bearer ' + this.localStorageService.user.accessToken);
-      this.formData.append('menuId', 'DEFAULT1');
-      this.formData.append('userId', this.localStorageService.user.userId);
-      let formDataObj: any = {};
-      formDataObj = this.formData;
-      this.complaintDIService.postFile(plantType,this.formData,complaintReferenceNo,complainDetailsAutoId,activityId).
-      subscribe(res=>{
-        if(res.msgType === 'Info'){
-          fileSuccessErrReturnMsg = "Success";
-          this.busySpinner = false;
-          console.log("file uploaded successfully..");
-        }else{
-          fileSuccessErrReturnMsg = "Error";
-        this.errorMsgObj.errMsgShowFlag = true;
-        this.errorMsgObj.errorMsg = res.msg;
-        this.busySpinner = false;
-        }
-      },err=>{
-        console.log(err);
-        fileSuccessErrReturnMsg = "Error";
-        this.errorMsgObj.errMsgShowFlag = true;
-        this.errorMsgObj.errorMsg = err.msg;
-        this.busySpinner = false;
-        this.sessionErrorService.routeToLogin(err._body);
-      });
+      this.onOpenModal(resvalue, resmsg);
+      this.router.navigate([ROUTE_PATHS.RouteHome]);
     }
-    return fileSuccessErrReturnMsg;
   }//end of method
 
   //start method onKeyupComplaintQty
@@ -862,7 +863,7 @@ export class ComplaintDIRegisterComponent implements OnInit {
       }//end of for
     }//end of if
   }//end of filechange method  
-  
+
   //for clicking submit button this method will be invoked
   public onComplainSubmit(): void {
     console.log("form value::", this.complaintRegisterFormGroup.value);
@@ -896,28 +897,22 @@ export class ComplaintDIRegisterComponent implements OnInit {
           complainDetailJson.complaintReferenceNo = res.value;
           this.complaintDIService.postDetail(complainDetailJson, plantType, action).
             subscribe(res => {
-              if (res.msgType === 'Info') {                
+              if (res.msgType === 'Info') {
                 console.log(" complain submitted successfully");
                 let fileSuccessErrReturnMsg: string = "";
-                if(this.totalFileSize > 0){
-                  fileSuccessErrReturnMsg = this.fileUploadWSCall(plantType,res.value,this.activityId,res.valueSub);
-                  console.log("fileSuccessErrReturnMsg",fileSuccessErrReturnMsg);
-                }else{
-                  this.busySpinner = false;
-                  fileSuccessErrReturnMsg = "Success";
-                }
-                if(fileSuccessErrReturnMsg === "Success"){
-                  this.onOpenModal(res.value,res.msg);
-                  this.router.navigate([ROUTE_PATHS.RouteHome]);
-                }                
-              }              
+
+                this.fileUploadWSCall(plantType, res.value, this.activityId, res.valueSub, res.msg, res.value);
+
+
+
+              }
             },
               err => {
                 console.log(err);
                 this.busySpinner = false;
                 this.sessionErrorService.routeToLogin(err._body);
               });
-        }else{
+        } else {
           this.busySpinner = false;
         }
 

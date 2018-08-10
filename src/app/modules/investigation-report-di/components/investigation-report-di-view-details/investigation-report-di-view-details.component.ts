@@ -43,6 +43,7 @@ export class InvestigationReportDiViewDetailsComponent implements OnInit {
   public invReportDetails: any[] = [];// to store invReport deatils from response
   public invReportIndex: number = 0;
   public invItemDetails:  any[] = [];// to store inv item deatils from response
+  public fileDetails: any[] = [];//to store file details 
   public selectedIvtReportDataList: any = { unloadingEquipment: [] , lubricantUsedDesc: [], layingPositionDesc: [], jointingTypeDesc:[] };
   public ivtReportDataList: any = { unloadingEquipmentList: '', lubricantUsedList: '', layingPositionList: '', jointingTypeList: '' };
   //busySpinner 

@@ -26,12 +26,15 @@ export class CADIViewDetailsComponent implements OnInit {
   public caReportTable: any[] = [];//to store prev rca report
   public caDetails: any[] = [];//to store complain reference detailS
   public caIndex: number = 0;
+  public fileDetails: any[] = [];//to store file details
   public busySpinner: boolean = true;//spinner
   //for error msg
   public errorMsgObj: any = {
     errorMsg: '',
     errMsgShowFlag: false
   };
+  public prevCompDetShowFlag: boolean = false;//a flag to show previous complain det
+
   constructor(
     private formBuilder: FormBuilder,
     private router: Router,
@@ -84,7 +87,9 @@ private getviewComplainReferenceDetailsWSCall() {
         this.caDetails = json;
         this.caIndex = this.caDetails ? this.caDetails.length - 1 : 0;
         this.setResValToForm();
-        this.busySpinner = false;
+        let complainDetailsAutoId: number = this.caDetails[this.caIndex].complaintDetailAutoId;
+        this.getFileWSCall(this.routeParam.complaintReferenceNo, pageCompStatus, complainDetailsAutoId);//to get file
+        // this.busySpinner = false;
       } else {
         this.errorMsgObj.errMsgShowFlag = true;
         this.errorMsgObj.errorMsg = res.msg;
@@ -107,6 +112,31 @@ private setResValToForm() {
   this.caDIAddEditFormGroup.controls['caAddEditDate'].setValue(this.datePipe.transform(caFormData.correctiveActionDate, 'dd-MMM-yyyy'));
   this.caDIAddEditFormGroup.controls['caAddEditDetails'].setValue(caFormData.correctiveAction);
 }//end of method 
+
+ //method to get file
+ private getFileWSCall(complaintReferenceNo: string, pageActivityId: number, complainDetailsAutoId: number) {
+  this.complaintDIService.viewFile(complaintReferenceNo, pageActivityId, complainDetailsAutoId).
+    subscribe(res => {
+      console.log("res of file det::::", res);
+      if (res.msgType === 'Info') {
+        let json: any = JSON.parse(res.mapDetails);
+        console.log("json::::", json);
+        this.fileDetails = json;
+        console.log("File details::::", this.fileDetails);
+        this.busySpinner = false;
+      } else {
+        this.busySpinner = false;
+        this.fileDetails = [];
+      }
+    },
+      err => {
+        console.log(err);
+        this.fileDetails = [];
+        this.busySpinner = false;
+        this.sessionErrorService.routeToLogin(err._body);
+      });
+}//end of method to get file
+
 
 //for clicking cancel button this method will be invoked
 public onCancel(): void {
