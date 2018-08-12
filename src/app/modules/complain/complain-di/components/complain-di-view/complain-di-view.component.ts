@@ -129,7 +129,7 @@ export class ComplainDIViewComponent implements OnInit {
     this.parameterCheck(this.dashboardParameter);
     this.loadFacetedNav();
 
-    this.getcount();
+    this.setPagination();
   }//end of onInit
 
 
@@ -176,12 +176,12 @@ export class ComplainDIViewComponent implements OnInit {
   }
 
   private loadFacetedNav() {
-    this.loadComplainStatusFacet();
-    this.loadComplainTypeFacet();
-    this.loadNatureOfComplainFacet();
+    this.loadComplainStatusFacet('initial');
+    this.loadComplainTypeFacet('initial');
+    this.loadNatureOfComplainFacet('initial');
   }
 
-  private loadComplainStatusFacet() {
+  private loadComplainStatusFacet(callType?: string) {
     let complainStatusParam: ComplaintDIHeaderParamModel = new ComplaintDIHeaderParamModel();
     complainStatusParam.filter = this.headerparams.filter;
     complainStatusParam.fields = 'distinct LAST_ACTIVITY_ID, ACTIVITY_DESC';
@@ -189,14 +189,16 @@ export class ComplainDIViewComponent implements OnInit {
 
     this.complaintdIservice.getHeader(complainStatusParam).subscribe((res: any) => {
       this.facetedNavData.complainStatus = JSON.parse(res.mapDetails);
-      this.changeStattusGroup = this.buildComplainStatusFacetFormGroup();
-      this.changeStattusGroup.valueChanges.subscribe(() => this.changeStatusGroupValueChange());
+      if (callType && callType == 'initial') {
+        this.changeStattusGroup = this.buildComplainStatusFacetFormGroup();
+        this.changeStattusGroup.valueChanges.subscribe(() => this.changeFacetElement('complainStatus'));
+      }
     }, (err: any) => {
       // this.busySpinner = false;
     });
   }
 
-  private loadComplainTypeFacet() {
+  private loadComplainTypeFacet(callType?: string) {
     let complainStatusParam: ComplaintDIHeaderParamModel = new ComplaintDIHeaderParamModel();
     complainStatusParam.filter = this.headerparams.filter;
     complainStatusParam.fields = 'distinct CMPLNT_TYPE_ID , CMPLNT_TYPE_DESC';
@@ -204,15 +206,16 @@ export class ComplainDIViewComponent implements OnInit {
 
     this.complaintdIservice.getHeader(complainStatusParam).subscribe((res: any) => {
       this.facetedNavData.complainType = JSON.parse(res.mapDetails);
-      this.complanTypeFormgroup = this.buildComplainTypeFacetFormGroup();
-      console.log(this.complanTypeFormgroup);
-      this.complanTypeFormgroup.valueChanges.subscribe(() => this.complainTypeValueChange());
+      if (callType && callType == 'initial') {
+        this.complanTypeFormgroup = this.buildComplainTypeFacetFormGroup();
+        this.complanTypeFormgroup.valueChanges.subscribe(() => this.changeFacetElement('complainType'));
+      }
     }, (err: any) => {
       // this.busySpinner = false;
     });
   }
 
-  private loadNatureOfComplainFacet() {
+  private loadNatureOfComplainFacet(callType?: string) {
     let complainStatusParam: ComplaintDIHeaderParamModel = new ComplaintDIHeaderParamModel();
     complainStatusParam.filter = this.headerparams.filter;
     complainStatusParam.fields = 'distinct NAT_CMPLNT_ID, NAT_CMPLNT_DESC';
@@ -220,8 +223,10 @@ export class ComplainDIViewComponent implements OnInit {
 
     this.complaintdIservice.getHeader(complainStatusParam).subscribe((res: any) => {
       this.facetedNavData.natureOfComplain = JSON.parse(res.mapDetails);
-      this.natureOfComplainGroup = this.buildNatureOfComplainFacetFormGroup();
-      this.natureOfComplainGroup.valueChanges.subscribe(() => this.natureOfCompliantValueChange());
+      if (callType && callType == 'initial') {
+        this.natureOfComplainGroup = this.buildNatureOfComplainFacetFormGroup();
+        this.natureOfComplainGroup.valueChanges.subscribe(() => this.changeFacetElement('natureOfComplain'));
+      }
     }, (err: any) => {
       // this.busySpinner = false;
     });
@@ -232,8 +237,6 @@ export class ComplainDIViewComponent implements OnInit {
   private buildComplainStatusFacetFormGroup() {
     let Changestattusgroup: any = {};
     this.facetedNavData.complainStatus.forEach((element, index) => {
-      // console.log(element);
-      // console.log(index);
       Changestattusgroup[element.lastActivityId] = new FormControl(false);
     });
     // console.log(Changestattusgroup)
@@ -245,8 +248,6 @@ export class ComplainDIViewComponent implements OnInit {
   private buildComplainTypeFacetFormGroup() {
     let CoplanTypegroup: any = {};
     this.facetedNavData.complainType.forEach((element, index) => {
-      // console.log(element);
-      // console.log(index);
       CoplanTypegroup[element.complaintTypeId] = new FormControl(false);
     });
     //console.log(this.CoplanTypegroup)
@@ -255,8 +256,6 @@ export class ComplainDIViewComponent implements OnInit {
   private buildNatureOfComplainFacetFormGroup() {
     let NatureOfComplainGroup: any = {};
     this.facetedNavData.natureOfComplain.forEach((element, index) => {
-      // console.log(element);
-      // console.log(index);
       NatureOfComplainGroup[element.natureOfComplaintId] = new FormControl(false);
     });
     //console.log(NatureOfComplainGroup)
@@ -265,73 +264,74 @@ export class ComplainDIViewComponent implements OnInit {
   /**
    * @description change status dettect 
    */
-  changeStatusGroupValueChange() {
+  changeFacetElement(callingFacet: string) {
     this.changeStattusGroup;
+    this.busySpinner = true;
     console.log(this.changeStattusGroup);
 
-    let facetFilter: string = '';
-    for (var ctrl in this.changeStattusGroup.value) {
-      if (this.changeStattusGroup.value[ctrl]) {
-        facetFilter += facetFilter ? " OR LAST_ACTIVITY_ID='" + ctrl + "'" : "LAST_ACTIVITY_ID='" + ctrl + "'";
+    let filter: string = '';
+    let cmpStatusFilter: string = '';
+    for (let statusCtrl in this.changeStattusGroup.value) {
+      if (this.changeStattusGroup.value[statusCtrl]) {
+        cmpStatusFilter += cmpStatusFilter ? 
+          " OR LAST_ACTIVITY_ID='" + statusCtrl + "'" : 
+          "LAST_ACTIVITY_ID='" + statusCtrl + "'";
       }
     }
 
-    this.selectFacet('complainStatus', facetFilter);
-  }
+    if (cmpStatusFilter) {
+      cmpStatusFilter = '('+cmpStatusFilter+")"
+      filter ? filter += " AND " + cmpStatusFilter : filter = cmpStatusFilter;
+    }
 
-  complainTypeValueChange() {
-    console.log(this.complanTypeFormgroup.value)
-    let facetFilter: string = '';
-    for (var ctrl in this.complanTypeFormgroup.value) {
-      if (this.complanTypeFormgroup.value[ctrl]) {
-        facetFilter += facetFilter ? " OR CMPLNT_TYPE_ID='" + ctrl + "'" : "CMPLNT_TYPE_ID='" + ctrl + "'";
+    let cmpTypeFilter: string = '';
+    for (let typeCtrl in this.complanTypeFormgroup.value) {
+      if (this.complanTypeFormgroup.value[typeCtrl]) {
+        cmpTypeFilter += cmpTypeFilter ? 
+          " OR CMPLNT_TYPE_ID='" + typeCtrl + "'" : 
+          "CMPLNT_TYPE_ID='" + typeCtrl + "'";
       }
     }
 
-    this.selectFacet('complainType', facetFilter);
-  }
-  natureOfCompliantValueChange() {
+    if (cmpTypeFilter) {
+      cmpTypeFilter = '('+cmpTypeFilter+")"
+      filter ? filter += " AND " + cmpTypeFilter : filter = cmpTypeFilter;
+    }
 
-    console.log(this.natureOfComplainGroup.value)
-    let facetFilter: string = '';
-    for (var ctrl in this.natureOfComplainGroup.value) {
-      if (this.natureOfComplainGroup.value[ctrl]) {
-        facetFilter += facetFilter ? " OR NAT_CMPLNT_ID='" + ctrl + "'" : "NAT_CMPLNT_ID='" + ctrl + "'";
+    let natOfCmpfacetFilter: string = '';
+    for (let natCtrl in this.natureOfComplainGroup.value) {
+      if (this.natureOfComplainGroup.value[natCtrl]) {
+        natOfCmpfacetFilter += natOfCmpfacetFilter ? 
+          " OR NAT_CMPLNT_ID='" + natCtrl + "'" : 
+          "NAT_CMPLNT_ID='" + natCtrl + "'";
       }
     }
 
-    this.selectFacet('natureOfComplain', facetFilter);
-  }
+    if (natOfCmpfacetFilter) {
+      natOfCmpfacetFilter = '('+natOfCmpfacetFilter+")"
+      filter ? filter += " AND " + natOfCmpfacetFilter : filter = natOfCmpfacetFilter;
+    }
 
+    this.selectFacet(callingFacet, filter);
+  }
 
   public selectFacet(facetName: string, selectedFacet: string) {
     //console.log(this.changeStattusGroup.value);
     console.log(facetName + " :: " + selectedFacet);
     switch (facetName) {
       case 'complainStatus': {
-        // this.headerparams.filter ?
-        //   this.headerparams.filter += " AND " + selectedFacet :
-        //   this.headerparams.filter = selectedFacet;
-
         this.headerparams.filter = selectedFacet;
-
         this.loadComplainTypeFacet();
         this.loadNatureOfComplainFacet();
         break;
       }
       case 'complainType': {
-        // this.headerparams.filter ?
-        //   this.headerparams.filter += " OR " + "CMPLNT_TYPE_ID='" + selectedFacet + "'" :
-        //   this.headerparams.filter = "CMPLNT_TYPE_ID='" + selectedFacet + "'";
         this.headerparams.filter = selectedFacet;
         this.loadComplainStatusFacet();
         this.loadNatureOfComplainFacet();
         break;
       }
       case 'natureOfComplain': {
-        // this.headerparams.filter ?
-        //   this.headerparams.filter += " OR " + "NAT_CMPLNT_ID='" + selectedFacet + "'" :
-        //   this.headerparams.filter = "NAT_CMPLNT_ID='" + selectedFacet + "'";
         this.headerparams.filter = selectedFacet;
         this.loadComplainStatusFacet();
         this.loadComplainTypeFacet();
@@ -339,15 +339,12 @@ export class ComplainDIViewComponent implements OnInit {
       }
     }
 
-    this.getcount();
-
+    this.setPagination();
   }
 
   public getComplaintDetailsOnSelect(complaintDetail: any, viewParam?: string) {
-    console.log("checked : ", complaintDetail);
+
     this.processFlowStatusDet = new ProcessFlowStatusDetailsModel().statusDetails;
-    console.log("this.processFlowStatusDet======", this.processFlowStatusDet);
-    console.log("param to check the click from view::", viewParam);
 
     let complainNo: string = complaintDetail.complaintReferenceNo;
     let complainStatusId: string = complaintDetail.lastActivityId;
@@ -503,7 +500,8 @@ export class ComplainDIViewComponent implements OnInit {
     // this.pagedItems = this.allschooldata.slice(this.pager.startIndex, this.pager.endIndex + 1);
 
   }
-  getcount() {
+  
+  setPagination() {
     // let header: ComplaintDIHeaderParamModel;
     // header.filter = '';
     this.complaintdIservice.getHeadercount(this.headerparams, 'DI').subscribe((res) => {
