@@ -174,8 +174,8 @@ export class RCADIAddEditComponent implements OnInit {
     let rcaJsonForDetTable: any = {};
     rcaJsonForDetTable.activityId = rcaWsInfo.activityId;
     rcaJsonForDetTable.complaintReferenceNo = this.rcaDIAddEditFormGroup.value.complaintReferenceNo;
-    rcaJsonForDetTable.rootCauseAnanysisRemarks = this.rcaDIAddEditFormGroup.value.paAddEditDetails;
-    rcaJsonForDetTable.rootCauseAnanysisDate = this.rcaDIAddEditFormGroup.value.paAddEditDate;
+    rcaJsonForDetTable.rootCauseAnanysisRemarks = this.rcaDIAddEditFormGroup.value.rcaAddEditDetails;
+    rcaJsonForDetTable.rootCauseAnanysisDate = this.rcaDIAddEditFormGroup.value.rcaAddEditDate;
     rcaJsonForDetTable.userId = this.localStorageService.user.userId;
     console.log("rca json for Det table::", rcaJsonForDetTable);
     this.complaintDIService.putHeader(rcaJsonForHeaderTable, rcaWsInfo.plantType, rcaWsInfo.action).

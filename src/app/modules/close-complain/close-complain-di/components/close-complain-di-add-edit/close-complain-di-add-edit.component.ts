@@ -1,4 +1,4 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, ViewChild } from '@angular/core';
 import { FormGroup, FormBuilder, Validators, FormControl } from '@angular/forms';
 import { Subscription } from 'rxjs/Subscription';//to get route param
 import { Router, ActivatedRoute } from '@angular/router';
@@ -18,12 +18,17 @@ import { SessionErrorService } from "../../../../shared/services/session-error.s
 
 })
 export class CloseComplainDIAddEditComponent {
-
+  @ViewChild('fileInput')
+  fileInputVariable: any;
+  private formData: FormData = new FormData(); // form data for file upload
+  private totalFileSize: number = 0;//file upload error
+  private fileSizeLimit: number = 104857600;
+  private fileData: FormData;
+  private fileList: FileList;
   public title: string = "Close Complain";
   public closeComplainDIFormGroup: FormGroup;
   public closeRemarksLength: number = this.localStorageService.dbSettings.closeRemarks;
   public fileActivityId: number = this.localStorageService.appSettings.closeComplaintActivityId;//to load the files
-
   public routeParam: any = {
     complaintReferenceNo: '',//to get complaint reference no from route param
     complaintStatus: ''//to fetch complaint status from route
@@ -35,7 +40,7 @@ export class CloseComplainDIAddEditComponent {
     errorMsg: '',
     errMsgShowFlag: false
   };
-
+  public fileArr: any[] = [];//to store file details from file upload response
   constructor(
     private activatedroute: ActivatedRoute,
     private formBuilder: FormBuilder,
@@ -85,20 +90,73 @@ export class CloseComplainDIAddEditComponent {
   private getSystemDate() {
     //formatting the current date
     let date = new Date();
-    let currentDate: string = this.datePipe.transform(date,'yyyy-MM-dd'); //'dd-MMM-yyyy');
+    let currentDate: string = this.datePipe.transform(date, 'yyyy-MM-dd'); //'dd-MMM-yyyy');
     this.closeComplainDIFormGroup.controls["closeDate"].setValue(currentDate);
   }//end of method
 
+  private wsErrorCall(err) {
+    this.errorMsgObj.errMsgShowFlag = true;
+    this.errorMsgObj.errorMsg = err.msg;
+    this.busySpinner = false;
+    this.sessionErrorService.routeToLogin(err._body);
+  }//end of method
+
   //onOpenModal for opening modal from modalService
-  private onOpenModal(modalMessage) {
+  private onOpenModal(complaintReferenceNo: string, msgBody: string) {
     const modalRef = this.modalService.open(NgbdModalComponent);
-    modalRef.componentInstance.modalTitle = 'Information';
-    modalRef.componentInstance.modalMessage = modalMessage;//"User Id "+ manageProfileUserId + " updated successfully."
-  }
-  //end of method onOpenModal
+    modalRef.componentInstance.modalTitle = 'Complaint Reference Number: ' + complaintReferenceNo;//'Information';
+    modalRef.componentInstance.modalMessage = msgBody;
+  }//end of method onOpenModal
+
+  //method to file upload
+  private fileUploadWSCall(plantType: string, fileJsonBody: any) {
+    this.complaintDIService.postFile(plantType, fileJsonBody).
+      subscribe(res => {
+        if (res.msgType === 'Info') {
+          console.log("files uploaded successfully");
+        } else {
+          this.fileUploadWSCall(plantType, fileJsonBody);
+        }
+      }, err => {
+        console.log(err);
+        this.fileUploadWSCall(plantType, fileJsonBody);
+      });
+  }//end of method
+
+  //method of complaint details submit service call
+  private complaintDetailsSubmitWSCall(complainDetailJson: any, plantType: string, action: string) {
+    this.complaintDIService.postDetail(complainDetailJson, plantType, action).
+      subscribe(res => {
+        if (res.msgType === 'Info') {
+          console.log(" ca Det submitted successfully");
+          if (this.fileArr.length > 0) {
+            let fileAutoIdStr: string = '';//taking a var to store files autoId
+            this.fileArr.forEach(fileEl => {
+              fileAutoIdStr = fileAutoIdStr ? (fileAutoIdStr + ',' + fileEl.fileAutoId) : fileEl.fileAutoId;
+            });
+            let fileJsonBody: any = {};
+            fileJsonBody.complaintReferenceNo = complainDetailJson.complaintReferenceNo;
+            fileJsonBody.complaintDetailsAutoId = parseInt(res.valueSub);
+            fileJsonBody.activityId = complainDetailJson.activityId;
+            fileJsonBody.userId = this.localStorageService.user.userId;
+            fileJsonBody.fileAutoIds = fileAutoIdStr;
+            this.fileUploadWSCall(plantType, fileJsonBody);//calling the file ws method
+          }//end of file array check
+          this.onOpenModal(this.routeParam.complaintReferenceNo, res.msg);//open modal to show the msg
+          this.router.navigate([ROUTE_PATHS.RouteComplainDIView]);
+        } else {
+          this.complaintDetailsSubmitWSCall(complainDetailJson, plantType, action);
+        }
+      },
+        err => {
+          console.log(err);
+          this.complaintDetailsSubmitWSCall(complainDetailJson, plantType, action);
+        });
+  }//end of method
 
   //method of submit modify allocate complaint
   public onComplaintResolutionPISubmit() {
+    this.busySpinner = true;//to load spinner
     console.log("form value of Close complain di submit : ", this.closeComplainDIFormGroup.value);
     let closeComplainWsInfo: any = {};
     closeComplainWsInfo.activityId = 80;
@@ -120,25 +178,8 @@ export class CloseComplainDIAddEditComponent {
     this.complaintDIService.putHeader(closeComplainJsonForHeaderTable, closeComplainWsInfo.plantType, closeComplainWsInfo.action).
       subscribe(res => {
         if (res.msgType === 'Info') {
-          this.complaintDIService.postDetail(closeComplainJsonForDetTable, closeComplainWsInfo.plantType, closeComplainWsInfo.action).
-            subscribe(res => {
-              if (res.msgType === 'Info') {
-                console.log(" ca Det submitted successfully");
-                this.onOpenModal(res.msg);//open modal to show the msg
-                this.router.navigate([ROUTE_PATHS.RouteComplainDIView]);
-              } else {
-                this.errorMsgObj.errMsgShowFlag = true;
-                this.errorMsgObj.errorMsg = res.msg;
-              }
-              this.busySpinner = false;//to stop spinner
-            },
-              err => {
-                console.log(err);
-                this.errorMsgObj.errMsgShowFlag = true;
-                this.errorMsgObj.errorMsg = err.msg;
-                this.busySpinner = false;//to stop spinner
-                this.sessionErrorService.routeToLogin(err._body);
-              });
+          console.log("header added successfully");
+          this.complaintDetailsSubmitWSCall(closeComplainJsonForDetTable, closeComplainWsInfo.plantType, closeComplainWsInfo.action);
         } else {
           this.errorMsgObj.errMsgShowFlag = true;
           this.errorMsgObj.errorMsg = res.msg;
@@ -147,13 +188,67 @@ export class CloseComplainDIAddEditComponent {
       },
         err => {
           console.log(err);
-          this.busySpinner = false;//to stop spinner
-          this.errorMsgObj.errMsgShowFlag = true;
-          this.errorMsgObj.errorMsg = err.msg;
-          this.sessionErrorService.routeToLogin(err._body);
+          this.wsErrorCall(err);
         });
-
   } //end of method submit close di add
+
+  //file upload event  
+  public fileChange(event) {
+    let plantType: string = this.localStorageService.user.plantType;
+    this.fileData = new FormData();
+    this.totalFileSize = 0;
+    this.fileList = event.target.files;
+    // console.log("this.fileList.length::",this.fileList.length);
+    if (this.fileList.length > 0) {
+      this.busySpinner = true;
+      for (let i: number = 0; i < this.fileList.length; i++) {
+        let file: File = this.fileList[i];
+        this.fileData.append('uploadFile', file, file.name);
+        this.totalFileSize = this.totalFileSize + file.size;
+        console.log("this.totalFileSize:::::::::::", this.totalFileSize);
+      }//end of for
+      if (this.totalFileSize > this.fileSizeLimit) {
+        this.errorMsgObj.errMsgShowFlag = true;
+        this.errorMsgObj.errorMsg = "File size should be within 100 mb !";
+        this.busySpinner = false;
+      } else {
+        if (this.fileData != undefined) {
+          for (let i: number = 0; i < this.fileList.length; i++) {
+            console.log(" file upload", this.fileData.get('uploadFile'));
+            if (this.fileData.get('uploadFile') != null) {
+              this.formData.append('uploadFile', this.fileData.get('uploadFile'));
+            }
+          }//end of for
+        }//end of if fileData is !undefined
+        this.formData.append('Accept', 'application/json');
+        this.formData.append('accessToken', 'bearer ' + this.localStorageService.user.accessToken);
+        this.formData.append('menuId', 'DEFAULT1');
+        this.formData.append('userId', this.localStorageService.user.userId);
+        // let formDataObj: any = {};
+        // formDataObj = this.formData;
+        this.complaintDIService.postFileInTempTable(plantType, this.formData).
+          subscribe(res => {
+            if (res.msgType === 'Info') {
+              this.busySpinner = false;
+              console.log("file uploaded successfully..");
+              this.fileArr.push({ fileAutoId: res.valueAdv, fileName: res.value, fileUrl: res.valueSub });
+              console.log("this.fileArr:: ", this.fileArr);
+              this.fileInputVariable.nativeElement.value = "";//reset file
+              this.formData = new FormData();
+            } else {
+              this.errorMsgObj.errMsgShowFlag = true;
+              this.errorMsgObj.errorMsg = res.msg;
+              this.formData = new FormData();
+              this.busySpinner = false;
+            }
+          }, err => {
+            console.log(err);
+            this.formData = new FormData();
+            this.wsErrorCall(err);
+          });
+      }
+    }//end of if
+  }//end of filechange method 
 
   //for clicking cancel button this method will be invoked
   public onCancel(): void {
@@ -165,9 +260,4 @@ export class CloseComplainDIAddEditComponent {
     this.errorMsgObj.errMsgShowFlag = false;
     this.errorMsgObj.errorMsg = "";
   }//end of method delete error msg
-
-  //file change
-  public fileChange(evt){
-
-  }//
 }//end of class
