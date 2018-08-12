@@ -30,38 +30,60 @@
     <!--start div for row-->
     <div class="row col-lg-12 col-md-12 col-sm-12 col-xs-12" style="padding-top: 15px;">
 
-   
-            <!--start div for faceted nav-->
-            <div class="col-lg-2 col-md-2 col-sm-2 col-xs-2 faceted-nav">
 
-              <!--start div for status-->
-              <!-- <ng-container> -->
-                <div class="row faceted-header" style="height:33px;">
-                  <span class="label-faceted-header">Test Header</span>
-                </div>
-                <div>
-                  <div style="padding: 5px;">
-                    <input type="checkbox"/>
-                    <span>
-                      Test
-                    </span>
-                  </div>
-                </div>
-                <div class="row faceted-header" style="height:33px;">
-                  <span class="label-faceted-header">Test Header 1</span>
-                </div>
-                <div>
-                  <div style="padding: 5px;">
-                    <input type="checkbox"/>
-                    <span>
-                      Test 1
-                    </span>
-                  </div>
-                </div>
-              <!-- </ng-container> -->
-              <!--end div for status-->
-            </div>
-            <!-- end div for faceted nav -->
+      <!--start div for faceted nav-->
+      <div class="col-lg-2 col-md-2 col-sm-2 col-xs-2 faceted-nav">
+
+        <!--start div for status-->
+        <!-- <ng-container> -->
+        <div class="row faceted-header" style="height:33px;">
+          <span class="label-faceted-header">Complaint Status</span>
+        </div>
+        <div *ngIf="facetedNavData?.complainStatus">
+          <div *ngFor="let statusFacet of facetedNavData?.complainStatus" style="padding: 5px;">
+            <ng-container *ngIf="statusFacet.lastActivityId">
+              <input type="checkbox" 
+                (click)="selectFacet('complainStatus', statusFacet.lastActivityId)"/>
+              <span>
+                {{ statusFacet.lastStatus }}
+              </span>
+            </ng-container>
+          </div>
+        </div>
+
+        <div class="row faceted-header" style="height:33px;">
+          <span class="label-faceted-header">Complaint Type</span>
+        </div>
+        <div *ngIf="facetedNavData?.complainType">
+          <div *ngFor="let complainTypeFacet of facetedNavData?.complainType" style="padding: 5px;">
+            <ng-container *ngIf="complainTypeFacet.complaintTypeId">
+              <input type="checkbox" 
+                (click)="selectFacet('complainType', complainTypeFacet.complaintTypeId)"/>
+              <span>
+                {{ complainTypeFacet.complaintTypeDesc }}
+              </span>
+            </ng-container>
+          </div>
+        </div>
+
+        <div class="row faceted-header" style="height:33px;">
+          <span class="label-faceted-header">Nature of Complaint</span>
+        </div>
+        <div *ngIf="facetedNavData?.natureOfComplain">
+          <div *ngFor="let natureOfComplainFacet of facetedNavData?.natureOfComplain" style="padding: 5px;">
+            <ng-container *ngIf="natureOfComplainFacet.natureOfComplaintId">
+              <input type="checkbox" 
+                (click)="selectFacet('natureOfComplain', natureOfComplainFacet.natureOfComplaintId)"/>
+              <span>
+                {{ natureOfComplainFacet.natureOfComplaintDesc }}
+              </span>
+            </ng-container>
+          </div>
+        </div>
+        <!-- </ng-container> -->
+        <!--end div for status-->
+      </div>
+      <!-- end div for faceted nav -->
 
       <!--start div for actn btn and table grid (col-md-10)-->
       <div class="col-lg-10 col-md-10 col-sm-10 col-xs-10">
@@ -71,7 +93,7 @@
 
           <!--start div for showing faceted data-->
 
-         
+
 
           <!--end of div for showing faceted data-->
 
@@ -85,55 +107,44 @@
                   <tr class="th-style">
                     <td class="header-style-first hideextra" (click)="sortdata('CMPLNT_REF_NO')">
                       {{ gridHeader.complaintReferenceNo }}
-                      <i *ngIf="sortSelection.sortData == 'CMPLNT_REF_NO' && sortSelection.orderType == 'ASC'"
-                        class="fa fa-sort-asc"></i>
-                      <i *ngIf="sortSelection.sortData == 'CMPLNT_REF_NO' && sortSelection.orderType == 'DESC'"
-                        class="fa fa-sort-desc"></i>
+                      <i *ngIf="sortSelection.sortData == 'CMPLNT_REF_NO' && sortSelection.orderType == 'ASC'" class="fa fa-sort-asc"></i>
+                      <i *ngIf="sortSelection.sortData == 'CMPLNT_REF_NO' && sortSelection.orderType == 'DESC'" class="fa fa-sort-desc"></i>
                       <i *ngIf="sortSelection.sortData != 'CMPLNT_REF_NO' || sortSelection.orderType == ''" class="fa fa-sort"></i>
                     </td>
                     <td class="header-style hideextra" (click)="sortdata('CMPLNT_REF_DATE')">
                       Complaint Date
 
-                      <i *ngIf="sortSelection.sortData == 'CMPLNT_REF_DATE' && sortSelection.orderType == 'ASC'"
-                        class="fa fa-sort-asc"></i>
-                      <i *ngIf="sortSelection.sortData == 'CMPLNT_REF_DATE' && sortSelection.orderType == 'DESC'"
-                        class="fa fa-sort-desc"></i>
+                      <i *ngIf="sortSelection.sortData == 'CMPLNT_REF_DATE' && sortSelection.orderType == 'ASC'" class="fa fa-sort-asc"></i>
+                      <i *ngIf="sortSelection.sortData == 'CMPLNT_REF_DATE' && sortSelection.orderType == 'DESC'" class="fa fa-sort-desc"></i>
                       <i *ngIf="sortSelection.sortData != 'CMPLNT_REF_DATE' || sortSelection.orderType == ''" class="fa fa-sort"></i>
                     </td>
 
                     <td class="header-style hideextra" (click)="sortdata('CUSTOMER_NAME')">
                       {{ gridHeader.customerName }}
-                      <i *ngIf="sortSelection.sortData == 'CUSTOMER_NAME' && sortSelection.orderType == 'ASC'"
-                      class="fa fa-sort-asc"></i>
-                    <i *ngIf="sortSelection.sortData == 'CUSTOMER_NAME' && sortSelection.orderType == 'DESC'"
-                      class="fa fa-sort-desc"></i>
-                   
+                      <i *ngIf="sortSelection.sortData == 'CUSTOMER_NAME' && sortSelection.orderType == 'ASC'" class="fa fa-sort-asc"></i>
+                      <i *ngIf="sortSelection.sortData == 'CUSTOMER_NAME' && sortSelection.orderType == 'DESC'" class="fa fa-sort-desc"></i>
+
                       <i *ngIf="sortSelection.sortData != 'CUSTOMER_NAME' || sortSelection.orderType == ''" class="fa fa-sort"></i>
                     </td>
 
                     <td class="header-style hideextra" (click)="sortdata('CMPLNT_TYPE_DESC')">
                       {{ gridHeader.complaintTypeDesc }}
-                      <i *ngIf="sortSelection.sortData == 'CMPLNT_TYPE_DESC' && sortSelection.orderType == 'ASC'"
-                      class="fa fa-sort-asc"></i>
-                    <i *ngIf="sortSelection.sortData == 'CMPLNT_TYPE_DESC' && sortSelection.orderType == 'DESC'"
-                      class="fa fa-sort-desc"></i>
+                      <i *ngIf="sortSelection.sortData == 'CMPLNT_TYPE_DESC' && sortSelection.orderType == 'ASC'" class="fa fa-sort-asc"></i>
+                      <i *ngIf="sortSelection.sortData == 'CMPLNT_TYPE_DESC' && sortSelection.orderType == 'DESC'" class="fa fa-sort-desc"></i>
                       <i *ngIf="sortSelection.sortData != 'CMPLNT_TYPE_DESC' || sortSelection.orderType == ''" class="fa fa-sort"></i>
                     </td>
 
                     <td class="header-style hideextra" (click)="sortdata('NAT_CMPLNT_DESC')">
                       {{ gridHeader.natureOfComplaintDesc }}
-                      <i *ngIf="sortSelection.sortData == 'NAT_CMPLNT_DESC' && sortSelection.orderType == 'ASC'"
-                      class="fa fa-sort-asc"></i>
-                    <i *ngIf="sortSelection.sortData == 'NAT_CMPLNT_DESC' && sortSelection.orderType == 'DESC'"
-                      class="fa fa-sort-desc"></i>
+                      <i *ngIf="sortSelection.sortData == 'NAT_CMPLNT_DESC' && sortSelection.orderType == 'ASC'" class="fa fa-sort-asc"></i>
+                      <i *ngIf="sortSelection.sortData == 'NAT_CMPLNT_DESC' && sortSelection.orderType == 'DESC'" class="fa fa-sort-desc"></i>
                       <i *ngIf="sortSelection.sortData != 'NAT_CMPLNT_DESC' || sortSelection.orderType == ''" class="fa fa-sort"></i>
                     </td>
                     <td class="header-style-last hideextra" (click)="sortdata('ACTIVITY_DESC')">
                       {{ gridHeader.lastStatus }}
-                      <i *ngIf="sortSelection.sortData == 'ACTIVITY_DESC' && sortSelection.orderType == 'ASC'"
-                      class="fa fa-sort-asc"></i>
-                    <i *ngIf="sortSelection.sortData == 'ACTIVITY_DESC' && sortSelection.orderType == 'DESC'"
-                      class="fa fa-sort-desc"></i><i *ngIf="sortSelection.sortData != 'ACTIVITY_DESC' || sortSelection.orderType == ''" class="fa fa-sort"></i>
+                      <i *ngIf="sortSelection.sortData == 'ACTIVITY_DESC' && sortSelection.orderType == 'ASC'" class="fa fa-sort-asc"></i>
+                      <i *ngIf="sortSelection.sortData == 'ACTIVITY_DESC' && sortSelection.orderType == 'DESC'" class="fa fa-sort-desc"></i>
+                      <i *ngIf="sortSelection.sortData != 'ACTIVITY_DESC' || sortSelection.orderType == ''" class="fa fa-sort"></i>
                     </td>
                   </tr>
                 </thead>
@@ -143,7 +154,7 @@
                 <tbody>
                   <tr class="tr-style" *ngFor="let complaintViewValue of complaintDIViewDetails
                   | isplSearch: searchFormGroup.value.gridSearch : gridHeader
-              ; let odd = odd; let even = even;" [ngClass]="{even: even, odd: odd }">                    
+              ; let odd = odd; let even = even;" [ngClass]="{even: even, odd: odd }">
                     <td class="td-style-first">
                       <span class="custom-link" title="Click here" (click)="getComplaintDetailsOnSelect(complaintViewValue,'View')">
                         {{complaintViewValue.complaintReferenceNo}}

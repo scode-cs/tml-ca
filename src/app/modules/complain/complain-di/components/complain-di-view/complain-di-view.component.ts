@@ -85,7 +85,7 @@ export class ComplainDIViewComponent implements OnInit {
   public complaintLoggedActivityId: number = this.localStorageService.appSettings.complaintRegistrationActivityId;
   public headerparams: ComplaintDIHeaderParamModel;
 
-
+  public facetedNavData: any = {};
 
   constructor(
     private formBuilder: FormBuilder,
@@ -117,6 +117,7 @@ export class ComplainDIViewComponent implements OnInit {
     this.getParamFromRoute();//to get route param
     console.log("view complaint according to parameter [dashboard]: ", this.dashboardParameter);
     this.parameterCheck(this.dashboardParameter);
+    this.loadFacetedNav();
   }//end of onInit
 
 
@@ -151,17 +152,96 @@ export class ComplainDIViewComponent implements OnInit {
   /**
    * @description get compliant data
    */
-  getcomplaindetails() {
-
+  private getcomplaindetails() {
+    this.busySpinner = true;
     this.complaintdIservice.getHeader(this.headerparams).subscribe((res: any) => {
       console.log('get data all', JSON.parse(res.mapDetails));
       this.complaintDIViewDetails = JSON.parse(res.mapDetails);
       this.busySpinner = false;
     }, (err: any) => {
       this.busySpinner = false;
-    })
+    });
   }
 
+  private loadFacetedNav() {
+    this.loadComplainStatusFacet();
+    this.loadComplainTypeFacet();
+    this.loadNatureOfComplainFacet();
+  }
+
+  private loadComplainStatusFacet() {
+    let complainStatusParam: ComplaintDIHeaderParamModel = new ComplaintDIHeaderParamModel();
+    complainStatusParam.filter = this.headerparams.filter;
+    complainStatusParam.fields = 'distinct LAST_ACTIVITY_ID, ACTIVITY_DESC';
+    complainStatusParam.orderBy = 'LAST_ACTIVITY_ID';
+
+    this.complaintdIservice.getHeader(complainStatusParam).subscribe((res: any) => {
+      this.facetedNavData.complainStatus = JSON.parse(res.mapDetails);
+    }, (err: any) => {
+      // this.busySpinner = false;
+    });
+  }
+
+  private loadComplainTypeFacet() {
+    let complainStatusParam: ComplaintDIHeaderParamModel = new ComplaintDIHeaderParamModel();
+    complainStatusParam.filter = this.headerparams.filter;
+    complainStatusParam.fields = 'distinct CMPLNT_TYPE_ID , CMPLNT_TYPE_DESC';
+    complainStatusParam.orderBy = 'CMPLNT_TYPE_ID';
+
+    this.complaintdIservice.getHeader(complainStatusParam).subscribe((res: any) => {
+      this.facetedNavData.complainType = JSON.parse(res.mapDetails);
+    }, (err: any) => {
+      // this.busySpinner = false;
+    });
+  }
+
+  private loadNatureOfComplainFacet() {
+    let complainStatusParam: ComplaintDIHeaderParamModel = new ComplaintDIHeaderParamModel();
+    complainStatusParam.filter = this.headerparams.filter;
+    complainStatusParam.fields = 'distinct NAT_CMPLNT_ID, NAT_CMPLNT_DESC';
+    complainStatusParam.orderBy = 'NAT_CMPLNT_ID';
+
+    this.complaintdIservice.getHeader(complainStatusParam).subscribe((res: any) => {
+      this.facetedNavData.natureOfComplain = JSON.parse(res.mapDetails);
+    }, (err: any) => {
+      // this.busySpinner = false;
+    });
+  }
+
+  public selectFacet(facetName: string, selectedFacet: string) {
+    console.log(facetName + " :: " + selectedFacet);
+    switch(facetName) {
+      case 'complainStatus': {
+        this.headerparams.filter ? 
+          this.headerparams.filter += " OR " + "LAST_ACTIVITY_ID='"+selectedFacet+"'" :
+          this.headerparams.filter = "LAST_ACTIVITY_ID='"+selectedFacet+"'";
+
+          this.loadComplainTypeFacet();
+          this.loadNatureOfComplainFacet();
+        break;
+      }
+      case 'complainType': {
+        this.headerparams.filter ? 
+          this.headerparams.filter += " OR " + "CMPLNT_TYPE_ID='"+selectedFacet+"'" :
+          this.headerparams.filter = "CMPLNT_TYPE_ID='"+selectedFacet+"'";
+
+          this.loadComplainStatusFacet();
+          this.loadNatureOfComplainFacet();
+        break;
+      }
+      case 'natureOfComplain': {
+        this.headerparams.filter ? 
+          this.headerparams.filter += " OR " + "NAT_CMPLNT_ID='"+selectedFacet+"'" :
+          this.headerparams.filter = "NAT_CMPLNT_ID='"+selectedFacet+"'";
+
+          this.loadComplainStatusFacet();
+          this.loadComplainTypeFacet();
+        break;
+      }
+    }
+
+    this.getcomplaindetails();
+  }
 
   public getComplaintDetailsOnSelect(complaintDetail: any, viewParam?: string) {
     console.log("checked : ", complaintDetail);
