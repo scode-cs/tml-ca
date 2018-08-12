@@ -611,7 +611,7 @@ export class ComplaintDIRegisterComponent implements OnInit {
     modalRef.componentInstance.modalMessage = msgBody;
   }//end of method onOpenModal
 
-  private wsErrorCall(err){
+  private wsErrorCall(err) {
     this.errorMsgObj.errMsgShowFlag = true;
     this.errorMsgObj.errorMsg = err.msg;
     this.busySpinner = false;
@@ -647,50 +647,173 @@ export class ComplaintDIRegisterComponent implements OnInit {
   }//end of method
 
   //method of complaint details submit service call
-  private complaintDetailsSubmitWSCall(complainDetailJson:any, plantType:string, action:string){
+  private complaintDetailsSubmitWSCall(complainDetailJson: any, plantType: string, action: string) {
     this.complaintDIService.postDetail(complainDetailJson, plantType, action).
-    subscribe(res => {
-      if (res.msgType === 'Info') {
-        console.log(" complain submitted successfully");
-        if (this.selectedItemDetails.length > 0) {
-          let invArr: any = this.setInvoiceItemArrForSubmit(complainDetailJson.complaintReferenceNo, this.activityId, res.valueSub, complainDetailJson.natureOfComplaintId, complainDetailJson.complaintDetails);//calling the method to set item grid array
-          console.log("selectedItem grid invArr::", invArr);
-          this.invoiceItemDetailSubmitWSCall(invArr, plantType);
-        }
-        // this.fileUploadWSCall(plantType, res.value, this.activityId, res.valueSub, res.msg, res.value);
-      }
-    },
-      err => {
-        console.log(err);
-        this.wsErrorCall(err);
-      });
+      subscribe(res => {
+        if (res.msgType === 'Info') {
+          console.log(" complain submitted successfully");
+          if (this.selectedItemDetails.length > 0) {
+            let invArr: any = this.setInvoiceItemArrForSubmit(complainDetailJson.complaintReferenceNo, this.activityId, res.valueSub, complainDetailJson.natureOfComplaintId, complainDetailJson.complaintDetails);//calling the method to set item grid array
+            console.log("selectedItem grid invArr::", invArr);
+            let invItem: any = {};
+            invItem.items = invArr;
+            this.invoiceItemDetailSubmitWSCall(invItem, plantType);
+          }//end of if item det check
+          if (this.fileArr.length > 0) {
+            let fileAutoIdStr: string = '';//taking a var to store files autoId
+            this.fileArr.forEach(fileEl => {
+              fileAutoIdStr = fileAutoIdStr? (fileAutoIdStr + ',' + fileEl.fileAutoId) : fileEl.fileAutoId;
+            });
+            let fileJsonBody: any = {};
+            fileJsonBody.complaintReferenceNo = complainDetailJson.complaintReferenceNo;
+            fileJsonBody.complaintDetailsAutoId = parseInt(res.valueSub);
+            fileJsonBody.activityId = this.activityId;
+            fileJsonBody.userId = this.localStorageService.user.userId;
+            fileJsonBody.fileAutoIds = fileAutoIdStr;
+            this.fileUploadWSCall(plantType,fileJsonBody);//calling the file ws method
+          }//end of file array check
+          this.onOpenModal(complainDetailJson.complaintReferenceNo,res.msg);//calling the modal to show msg
+          this.router.navigate([ROUTE_PATHS.RouteHome]);
+        } else {
+          this.complaintDetailsSubmitWSCall(complainDetailJson, plantType, action);
+        }//end of else of msgType 'Info'
+      },
+        err => {
+          console.log(err);
+          this.complaintDetailsSubmitWSCall(complainDetailJson, plantType, action);
+        });
   }//end of method
 
   //method to item submit
-  private invoiceItemDetailSubmitWSCall(items: any[], plantType: string) {
+  private invoiceItemDetailSubmitWSCall(items: any, plantType: string) {
     this.complaintDIService.postInvoiceItemDetail(items, plantType).
       subscribe(res => {
         if (res.msgType === 'Info') {
           console.log("Invoice items uploaded successfully");
         } else {
-          this.errorMsgObj.errMsgShowFlag = true;
-          this.errorMsgObj.errorMsg = res.msg;
-          this.busySpinner = false;
+          this.invoiceItemDetailSubmitWSCall(items, plantType);
         }
       }, err => {
         console.log(err);
-        this.wsErrorCall(err);
-        // this.errorMsgObj.errMsgShowFlag = true;
-        // this.errorMsgObj.errorMsg = err.msg;
-        // this.busySpinner = false;
-        // this.sessionErrorService.routeToLogin(err._body);
+        this.invoiceItemDetailSubmitWSCall(items, plantType);
       });
   }//end of method
 
   //method to file upload
-  private fileUploadWSCall(plantType: string, complaintReferenceNo: string, activityId: number, complainDetailsAutoId: number, resmsg: string, resvalue: string) {
-
+  private fileUploadWSCall(plantType: string,fileJsonBody: any) {
+    this.complaintDIService.postFile(plantType,fileJsonBody).
+    subscribe(res=>{
+      if (res.msgType === 'Info') {
+        console.log("files uploaded successfully");
+      } else {
+        this.fileUploadWSCall(plantType, fileJsonBody);
+      }
+    },err=>{
+      console.log(err);
+      this.fileUploadWSCall(plantType, fileJsonBody);
+    });
   }//end of method
+
+  //file upload event  
+  public fileChange(event) {
+    let plantType: string = this.localStorageService.user.plantType;
+    this.fileData = new FormData();
+    this.totalFileSize = 0;
+    this.fileList = event.target.files;
+    // console.log("this.fileList.length::",this.fileList.length);
+    if (this.fileList.length > 0) {
+      this.busySpinner = true;
+      for (let i: number = 0; i < this.fileList.length; i++) {
+        let file: File = this.fileList[i];
+        this.fileData.append('uploadFile', file, file.name);
+        this.totalFileSize = this.totalFileSize + file.size;
+        console.log("this.totalFileSize:::::::::::", this.totalFileSize);
+      }//end of for
+      if (this.totalFileSize > this.fileSizeLimit) {
+        this.errorMsgObj.errMsgShowFlag = true;
+        this.errorMsgObj.errorMsg = "File size should be within 100 mb !";
+        this.busySpinner = false;
+      } else {
+        if (this.fileData != undefined) {
+          for (let i: number = 0; i < this.fileList.length; i++) {
+            console.log(" file upload", this.fileData.get('uploadFile'));
+            if (this.fileData.get('uploadFile') != null) {
+              this.formData.append('uploadFile', this.fileData.get('uploadFile'));
+            }
+          }//end of for
+        }//end of if fileData is !undefined
+        this.formData.append('Accept', 'application/json');
+        this.formData.append('accessToken', 'bearer ' + this.localStorageService.user.accessToken);
+        this.formData.append('menuId', 'DEFAULT1');
+        this.formData.append('userId', this.localStorageService.user.userId);
+        // let formDataObj: any = {};
+        // formDataObj = this.formData;
+        this.complaintDIService.postFileInTempTable(plantType, this.formData).
+          subscribe(res => {
+            if (res.msgType === 'Info') {
+              this.busySpinner = false;
+              console.log("file uploaded successfully..");
+              this.fileArr.push({ fileAutoId: res.valueAdv, fileName: res.value, fileUrl: res.valueSub });
+              console.log("this.fileArr:: ", this.fileArr);
+              this.fileInputVariable.nativeElement.value = "";//reset file
+              this.formData = new FormData();
+            } else {
+              this.errorMsgObj.errMsgShowFlag = true;
+              this.errorMsgObj.errorMsg = res.msg;
+              this.formData = new FormData();
+              this.busySpinner = false;
+            }
+          }, err => {
+            console.log(err);
+            this.formData = new FormData();
+            this.wsErrorCall(err);
+          });
+      }
+    }//end of if
+  }//end of filechange method 
+  //submit method
+  public onComplainSubmit(): void {
+    this.busySpinner = true;
+    console.log("form value::", this.complaintRegisterFormGroup.value);
+    let complainHeaderJson: any = {};
+    complainHeaderJson.lastActivityId = this.activityId;
+    complainHeaderJson.userId = this.localStorageService.user.userId;
+    console.log(" complainHeaderJson =========", complainHeaderJson);
+    let plantType: string = this.localStorageService.user.plantType;
+    let action: string = "reg_add";
+    let complainDetailJson: any = {};
+    complainDetailJson.activityId = this.activityId;
+    complainDetailJson.modeId = this.complaintRegisterFormGroup.value.modeId;
+    complainDetailJson.siteVisit = this.siteVisitValue;
+    complainDetailJson.siteVisitByDepartmentName = this.complaintRegisterFormGroup.value.siteVisitByDepartmentName;
+    complainDetailJson.complaintReferenceDt = this.complaintRegisterFormGroup.value.complaintReferenceDt;
+    complainDetailJson.loggedOnDt = this.complaintRegisterFormGroup.value.loggedOnDt;
+    complainDetailJson.contactPersonName = this.complaintRegisterFormGroup.value.contactPersonName;
+    complainDetailJson.contactPersonPhoneNo = this.complaintRegisterFormGroup.value.contactPersonPhoneNo;
+    complainDetailJson.contactPersonEmailId = this.complaintRegisterFormGroup.value.contactPersonEmailId;
+    complainDetailJson.loggedBy = this.empInfo.empId;
+    complainDetailJson.complaintTypeId = parseInt(this.complaintRegisterFormGroup.value.complaintTypeId);
+    complainDetailJson.natureOfComplaintId = parseInt(this.complaintRegisterFormGroup.value.natureOfComplaintId);
+    complainDetailJson.complaintDetails = this.complaintRegisterFormGroup.value.complaintDetails;
+    complainDetailJson.custCode = this.custInfo.custCode;
+    complainDetailJson.userId = this.localStorageService.user.userId;
+    console.log(" complainDetailJson =========", complainDetailJson);
+    this.complaintDIService.putHeader(complainHeaderJson, plantType, action).
+      subscribe(res => {
+        if (res.msgType === 'Info') {
+          complainDetailJson.complaintReferenceNo = res.value;
+          this.complaintDetailsSubmitWSCall(complainDetailJson, plantType, action);//details submit ws call 
+        } else {
+          this.errorMsgObj.errMsgShowFlag = true;
+          this.errorMsgObj.errorMsg = res.msg;
+          this.busySpinner = false;
+        }
+      },
+        err => {
+          console.log(err);
+          this.wsErrorCall(err);
+        });
+  }//end of method complainregDiSubmit  
 
   //start method onKeyupComplaintQty
   public onKeyupComplaintQty(complaintQtyInMtrsParam, invoiceNo, itemCode, invoiceQtyInMtrsParam) {
@@ -750,7 +873,6 @@ export class ComplaintDIRegisterComponent implements OnInit {
       this.complaintDIRegisterDataService.getSelectValNatureOfComplaint(this.complaintTypeId).
         subscribe(res => {
           this.natureOfComDropDownList = res.details;
-
           for (let natureCmp of this.natureOfComDropDownList) {
             console.log(" natureCmp.Key ", natureCmp.Key);
             if (this.complaintTypeName == "Others(CAT C)" && !compDet) {
@@ -880,112 +1002,6 @@ export class ComplaintDIRegisterComponent implements OnInit {
       this.complaintRegisterFormGroup.controls['siteVisitByDepartmentName'].markAsUntouched();
     } // end of else
   }//end of method onRadioClick
-
-  //file upload event  
-  public fileChange(event) {
-    let plantType: string = this.localStorageService.user.plantType;
-    this.fileData = new FormData();
-    this.totalFileSize = 0;
-    this.fileList = event.target.files;
-    // console.log("this.fileList.length::",this.fileList.length);
-    if (this.fileList.length > 0) {
-      this.busySpinner = true;
-      for (let i: number = 0; i < this.fileList.length; i++) {
-        let file: File = this.fileList[i];
-        this.fileData.append('uploadFile', file, file.name);
-        this.totalFileSize = this.totalFileSize + file.size;
-        console.log("this.totalFileSize:::::::::::", this.totalFileSize);
-      }//end of for
-      if (this.totalFileSize > this.fileSizeLimit) {
-        this.errorMsgObj.errMsgShowFlag = true;
-        this.errorMsgObj.errorMsg = "File size should be within 100 mb !";
-        this.busySpinner = false;
-      } else {
-        if (this.fileData != undefined) {
-          for (let i: number = 0; i < this.fileList.length; i++) {
-            console.log(" file upload", this.fileData.get('uploadFile'));
-            if (this.fileData.get('uploadFile') != null) {
-              this.formData.append('uploadFile', this.fileData.get('uploadFile'));
-            }
-          }//end of for
-        }//end of if fileData is !undefined
-        this.formData.append('Accept', 'application/json');
-        this.formData.append('accessToken', 'bearer ' + this.localStorageService.user.accessToken);
-        this.formData.append('menuId', 'DEFAULT1');
-        this.formData.append('userId', this.localStorageService.user.userId);
-        // let formDataObj: any = {};
-        // formDataObj = this.formData;
-        this.complaintDIService.postFileInTempTable(plantType, this.formData).
-          subscribe(res => {
-            if (res.msgType === 'Info') {
-              this.busySpinner = false;
-              console.log("file uploaded successfully..");
-              this.fileArr.push({ fileAutoId: res.valueAdv, fileName: res.value, fileUrl: res.valueSub });
-              console.log("this.fileArr:: ", this.fileArr);
-              // this.resetFileInput();//to reset file input
-              this.fileInputVariable.nativeElement.value = "";//reset file
-            } else {
-              this.errorMsgObj.errMsgShowFlag = true;
-              this.errorMsgObj.errorMsg = res.msg;
-              this.formData = new FormData();
-              this.busySpinner = false;
-            }
-          }, err => {
-            console.log(err);
-            this.formData = new FormData();
-            this.wsErrorCall(err);
-            // this.errorMsgObj.errMsgShowFlag = true;
-            // this.errorMsgObj.errorMsg = err.msg;
-            // this.busySpinner = false;
-            // this.sessionErrorService.routeToLogin(err._body);
-          });
-      }
-    }//end of if
-  }//end of filechange method  
-
-  //submit method
-  public onComplainSubmit(): void {
-    this.busySpinner = true;
-    console.log("form value::", this.complaintRegisterFormGroup.value);
-    let complainHeaderJson: any = {};
-    complainHeaderJson.lastActivityId = this.activityId;
-    complainHeaderJson.userId = this.localStorageService.user.userId;
-    console.log(" complainHeaderJson =========", complainHeaderJson);
-    let plantType: string = this.localStorageService.user.plantType;
-    let action: string = "reg_add";
-    let complainDetailJson: any = {};
-    complainDetailJson.activityId = this.activityId;
-    complainDetailJson.modeId = this.complaintRegisterFormGroup.value.modeId;
-    complainDetailJson.siteVisit = this.siteVisitValue;
-    complainDetailJson.siteVisitByDepartmentName = this.complaintRegisterFormGroup.value.siteVisitByDepartmentName;
-    complainDetailJson.complaintReferenceDt = this.complaintRegisterFormGroup.value.complaintReferenceDt;
-    complainDetailJson.loggedOnDt = this.complaintRegisterFormGroup.value.loggedOnDt;
-    complainDetailJson.contactPersonName = this.complaintRegisterFormGroup.value.contactPersonName;
-    complainDetailJson.contactPersonPhoneNo = this.complaintRegisterFormGroup.value.contactPersonPhoneNo;
-    complainDetailJson.contactPersonEmailId = this.complaintRegisterFormGroup.value.contactPersonEmailId;
-    complainDetailJson.loggedBy = this.empInfo.empId;
-    complainDetailJson.complaintTypeId = parseInt(this.complaintRegisterFormGroup.value.complaintTypeId);
-    complainDetailJson.natureOfComplaintId = parseInt(this.complaintRegisterFormGroup.value.natureOfComplaintId);
-    complainDetailJson.complaintDetails = this.complaintRegisterFormGroup.value.complaintDetails;
-    complainDetailJson.custCode = this.custInfo.custCode;
-    complainDetailJson.userId = this.localStorageService.user.userId;
-    console.log(" complainDetailJson =========", complainDetailJson);
-    this.complaintDIService.putHeader(complainHeaderJson, plantType, action).
-      subscribe(res => {
-        if (res.msgType === 'Info') {
-          complainDetailJson.complaintReferenceNo = res.value;
-          this.complaintDetailsSubmitWSCall(complainDetailJson, plantType, action);//details submit ws call 
-        } else {
-          this.errorMsgObj.errMsgShowFlag = true;
-          this.errorMsgObj.errorMsg = res.msg;
-          this.busySpinner = false;
-        }
-      },
-        err => {
-          console.log(err);
-          this.wsErrorCall(err);
-        });
-  }//end of method complainregDiSubmit  
 
   //onOpenModal for opening modal from modalService
   public onInvoiceNoOpenModal(invoiceNo: string) {
