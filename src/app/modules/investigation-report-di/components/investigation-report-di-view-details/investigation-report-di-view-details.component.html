@@ -219,47 +219,44 @@
               </div>
             </div>
             <!--end div for show files-->
-<div class="row">
-  <div *ngIf="rejectFlag" class="col-xs-12 col-sm-12 col-md-12 col-lg-12 bs-callout bs-callout-warning">
-    <div class="col-sm-6" style="display: inline-block">
-      <span>Reject Reason</span>
-      <textarea rows="5" #rejectReasonVal></textarea>
-    </div>
-    
-      <div class="col-sm-6" style="display: inline-block">
-        <button type="submit" class="btn primary-button-style" (click)="onRejectSubmit(rejectReasonVal.value)">
-          Save
-        </button>
-      </div>
-    
-  </div>
-  <!-- <div class="input-group" *ngIf="rejectFlag">
+            <div class="row" *ngIf="rejectFlag" class="reject-alert">
+              <h3>Reason to Reject</h3>
+              <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 bs-callout bs-callout-warning">
+                <div class="col-md-6" style="display: inline-block">
+                  <textarea #rejectReasonVal></textarea>
+                  <button type="submit" class="btn primary-button-style" (click)="onRejectSubmit(rejectReasonVal.value)">
+                      Save
+                    </button>
+                </div>
+              </div>
+              <!-- <div class="input-group" *ngIf="rejectFlag">
     <textarea class="form-control custom-control" rows="3" style="resize:none"></textarea>     
     <span class="input-group-addon btn btn-primary">Send</span>
 </div> -->
-</div>
-           
+            </div>
+
           </div>
           <!--end of div row manage profile form-->
         </form>
         <!--end form -->
- 
-            <!--start button div-->
-            <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
-              <div class="col-xs-12 col-sm-4 col-md-4 col-lg-2 button-holder">
-                <button type="submit" class="btn default-button-style" (click)="onCancel()">
-                  Cancel
-                </button>
-              </div>
-              <div class="col-xs-12 col-sm-4 col-md-4 col-lg-2 button-holder" *ngIf="!rejectFlag "><!--&& complaintStatus==50-->
-                <button type="submit" class="btn btn-danger danger-button-style"  (click)="onClickRejectBtn()">
-                  Reject
-                </button>
-              </div>
-            </div>
-            <!--end of button div-->
 
-              </div>
+        <!--start button div-->
+        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+          <div class="col-xs-12 col-sm-4 col-md-4 col-lg-2 button-holder">
+            <button type="submit" class="btn default-button-style" (click)="onCancel()">
+              Cancel
+            </button>
+          </div>
+          <div class="col-xs-12 col-sm-4 col-md-4 col-lg-2 button-holder" *ngIf="!rejectFlag ">
+            <!--&& complaintStatus==50-->
+            <button type="submit" class="btn btn-danger danger-button-style" (click)="onClickRejectBtn()">
+              Reject
+            </button>
+          </div>
+        </div>
+        <!--end of button div-->
+
+      </div>
       <!-- end div of form -->
     </div>
     <!-- end of main div -->
