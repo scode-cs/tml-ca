@@ -8,7 +8,6 @@ import { LocalStorageService } from "../../../shared/services/local-storage.serv
 import { DatePipe } from '@angular/common';
 import { SessionErrorService } from "../../../shared/services/session-error.service";
 import { InvestigationReportDIConfigModel } from '../../models/investigation-report-di-config.model';
-import { InvestigationReportDIDataService } from '../../services/investigation-report-di.service';
 import { ComplaintDIService } from '../../../shared/services/complaint-di.service';
 import { InvestigationDataModel } from '../../models/investigation-data-model';
 
@@ -42,13 +41,13 @@ export class InvestigationReportDiViewDetailsComponent implements OnInit {
     errorMsg: '',
     errMsgShowFlag: false
   };
-
+  public rejectFlag: boolean = false;//reject flag
   constructor(
     private activatedroute: ActivatedRoute,
     private router: Router,
     private sessionErrorService: SessionErrorService,
     private complaintDIService: ComplaintDIService,
-    private investigationReportDIDataService: InvestigationReportDIDataService,
+    private localstorageService: LocalStorageService,
     private datePipe: DatePipe//for date
   ) {
     // this.buildForm();
@@ -229,5 +228,44 @@ export class InvestigationReportDiViewDetailsComponent implements OnInit {
     // Not authenticated
     this.router.navigate([ROUTE_PATHS.RouteComplainDIView]);
   }//end of cancel method
+
+  //reject click
+  public onClickRejectBtn() {
+    this.rejectFlag = true;
+  }//end of method
+  //methhod to submit reject reason
+  public onRejectSubmit(rejectReasonVal) {
+    let date = new Date();
+    let currentDate: string = this.datePipe.transform(date, 'yyyy-MM-dd');
+    let rejectHeaderJson: any = {};
+    let rejectDetailJson: any = {};
+    let plantType: string = this.localstorageService.user.plantType;
+    let action: string = "";
+    rejectHeaderJson.lastActivityId = 10;
+    rejectHeaderJson.userId = this.localstorageService.user.userId;
+    rejectHeaderJson.complaintReferenceNo = this.complaintReferenceNo;
+    // rejectHeaderJson.investigationReportCancelFlag" : "Y"
+
+    rejectDetailJson.activityId = 40;
+    rejectDetailJson.complaintReferenceNo = this.complaintReferenceNo;
+    rejectDetailJson.userId = this.localstorageService.user.userId;
+    rejectDetailJson.investigationReportCancelRemarks = rejectReasonVal;
+    rejectDetailJson.investigationReportCancelDate = currentDate;
+
+    console.log("rejectHeaderJson",rejectHeaderJson);
+    console.log("rejectDetailJson",rejectDetailJson);
+     this.complaintDIService.putHeader(rejectHeaderJson,plantType,action).
+      subscribe(res=>{
+        console.log("res success msg",res.msg);
+      },err=>{
+        console.log(err);
+      });
+      this.complaintDIService.postDetail(rejectDetailJson,plantType,action).
+      subscribe(res=>{
+        console.log("res success msg",res.msg);
+      },err=>{
+        console.log(err);
+      });
+  }
 
 }//end of class
