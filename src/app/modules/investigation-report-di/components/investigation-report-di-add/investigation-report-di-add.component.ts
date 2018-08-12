@@ -45,6 +45,7 @@ export class InvestigationReportDiComponent implements OnInit {
   public complaintStatus: number;//to fetch complaint status from route
   public invReportDetails: any[] = [];// to store invReport deatils from response
   public invItemDetails: any[] = [];// to store inv item deatils from response
+  public selectedInvItemDetails: any[] = [];// to store inv item deatils from response
   public invReportIndex: number = 0;
   public ivtReportDataList: any = { unloadingEquipmentList: '', lubricantUsedList: '', layingPositionList: '', jointingTypeList: '' };
   public unloadingEquipmentList: any[] = [];
@@ -101,6 +102,7 @@ export class InvestigationReportDiComponent implements OnInit {
     this.getRouteParam();
     this.getSystemDate();
     this.getInvestigationViewDetailsWSCall();
+    this.getInvItemGridDet();//method to get inv item grid
     this.invReportTable = new InvestigationReportDIConfigModel().prevInvReportHeader;
     this.itemGridTable = new InvestigationReportDIConfigModel().invItemGridHeader;
     this.ivtReportDataList.unloadingEquipmentList = new InvestigationDataModel().unloadingEquipmentList;
@@ -127,6 +129,31 @@ export class InvestigationReportDiComponent implements OnInit {
     let currentDate: string = this.datePipe.transform(date, 'dd-MM-yyyy');
     this.invReportFormGroup.controls['investigationReportDate'].setValue(currentDate);
   }//end of method
+
+  //method to get invitemgrid det
+  private getInvItemGridDet() {
+    //if selected items grid length is greater than zero setSelectItemsGrid method will invoked
+    if (this.investigationReportInvoiceDetailsService && this.investigationReportInvoiceDetailsService.selectedItemDetails) {
+      let selItemsDet : any =  {};
+      selItemsDet = this.investigationReportInvoiceDetailsService.selectedItemDetails;
+      let items: any = [];
+      items = selItemsDet.items;
+      console.log(" items ==================== ", items);
+      this.setSelectItemsGrid(items);
+      // //for setting selected items grid row
+      // this.setSelectItemsGrid(selItemsDet);
+    }//end of if
+  }//end of method
+
+  //start method of setSelectItemsGrid
+  private setSelectItemsGrid(selItemsParam: any[]){
+    let selItems: any [] = selItemsParam;
+    selItems.forEach(selItm => {
+      this.selectedInvItemDetails.push(selItm);
+    });
+
+    console.log(" this.selectedInvItemDetails ======",this.selectedInvItemDetails);
+  }//end method of setSelectItemsGrid
 
   //method to get investigation report details by service call
   private getInvestigationViewDetailsWSCall() {
@@ -202,10 +229,10 @@ export class InvestigationReportDiComponent implements OnInit {
     }//end of else of inv report date value
   }//end method setFormValue
 
-  //onOpenModal for opening modal from modalService
-  private onOpenModal(msgBody: string) {
+   //onOpenModal for opening modal from modalService
+   private onOpenModal(complaintReferenceNo: string, msgBody: string) {
     const modalRef = this.modalService.open(NgbdModalComponent);
-    modalRef.componentInstance.modalTitle = 'Information';
+    modalRef.componentInstance.modalTitle = 'Complaint Reference Number: ' + complaintReferenceNo;//'Information';
     modalRef.componentInstance.modalMessage = msgBody;
   }//end of method onOpenModal
 
@@ -231,7 +258,15 @@ export class InvestigationReportDiComponent implements OnInit {
   //start method postInvoiceItemDetailWsCall to post item details
   private postInvoiceItemDetailWsCall() {
     this.busySpinner = true;
-    this.complaintDIService.postInvoiceItemDetail(this.invItemDetails, this.plantType).
+    let items: any[] = [];
+    this.invItemDetails.forEach( invItmDet=> {
+      items.push(invItmDet);
+    });
+    this.selectedInvItemDetails.forEach(selInvItmDet => {
+      items.push(selInvItmDet);
+    });
+    console.log(" total itemssssss::::::",items);
+    this.complaintDIService.postInvoiceItemDetail(items,this.plantType).
       subscribe(res => {
         if (res.msgType === 'Info') {
           console.log("submit item msg====   ", res.msg);
@@ -263,7 +298,7 @@ export class InvestigationReportDiComponent implements OnInit {
                 console.log(" complain submitted successfully");
               }
               this.busySpinner = false;
-              this.onOpenModal(res.msg);
+              this.onOpenModal(res.value,res.msg);
             },
               err => {
                 console.log(err);
@@ -279,6 +314,21 @@ export class InvestigationReportDiComponent implements OnInit {
           this.sessionErrorService.routeToLogin(err._body);
         });
   }//end of the method of submitInvReportDIDetWSCall
+
+  //start method deleteSelInvDetFromAllInvDetArr for deleting the ivoice details from selected invoice data grid array
+  private deleteSelInvDetFromSelInvDetArr(selectedInvDetParam: any) {
+    console.log(" SelInvDetails before splice ", this.selectedInvItemDetails);
+    let indexCount: number = 0;
+    for (let selInvDet of this.selectedInvItemDetails) {
+      if (selInvDet.invoiceNo == selectedInvDetParam.invoiceNo && selInvDet.itemCode == selectedInvDetParam.itemCode && selInvDet.complaintTypeDesc == selectedInvDetParam.complaintTypeDesc && selInvDet.natureOfComplaintDesc == selectedInvDetParam.natureOfComplaintDesc) {
+        this.selectedInvItemDetails.splice(indexCount, 1);
+        break;
+      }//end of if
+      indexCount++;
+    }//end of for
+    console.log(" SelInvDetails after splice ", this.selectedInvItemDetails);
+  }//end of the method deleteSelInvDetFromSelInvDet
+
 
   //on click investigationReportDISubmit method
   public investigationReportDISubmit(): void {
@@ -503,6 +553,18 @@ export class InvestigationReportDiComponent implements OnInit {
     this.investigationReportInvoiceDetailsService.custCode = customerCode;
     let customerName: string = this.invReportFormGroup.value.customerName;
     this.investigationReportInvoiceDetailsService.custName = customerName;
+    this.investigationReportInvoiceDetailsService.compRefNo = this.complaintReferenceNo;
+    this.investigationReportInvoiceDetailsService.complaintStatus = this.complaintStatus;
+    let items: any = [];
+    items = this.selectedInvItemDetails;
+    let selItemsDet : any =  {};
+      selItemsDet.items = items;
+    this.investigationReportInvoiceDetailsService.selectedItemDetails = selItemsDet;
   }//end of method onOpenModal
+
+  // start method of onCloseInvoiceNo
+  public onCloseInvoiceNo(selectedInvDet: any){
+    this.deleteSelInvDetFromSelInvDetArr(selectedInvDet);
+  }//end of the method of onCloseInvoiceNo
 
 }//end of class

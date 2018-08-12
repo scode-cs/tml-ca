@@ -10,6 +10,7 @@ export class InvestigationReportInvoiceDetailsService {
     private _salesGroup: string;
     private _salesOffice: string;
     private _compRefNo: string;
+    private _complaintStatus: number;
     private _fileData: FormData;
     private _fileList: FileList;
     private _testVar: string;
@@ -61,6 +62,12 @@ export class InvestigationReportInvoiceDetailsService {
     }
     public set compRefNo(compRefNo: string){
         this._compRefNo = compRefNo;
+    }
+    public get complaintStatus(): number{
+        return this._complaintStatus;
+    }
+    public set complaintStatus(complaintStatus: number){
+        this._complaintStatus = complaintStatus;
     }
     public get fileData(): FormData{
         return this._fileData;
