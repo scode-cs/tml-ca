@@ -243,6 +243,21 @@
                       </ng-template>
                     </td>
                   </tr>
+                  <tr class="tr-style" *ngFor="let selInvItmDet of selectedInvItemDetails">
+                    <td class="hideextra" *ngFor="let itmGrid of itemGridTable" [ngClass]="itmGrid.dataClass"> 
+                      <ng-container *ngIf="itmGrid.headerKey === 'complaintQtyInMtrs' then thenblock; else elseblock">
+                      </ng-container>
+                      <ng-template #thenblock>
+                        <input type="number" value={{selInvItmDet[itmGrid.headerKey]}} />
+                      </ng-template>
+                      <ng-template #elseblock>
+                        {{ selInvItmDet[itmGrid.headerKey] }}
+                      </ng-template>
+                      <ng-container *ngIf="itmGrid.headerKey === 'complaintReferenceNo'">
+                          <i class="fa fa-minus-circle text-danger" style="cursor: pointer;" (click)="onCloseInvoiceNo(selInvItmDet)"></i>
+                        </ng-container> 
+                    </td>
+                  </tr>
                   <tr class="tr-style">
                     <!-- invItemDetails -->
                     <td class="td-style-first hideextra">
