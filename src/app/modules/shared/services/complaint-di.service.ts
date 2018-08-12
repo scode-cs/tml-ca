@@ -55,8 +55,10 @@ export class ComplaintDIService {
     param += complainHeaderParam && complainHeaderParam.fields ? "fields="+complainHeaderParam.fields+"&" : "fields=&";
     param += complainHeaderParam && complainHeaderParam.filter ? "filter="+complainHeaderParam.filter+"&" : "filter=&";
     param += complainHeaderParam && complainHeaderParam.sortData ? "sortData="+complainHeaderParam.sortData+"&" : "sortData=&";
-    param += complainHeaderParam && complainHeaderParam.orderBy ? "orderBy="+complainHeaderParam.orderBy+"" : "orderBy=";
-    
+    param += complainHeaderParam && complainHeaderParam.orderBy ? "orderBy="+complainHeaderParam.orderBy+"&" : "orderBy=&";
+    param += complainHeaderParam && complainHeaderParam.perPage ? "perPage="+complainHeaderParam.perPage+"&" : "perPage=&";
+    param += complainHeaderParam && complainHeaderParam.pageNo ? "pageNo="+complainHeaderParam.pageNo+"" : "pageNo=";
+        
     
 
     console.log(param);
@@ -209,7 +211,24 @@ public viewFile(complaintReferenceNo:string, activityId: number, complaintDetail
 }//end method of viewFile
 
 
+public getHeadercount(complainHeaderParam: ComplaintDIHeaderParamModel,planTye:any){
+  let headers: Headers = this.configService();
+  let actionUrl = AppUrlsConst.COMPLAINT_HEADER_DATA_COUNT;
 
+
+  let param: string = '';
+  param+="plantType="+planTye+"&";
+  param += complainHeaderParam && complainHeaderParam.filter ? "filter="+complainHeaderParam.filter : "filter=";
+  
+  
+
+  console.log(param);
+
+  return this.http.get((actionUrl+'?'+param), { headers: headers })
+  .map((res: Response) => { return res.json() })
+  .catch((error: Response) => { return Observable.throw(error) });
+
+}
   
 
 }

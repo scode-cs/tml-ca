@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import { FormGroup, FormBuilder, Validators, FormControl } from '@angular/forms';
 import { LocalStorageService } from '../../../../shared/services/local-storage.service';
 import { ViewComplaintDIDataService } from '../../services/complaint-di-view-data.service';
@@ -91,7 +91,10 @@ export class ComplainDIViewComponent implements OnInit {
   public changeStattusGroup: FormGroup;
   public complanTypeFormgroup: FormGroup;
   public natureOfComplainGroup: FormGroup;
-
+  pager: any = {};
+  datacount:number;
+  // paged items
+  pagedItems: any[];
 
   constructor(
     private formBuilder: FormBuilder,
@@ -101,7 +104,8 @@ export class ComplainDIViewComponent implements OnInit {
     private complaintdIservice: ComplaintDIService,
     private tilesInteractionService: TilesInteractionService,
     private sessionErrorService: SessionErrorService,
-    private activatedroute: ActivatedRoute//route parameter
+    private activatedroute: ActivatedRoute,//route parameter,
+    private cd: ChangeDetectorRef
   ) {
     console.log("View DI Complain Class");
     // this.gridSearch = new FormControl('');
@@ -125,7 +129,7 @@ export class ComplainDIViewComponent implements OnInit {
     this.parameterCheck(this.dashboardParameter);
     this.loadFacetedNav();
 
-    
+    this.getcount();
   }//end of onInit
 
 
@@ -181,7 +185,7 @@ export class ComplainDIViewComponent implements OnInit {
     let complainStatusParam: ComplaintDIHeaderParamModel = new ComplaintDIHeaderParamModel();
     complainStatusParam.filter = this.headerparams.filter;
     complainStatusParam.fields = 'distinct LAST_ACTIVITY_ID, ACTIVITY_DESC';
-    complainStatusParam.orderBy = 'LAST_ACTIVITY_ID';
+    complainStatusParam.sortData = 'LAST_ACTIVITY_ID';
 
     this.complaintdIservice.getHeader(complainStatusParam).subscribe((res: any) => {
       this.facetedNavData.complainStatus = JSON.parse(res.mapDetails);
@@ -196,13 +200,13 @@ export class ComplainDIViewComponent implements OnInit {
     let complainStatusParam: ComplaintDIHeaderParamModel = new ComplaintDIHeaderParamModel();
     complainStatusParam.filter = this.headerparams.filter;
     complainStatusParam.fields = 'distinct CMPLNT_TYPE_ID , CMPLNT_TYPE_DESC';
-    complainStatusParam.orderBy = 'CMPLNT_TYPE_ID';
+    complainStatusParam.sortData = 'CMPLNT_TYPE_ID';
 
     this.complaintdIservice.getHeader(complainStatusParam).subscribe((res: any) => {
       this.facetedNavData.complainType = JSON.parse(res.mapDetails);
       this.complanTypeFormgroup = this.buildComplainTypeFacetFormGroup();
       console.log(this.complanTypeFormgroup);
-      this.complanTypeFormgroup.valueChanges.subscribe(()=>this.complainTypeValueChange());
+      this.complanTypeFormgroup.valueChanges.subscribe(() => this.complainTypeValueChange());
     }, (err: any) => {
       // this.busySpinner = false;
     });
@@ -212,12 +216,12 @@ export class ComplainDIViewComponent implements OnInit {
     let complainStatusParam: ComplaintDIHeaderParamModel = new ComplaintDIHeaderParamModel();
     complainStatusParam.filter = this.headerparams.filter;
     complainStatusParam.fields = 'distinct NAT_CMPLNT_ID, NAT_CMPLNT_DESC';
-    complainStatusParam.orderBy = 'NAT_CMPLNT_ID';
+    complainStatusParam.sortData = 'NAT_CMPLNT_ID';
 
     this.complaintdIservice.getHeader(complainStatusParam).subscribe((res: any) => {
       this.facetedNavData.natureOfComplain = JSON.parse(res.mapDetails);
       this.natureOfComplainGroup = this.buildNatureOfComplainFacetFormGroup();
-      this.natureOfComplainGroup.valueChanges.subscribe(()=>this.natureOfCompliantValueChange());
+      this.natureOfComplainGroup.valueChanges.subscribe(() => this.natureOfCompliantValueChange());
     }, (err: any) => {
       // this.busySpinner = false;
     });
@@ -232,7 +236,7 @@ export class ComplainDIViewComponent implements OnInit {
       // console.log(index);
       Changestattusgroup[element.lastActivityId] = new FormControl(false);
     });
-   // console.log(Changestattusgroup)
+    // console.log(Changestattusgroup)
     return new FormGroup(Changestattusgroup);
   }
   /**
@@ -241,7 +245,7 @@ export class ComplainDIViewComponent implements OnInit {
   private buildComplainTypeFacetFormGroup() {
     let CoplanTypegroup: any = {};
     this.facetedNavData.complainType.forEach((element, index) => {
-     // console.log(element);
+      // console.log(element);
       // console.log(index);
       CoplanTypegroup[element.complaintTypeId] = new FormControl(false);
     });
@@ -251,24 +255,24 @@ export class ComplainDIViewComponent implements OnInit {
   private buildNatureOfComplainFacetFormGroup() {
     let NatureOfComplainGroup: any = {};
     this.facetedNavData.natureOfComplain.forEach((element, index) => {
-     // console.log(element);
+      // console.log(element);
       // console.log(index);
       NatureOfComplainGroup[element.natureOfComplaintId] = new FormControl(false);
     });
     //console.log(NatureOfComplainGroup)
     return new FormGroup(NatureOfComplainGroup);
   }
-/**
- * @description change status dettect 
- */
+  /**
+   * @description change status dettect 
+   */
   changeStatusGroupValueChange() {
     this.changeStattusGroup;
     console.log(this.changeStattusGroup);
 
     let facetFilter: string = '';
-    for (var ctrl in this.changeStattusGroup.value) { 
+    for (var ctrl in this.changeStattusGroup.value) {
       if (this.changeStattusGroup.value[ctrl]) {
-         facetFilter += facetFilter ? " OR LAST_ACTIVITY_ID='"+ctrl+"'" : "LAST_ACTIVITY_ID='"+ctrl+"'";
+        facetFilter += facetFilter ? " OR LAST_ACTIVITY_ID='" + ctrl + "'" : "LAST_ACTIVITY_ID='" + ctrl + "'";
       }
     }
 
@@ -276,23 +280,23 @@ export class ComplainDIViewComponent implements OnInit {
   }
 
   complainTypeValueChange() {
-console.log(this.complanTypeFormgroup.value)
+    console.log(this.complanTypeFormgroup.value)
     let facetFilter: string = '';
-    for (var ctrl in this.complanTypeFormgroup.value) { 
+    for (var ctrl in this.complanTypeFormgroup.value) {
       if (this.complanTypeFormgroup.value[ctrl]) {
-         facetFilter += facetFilter ? " OR CMPLNT_TYPE_ID='"+ctrl+"'" : "CMPLNT_TYPE_ID='"+ctrl+"'";
+        facetFilter += facetFilter ? " OR CMPLNT_TYPE_ID='" + ctrl + "'" : "CMPLNT_TYPE_ID='" + ctrl + "'";
       }
     }
 
     this.selectFacet('complainType', facetFilter);
   }
   natureOfCompliantValueChange() {
-   
-console.log(this.natureOfComplainGroup.value)
+
+    console.log(this.natureOfComplainGroup.value)
     let facetFilter: string = '';
-    for (var ctrl in this.natureOfComplainGroup.value) { 
+    for (var ctrl in this.natureOfComplainGroup.value) {
       if (this.natureOfComplainGroup.value[ctrl]) {
-         facetFilter += facetFilter ? " OR NAT_CMPLNT_ID='"+ctrl+"'" : "NAT_CMPLNT_ID='"+ctrl+"'";
+        facetFilter += facetFilter ? " OR NAT_CMPLNT_ID='" + ctrl + "'" : "NAT_CMPLNT_ID='" + ctrl + "'";
       }
     }
 
@@ -425,4 +429,88 @@ console.log(this.natureOfComplainGroup.value)
   }//end of onclick method
 
 
+
+  getPager(totalItems: number, currentPage: number = 1, pageSize: number = 10) {
+    // calculate total pages
+    let totalPages = Math.ceil(totalItems / pageSize);
+
+    // ensure current page isn't out of range
+    if (currentPage < 1) {
+      currentPage = 1;
+    } else if (currentPage > totalPages) {
+      currentPage = totalPages;
+    }
+
+    let startPage: number, endPage: number;
+    if (totalPages <= 10) {
+      // less than 10 total pages so show all
+      startPage = 1;
+      endPage = totalPages;
+    } else {
+      // more than 10 total pages so calculate start and end pages
+      if (currentPage <= 6) {
+        startPage = 1;
+        endPage = 10;
+      } else if (currentPage + 4 >= totalPages) {
+        startPage = totalPages - 9;
+        endPage = totalPages;
+      } else {
+        startPage = currentPage - 5;
+        endPage = currentPage + 4;
+      }
+    }
+
+    // calculate start and end item indexes
+    let startIndex = (currentPage - 1) * pageSize;
+    let endIndex = Math.min(startIndex + pageSize - 1, totalItems - 1);
+
+    // create an array of pages to ng-repeat in the pager control
+    let pages = Array.from(Array((endPage + 1) - startPage).keys()).map(i => startPage + i);
+
+    // return object with all pager properties required by the view
+    return {
+      totalItems: totalItems,
+      currentPage: currentPage,
+      pageSize: pageSize,
+      totalPages: totalPages,
+      startPage: startPage,
+      endPage: endPage,
+      startIndex: startIndex,
+      endIndex: endIndex,
+      pages: pages
+    };
+  }
+  /**
+   * 
+   * @param page 
+   * @param term 
+   */
+  setPage(page: number) {
+    // get current page of items this is for local paginate
+  
+    console.log(this.datacount);
+    this.pager = this.getPager(this.datacount, page, 20);
+    // this.getlistofschoole(this.pager.currentPage - 1, 10);
+    this.headerparams.pageNo = (this.pager.currentPage - 1).toString();
+    this.headerparams.perPage = '20';
+    this.getcomplaindetails();
+    this.cd.detectChanges();
+
+
+
+    //use to do for local pagination
+    // this.pagedItems = this.allschooldata.slice(this.pager.startIndex, this.pager.endIndex + 1);
+
+  }
+  getcount() {
+    // let header: ComplaintDIHeaderParamModel;
+    // header.filter = '';
+    this.complaintdIservice.getHeadercount(this.headerparams, 'DI').subscribe((res) => {
+      console.log(res);
+      this.datacount=res.xCount;
+      this.setPage(1);
+    }, (err) => {
+      console.log(err);
+    })
+  }
 }//end of class
