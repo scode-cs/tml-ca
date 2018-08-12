@@ -39,46 +39,52 @@
         <div class="row faceted-header" style="height:33px;">
           <span class="label-faceted-header">Complaint Status</span>
         </div>
-        <div *ngIf="facetedNavData?.complainStatus">
-          <div *ngFor="let statusFacet of facetedNavData?.complainStatus" style="padding: 5px;">
-            <ng-container *ngIf="statusFacet.lastActivityId">
-              <input type="checkbox" 
-                (click)="selectFacet('complainStatus', statusFacet.lastActivityId)"/>
-              <span>
-                {{ statusFacet.lastStatus }}
-              </span>
-            </ng-container>
-          </div>
+        <div *ngIf="facetedNavData?.complainStatus && changeStattusGroup">
+          <form [formGroup]="changeStattusGroup">
+            <div *ngFor="let statusFacet of facetedNavData?.complainStatus" style="padding: 5px;">
+              <ng-container *ngIf="statusFacet.lastActivityId">
+                <input type="checkbox" formControlName="{{statusFacet.lastActivityId}}" />
+                <span>
+                  {{ statusFacet.lastStatus }}
+                </span>
+              </ng-container>
+            </div>
+          </form>
+
         </div>
 
         <div class="row faceted-header" style="height:33px;">
           <span class="label-faceted-header">Complaint Type</span>
         </div>
-        <div *ngIf="facetedNavData?.complainType">
+        <div *ngIf="facetedNavData?.complainType && complanTypeFormgroup">
+            <form [formGroup]="complanTypeFormgroup">
           <div *ngFor="let complainTypeFacet of facetedNavData?.complainType" style="padding: 5px;">
-            <ng-container *ngIf="complainTypeFacet.complaintTypeId">
-              <input type="checkbox" 
-                (click)="selectFacet('complainType', complainTypeFacet.complaintTypeId)"/>
+            <ng-container *ngIf="complainTypeFacet.complaintTypeDesc">
+              <input type="checkbox" formControlName="{{complainTypeFacet.complaintTypeId}}"/>
               <span>
                 {{ complainTypeFacet.complaintTypeDesc }}
               </span>
             </ng-container>
           </div>
+        </form>
         </div>
 
         <div class="row faceted-header" style="height:33px;">
           <span class="label-faceted-header">Nature of Complaint</span>
         </div>
-        <div *ngIf="facetedNavData?.natureOfComplain">
+        <div *ngIf="facetedNavData?.natureOfComplain && natureOfComplainGroup">
+          <form [formGroup]="natureOfComplainGroup"> 
+
+         
           <div *ngFor="let natureOfComplainFacet of facetedNavData?.natureOfComplain" style="padding: 5px;">
             <ng-container *ngIf="natureOfComplainFacet.natureOfComplaintId">
-              <input type="checkbox" 
-                (click)="selectFacet('natureOfComplain', natureOfComplainFacet.natureOfComplaintId)"/>
+              <input type="checkbox" (click)="selectFacet('natureOfComplain', natureOfComplainFacet.natureOfComplaintId)" formControlName="{{natureOfComplainFacet.natureOfComplaintId}}" />
               <span>
                 {{ natureOfComplainFacet.natureOfComplaintDesc }}
               </span>
             </ng-container>
           </div>
+        </form>
         </div>
         <!-- </ng-container> -->
         <!--end div for status-->

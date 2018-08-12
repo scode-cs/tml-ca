@@ -87,6 +87,12 @@ export class ComplainDIViewComponent implements OnInit {
 
   public facetedNavData: any = {};
 
+  //formgroup
+  public changeStattusGroup: FormGroup;
+  public complanTypeFormgroup: FormGroup;
+  public natureOfComplainGroup: FormGroup;
+
+
   constructor(
     private formBuilder: FormBuilder,
     private localStorageService: LocalStorageService,
@@ -118,6 +124,8 @@ export class ComplainDIViewComponent implements OnInit {
     console.log("view complaint according to parameter [dashboard]: ", this.dashboardParameter);
     this.parameterCheck(this.dashboardParameter);
     this.loadFacetedNav();
+
+    
   }//end of onInit
 
 
@@ -177,6 +185,8 @@ export class ComplainDIViewComponent implements OnInit {
 
     this.complaintdIservice.getHeader(complainStatusParam).subscribe((res: any) => {
       this.facetedNavData.complainStatus = JSON.parse(res.mapDetails);
+      this.changeStattusGroup = this.buildComplainStatusFacetFormGroup();
+      this.changeStattusGroup.valueChanges.subscribe(() => this.changeStatusGroupValueChange());
     }, (err: any) => {
       // this.busySpinner = false;
     });
@@ -190,6 +200,9 @@ export class ComplainDIViewComponent implements OnInit {
 
     this.complaintdIservice.getHeader(complainStatusParam).subscribe((res: any) => {
       this.facetedNavData.complainType = JSON.parse(res.mapDetails);
+      this.complanTypeFormgroup = this.buildComplainTypeFacetFormGroup();
+      console.log(this.complanTypeFormgroup);
+      this.complanTypeFormgroup.valueChanges.subscribe(()=>this.complainTypeValueChange());
     }, (err: any) => {
       // this.busySpinner = false;
     });
@@ -203,39 +216,121 @@ export class ComplainDIViewComponent implements OnInit {
 
     this.complaintdIservice.getHeader(complainStatusParam).subscribe((res: any) => {
       this.facetedNavData.natureOfComplain = JSON.parse(res.mapDetails);
+      this.natureOfComplainGroup = this.buildNatureOfComplainFacetFormGroup();
+      this.natureOfComplainGroup.valueChanges.subscribe(()=>this.natureOfCompliantValueChange());
     }, (err: any) => {
       // this.busySpinner = false;
     });
   }
+  /**
+   * changestatus form group
+   */
+  private buildComplainStatusFacetFormGroup() {
+    let Changestattusgroup: any = {};
+    this.facetedNavData.complainStatus.forEach((element, index) => {
+      // console.log(element);
+      // console.log(index);
+      Changestattusgroup[element.lastActivityId] = new FormControl(false);
+    });
+   // console.log(Changestattusgroup)
+    return new FormGroup(Changestattusgroup);
+  }
+  /**
+   * @description complintype group
+   */
+  private buildComplainTypeFacetFormGroup() {
+    let CoplanTypegroup: any = {};
+    this.facetedNavData.complainType.forEach((element, index) => {
+     // console.log(element);
+      // console.log(index);
+      CoplanTypegroup[element.complaintTypeId] = new FormControl(false);
+    });
+    //console.log(this.CoplanTypegroup)
+    return new FormGroup(CoplanTypegroup);
+  }
+  private buildNatureOfComplainFacetFormGroup() {
+    let NatureOfComplainGroup: any = {};
+    this.facetedNavData.natureOfComplain.forEach((element, index) => {
+     // console.log(element);
+      // console.log(index);
+      NatureOfComplainGroup[element.natureOfComplaintId] = new FormControl(false);
+    });
+    //console.log(NatureOfComplainGroup)
+    return new FormGroup(NatureOfComplainGroup);
+  }
+/**
+ * @description change status dettect 
+ */
+  changeStatusGroupValueChange() {
+    this.changeStattusGroup;
+    console.log(this.changeStattusGroup);
+
+    let facetFilter: string = '';
+    for (var ctrl in this.changeStattusGroup.value) { 
+      if (this.changeStattusGroup.value[ctrl]) {
+         facetFilter += facetFilter ? " OR LAST_ACTIVITY_ID='"+ctrl+"'" : "LAST_ACTIVITY_ID='"+ctrl+"'";
+      }
+    }
+
+    this.selectFacet('complainStatus', facetFilter);
+  }
+
+  complainTypeValueChange() {
+console.log(this.complanTypeFormgroup.value)
+    let facetFilter: string = '';
+    for (var ctrl in this.complanTypeFormgroup.value) { 
+      if (this.complanTypeFormgroup.value[ctrl]) {
+         facetFilter += facetFilter ? " OR CMPLNT_TYPE_ID='"+ctrl+"'" : "CMPLNT_TYPE_ID='"+ctrl+"'";
+      }
+    }
+
+    this.selectFacet('complainType', facetFilter);
+  }
+  natureOfCompliantValueChange() {
+   
+console.log(this.natureOfComplainGroup.value)
+    let facetFilter: string = '';
+    for (var ctrl in this.natureOfComplainGroup.value) { 
+      if (this.natureOfComplainGroup.value[ctrl]) {
+         facetFilter += facetFilter ? " OR NAT_CMPLNT_ID='"+ctrl+"'" : "NAT_CMPLNT_ID='"+ctrl+"'";
+      }
+    }
+
+    this.selectFacet('natureOfComplain', facetFilter);
+  }
+
 
   public selectFacet(facetName: string, selectedFacet: string) {
+    //console.log(this.changeStattusGroup.value);
     console.log(facetName + " :: " + selectedFacet);
-    switch(facetName) {
+    switch (facetName) {
       case 'complainStatus': {
-        this.headerparams.filter ? 
-          this.headerparams.filter += " OR " + "LAST_ACTIVITY_ID='"+selectedFacet+"'" :
-          this.headerparams.filter = "LAST_ACTIVITY_ID='"+selectedFacet+"'";
+        // this.headerparams.filter ?
+        //   this.headerparams.filter += " AND " + selectedFacet :
+        //   this.headerparams.filter = selectedFacet;
 
-          this.loadComplainTypeFacet();
-          this.loadNatureOfComplainFacet();
+        this.headerparams.filter = selectedFacet;
+
+        this.loadComplainTypeFacet();
+        this.loadNatureOfComplainFacet();
         break;
       }
       case 'complainType': {
-        this.headerparams.filter ? 
-          this.headerparams.filter += " OR " + "CMPLNT_TYPE_ID='"+selectedFacet+"'" :
-          this.headerparams.filter = "CMPLNT_TYPE_ID='"+selectedFacet+"'";
-
-          this.loadComplainStatusFacet();
-          this.loadNatureOfComplainFacet();
+        // this.headerparams.filter ?
+        //   this.headerparams.filter += " OR " + "CMPLNT_TYPE_ID='" + selectedFacet + "'" :
+        //   this.headerparams.filter = "CMPLNT_TYPE_ID='" + selectedFacet + "'";
+        this.headerparams.filter = selectedFacet;
+        this.loadComplainStatusFacet();
+        this.loadNatureOfComplainFacet();
         break;
       }
       case 'natureOfComplain': {
-        this.headerparams.filter ? 
-          this.headerparams.filter += " OR " + "NAT_CMPLNT_ID='"+selectedFacet+"'" :
-          this.headerparams.filter = "NAT_CMPLNT_ID='"+selectedFacet+"'";
-
-          this.loadComplainStatusFacet();
-          this.loadComplainTypeFacet();
+        // this.headerparams.filter ?
+        //   this.headerparams.filter += " OR " + "NAT_CMPLNT_ID='" + selectedFacet + "'" :
+        //   this.headerparams.filter = "NAT_CMPLNT_ID='" + selectedFacet + "'";
+        this.headerparams.filter = selectedFacet;
+        this.loadComplainStatusFacet();
+        this.loadComplainTypeFacet();
         break;
       }
     }
