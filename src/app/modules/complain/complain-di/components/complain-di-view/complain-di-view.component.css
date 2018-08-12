@@ -186,8 +186,7 @@
 
 /*start style for faceted nav*/
 .faceted-nav{
-  border: 1pt solid #EAEBED;
-  box-shadow: 0px 2px 5px #C6C6C6;
+    border-right: 1pt solid #EAEBED;
 }
 .faceted-header{
   background-color: #dbdada;
@@ -197,6 +196,10 @@
   font-family: sans-serif;
   text-align: left;
   
+  height:33px; 
+  margin-left: -16px; 
+  margin-right: -16px;
+  border: 1px solid #BCBCBC;
 }
 /*end style for faceted nav*/
 
@@ -338,4 +341,5 @@ section {
   text-decoration: underline;
   cursor: pointer;
 }
+
 /* end of style for custom-link */

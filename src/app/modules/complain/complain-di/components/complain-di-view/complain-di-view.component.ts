@@ -165,7 +165,7 @@ export class ComplainDIViewComponent implements OnInit {
    * @description get compliant data
    */
   private getcomplaindetails() {
-    this.busySpinner = true;
+    // this.busySpinner = true;
     this.complaintdIservice.getHeader(this.headerparams).subscribe((res: any) => {
       console.log('get data all', JSON.parse(res.mapDetails));
       this.complaintDIViewDetails = JSON.parse(res.mapDetails);
@@ -512,4 +512,5 @@ export class ComplainDIViewComponent implements OnInit {
       console.log(err);
     })
   }
+
 }//end of class

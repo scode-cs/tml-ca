@@ -16,12 +16,14 @@ import { ComplaintDIInvoiceDetailsService } from "./services/complaint-di-invoic
 //for di customer search
 import { ComplaintDIInvoiceSearchComponent } from './components/complain-di-register/complain-di-invoice-search/complaint-di-invoice-search.component';
 import { ComplaintDICustomerSearchComponent } from './components/complain-di-register/complain-di-customer-search/complaint-di-customer-search.component';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 @NgModule({
   imports:      [
     ReactiveFormsModule,
     CommonModule,
     BrowserModule,
+    BrowserAnimationsModule,
     BusySpinnerModule,
     SharedModule
   ],
