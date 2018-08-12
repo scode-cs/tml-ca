@@ -18,6 +18,7 @@ export class InvestigationReportDIConfigModel {
         { headerKey: 'complaintQtyInMtrs', headerDesc: 'Complaint Qty(in Mtrs)', headerClass: 'header-style visible-style', dataClass: 'td-style visible-style', inputType:' <input type="text"></input>' },
         { headerKey: 'complaintTypeDesc', headerDesc: 'Complaint Type', headerClass: 'header-style visible-style', dataClass: 'td-style visible-style' },
         { headerKey: 'natureOfComplaintDesc', headerDesc: 'Nature of Complaint', headerClass: 'header-style visible-style', dataClass: 'td-style visible-style' },
+        { headerKey: 'complaintDetails', headerDesc: 'Detail of Complaint', headerClass: 'header-style visible-style', dataClass: 'td-style visible-style' },
         { headerKey: 'projectName', headerDesc: 'Project Name', headerClass: 'header-style visible-style', dataClass: 'td-style visible-style' },
         { headerKey: 'projectLocation', headerDesc: 'Project Location', headerClass: 'header-style-last visible-style', dataClass: 'td-style-last visible-style' }
     ]

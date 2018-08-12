@@ -17,7 +17,7 @@
     <!-- main div -->
     <div class="form-div-style">
       <!-- start table div -->
-      <div *ngIf="invReportDetails.length > 1 && prevInvReportShowFlag" class="col-lg-12 col-md-12 col-xs-12 scroll-bar prev-inv-report-table-style" >
+      <div *ngIf="invReportDetails.length > 1 && prevInvReportShowFlag" class="col-lg-12 col-md-12 col-xs-12 scroll-bar prev-inv-report-table-style">
         <table class="table-style">
           <thead>
             <tr class="th-style">
@@ -207,15 +207,15 @@
 
             <!-- start div for Customer Code -->
             <div class="form-group col-xs-12 col-sm-6 col-md-6 col-lg-4">
-                <label>Customer Code</label>
-                <input type="text" class="form-control" formControlName="customerCode" readonly>
+              <label>Customer Code</label>
+              <input type="text" class="form-control" formControlName="customerCode" readonly>
             </div>
             <!-- end div for Customer Code -->
 
             <!-- start div for Customer Name -->
             <div class="form-group col-xs-12 col-sm-6 col-md-6 col-lg-4">
-                <label>Customer Name</label>
-                <input type="text" class="form-control" formControlName="customerName" readonly>
+              <label>Customer Name</label>
+              <input type="text" class="form-control" formControlName="customerName" readonly>
             </div>
             <!-- end div for Customer Name -->
 
@@ -241,10 +241,13 @@
                       <ng-template #elseblock>
                         {{ invItemDet[itmGrid.headerKey] }}
                       </ng-template>
+                      <ng-container *ngIf="itmGrid.headerKey === 'complaintReferenceNo'">
+                          <i class="fa fa-pencil-square text-info" style="cursor: pointer;" (click)="onEditPrevItem(invItemDet)"></i>   
+                      </ng-container>
                     </td>
                   </tr>
                   <tr class="tr-style" *ngFor="let selInvItmDet of selectedInvItemDetails">
-                    <td class="hideextra" *ngFor="let itmGrid of itemGridTable" [ngClass]="itmGrid.dataClass"> 
+                    <td class="hideextra" *ngFor="let itmGrid of itemGridTable" [ngClass]="itmGrid.dataClass">
                       <ng-container *ngIf="itmGrid.headerKey === 'complaintQtyInMtrs' then thenblock; else elseblock">
                       </ng-container>
                       <ng-template #thenblock>
@@ -254,8 +257,8 @@
                         {{ selInvItmDet[itmGrid.headerKey] }}
                       </ng-template>
                       <ng-container *ngIf="itmGrid.headerKey === 'complaintReferenceNo'">
-                          <i class="fa fa-minus-circle text-danger" style="cursor: pointer;" (click)="onCloseInvoiceNo(selInvItmDet)"></i>
-                        </ng-container> 
+                        <i class="fa fa-minus-circle text-danger" style="cursor: pointer;" (click)="onCloseInvoiceNo(selInvItmDet)"></i>
+                      </ng-container>
                     </td>
                   </tr>
                   <tr class="tr-style">
@@ -263,6 +266,9 @@
                     <td class="td-style-first hideextra">
                       Add Item(s)
                       <i style="font-size:16px;cursor: pointer;" title="Click here" class="fa fa-plus-circle" (click)="onItemsOpenModal()"></i>
+                    </td>
+                    <td class="td-style">
+
                     </td>
                     <td class="td-style">
 
@@ -378,31 +384,28 @@
             </div>
             <!--end div for Unloading Equipment [add]-->
 
+            <!--start fle upload div-->
+            <div class="form-group col-xs-12 col-sm-6 col-md-6 col-lg-6">
+              <label for="imageFile">File(s) Upload</label>
+              <label class="red-coloured-label">(max size 100 mb)</label>
+              <input type="file" #fileInput (change)="fileChange($event)" />
+            </div>
+            <!--end of file upload div-->
+
             <!--start div for show files-->
-            <!--files-->
-            <div class="form-group col-xs-12 col-sm-6 col-md-6 col-lg-4" *ngIf="">
+            <div class="form-group col-xs-12 col-sm-6 col-md-6 col-lg-4" *ngIf="fileArr?.length!=0">
               <label>Uploaded file(s)</label>
-              <div *ngFor="">
-                <!-- <a href="{{file.fileUrl}}" target="_blank">{{file.fileName}}</a> -->
+              <div *ngFor="let file of fileArr">
+                <a href="{{file.fileUrl}}" target="_blank">{{file.fileName}}</a>
                 <br/>
               </div>
             </div>
             <!--end div for show files-->
 
-            <!--start fle upload div-->
-            <div class="form-group col-xs-12 col-sm-6 col-md-6 col-lg-6">
-              <label for="imageFile">File(s) Upload</label>
-              <label class="red-coloured-label">(max size 100 mb)</label>
-              <input type="file" (change)="fileChange($event)" multiple/>
-            </div>
-            <!--end of file upload div-->
-
-
-
             <!--start button div-->
             <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
               <div class="col-xs-12 col-sm-4 col-md-4 col-lg-2 button-holder">
-                <button type="submit" class="btn btn-primary primary-button-style" [disabled]="!invReportFormGroup.valid">Submit
+                <button type="submit" class="btn btn-primary primary-button-style">Submit
                 </button>
               </div>
               <div class="col-xs-12 col-sm-4 col-md-4 col-lg-2 button-holder">
@@ -419,6 +422,17 @@
 
       </div>
       <!-- end div of form -->
+
+      <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" *ngIf="errorMsgObj.errMsgShowFlag">
+        <div class="alert alert-danger">
+          {{errorMsgObj.errorMsg}}&nbsp;
+          <button aria-label="Close" class="close" type="button" (click)="deleteResErrorMsgOnClick()">
+            <span aria-hidden="true">×</span>
+          </button>
+        </div>
+        <br/>
+        <br/>
+      </div>
 
     </div>
     <!-- end of main div -->

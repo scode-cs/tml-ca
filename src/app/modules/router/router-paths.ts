@@ -80,6 +80,8 @@ const ROUTE_INVESTIGATION_REPORT_DI_ADD_CONST: string = 'addinvestigationreportd
 const ROUTE_INVESTIGATION_REPORT_DI_ADD: string = ROUTE_INVESTIGATION_REPORT_DI_ADD_CONST + '/' + ':complaintReferenceNo'+ '/' + ':complaintStatus';
 const ROUTE_INVESTIGATION_REPORT_DI_ADD_FULL: string = ROUTE_HOME_FULL + '/' + ROUTE_INVESTIGATION_REPORT_DI_ADD_CONST;//add
 
+
+
 //new add for view INVESTIGATION_REPORT_DI (inv report view details)
 const ROUTE_INVESTIGATION_REPORT_DI_VIEW: string = 'viewinvestigationreportdi';
 const ROUTE_VIEW_DETAILS_INVESTIGATION_REPORT_DI: string =  ROUTE_INVESTIGATION_REPORT_DI_VIEW +'/' + ':complaintReferenceNo'+ '/' + ':complaintStatus';
@@ -88,8 +90,9 @@ const ROUTE_VIEW_DETAILS_INVESTIGATION_REPORT_DI_FULL: string = ROUTE_HOME_FULL 
 //new add for single view ROUTE_VIEW_DETAILS_INVESTIGATION_REPORT_DI 15.02.18
 
 //complaint reference no search
-const ROUTE_COMPLAINT_REFERENCE_NO_SEARCH: string ='complaintReferenceNoSearch';
-const ROUTE_COMPLAINT_REFERENCE_NO_SEARCH_FULL: string = ROUTE_HOME_FULL + '/'+ ROUTE_COMPLAINT_REFERENCE_NO_SEARCH;
+const ROUTE_COMPLAINT_REFERENCE_NO_SEARCH_CONST: string = 'complaintReferenceNoSearch';
+const ROUTE_COMPLAINT_REFERENCE_NO_SEARCH: string = ROUTE_COMPLAINT_REFERENCE_NO_SEARCH_CONST+ '/'+ ':invoiceNo'+ '/' + ':itemCode';
+const ROUTE_COMPLAINT_REFERENCE_NO_SEARCH_FULL: string = ROUTE_HOME_FULL + '/'+ ROUTE_COMPLAINT_REFERENCE_NO_SEARCH_CONST;
 
 
 //new add for allocate complaint add

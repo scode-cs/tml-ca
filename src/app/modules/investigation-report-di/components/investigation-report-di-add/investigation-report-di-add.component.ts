@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter, ViewChild } from '@angular/core';
 import { FormGroup, FormBuilder, Validators, FormControl } from '@angular/forms';
 import { ToastService } from "../../../home/services/toast-service";
 import { Router, ActivatedRoute } from '@angular/router';
@@ -27,10 +27,11 @@ import { InvestigationReportInvoiceDetailsService } from "../../services/investi
   styleUrls: ['investigation-report-di-add.component.css']
 })
 export class InvestigationReportDiComponent implements OnInit {
-  private totalFileSize: number = 0;//file upload error
-  //private fileSizeLimit: number = 104857600;
-
+  @ViewChild('fileInput')
+  fileInputVariable: any;
   // form data for file upload
+  private totalFileSize: number = 0;//file upload
+  private fileSizeLimit: number = 104857600;
   private formData: FormData = new FormData();
   private fileData: FormData;
   public fileList: FileList;
@@ -52,26 +53,22 @@ export class InvestigationReportDiComponent implements OnInit {
   public lubricantUsedList: any[] = [];
   public layingPositionList: any[] = [];
   public jointingTypeList: any[] = [];
-
+  public errorMsgObj: any = {
+    errorMsg: '',
+    errMsgShowFlag: false
+  };
+  public fileArr: any[] = [];//to store file details from file upload response
   //creating a FormGroup for Investigation Report
-  public invReportFormGroup = new FormGroup({
-    complaintReferenceNo: new FormControl(''),
-    siteVisit: new FormControl('', Validators.required),
-    siteVisitDt: new FormControl(''),
-    sampleCollected: new FormControl('', Validators.required),
-    sampleCollectedDate: new FormControl(''),
-    investigationReportDate: new FormControl(''),
-    customerCode: new FormControl(''),
-    customerName: new FormControl('')
-  });
-
-
+  public invReportFormGroup: FormGroup;
   public complaintReferenceNo: string;//to get complaint ref no from html and send it as a parameter
 
   //busySpinner 
   public busySpinner: boolean = true;
 
   public prevInvReportShowFlag: boolean = false;
+
+  public complaintTypeDropDownList: any[] = [];
+  public natureOfComDropDownList: any[] = [];
 
 
   //variable used for radio button
@@ -99,6 +96,7 @@ export class InvestigationReportDiComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    this.initform();
     this.getRouteParam();
     this.getSystemDate();
     this.getInvestigationViewDetailsWSCall();
@@ -110,6 +108,22 @@ export class InvestigationReportDiComponent implements OnInit {
     this.ivtReportDataList.layingPositionList = new InvestigationDataModel().layingPositionList;
     this.ivtReportDataList.jointingTypeList = new InvestigationDataModel().jointingTypeList;
   }//end of onInit
+
+  /**
+   * @description init form data
+   */
+  initform() {
+    this.invReportFormGroup = new FormGroup({
+      complaintReferenceNo: new FormControl(''),
+      siteVisit: new FormControl('', Validators.required),
+      siteVisitDt: new FormControl(''),
+      sampleCollected: new FormControl('', Validators.required),
+      sampleCollectedDate: new FormControl(''),
+      investigationReportDate: new FormControl(''),
+      customerCode: new FormControl(''),
+      customerName: new FormControl('')
+    });
+  }//end of method
 
   //start method getRouteParam to get route parameter
   private getRouteParam() {
@@ -134,7 +148,7 @@ export class InvestigationReportDiComponent implements OnInit {
   private getInvItemGridDet() {
     //if selected items grid length is greater than zero setSelectItemsGrid method will invoked
     if (this.investigationReportInvoiceDetailsService && this.investigationReportInvoiceDetailsService.selectedItemDetails) {
-      let selItemsDet : any =  {};
+      let selItemsDet: any = {};
       selItemsDet = this.investigationReportInvoiceDetailsService.selectedItemDetails;
       let items: any = [];
       items = selItemsDet.items;
@@ -146,13 +160,13 @@ export class InvestigationReportDiComponent implements OnInit {
   }//end of method
 
   //start method of setSelectItemsGrid
-  private setSelectItemsGrid(selItemsParam: any[]){
-    let selItems: any [] = selItemsParam;
+  private setSelectItemsGrid(selItemsParam: any[]) {
+    let selItems: any[] = selItemsParam;
     selItems.forEach(selItm => {
       this.selectedInvItemDetails.push(selItm);
     });
 
-    console.log(" this.selectedInvItemDetails ======",this.selectedInvItemDetails);
+    console.log(" this.selectedInvItemDetails ======", this.selectedInvItemDetails);
   }//end method of setSelectItemsGrid
 
   //method to get investigation report details by service call
@@ -169,7 +183,7 @@ export class InvestigationReportDiComponent implements OnInit {
           this.invReportIndex = this.invReportDetails ? this.invReportDetails.length - 1 : 0;
           let pageActivityId: number = 10;
           let complaintDetailsAutoId: number = this.invReportDetails[this.invReportIndex].complaintDetailAutoId;
-          this.getInvoiceItemDetailWSCall(this.complaintReferenceNo,pageActivityId,complaintDetailsAutoId);
+          this.getInvoiceItemDetailWSCall(this.complaintReferenceNo, pageActivityId, complaintDetailsAutoId);
           //this.setFormValue();
         } else {
           this.busySpinner = false;
@@ -182,10 +196,33 @@ export class InvestigationReportDiComponent implements OnInit {
         });
   }//end of method
 
+  //method to get all values from ComplaintDIRegisterDataService  
+  private getAllDropDownVal() {
+    this.busySpinner = true;
+    //getting all values of complaintType
+    this.investigationReportDIDataService.getSelectComplaintType().
+      subscribe(res => {
+        this.complaintTypeDropDownList = res.details;
+        for (let cmpType of this.complaintTypeDropDownList) {
+          // if (cmpType.Key == "") {
+          //   this.complaintRegisterFormGroup.controls["complaintTypeId"].setValue(cmpType.Key);
+          //   break;
+          // }//end if
+        }//end for
+        this.busySpinner = false;
+      },
+      err => {
+        console.log(err);
+        this.busySpinner = false;
+        this.sessionErrorService.routeToLogin(err._body);
+      });
+
+  }//end method getAllDropDownVal
+
   //start method getInvoiceItemDetailWSCall to get item details
   private getInvoiceItemDetailWSCall(complaintReferenceNo: string, pageActivityId: number, complaintDetailsAutoId: number) {
     this.busySpinner = true;
-    this.complaintDIService.getInvoiceItemDetail(complaintReferenceNo, pageActivityId,complaintDetailsAutoId).
+    this.complaintDIService.getInvoiceItemDetail(complaintReferenceNo, pageActivityId, complaintDetailsAutoId).
       subscribe(res => {
         if (res.msgType === "Info") {
           let invItemDeatilsJson: any = JSON.parse(res.mapDetails);
@@ -194,7 +231,7 @@ export class InvestigationReportDiComponent implements OnInit {
           console.log("item details =========.........>>>>>>>>>", this.invItemDetails);
           this.invReportFormGroup.controls['customerCode'].setValue(this.invItemDetails[0].customerCode);
           this.invReportFormGroup.controls['customerName'].setValue(this.invItemDetails[0].customerName);
-        }else{
+        } else {
           this.busySpinner = false;
         }
       },
@@ -221,7 +258,7 @@ export class InvestigationReportDiComponent implements OnInit {
       this.invReportFormGroup.controls['sampleCollectedDate'].setValue(this.datePipe.transform(formData.sampleCollectedDate, 'yyyy-MM-dd'));
       this.invReportFormGroup.controls['sampleCollectedDate'].setValidators(Validators.required);
     }
-    
+
     if (formData.investigationReportDate) {
       this.invReportFormGroup.controls['investigationReportDate'].setValue(this.datePipe.transform(formData.investigationReportDate, 'dd-MM-yyyy'));
     } else {
@@ -229,8 +266,8 @@ export class InvestigationReportDiComponent implements OnInit {
     }//end of else of inv report date value
   }//end method setFormValue
 
-   //onOpenModal for opening modal from modalService
-   private onOpenModal(complaintReferenceNo: string, msgBody: string) {
+  //onOpenModal for opening modal from modalService
+  private onOpenModal(complaintReferenceNo: string, msgBody: string) {
     const modalRef = this.modalService.open(NgbdModalComponent);
     modalRef.componentInstance.modalTitle = 'Complaint Reference Number: ' + complaintReferenceNo;//'Information';
     modalRef.componentInstance.modalMessage = msgBody;
@@ -255,63 +292,117 @@ export class InvestigationReportDiComponent implements OnInit {
         });
   }//end of the method
 
-  //start method postInvoiceItemDetailWsCall to post item details
-  private postInvoiceItemDetailWsCall() {
-    this.busySpinner = true;
+  private wsErrorCall(err) {
+    this.errorMsgObj.errMsgShowFlag = true;
+    this.errorMsgObj.errorMsg = err.msg;
+    this.busySpinner = false;
+    this.sessionErrorService.routeToLogin(err._body);
+  }//end of method
+
+  //start method of getTotalItemDet to get total items
+  private getTotalItemDet(): any[] {
     let items: any[] = [];
-    this.invItemDetails.forEach( invItmDet=> {
+    this.invItemDetails.forEach(invItmDet => {
       items.push(invItmDet);
     });
     this.selectedInvItemDetails.forEach(selInvItmDet => {
       items.push(selInvItmDet);
     });
-    console.log(" total itemssssss::::::",items);
-    this.complaintDIService.postInvoiceItemDetail(items,this.plantType).
+    console.log(" total itemssssss::::::", items);
+    return items;
+  }//end of the method of getTotalItemDet
+
+  //start method postInvoiceItemDetailWsCall to post item details
+  private postInvoiceItemDetailWsCall(items: any[]) {
+    this.busySpinner = true;
+    this.complaintDIService.postInvoiceItemDetail(items, this.plantType).
       subscribe(res => {
         if (res.msgType === 'Info') {
-          console.log("submit item msg====   ", res.msg);
-        }//end of if of msgType Info
+          console.log("submit item msg====", res.msg);
+        } else {
+          this.postInvoiceItemDetailWsCall(items);
+        }
       },
         err => {
           console.log(err);
-          this.busySpinner = false;
-          this.sessionErrorService.routeToLogin(err._body);
+          this.postInvoiceItemDetailWsCall(items);
         });
   }//end of the method of postInvoiceItemDetailWsCall
 
+  //method to file upload
+  private fileUploadWSCall(plantType: string, fileJsonBody: any) {
+    this.complaintDIService.postFile(plantType, fileJsonBody).
+      subscribe(res => {
+        if (res.msgType === 'Info') {
+          console.log("files uploaded successfully");
+        } else {
+          this.fileUploadWSCall(plantType, fileJsonBody);
+        }
+      }, err => {
+        console.log(err);
+        this.fileUploadWSCall(plantType, fileJsonBody);
+      });
+  }//end of method
+
   //start method uploadInvoiceItemDetails
-  private uploadInvoiceItemDetails(){
+  private uploadInvoiceItemDetails(totalItems: any[]) {
     //this.deleteInvoiceItemDetailWSCall();
-    this.postInvoiceItemDetailWsCall();
+    this.postInvoiceItemDetailWsCall(totalItems);
   }//end of the method uploadInvoiceItemDetails
 
+  // start method of submitInvReportDIDetDetailWSCall to detail submit webservice calll
+  private submitInvReportDIDetDetailWSCall(invReportDetailJson: any, action: string) {
+    let totalItems: any[] = [];
+    this.complaintDIService.postDetail(invReportDetailJson, this.plantType, action).
+      subscribe(res => {
+        if (res.msgType === 'Info') {
+          console.log(" complain submitted successfully");
+          totalItems = this.getTotalItemDet();
+          if (totalItems.length > 0) {
+            this.uploadInvoiceItemDetails(totalItems);
+          } if (this.fileArr.length > 0) {
+            let fileAutoIdStr: string = '';//taking a var to store files autoId
+            this.fileArr.forEach(fileEl => {
+              fileAutoIdStr = fileAutoIdStr ? (fileAutoIdStr + ',' + fileEl.fileAutoId) : fileEl.fileAutoId;
+            });
+            let fileJsonBody: any = {};
+            fileJsonBody.complaintReferenceNo = invReportDetailJson.complaintReferenceNo;
+            fileJsonBody.complaintDetailsAutoId = parseInt(res.valueSub);
+            fileJsonBody.activityId = this.activityId;
+            fileJsonBody.userId = this.localStorageService.user.userId;
+            fileJsonBody.fileAutoIds = fileAutoIdStr;
+            this.fileUploadWSCall(this.plantType, fileJsonBody);//calling the file ws method
+          }//end of file array check
+          this.onOpenModal(res.value, res.msg);//calling the modal to show msg
+          this.router.navigate([ROUTE_PATHS.RouteComplainDIView]);
+        } else {
+          this.submitInvReportDIDetDetailWSCall(invReportDetailJson, action);
+        }
+
+      },
+        err => {
+          console.log(err);
+          this.submitInvReportDIDetDetailWSCall(invReportDetailJson, action);
+        });
+  }//end of submitInvReportDIDetDetailWSCall method
+
   //start method of submitInvReportDIDetWSCall to submit invReport details
-  private submitInvReportDIDetWSCall(invReportHeaderJson: any, invReportDetailJson: any, action: string){
+  private submitInvReportDIDetWSCall(invReportHeaderJson: any, invReportDetailJson: any, action: string) {
     this.busySpinner = true;
     this.complaintDIService.putHeader(invReportHeaderJson, this.plantType, action).
       subscribe(res => {
         if (res.msgType === 'Info') {
           invReportDetailJson.complaintReferenceNo = res.value;
-          this.complaintDIService.postDetail(invReportDetailJson, this.plantType, action).
-            subscribe(res => {
-              if (res.msgType === 'Info') {
-                console.log(" complain submitted successfully");
-              }
-              this.busySpinner = false;
-              this.onOpenModal(res.value,res.msg);
-            },
-              err => {
-                console.log(err);
-                this.busySpinner = false;
-                this.sessionErrorService.routeToLogin(err._body);
-              });
-        }//end of if of msgType Info
-
+          this.submitInvReportDIDetDetailWSCall(invReportDetailJson, action);
+        } else {
+          this.errorMsgObj.errMsgShowFlag = true;
+          this.errorMsgObj.errorMsg = res.msg;
+          this.busySpinner = false;
+        }
       },
         err => {
           console.log(err);
-          this.busySpinner = false;
-          this.sessionErrorService.routeToLogin(err._body);
+          this.wsErrorCall(err);
         });
   }//end of the method of submitInvReportDIDetWSCall
 
@@ -329,79 +420,129 @@ export class InvestigationReportDiComponent implements OnInit {
     console.log(" SelInvDetails after splice ", this.selectedInvItemDetails);
   }//end of the method deleteSelInvDetFromSelInvDet
 
-
-  //on click investigationReportDISubmit method
-  public investigationReportDISubmit(): void {
-    let invReportHeaderJson: any = {};
-    invReportHeaderJson.lastActivityId = this.activityId;
-    invReportHeaderJson.userId = this.localStorageService.user.userId;
-    invReportHeaderJson.complaintReferenceNo = this.invReportFormGroup.value.complaintReferenceNo;
-    console.log(" invReportHeaderJson =========", invReportHeaderJson);
-    let action: string = "";
-    let invReportDetailJson: any = {};
-    invReportDetailJson.activityId = this.activityId;
-    invReportDetailJson.userId = this.localStorageService.user.userId;
-    console.log("invReportFormGroup: ", this.invReportFormGroup.value);
-    invReportDetailJson.complaintReferenceNo = this.invReportFormGroup.value.complaintReferenceNo;
-    invReportDetailJson.investigationReportDate = this.invReportFormGroup.value.investigationReportDate;
-    invReportDetailJson.sampleCollected = this.invReportFormGroup.value.sampleCollected;
-    invReportDetailJson.sampleCollectedDate = this.invReportFormGroup.value.sampleCollectedDate;
-    invReportDetailJson.siteVisitMade = this.invReportFormGroup.value.siteVisit;
-    invReportDetailJson.siteVisitMadeDate = this.invReportFormGroup.value.siteVisitDt;
-
-    let unloadingEquipment: string = "";
-    this.unloadingEquipmentList.forEach(unloadingEquip => {
-      unloadingEquipment = unloadingEquipment ? (unloadingEquipment + "," + unloadingEquip) : unloadingEquip;
-    });
-    console.log("unloadingEquipment ======== ", unloadingEquipment);
-    invReportDetailJson.unloadingEquipement = unloadingEquipment;
-
-    let lubricantUsed: string = "";
-    this.lubricantUsedList.forEach(lbUsed => {
-      lubricantUsed = lubricantUsed ? (lubricantUsed + "," + lbUsed) : lbUsed;
-    });
-    console.log("lubricantUsed ======== ", lubricantUsed);
-    invReportDetailJson.lubricantUsed = lubricantUsed;
-
-    let layingPosition: string = "";
-    this.layingPositionList.forEach(layPos => {
-      layingPosition = layingPosition ? (layingPosition + "," + layPos) : layPos;
-    });
-    console.log("layingPosition ======== ", layingPosition);
-    invReportDetailJson.layingPosition = layingPosition;
-
-    let jointingType: string = "";
-    this.jointingTypeList.forEach(jType => {
-      jointingType = jointingType ? (jointingType + "," + jType) : jType;
-    });
-    console.log("jointingType ======== ", jointingType);
-    invReportDetailJson.jointingType = jointingType;
-
-    console.log("invReportDetailJson====== ", invReportDetailJson);
-
-    this.submitInvReportDIDetWSCall(invReportHeaderJson,invReportDetailJson,action);//calling the me
-    this.uploadInvoiceItemDetails();
-
-  }//end of method investigationReportDISubmit
-
-  // start method of deleteResErrorMsgOnClick
-  public deleteResErrorMsgOnClick() {
-  }//method to delete error msg
-
   //file upload event  
   public fileChange(event) {
+    let plantType: string = this.localStorageService.user.plantType;
     this.fileData = new FormData();
     this.totalFileSize = 0;
     this.fileList = event.target.files;
+    // console.log("this.fileList.length::",this.fileList.length);
     if (this.fileList.length > 0) {
+      this.busySpinner = true;
       for (let i: number = 0; i < this.fileList.length; i++) {
         let file: File = this.fileList[i];
-        this.fileData.append('uploadFile' + i.toString(), file, file.name);
+        this.fileData.append('uploadFile', file, file.name);
         this.totalFileSize = this.totalFileSize + file.size;
         console.log("this.totalFileSize:::::::::::", this.totalFileSize);
       }//end of for
+      if (this.totalFileSize > this.fileSizeLimit) {
+        this.errorMsgObj.errMsgShowFlag = true;
+        this.errorMsgObj.errorMsg = "File size should be within 100 mb !";
+        this.busySpinner = false;
+      } else {
+        if (this.fileData != undefined) {
+          for (let i: number = 0; i < this.fileList.length; i++) {
+            console.log(" file upload", this.fileData.get('uploadFile'));
+            if (this.fileData.get('uploadFile') != null) {
+              this.formData.append('uploadFile', this.fileData.get('uploadFile'));
+            }
+          }//end of for
+        }//end of if fileData is !undefined
+        this.formData.append('Accept', 'application/json');
+        this.formData.append('accessToken', 'bearer ' + this.localStorageService.user.accessToken);
+        this.formData.append('menuId', 'DEFAULT1');
+        this.formData.append('userId', this.localStorageService.user.userId);
+        // let formDataObj: any = {};
+        // formDataObj = this.formData;
+        this.complaintDIService.postFileInTempTable(plantType, this.formData).
+          subscribe(res => {
+            if (res.msgType === 'Info') {
+              this.busySpinner = false;
+              console.log("file uploaded successfully..");
+              this.fileArr.push({ fileAutoId: res.valueAdv, fileName: res.value, fileUrl: res.valueSub });
+              console.log("this.fileArr:: ", this.fileArr);
+              this.fileInputVariable.nativeElement.value = "";//reset file
+              this.formData = new FormData();
+            } else {
+              this.errorMsgObj.errMsgShowFlag = true;
+              this.errorMsgObj.errorMsg = res.msg;
+              this.formData = new FormData();
+              this.busySpinner = false;
+            }
+          }, err => {
+            console.log(err);
+            this.formData = new FormData();
+            this.wsErrorCall(err);
+          });
+      }
     }//end of if
-  }//end of filechange method  
+  }//end of filechange method 
+
+  // start method of onEditPrevItem
+  public onEditPrevItem(invItemDet: any){
+    let invoiceNo: string = invItemDet.invoiceNo;
+    let itemCode: string = invItemDet.itemNo;
+    console.log(" invoiceNo ====",invoiceNo+" itemCode==== ",itemCode);
+    this.router.navigate([ROUTE_PATHS.RouteComplaintReferenceNoSearch,invoiceNo,itemCode]);
+  }//end method of onEditPrevItem
+
+  //on click investigationReportDISubmit method
+  public investigationReportDISubmit(): void {
+    if (this.invReportFormGroup.valid && this.unloadingEquipmentList.length > 0 && this.lubricantUsedList.length > 0 && this.layingPositionList.length > 0 && this.jointingTypeList.length > 0) {
+      console.log("this.invReportFormGroup.value", this.invReportFormGroup.value);
+      let invReportHeaderJson: any = {};
+      invReportHeaderJson.lastActivityId = this.activityId;
+      invReportHeaderJson.userId = this.localStorageService.user.userId;
+      invReportHeaderJson.complaintReferenceNo = this.invReportFormGroup.value.complaintReferenceNo;
+      console.log(" invReportHeaderJson =========", invReportHeaderJson);
+      let action: string = "";
+      let invReportDetailJson: any = {};
+      invReportDetailJson.activityId = this.activityId;
+      invReportDetailJson.userId = this.localStorageService.user.userId;
+      console.log("invReportFormGroup: ", this.invReportFormGroup.value);
+      invReportDetailJson.complaintReferenceNo = this.invReportFormGroup.value.complaintReferenceNo;
+      invReportDetailJson.investigationReportDate = this.invReportFormGroup.value.investigationReportDate;
+      invReportDetailJson.sampleCollected = this.invReportFormGroup.value.sampleCollected;
+      invReportDetailJson.sampleCollectedDate = this.invReportFormGroup.value.sampleCollectedDate;
+      invReportDetailJson.siteVisitMade = this.invReportFormGroup.value.siteVisit;
+      invReportDetailJson.siteVisitMadeDate = this.invReportFormGroup.value.siteVisitDt;
+
+      let unloadingEquipment: string = "";
+      this.unloadingEquipmentList.forEach(unloadingEquip => {
+        unloadingEquipment = unloadingEquipment ? (unloadingEquipment + "," + unloadingEquip) : unloadingEquip;
+      });
+      console.log("unloadingEquipment ======== ", unloadingEquipment);
+      invReportDetailJson.unloadingEquipement = unloadingEquipment;
+
+      let lubricantUsed: string = "";
+      this.lubricantUsedList.forEach(lbUsed => {
+        lubricantUsed = lubricantUsed ? (lubricantUsed + "," + lbUsed) : lbUsed;
+      });
+      console.log("lubricantUsed ======== ", lubricantUsed);
+      invReportDetailJson.lubricantUsed = lubricantUsed;
+
+      let layingPosition: string = "";
+      this.layingPositionList.forEach(layPos => {
+        layingPosition = layingPosition ? (layingPosition + "," + layPos) : layPos;
+      });
+      console.log("layingPosition ======== ", layingPosition);
+      invReportDetailJson.layingPosition = layingPosition;
+
+      let jointingType: string = "";
+      this.jointingTypeList.forEach(jType => {
+        jointingType = jointingType ? (jointingType + "," + jType) : jType;
+      });
+      console.log("jointingType ======== ", jointingType);
+      invReportDetailJson.jointingType = jointingType;
+
+      console.log("invReportDetailJson====== ", invReportDetailJson);
+
+      this.submitInvReportDIDetWSCall(invReportHeaderJson, invReportDetailJson, action);//calling the me
+    } else {
+      this.errorMsgObj.errMsgShowFlag = true;
+      this.errorMsgObj.errorMsg = 'Please fillout All Data';
+    }
+  }//end of method investigationReportDISubmit
 
   //cancel method
   public onCancel(): void {
@@ -557,14 +698,20 @@ export class InvestigationReportDiComponent implements OnInit {
     this.investigationReportInvoiceDetailsService.complaintStatus = this.complaintStatus;
     let items: any = [];
     items = this.selectedInvItemDetails;
-    let selItemsDet : any =  {};
-      selItemsDet.items = items;
+    let selItemsDet: any = {};
+    selItemsDet.items = items;
     this.investigationReportInvoiceDetailsService.selectedItemDetails = selItemsDet;
   }//end of method onOpenModal
 
   // start method of onCloseInvoiceNo
-  public onCloseInvoiceNo(selectedInvDet: any){
+  public onCloseInvoiceNo(selectedInvDet: any) {
     this.deleteSelInvDetFromSelInvDetArr(selectedInvDet);
   }//end of the method of onCloseInvoiceNo
+
+  // method to delete error msg
+  public deleteResErrorMsgOnClick() {
+    this.errorMsgObj.errMsgShowFlag = false;
+    this.errorMsgObj.errorMsg = "";
+  }//end of method to delete error msg
 
 }//end of class

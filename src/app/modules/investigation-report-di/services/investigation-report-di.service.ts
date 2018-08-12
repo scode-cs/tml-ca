@@ -204,6 +204,15 @@ export class InvestigationReportDIDataService {
     return Observable.throw(error);
   }
 
+  public getSelectComplaintType() {
+    let actionUrl = AppUrlsConst.CMP_REG_COMPLAINT_TYPE_USER_URL;
+    this.headers = this.configService();
+
+    return this.http.get(actionUrl, { headers: this.headers })
+      .map((res: Response) => { return res.json() })
+      .catch((error: Response) => { return Observable.throw(error) });
+  }
+
   //get comp ref no list for preli investigation report
 
   //method to get preli view details for edit/update

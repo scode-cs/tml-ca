@@ -44,7 +44,7 @@ export class NgbdComplaintReferenceNoModalComponent implements OnInit {
 
   // start method onRedirectComplaintReferenceNoSearch for redirecting to complaint ref no search page
   onRedirectComplaintReferenceNoSearch() {
-    this.router.navigate([ROUTE_PATHS.RouteComplaintReferenceNoSearch]);
+    this.router.navigate([ROUTE_PATHS.RouteComplaintReferenceNoSearch,'','']);
     this.activeModal.close('Close click');
   }//end of the method onRedirectComplaintReferenceNoSearch
 
