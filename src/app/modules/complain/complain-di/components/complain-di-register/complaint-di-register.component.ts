@@ -117,7 +117,9 @@ export class ComplaintDIRegisterComponent implements OnInit {
     this.initform();
     this.getRouteParam();//to get route param
     this.invReportTable = new ComplaintDIConfigModel().prevComplainHeader;//getting prev complain report details  
+
     this.getItemsVal("ispl");//get item header by ws call   
+
     this.getAllDropDownVal();//ws call to get all dropdown val
     this.getDepartmentNameValues();//method to get department name value
     this.getSystemDate();//method to get system date
@@ -128,6 +130,9 @@ export class ComplaintDIRegisterComponent implements OnInit {
     this.getInvItemGridDet();//method to get inv item grid
     this.complaintQtyErrorCheck();//to check complain qty error
     this.complaintRegisterFormGroup.controls["loggedBy"].setValue(this.empInfo.empName);//set emp name to control
+    this.complaintRegisterFormGroup.controls['modeId'].valueChanges.subscribe((rs) => {
+      console.log('got value change', rs);
+    })
   }//end of ngOnInit
 
   /**
@@ -293,14 +298,20 @@ export class ComplaintDIRegisterComponent implements OnInit {
     //getting all values of ReceiptMode 
     this.complaintDIRegisterDataService.getSelectValReceiptMode().
       subscribe(res => {
-        this.modeOfReceiptDropDownList = res.details;
-
-        for (let receipt of this.modeOfReceiptDropDownList) {
-          if (receipt.Key == "") {
-            this.complaintRegisterFormGroup.controls["modeId"].setValue(receipt.Key);
-            break;
-          }//end if
-        }//end for
+        this.modeOfReceiptDropDownList = JSON.parse(JSON.stringify(res.details));
+        // this.modeOfReceiptDropDownList = this.modeOfReceiptDropDownList.filter((e) => {
+        //   return e.Key != "";
+        // })
+        this.modeOfReceiptDropDownList;
+        // https://github.com/santanucst/tml-ca/issues/121   
+        if (!this.invData || !this.invData.modeId) {
+          for (let receipt of this.modeOfReceiptDropDownList) {
+            if (receipt.Key == "") {
+              this.complaintRegisterFormGroup.controls["modeId"].setValue(receipt.Key);
+              break;
+            }//end if
+          }//end for
+        }
         this.busySpinner = false;
       },
         err => {
@@ -313,12 +324,16 @@ export class ComplaintDIRegisterComponent implements OnInit {
     this.complaintDIRegisterDataService.getSelectComplaintType().
       subscribe(res => {
         this.complaintTypeDropDownList = res.details;
+        //https://github.com/santanucst/tml-ca/issues/121
+        
+        if (!this.invData || !this.invData.complaintTypeId) {
         for (let cmpType of this.complaintTypeDropDownList) {
           if (cmpType.Key == "") {
             this.complaintRegisterFormGroup.controls["complaintTypeId"].setValue(cmpType.Key);
             break;
           }//end if
         }//end for
+        }
         this.busySpinner = false;
       },
         err => {
@@ -662,7 +677,7 @@ export class ComplaintDIRegisterComponent implements OnInit {
           if (this.fileArr.length > 0) {
             let fileAutoIdStr: string = '';//taking a var to store files autoId
             this.fileArr.forEach(fileEl => {
-              fileAutoIdStr = fileAutoIdStr? (fileAutoIdStr + ',' + fileEl.fileAutoId) : fileEl.fileAutoId;
+              fileAutoIdStr = fileAutoIdStr ? (fileAutoIdStr + ',' + fileEl.fileAutoId) : fileEl.fileAutoId;
             });
             let fileJsonBody: any = {};
             fileJsonBody.complaintReferenceNo = complainDetailJson.complaintReferenceNo;
@@ -670,9 +685,9 @@ export class ComplaintDIRegisterComponent implements OnInit {
             fileJsonBody.activityId = this.activityId;
             fileJsonBody.userId = this.localStorageService.user.userId;
             fileJsonBody.fileAutoIds = fileAutoIdStr;
-            this.fileUploadWSCall(plantType,fileJsonBody);//calling the file ws method
+            this.fileUploadWSCall(plantType, fileJsonBody);//calling the file ws method
           }//end of file array check
-          this.onOpenModal(complainDetailJson.complaintReferenceNo,res.msg);//calling the modal to show msg
+          this.onOpenModal(complainDetailJson.complaintReferenceNo, res.msg);//calling the modal to show msg
           this.router.navigate([ROUTE_PATHS.RouteHome]);
         } else {
           this.complaintDetailsSubmitWSCall(complainDetailJson, plantType, action);
@@ -700,18 +715,18 @@ export class ComplaintDIRegisterComponent implements OnInit {
   }//end of method
 
   //method to file upload
-  private fileUploadWSCall(plantType: string,fileJsonBody: any) {
-    this.complaintDIService.postFile(plantType,fileJsonBody).
-    subscribe(res=>{
-      if (res.msgType === 'Info') {
-        console.log("files uploaded successfully");
-      } else {
+  private fileUploadWSCall(plantType: string, fileJsonBody: any) {
+    this.complaintDIService.postFile(plantType, fileJsonBody).
+      subscribe(res => {
+        if (res.msgType === 'Info') {
+          console.log("files uploaded successfully");
+        } else {
+          this.fileUploadWSCall(plantType, fileJsonBody);
+        }
+      }, err => {
+        console.log(err);
         this.fileUploadWSCall(plantType, fileJsonBody);
-      }
-    },err=>{
-      console.log(err);
-      this.fileUploadWSCall(plantType, fileJsonBody);
-    });
+      });
   }//end of method
 
   //file upload event  
@@ -773,46 +788,57 @@ export class ComplaintDIRegisterComponent implements OnInit {
   }//end of filechange method 
   //submit method
   public onComplainSubmit(): void {
-    this.busySpinner = true;
-    console.log("form value::", this.complaintRegisterFormGroup.value);
-    let complainHeaderJson: any = {};
-    complainHeaderJson.lastActivityId = this.activityId;
-    complainHeaderJson.userId = this.localStorageService.user.userId;
-    console.log(" complainHeaderJson =========", complainHeaderJson);
-    let plantType: string = this.localStorageService.user.plantType;
-    let action: string = "reg_add";
-    let complainDetailJson: any = {};
-    complainDetailJson.activityId = this.activityId;
-    complainDetailJson.modeId = this.complaintRegisterFormGroup.value.modeId;
-    complainDetailJson.siteVisit = this.siteVisitValue;
-    complainDetailJson.siteVisitByDepartmentName = this.complaintRegisterFormGroup.value.siteVisitByDepartmentName;
-    complainDetailJson.complaintReferenceDt = this.complaintRegisterFormGroup.value.complaintReferenceDt;
-    complainDetailJson.loggedOnDt = this.complaintRegisterFormGroup.value.loggedOnDt;
-    complainDetailJson.contactPersonName = this.complaintRegisterFormGroup.value.contactPersonName;
-    complainDetailJson.contactPersonPhoneNo = this.complaintRegisterFormGroup.value.contactPersonPhoneNo;
-    complainDetailJson.contactPersonEmailId = this.complaintRegisterFormGroup.value.contactPersonEmailId;
-    complainDetailJson.loggedBy = this.empInfo.empId;
-    complainDetailJson.complaintTypeId = parseInt(this.complaintRegisterFormGroup.value.complaintTypeId);
-    complainDetailJson.natureOfComplaintId = parseInt(this.complaintRegisterFormGroup.value.natureOfComplaintId);
-    complainDetailJson.complaintDetails = this.complaintRegisterFormGroup.value.complaintDetails;
-    complainDetailJson.custCode = this.custInfo.custCode;
-    complainDetailJson.userId = this.localStorageService.user.userId;
-    console.log(" complainDetailJson =========", complainDetailJson);
-    this.complaintDIService.putHeader(complainHeaderJson, plantType, action).
-      subscribe(res => {
-        if (res.msgType === 'Info') {
-          complainDetailJson.complaintReferenceNo = res.value;
-          this.complaintDetailsSubmitWSCall(complainDetailJson, plantType, action);//details submit ws call 
-        } else {
-          this.errorMsgObj.errMsgShowFlag = true;
-          this.errorMsgObj.errorMsg = res.msg;
-          this.busySpinner = false;
-        }
-      },
-        err => {
-          console.log(err);
-          this.wsErrorCall(err);
-        });
+
+    if (this.complaintRegisterFormGroup.valid) {
+      this.busySpinner = true;
+      console.log("form value::", this.complaintRegisterFormGroup.value);
+      let complainHeaderJson: any = {};
+      complainHeaderJson.lastActivityId = this.activityId;
+      complainHeaderJson.userId = this.localStorageService.user.userId;
+      console.log(" complainHeaderJson =========", complainHeaderJson);
+      let plantType: string = this.localStorageService.user.plantType;
+      let action: string = "reg_add";
+      let complainDetailJson: any = {};
+      complainDetailJson.activityId = this.activityId;
+      complainDetailJson.modeId = this.complaintRegisterFormGroup.value.modeId;
+      complainDetailJson.siteVisit = this.siteVisitValue;
+      complainDetailJson.siteVisitByDepartmentName = this.complaintRegisterFormGroup.value.siteVisitByDepartmentName;
+      complainDetailJson.complaintReferenceDt = this.complaintRegisterFormGroup.value.complaintReferenceDt;
+      complainDetailJson.loggedOnDt = this.complaintRegisterFormGroup.value.loggedOnDt;
+      complainDetailJson.contactPersonName = this.complaintRegisterFormGroup.value.contactPersonName;
+      complainDetailJson.contactPersonPhoneNo = this.complaintRegisterFormGroup.value.contactPersonPhoneNo;
+      complainDetailJson.contactPersonEmailId = this.complaintRegisterFormGroup.value.contactPersonEmailId;
+      complainDetailJson.loggedBy = this.empInfo.empId;
+      complainDetailJson.complaintTypeId = parseInt(this.complaintRegisterFormGroup.value.complaintTypeId);
+      complainDetailJson.natureOfComplaintId = parseInt(this.complaintRegisterFormGroup.value.natureOfComplaintId);
+      complainDetailJson.complaintDetails = this.complaintRegisterFormGroup.value.complaintDetails;
+      complainDetailJson.custCode = this.custInfo.custCode;
+      complainDetailJson.userId = this.localStorageService.user.userId;
+      console.log(" complainDetailJson =========", complainDetailJson);
+      this.complaintDIService.putHeader(complainHeaderJson, plantType, action).
+        subscribe(res => {
+          if (res.msgType === 'Info') {
+            complainDetailJson.complaintReferenceNo = res.value;
+            this.complaintDetailsSubmitWSCall(complainDetailJson, plantType, action);//details submit ws call 
+          } else {
+            this.errorMsgObj.errMsgShowFlag = true;
+            this.errorMsgObj.errorMsg = res.msg;
+            this.busySpinner = false;
+          }
+        },
+          err => {
+            console.log(err);
+            this.wsErrorCall(err);
+          });
+
+    } else {
+      this.errorMsgObj.errMsgShowFlag = true;
+      this.errorMsgObj.errorMsg = 'Please fillout All Data';
+    }
+
+
+
+
   }//end of method complainregDiSubmit  
 
   //start method onKeyupComplaintQty
