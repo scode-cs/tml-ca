@@ -163,7 +163,9 @@ export const AppUrlsConst: any = {
     COMPLAIN_FILE_DELETE_URL: URL_PATH + 'api/complaint/modfile',//to delete file
     COMPLAIN_FILE_UPLOAD_TEMP_TABLE_URL: URL_PATH + 'api/complaint/uploadtempfile',//upload file in temp table
     COMPLAIN_FILE_UPLOAD_URL: URL_PATH + 'api/complaint/uploadfile',//to upload file
-    COMPLAIN_FILE_VIEW_URL: URL_PATH + 'api/complaintview/viewfiledetail'//to view file
+    COMPLAIN_FILE_VIEW_URL: URL_PATH + 'api/complaintview/viewfiledetail',//to view file
+    COMPLAINT_HEADER_DATA_COUNT: URL_PATH + 'api/complaintview/viewcomplaintheadercount'//header data count
+    
 }
 
 export const WebServiceConst: any = {
