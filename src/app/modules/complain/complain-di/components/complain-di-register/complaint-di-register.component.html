@@ -305,9 +305,9 @@
             <label for="contactPersonEmailId">Email Id</label>
             <input type="text" id="contactPersonEmailId" class="form-control" formControlName="contactPersonEmailId" />
             <!-- [maxlength]="contactPersonEmailIdLength"  -->
-            <div class="alert alert-danger" *ngIf="complaintRegisterFormGroup.get('contactPersonEmailId').hasError('required') && complaintRegisterFormGroup.get('contactPersonEmailId').touched && !complaintRegisterFormGroup.get('contactPersonEmailId').hasError('email') ">
+            <!-- <div class="alert alert-danger" *ngIf="complaintRegisterFormGroup.get('contactPersonEmailId').hasError('required') && complaintRegisterFormGroup.get('contactPersonEmailId').touched && !complaintRegisterFormGroup.get('contactPersonEmailId').hasError('email') ">
               <i class="fa fa-exclamation-circle"></i> Provide valid email id
-            </div>
+            </div> -->
             <div class="alert alert-danger" *ngIf="complaintRegisterFormGroup.get('contactPersonEmailId').hasError('email') && complaintRegisterFormGroup.get('contactPersonEmailId').touched">
               <i class="fa fa-exclamation-circle"></i> Provide valid email id
             </div>
