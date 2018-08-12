@@ -9,7 +9,7 @@
         </ol>
     </div>
     <!--start process flow div-->
-    <app-flowmangement [complainNo]="routeParam.complaintReferenceNo"  [complianStatus]="routeParam.complaintStatus" [pageType]="'add'"></app-flowmangement>
+    <app-flowmangement [complainNo]="routeParam.complaintReferenceNo" [complianStatus]="routeParam.complaintStatus" [pageType]="'add'"></app-flowmangement>
     <!-- end div of process flow  -->
     <!--start form for rcaDIAddEditFormGroup-->
     <form [formGroup]="rcaDIAddEditFormGroup" autocomplete="off">
@@ -18,8 +18,7 @@
             <!--start div complaint reference no -->
             <div *ngIf="routeParam.complaintReferenceNo" class="form-group col-xs-12 col-sm-6 col-md-6 col-lg-4">
                 <label for="complaintReferenceNo">Complaint Reference No</label>
-                <input type="text" class="form-control" formControlName="complaintReferenceNo" readonly="readonly"
-                />
+                <input type="text" class="form-control" formControlName="complaintReferenceNo" readonly="readonly" />
             </div>
             <!--end of div for complaint reference no-->
 
@@ -34,34 +33,32 @@
             <div class="form-group col-xs-12 col-sm-6 col-md-6 col-lg-4">
                 <label>RCA Details</label>
                 <label class="red-asterick">*</label>
-                <textarea rows="5" formControlName="rcaAddEditDetails" class="form-control hide-horizontal-scroll"
-                    required></textarea>
+                <textarea rows="5" formControlName="rcaAddEditDetails" class="form-control hide-horizontal-scroll" required></textarea>
                 <div class="alert alert-danger" *ngIf="rcaDIAddEditFormGroup.get('rcaAddEditDetails').hasError('required') && rcaDIAddEditFormGroup.get('rcaAddEditDetails').touched">
                     <i class="fa fa-exclamation-circle"></i>RCA Details is required!
                 </div>
             </div>
             <!-- end of div for rca details -->
 
+            <!--start fle upload div-->
+            <div class="form-group col-xs-12 col-sm-6 col-md-6 col-lg-4">
+                <label for="imageFile">File(s) Upload</label>
+                <label class="red-coloured-label">(max size 100 mb)</label>
+                <input type="file" #fileInput (change)="fileChange($event)" />
+            </div>
+            <!--end of file upload div-->
+
             <!--files-->
             <!--start div for show files-->
-            <!-- <div class="form-group col-xs-12 col-sm-6 col-md-6 col-lg-4" *ngIf="complaintReferenceNo && selectedComplaintReferenceDetails.files?.length!=0">
+            <div class="form-group col-xs-12 col-sm-6 col-md-6 col-lg-4" *ngIf="fileArr?.length!=0">
                 <label>Uploaded file(s)</label>
-                <div *ngFor="let file of selectedComplaintReferenceDetails.files">
+                <div *ngFor="let file of fileArr">
                     <a href="{{file.fileUrl}}" target="_blank">{{file.fileName}}</a>
                     <br/>
                 </div>
-            </div> -->
+            </div>
             <!--end div for show files-->
 
-            <!--start fle upload div-->
-            <div class="form-group col-xs-12 col-sm-6 col-md-6 col-lg-4">
-                <div class="form-group col-xs-12 col-sm-12 col-md-12 col-lg-12" style="padding-left: 0px;">
-                    <label for="imageFile">File(s) Upload</label>
-                    <label class="red-coloured-label">(max size 100 mb)</label>
-                    <input type="file" (change)="fileChangeRCADIAddEdit($event)" multiple/>
-                </div>
-            </div>
-            <!--end of file upload div-->
             <!-- start div for Submit  and Cancel Button-->
             <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
                 <!-- start div for Submit Button-->
