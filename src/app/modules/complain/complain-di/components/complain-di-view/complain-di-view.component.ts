@@ -339,7 +339,8 @@ export class ComplainDIViewComponent implements OnInit {
       }
     }
 
-    this.getcomplaindetails();
+    this.getcount();
+
   }
 
   public getComplaintDetailsOnSelect(complaintDetail: any, viewParam?: string) {
