@@ -6,6 +6,7 @@ import { Subscription } from 'rxjs/Subscription';//to get route param
 import { ROUTE_PATHS } from '../../../../router/router-paths';
 import { LocalStorageService } from "../../../../shared/services/local-storage.service";
 import { ComplaintDIRegisterDataService } from "../../../../complain/complain-di/services/complaint-di-register-data.service";
+import { InvestigationReportDIDataService } from "../../../services/investigation-report-di.service";
 import { InvestigationReportInvoiceDetailsService } from "../../../services/investigation-report-invoice-details.service";
 import { SessionErrorService } from "../../../../shared/services/session-error.service";
 
@@ -45,20 +46,24 @@ export class ComplaintReferenceNoSearchComponent implements OnInit {
   private natureCmpName: string = "";
   private complaintTypeId: string;
   public complaintDetailsEnable: boolean = false;
+  public invoiceNo: string = "";
+  public itemCode: string = "";
 
   //for busy spinner
   public busySpinner: boolean = true;
 
   constructor(
-    private formBuilder: FormBuilder,
+    private activatedroute: ActivatedRoute,
     private router: Router,
     private complaintDIRegisterDataService: ComplaintDIRegisterDataService,
     private sessionErrorService: SessionErrorService,
+    private investigationReportDIDataService: InvestigationReportDIDataService,
     private investigationReportInvoiceDetailsService: InvestigationReportInvoiceDetailsService
   ) {
   }//end of constructor
 
   ngOnInit(): void {
+    this.getRouteParam();
     this.setInvDetFromInvDataService();
     this.initform();
     this.getItemsHeader("ispl");
@@ -101,11 +106,11 @@ export class ComplaintReferenceNoSearchComponent implements OnInit {
     this.salesOffice = this.investigationReportInvoiceDetailsService.salesOffice;
     this.compRefNo = this.investigationReportInvoiceDetailsService.compRefNo;
     this.complaintStatus = this.investigationReportInvoiceDetailsService.complaintStatus;
-    let selItmDet: any = {};
-    selItmDet = this.investigationReportInvoiceDetailsService.selectedItemDetails;
-    let items: any[] = [];
-    items = selItmDet.items;
-    this.selectedItemGrid(items);
+    // let selItmDet: any = {};
+    // selItmDet = this.investigationReportInvoiceDetailsService.selectedItemDetails;
+    // let items: any[] = [];
+    // items = selItmDet.items;
+    // this.selectedItemGrid(items);
   }//end of the method of setInvDetFromInvDataService
 
   //start method of selectedItemGrid
@@ -115,6 +120,16 @@ export class ComplaintReferenceNoSearchComponent implements OnInit {
       this.selectedInvDet.push(selItm);
     });
   }//end of the method selectedItemGrid
+
+  //start method getRouteParam to get route parameter
+  private getRouteParam() {
+    let routeSubscription: Subscription;
+    routeSubscription = this.activatedroute.params.subscribe(params => {
+      this.invoiceNo = params.invoiceNo ? params.invoiceNo : '';
+      this.itemCode = params.itemCode ? params.itemCode : '';
+    });
+    console.log(" invoiceNo ====",this.invoiceNo+" itemCode==== ",this.itemCode);
+  }//end of the method
 
 
   //start method getItemsVal
@@ -135,7 +150,8 @@ export class ComplaintReferenceNoSearchComponent implements OnInit {
   }//end method of getItemsVal
 
   private getCustomerInvDet() {
-    this.busySpinner = true;
+    if(!this.invoiceNo && !this.itemCode) {
+      this.busySpinner = true;
     this.complaintDIRegisterDataService.getCustomerInvDet(this.custCode).
       subscribe(res => {
         if (res.msgType === "Info") {
@@ -166,6 +182,7 @@ export class ComplaintReferenceNoSearchComponent implements OnInit {
         this.busySpinner = false;
         this.sessionErrorService.routeToLogin(err._body);
       });
+    }//end of if
   }//end of method 
 
   // start method setAllInvtDetails to push allInvDet to allInvDetData array
@@ -258,7 +275,7 @@ export class ComplaintReferenceNoSearchComponent implements OnInit {
   private getAllDropDownVal() {
     this.busySpinner = true;
     //getting all values of complaintType
-    this.complaintDIRegisterDataService.getSelectComplaintType().
+    this.investigationReportDIDataService.getSelectComplaintType().
       subscribe(res => {
         this.complaintTypeDropDownList = res.details;
         for (let cmpType of this.complaintTypeDropDownList) {
