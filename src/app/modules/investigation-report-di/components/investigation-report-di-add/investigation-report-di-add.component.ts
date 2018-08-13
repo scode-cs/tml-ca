@@ -1,22 +1,15 @@
 import { Component, OnInit, Input, Output, EventEmitter, ViewChild } from '@angular/core';
 import { FormGroup, FormBuilder, Validators, FormControl } from '@angular/forms';
-import { ToastService } from "../../../home/services/toast-service";
 import { Router, ActivatedRoute } from '@angular/router';
 import { NgbModal, NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { ROUTE_PATHS } from '../../../router/router-paths';
-import { Observable } from 'rxjs/Observable';
-import 'rxjs/add/observable/forkJoin';//new add for forkjoin
-import { Subject } from 'rxjs/Subject';
 import { Subscription } from 'rxjs/Subscription';//to get route param
 import { LocalStorageService } from '../../../shared/services/local-storage.service';
-import { InvestigationReportDIDataService } from '../../services/investigation-report-di.service';
 import { ComplaintDIService } from '../../../shared/services/complaint-di.service';
 import { NgbdModalComponent } from '../../../widget/modal/components/modal-component';
-import { AppUrlsConst, WebServiceConst } from '../../../app-config';
 import { DatePipe } from '@angular/common';
 import { SessionErrorService } from '../../../shared/services/session-error.service';
 import { NgbdComplaintReferenceNoModalComponent } from './complaint-reference-no-modal/complaint-reference-no-modal.component';
-import { DIPolygonModel } from '../../../shared/components/process-flow/complain-di-polygon.model';
 import { InvestigationReportDIConfigModel } from '../../models/investigation-report-di-config.model';
 import { InvestigationDataModel } from '../../models/investigation-data-model';
 import { InvestigationReportInvoiceDetailsService } from "../../services/investigation-report-invoice-details.service";
@@ -35,12 +28,12 @@ export class InvestigationReportDiComponent implements OnInit {
   private formData: FormData = new FormData();
   private fileData: FormData;
   public fileList: FileList;
-
-  public title: string = 'Add Investigation Report';//set the title;
-
+ 
   //activity Id for complain register
+  private plantType: string = this.localStorageService.user.plantType;
   private activityId: number = 40;
-
+  
+  public title: string = 'Add Investigation Report';//set the title;
   public invReportTable: any[] = [];//to store prev inv report
   public itemGridTable: any[] = [];//to store item grid
   public complaintStatus: number;//to fetch complaint status from route
@@ -61,35 +54,19 @@ export class InvestigationReportDiComponent implements OnInit {
   //creating a FormGroup for Investigation Report
   public invReportFormGroup: FormGroup;
   public complaintReferenceNo: string;//to get complaint ref no from html and send it as a parameter
-
   //busySpinner 
   public busySpinner: boolean = true;
-
-  public prevInvReportShowFlag: boolean = false;
-
-  public complaintTypeDropDownList: any[] = [];
-  public natureOfComDropDownList: any[] = [];
-
-
   //variable used for radio button
   public invReportVar: any = { siteVisitMadeValue: '', sampleCollectedValue: '' };
+  public invRejectReason: string = '';//taking a var to show reject reason
 
-  public resMsgType: string = "Info";//for showing error msg in html page
-  public errorConst: string = "Error";//error constant
-  public infoConstant: string = "Info";//info constant
-  public resErrorMsg: string;
-  //for file
-  private fileActivityId: number = this.localStorageService.appSettings.preliminaryInvestigationActivityId;//to get uploaded file for DI edit
-  private plantType: string = this.localStorageService.user.plantType;
   constructor(
     private activatedroute: ActivatedRoute,
     private router: Router,
     private complaintDIService: ComplaintDIService,
     private localStorageService: LocalStorageService,
-    private investigationReportDIDataService: InvestigationReportDIDataService,
     private investigationReportInvoiceDetailsService: InvestigationReportInvoiceDetailsService,
     private modalService: NgbModal,//modal
-    private formBuilder: FormBuilder,
     private sessionErrorService: SessionErrorService,
     private datePipe: DatePipe//for date
   ) {
@@ -97,9 +74,9 @@ export class InvestigationReportDiComponent implements OnInit {
 
   ngOnInit(): void {
     this.initform();
-    this.getRouteParam();
-    this.getSystemDate();
-    this.getInvestigationViewDetailsWSCall();
+    this.getRouteParam();       
+    this.getPreviousInvHistory();
+    // error call of getPreviousInvHistory() => this.getInvestigationViewDetailsWSCall();
     this.getInvItemGridDet();//method to get inv item grid
     this.invReportTable = new InvestigationReportDIConfigModel().prevInvReportHeader;
     this.itemGridTable = new InvestigationReportDIConfigModel().invItemGridHeader;
@@ -115,9 +92,9 @@ export class InvestigationReportDiComponent implements OnInit {
   initform() {
     this.invReportFormGroup = new FormGroup({
       complaintReferenceNo: new FormControl(''),
-      siteVisit: new FormControl('', Validators.required),
+      siteVisit: new FormControl({ value: 'N' }, Validators.required),
       siteVisitDt: new FormControl(''),
-      sampleCollected: new FormControl('', Validators.required),
+      sampleCollected: new FormControl({ value: 'N' }, Validators.required),
       sampleCollectedDate: new FormControl(''),
       investigationReportDate: new FormControl(''),
       customerCode: new FormControl(''),
@@ -153,9 +130,9 @@ export class InvestigationReportDiComponent implements OnInit {
       let items: any = [];
       items = selItemsDet.items;
       console.log(" items ==================== ", items);
-      this.setSelectItemsGrid(items);
-      // //for setting selected items grid row
-      // this.setSelectItemsGrid(selItemsDet);
+      if(items.length > 0){
+        this.setSelectItemsGrid(items);
+      }//end of if
     }//end of if
   }//end of method
 
@@ -165,15 +142,14 @@ export class InvestigationReportDiComponent implements OnInit {
     selItems.forEach(selItm => {
       this.selectedInvItemDetails.push(selItm);
     });
-
     console.log(" this.selectedInvItemDetails ======", this.selectedInvItemDetails);
   }//end method of setSelectItemsGrid
 
-  //method to get investigation report details by service call
-  private getInvestigationViewDetailsWSCall() {
+  // TODO: SUSMITA
+  private getPreviousInvHistory() {
     // let pageCompStatus: number = 40;
-    let prevCompStatus: number = 10;
-    this.complaintDIService.getComplainViewDetails(this.complaintReferenceNo, prevCompStatus).
+    let cmpStatus: number = 40;
+    this.complaintDIService.getComplainViewDetails(this.complaintReferenceNo, cmpStatus).
       subscribe(res => {
         //console.log("res of ref det::::",res);
         if (res.msgType === "Info") {
@@ -181,10 +157,38 @@ export class InvestigationReportDiComponent implements OnInit {
           this.invReportDetails = invReportDeatilsJson;
           console.log("res of inv Report Deatils::::", this.invReportDetails);
           this.invReportIndex = this.invReportDetails ? this.invReportDetails.length - 1 : 0;
-          let pageActivityId: number = 10;
+          // set form value
+          this.setFormValue();
+          let pageActivityId: number = 40;
           let complaintDetailsAutoId: number = this.invReportDetails[this.invReportIndex].complaintDetailAutoId;
+          // TODO: Item for previous 
           this.getInvoiceItemDetailWSCall(this.complaintReferenceNo, pageActivityId, complaintDetailsAutoId);
-          //this.setFormValue();
+        } else {
+          // this.busySpinner = false;
+          this.getComplainViewDetailsWSCall();
+        }//end of else if
+      },
+        err => {
+          console.log(err);
+          this.getComplainViewDetailsWSCall();
+        });
+  }//end of method 
+
+  //method to get complain details by service call
+  private getComplainViewDetailsWSCall() {
+    this.getSystemDate();//to get system date and set it to investigation report date
+    let prevCompStatus: number = 10;
+    this.complaintDIService.getComplainViewDetails(this.complaintReferenceNo, prevCompStatus).
+      subscribe(res => {
+        console.log("res of reg view det::::",res);
+        if (res.msgType === "Info") {
+          let invReportDeatilsJson: any = JSON.parse(res.mapDetails);
+          let regDetails = invReportDeatilsJson;
+          console.log("Reg DTL::::", regDetails);
+          let regLastIndex = regDetails ? regDetails.length - 1 : 0;
+          let pageActivityId: number = 10;
+          let complaintDetailsAutoId: number = regDetails[regLastIndex].complaintDetailAutoId;
+          this.getInvoiceItemDetailWSCall(this.complaintReferenceNo, pageActivityId, complaintDetailsAutoId);
         } else {
           this.busySpinner = false;
         }//end of else if
@@ -196,29 +200,6 @@ export class InvestigationReportDiComponent implements OnInit {
         });
   }//end of method
 
-  //method to get all values from ComplaintDIRegisterDataService  
-  private getAllDropDownVal() {
-    this.busySpinner = true;
-    //getting all values of complaintType
-    this.investigationReportDIDataService.getSelectComplaintType().
-      subscribe(res => {
-        this.complaintTypeDropDownList = res.details;
-        for (let cmpType of this.complaintTypeDropDownList) {
-          // if (cmpType.Key == "") {
-          //   this.complaintRegisterFormGroup.controls["complaintTypeId"].setValue(cmpType.Key);
-          //   break;
-          // }//end if
-        }//end for
-        this.busySpinner = false;
-      },
-      err => {
-        console.log(err);
-        this.busySpinner = false;
-        this.sessionErrorService.routeToLogin(err._body);
-      });
-
-  }//end method getAllDropDownVal
-
   //start method getInvoiceItemDetailWSCall to get item details
   private getInvoiceItemDetailWSCall(complaintReferenceNo: string, pageActivityId: number, complaintDetailsAutoId: number) {
     this.busySpinner = true;
@@ -229,8 +210,6 @@ export class InvestigationReportDiComponent implements OnInit {
           this.invItemDetails = invItemDeatilsJson;
           this.busySpinner = false;
           console.log("item details =========.........>>>>>>>>>", this.invItemDetails);
-          this.invReportFormGroup.controls['customerCode'].setValue(this.invItemDetails[0].customerCode);
-          this.invReportFormGroup.controls['customerName'].setValue(this.invItemDetails[0].customerName);
         } else {
           this.busySpinner = false;
         }
@@ -246,24 +225,32 @@ export class InvestigationReportDiComponent implements OnInit {
   private setFormValue() {
     let formData: any = this.invReportDetails[this.invReportIndex];
     this.invReportFormGroup.controls['complaintReferenceNo'].setValue(formData.complaintReferenceNo);
-    this.invReportVar.siteVisitMadeValue = formData.siteVisit;
-    this.invReportFormGroup.controls['siteVisit'].setValue(formData.siteVisit);
+    this.invReportVar.siteVisitMadeValue = formData.siteVisitMade;
+    this.invReportFormGroup.controls['siteVisit'].setValue(formData.siteVisitMade);
     if (formData.siteVisit === 'Y') {
       this.invReportFormGroup.controls['siteVisitDt'].setValue(this.datePipe.transform(formData.siteVisitDt, 'yyyy-MM-dd'));
-      this.invReportFormGroup.controls['siteVisitDt'].setValidators(Validators.required);
+      // this.invReportFormGroup.controls['siteVisitDt'].setValidators(Validators.required);
     }
     this.invReportVar.sampleCollectedValue = formData.sampleCollected;
     this.invReportFormGroup.controls['sampleCollected'].setValue(formData.sampleCollected);
     if (formData.sampleCollected === 'Y') {
       this.invReportFormGroup.controls['sampleCollectedDate'].setValue(this.datePipe.transform(formData.sampleCollectedDate, 'yyyy-MM-dd'));
-      this.invReportFormGroup.controls['sampleCollectedDate'].setValidators(Validators.required);
+      // this.invReportFormGroup.controls['sampleCollectedDate'].setValidators(Validators.required);
     }
-
     if (formData.investigationReportDate) {
       this.invReportFormGroup.controls['investigationReportDate'].setValue(this.datePipe.transform(formData.investigationReportDate, 'dd-MM-yyyy'));
-    } else {
-      this.invReportFormGroup.controls['investigationReportDate'].setValue(formData.investigationReportDate);
-    }//end of else of inv report date value
+    }
+    if(formData.customerCode) {      
+      this.invReportFormGroup.controls['customerCode'].setValue(formData.customerCode);
+    }
+    if(formData.customerName){      
+      this.invReportFormGroup.controls['customerName'].setValue(formData.customerName);
+    }
+    if(formData.investigationReportCancelRemarks) {
+      this.invRejectReason = formData.investigationReportCancelRemarks;//set the reject reason
+    }else{
+      this.invRejectReason = "";
+    }
   }//end method setFormValue
 
   //onOpenModal for opening modal from modalService
@@ -272,25 +259,6 @@ export class InvestigationReportDiComponent implements OnInit {
     modalRef.componentInstance.modalTitle = 'Complaint Reference Number: ' + complaintReferenceNo;//'Information';
     modalRef.componentInstance.modalMessage = msgBody;
   }//end of method onOpenModal
-
-  //start method deleteInvoiceItemDetailWSCall to delete item details
-  private deleteInvoiceItemDetailWSCall() {
-    let activityId: number = 40;
-    this.busySpinner = true;
-    let complaintDetailsAutoId: number = this.invItemDetails[0].complaintDetailsAutoId
-    this.complaintDIService.deleteInvoiceItemDetail(this.plantType, this.complaintReferenceNo, complaintDetailsAutoId, activityId).
-      subscribe(res => {
-        if (res.msgType === "Info") {
-          console.log("delete item msg====   ", res.msg);
-          this.busySpinner = false;
-        }//end of if
-      },
-        err => {
-          console.log(err);
-          this.busySpinner = false;
-          this.sessionErrorService.routeToLogin(err._body);
-        });
-  }//end of the method
 
   private wsErrorCall(err) {
     this.errorMsgObj.errMsgShowFlag = true;
@@ -315,7 +283,9 @@ export class InvestigationReportDiComponent implements OnInit {
   //start method postInvoiceItemDetailWsCall to post item details
   private postInvoiceItemDetailWsCall(items: any[]) {
     this.busySpinner = true;
-    this.complaintDIService.postInvoiceItemDetail(items, this.plantType).
+    let invItem: any = {};
+    invItem.items = items;
+    this.complaintDIService.postInvoiceItemDetail(invItem, this.plantType).
       subscribe(res => {
         if (res.msgType === 'Info') {
           console.log("submit item msg====", res.msg);
@@ -374,7 +344,7 @@ export class InvestigationReportDiComponent implements OnInit {
             this.fileUploadWSCall(this.plantType, fileJsonBody);//calling the file ws method
           }//end of file array check
           this.onOpenModal(res.value, res.msg);//calling the modal to show msg
-          this.router.navigate([ROUTE_PATHS.RouteComplainDIView]);
+          this.router.navigate([ROUTE_PATHS.RouteComplainDIView]);//route to complain view page
         } else {
           this.submitInvReportDIDetDetailWSCall(invReportDetailJson, action);
         }
@@ -483,12 +453,12 @@ export class InvestigationReportDiComponent implements OnInit {
     let invoiceNo: string = invItemDet.invoiceNo;
     let itemCode: string = invItemDet.itemNo;
     console.log(" invoiceNo ====",invoiceNo+" itemCode==== ",itemCode);
-    this.router.navigate([ROUTE_PATHS.RouteComplaintReferenceNoSearch,invoiceNo,itemCode]);
+    this.router.navigate([ROUTE_PATHS.RouteComplaintReferenceNoSearch,invoiceNo,itemCode]);//route to comp ref search page
   }//end method of onEditPrevItem
 
   //on click investigationReportDISubmit method
   public investigationReportDISubmit(): void {
-    if (this.invReportFormGroup.valid && this.unloadingEquipmentList.length > 0 && this.lubricantUsedList.length > 0 && this.layingPositionList.length > 0 && this.jointingTypeList.length > 0) {
+    if (this.invReportFormGroup.valid) {
       console.log("this.invReportFormGroup.value", this.invReportFormGroup.value);
       let invReportHeaderJson: any = {};
       invReportHeaderJson.lastActivityId = this.activityId;
@@ -547,7 +517,7 @@ export class InvestigationReportDiComponent implements OnInit {
   //cancel method
   public onCancel(): void {
     // Not authenticated
-    // this.router.navigate([ROUTE_PATHS.RouteHome]);
+    this.router.navigate([ROUTE_PATHS.RouteComplainDIView]);//route to complain di view page
   }//end of cancel method
 
   //start method for clicking radio button 
