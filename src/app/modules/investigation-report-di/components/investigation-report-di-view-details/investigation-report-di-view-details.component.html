@@ -42,6 +42,15 @@
       </div>
       <!--end table div-->
 
+      <!-- new add for reject reason -->
+      <div class="alert alert-danger" *ngIf="invRejectReason" style="margin-right: 29px;margin-left: 30px;">
+        <h4 style="color: #ef0600;font-size: 15px;">Reason to Re-investigate :</h4>
+        <div>
+          {{invRejectReason}}
+        </div>
+      </div>
+      <!-- end of reject reason -->
+
       <!-- start div of form -->
       <div style="margin-top: 10px; margin-bottom: 30px;">
         <!--start form -->
@@ -137,11 +146,6 @@
             </div>
             <!--end table div-->
 
-            <!-- item grid table will be shown -->
-
-            <div class="form-group col-xs-12 col-sm-12 col-md-12 col-lg-12" style="padding-bottom: 10px;">
-            </div>
-
             <!--start div for Unloading Equipment [view]-->
             <div class="form-group col-xs-12 col-sm-6 col-md-6 col-lg-4">
               <label>Unloading Equipment</label>
@@ -220,14 +224,13 @@
             </div>
             <!--end div for show files-->
             <div class="row" *ngIf="rejectFlag" class="reject-alert">
-              <h4 style="color: #aa6708">Reason to Reject</h4>
+              <h4 style="color: #aa6708">Reason to Re-investigate</h4>
               <div>
                 <textarea class="reject-alert-textarea" #rejectReasonVal></textarea>
               </div>
               <div style="margin-top: 8px; padding-right: 24px;">
-                <button type="submit" style="width: 280px; float: right; background: #aa6708" 
-                  class="btn primary-button-style" (click)="onRejectSubmit(rejectReasonVal.value)">
-                  Reject Investigation Report
+                <button type="submit" style="width: 280px; float: right; background: #aa6708" class="btn primary-button-style" (click)="onRejectSubmit(rejectReasonVal.value)">
+                  Re-investigate Investigation Report
                 </button>
               </div>
             </div>
@@ -247,7 +250,7 @@
           <div class="col-xs-12 col-sm-4 col-md-4 col-lg-2 button-holder" *ngIf="!rejectFlag ">
             <!--&& complaintStatus==50-->
             <button type="submit" class="btn btn-danger danger-button-style" (click)="onClickRejectBtn()">
-              Reject
+              Re-investigate
             </button>
           </div>
         </div>

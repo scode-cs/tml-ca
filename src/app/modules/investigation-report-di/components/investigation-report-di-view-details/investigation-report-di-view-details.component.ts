@@ -42,6 +42,8 @@ export class InvestigationReportDiViewDetailsComponent implements OnInit {
     errMsgShowFlag: false
   };
   public rejectFlag: boolean = false;//reject flag
+  public invRejectReason: string = '';//taking a var to show reject reason
+
   constructor(
     private activatedroute: ActivatedRoute,
     private router: Router,
@@ -194,6 +196,11 @@ export class InvestigationReportDiViewDetailsComponent implements OnInit {
     let jointingType: string = "[" + formData.jointingType + "]";
     let jointingTypeKey: any[] = JSON.parse(jointingType);
     this.selectedIvtReportDataList.jointingTypeDesc = this.getSelectedCheckedItemVal(this.ivtReportDataList.jointingTypeList, jointingTypeKey);
+    if (formData.investigationReportCancelRemarks) {
+      this.invRejectReason = formData.investigationReportCancelRemarks;//set the reject reason
+    } else {
+      this.invRejectReason = "";
+    }
   }//end method setFormValue
 
   //start method to rearrange selected checkbox desc
@@ -218,16 +225,7 @@ export class InvestigationReportDiViewDetailsComponent implements OnInit {
     let complainDetailsAutoId: number = this.invReportDetails[this.invReportIndex].complaintDetailsAutoId;
     this.getInvoiceItemDetailWSCall(this.complaintReferenceNo, pageCompStatus, complainDetailsAutoId);//inv item details
     this.getFileWSCall(this.complaintReferenceNo, pageCompStatus, complainDetailsAutoId);//to get file
-    // setTimeout(() => {
-    //   this.busySpinner = false;
-    // }, 500);
   }//end method of selectDatas
-
-  //cancel method
-  public onCancel(): void {
-    // Not authenticated
-    this.router.navigate([ROUTE_PATHS.RouteComplainDIView]);
-  }//end of cancel method
 
   //reject click
   public onClickRejectBtn() {
@@ -235,6 +233,7 @@ export class InvestigationReportDiViewDetailsComponent implements OnInit {
   }//end of method
   //methhod to submit reject reason
   public onRejectSubmit(rejectReasonVal) {
+    this.busySpinner = true;//load spinner
     let date = new Date();
     let currentDate: string = this.datePipe.transform(date, 'yyyy-MM-dd');
     let rejectHeaderJson: any = {};
@@ -245,27 +244,39 @@ export class InvestigationReportDiViewDetailsComponent implements OnInit {
     rejectHeaderJson.userId = this.localstorageService.user.userId;
     rejectHeaderJson.complaintReferenceNo = this.complaintReferenceNo;
     // rejectHeaderJson.investigationReportCancelFlag" : "Y"
-
+    let complainDetailsAutoId: string = this.invReportDetails[this.invReportIndex].complaintDetailsAutoId;//to get auto id
     rejectDetailJson.activityId = 40;
     rejectDetailJson.complaintReferenceNo = this.complaintReferenceNo;
     rejectDetailJson.userId = this.localstorageService.user.userId;
     rejectDetailJson.investigationReportCancelRemarks = rejectReasonVal;
     rejectDetailJson.investigationReportCancelDate = currentDate;
+    rejectDetailJson.complaintDetailsAutoId = parseInt(complainDetailsAutoId);
 
-    console.log("rejectHeaderJson",rejectHeaderJson);
-    console.log("rejectDetailJson",rejectDetailJson);
-     this.complaintDIService.putHeader(rejectHeaderJson,plantType,action).
-      subscribe(res=>{
-        console.log("res success msg",res.msg);
-      },err=>{
+    console.log("rejectHeaderJson", rejectHeaderJson);
+    console.log("rejectDetailJson", rejectDetailJson);
+    this.complaintDIService.putHeader(rejectHeaderJson, plantType, action).
+      subscribe(res => {
+        console.log("res success msg", res.msg);
+      }, err => {
         console.log(err);
       });
-      this.complaintDIService.postDetail(rejectDetailJson,plantType,action).
-      subscribe(res=>{
-        console.log("res success msg",res.msg);
-      },err=>{
+    action = "inv_cancel";
+    this.complaintDIService.postDetail(rejectDetailJson, plantType, action).
+      subscribe(res => {
+        console.log("res success msg", res.msg);
+        this.busySpinner = false;
+        this.router.navigate([ROUTE_PATHS.RouteComplainDIView]);
+      }, err => {
         console.log(err);
+        this.busySpinner = false;
       });
-  }
+  }//end of method
+
+  //cancel method
+  public onCancel(): void {
+    // Not authenticated
+    this.router.navigate([ROUTE_PATHS.RouteComplainDIView]);
+  }//end of cancel method
+
 
 }//end of class
