@@ -13,7 +13,7 @@ export class InvestigationReportDIConfigModel {
         { headerKey: 'itemName', headerDesc: 'Item Description', headerClass: 'header-style', dataClass: 'td-style' },
         { headerKey: 'invoiceDate', headerDesc: 'Official Document Date', headerClass: 'header-style', dataClass: 'td-style' },
         { headerKey: 'invoiceQtyInMtrs', headerDesc: 'Invoice Qty(in Mtrs)', headerClass: 'header-style', dataClass: 'td-style' },
-        { headerKey: 'complaintQtyInMtrs', headerDesc: 'Complaint Qty(in Mtrs)', headerClass: 'header-style', dataClass: 'td-style'},
+        { headerKey: 'complaintQtyInMtrs', headerDesc: 'Complaint Qty(in Mtrs)', headerClass: 'header-style bold-font', dataClass: 'td-style'},
         { headerKey: 'complaintTypeDesc', headerDesc: 'Complaint Type', headerClass: 'header-style', dataClass: 'td-style' },
         { headerKey: 'natureOfComplaintDesc', headerDesc: 'Nature of Complaint', headerClass: 'header-style', dataClass: 'td-style' },
         { headerKey: 'complaintDetails', headerDesc: 'Detail of Complaint', headerClass: 'header-style', dataClass: 'td-style' },
