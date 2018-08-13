@@ -28,11 +28,11 @@ export class InvestigationReportDiComponent implements OnInit {
   private formData: FormData = new FormData();
   private fileData: FormData;
   public fileList: FileList;
- 
+
   //activity Id for complain register
   private plantType: string = this.localStorageService.user.plantType;
   private activityId: number = 40;
-  
+
   public title: string = 'Add Investigation Report';//set the title;
   public invReportTable: any[] = [];//to store prev inv report
   public itemGridTable: any[] = [];//to store item grid
@@ -74,10 +74,10 @@ export class InvestigationReportDiComponent implements OnInit {
 
   ngOnInit(): void {
     this.initform();
-    this.getRouteParam();       
+    this.getRouteParam();
     this.getPreviousInvHistory();
     // error call of getPreviousInvHistory() => this.getInvestigationViewDetailsWSCall();
-    this.getInvItemGridDet();//method to get inv item grid
+    this.getSelectedInvItemGridDet();//method to get inv item grid
     this.invReportTable = new InvestigationReportDIConfigModel().prevInvReportHeader;
     this.itemGridTable = new InvestigationReportDIConfigModel().invItemGridHeader;
     this.ivtReportDataList.unloadingEquipmentList = new InvestigationDataModel().unloadingEquipmentList;
@@ -122,7 +122,7 @@ export class InvestigationReportDiComponent implements OnInit {
   }//end of method
 
   //method to get invitemgrid det
-  private getInvItemGridDet() {
+  private getSelectedInvItemGridDet() {
     //if selected items grid length is greater than zero setSelectItemsGrid method will invoked
     if (this.investigationReportInvoiceDetailsService && this.investigationReportInvoiceDetailsService.selectedItemDetails) {
       let selItemsDet: any = {};
@@ -130,12 +130,41 @@ export class InvestigationReportDiComponent implements OnInit {
       let items: any = [];
       items = selItemsDet.items;
       console.log(" items ==================== ", items);
-      if(items.length > 0){
+      if (items.length > 0) {
         this.setSelectItemsGrid(items);
       }//end of if
     }//end of if
   }//end of method
 
+  //new add
+  //start method of getComplainDet
+  private getComplainDet() {
+    let compDet: any = {};
+    if (this.investigationReportInvoiceDetailsService.complaintTypeDesc && this.investigationReportInvoiceDetailsService.natureOfComplaintDesc || this.investigationReportInvoiceDetailsService.detailsOfComplaint && this.investigationReportInvoiceDetailsService.invoiceNo && this.investigationReportInvoiceDetailsService.itemCode) {
+      compDet.complaintTypeDesc = this.investigationReportInvoiceDetailsService.complaintTypeDesc;
+      compDet.natureOfComplaintDesc = this.investigationReportInvoiceDetailsService.natureOfComplaintDesc;
+      compDet.invoiceNo = this.investigationReportInvoiceDetailsService.invoiceNo;
+      compDet.itemNo = this.investigationReportInvoiceDetailsService.itemCode;
+      if (this.investigationReportInvoiceDetailsService.detailsOfComplaint) {
+        compDet.detailsOfComplaint = this.investigationReportInvoiceDetailsService.detailsOfComplaint;
+      }//end of if
+      this.updatePrevItem(compDet);
+    }//end of if
+  }//end method of getComplainDet
+
+  //start method of updatePrevItem
+  private updatePrevItem(compDetParam: any) {
+    this.invItemDetails.forEach(invItm => {
+      if (invItm.invoiceNo === compDetParam.invoiceNo && invItm.itemNo === compDetParam.itemNo) {
+        invItm.complaintTypeDesc = compDetParam.complaintTypeDesc;
+        invItm.natureOfComplaintDesc = compDetParam.natureOfComplaintDesc;
+        invItm.complaintDetails =  compDetParam.detailsOfComplaint;
+        console.log(" ======item matched====== ");
+        console.log(" ==== compDetParam ======", compDetParam);
+      }//end of if
+    });
+  }//end of updatePrevItem
+  //end of new add
   //start method of setSelectItemsGrid
   private setSelectItemsGrid(selItemsParam: any[]) {
     let selItems: any[] = selItemsParam;
@@ -147,7 +176,6 @@ export class InvestigationReportDiComponent implements OnInit {
 
   // TODO: SUSMITA
   private getPreviousInvHistory() {
-    // let pageCompStatus: number = 40;
     let cmpStatus: number = 40;
     this.complaintDIService.getComplainViewDetails(this.complaintReferenceNo, cmpStatus).
       subscribe(res => {
@@ -158,11 +186,12 @@ export class InvestigationReportDiComponent implements OnInit {
           console.log("res of inv Report Deatils::::", this.invReportDetails);
           this.invReportIndex = this.invReportDetails ? this.invReportDetails.length - 1 : 0;
           // set form value
-          this.setFormValue();
+          this.setResValToForm();
           let pageActivityId: number = 40;
           let complaintDetailsAutoId: number = this.invReportDetails[this.invReportIndex].complaintDetailAutoId;
+          let comingFrom: string = "";//to check its from reg or not n set customer details
           // TODO: Item for previous 
-          this.getInvoiceItemDetailWSCall(this.complaintReferenceNo, pageActivityId, complaintDetailsAutoId);
+          this.getInvoiceItemDetailWSCall(this.complaintReferenceNo, pageActivityId, complaintDetailsAutoId,comingFrom);
         } else {
           // this.busySpinner = false;
           this.getComplainViewDetailsWSCall();
@@ -180,7 +209,7 @@ export class InvestigationReportDiComponent implements OnInit {
     let prevCompStatus: number = 10;
     this.complaintDIService.getComplainViewDetails(this.complaintReferenceNo, prevCompStatus).
       subscribe(res => {
-        console.log("res of reg view det::::",res);
+        console.log("res of reg view det::::", res);
         if (res.msgType === "Info") {
           let invReportDeatilsJson: any = JSON.parse(res.mapDetails);
           let regDetails = invReportDeatilsJson;
@@ -188,7 +217,8 @@ export class InvestigationReportDiComponent implements OnInit {
           let regLastIndex = regDetails ? regDetails.length - 1 : 0;
           let pageActivityId: number = 10;
           let complaintDetailsAutoId: number = regDetails[regLastIndex].complaintDetailAutoId;
-          this.getInvoiceItemDetailWSCall(this.complaintReferenceNo, pageActivityId, complaintDetailsAutoId);
+          let comingFrom: string = 'Reg';//to check its from reg or not n set customer details
+          this.getInvoiceItemDetailWSCall(this.complaintReferenceNo, pageActivityId, complaintDetailsAutoId,comingFrom);
         } else {
           this.busySpinner = false;
         }//end of else if
@@ -201,7 +231,7 @@ export class InvestigationReportDiComponent implements OnInit {
   }//end of method
 
   //start method getInvoiceItemDetailWSCall to get item details
-  private getInvoiceItemDetailWSCall(complaintReferenceNo: string, pageActivityId: number, complaintDetailsAutoId: number) {
+  private getInvoiceItemDetailWSCall(complaintReferenceNo: string, pageActivityId: number, complaintDetailsAutoId: number,comingFrom: string) {
     this.busySpinner = true;
     this.complaintDIService.getInvoiceItemDetail(complaintReferenceNo, pageActivityId, complaintDetailsAutoId).
       subscribe(res => {
@@ -210,6 +240,14 @@ export class InvestigationReportDiComponent implements OnInit {
           this.invItemDetails = invItemDeatilsJson;
           this.busySpinner = false;
           console.log("item details =========.........>>>>>>>>>", this.invItemDetails);
+          //new add
+          this.getComplainDet();//calling the method to check n update previous item row
+          if(comingFrom){
+            let invItemIndex: number = 0;
+            this.invReportFormGroup.controls['customerCode'].setValue(this.invItemDetails[invItemIndex].customerCode);
+            this.invReportFormGroup.controls['customerName'].setValue(this.invItemDetails[invItemIndex].customerName);            
+          }
+          // end of new add
         } else {
           this.busySpinner = false;
         }
@@ -221,37 +259,35 @@ export class InvestigationReportDiComponent implements OnInit {
         });
   }//end method of getInvoiceItemDetailWSCall
 
-  //start method setFormValue to set the value in invreport form
-  private setFormValue() {
+  //start method setResValToForm to set the value in invreport form
+  private setResValToForm() {
     let formData: any = this.invReportDetails[this.invReportIndex];
     this.invReportFormGroup.controls['complaintReferenceNo'].setValue(formData.complaintReferenceNo);
     this.invReportVar.siteVisitMadeValue = formData.siteVisitMade;
     this.invReportFormGroup.controls['siteVisit'].setValue(formData.siteVisitMade);
     if (formData.siteVisit === 'Y') {
       this.invReportFormGroup.controls['siteVisitDt'].setValue(this.datePipe.transform(formData.siteVisitDt, 'yyyy-MM-dd'));
-      // this.invReportFormGroup.controls['siteVisitDt'].setValidators(Validators.required);
     }
     this.invReportVar.sampleCollectedValue = formData.sampleCollected;
     this.invReportFormGroup.controls['sampleCollected'].setValue(formData.sampleCollected);
     if (formData.sampleCollected === 'Y') {
       this.invReportFormGroup.controls['sampleCollectedDate'].setValue(this.datePipe.transform(formData.sampleCollectedDate, 'yyyy-MM-dd'));
-      // this.invReportFormGroup.controls['sampleCollectedDate'].setValidators(Validators.required);
     }
     if (formData.investigationReportDate) {
       this.invReportFormGroup.controls['investigationReportDate'].setValue(this.datePipe.transform(formData.investigationReportDate, 'dd-MM-yyyy'));
     }
-    if(formData.customerCode) {      
-      this.invReportFormGroup.controls['customerCode'].setValue(formData.customerCode);
+    if (formData.custCode) {
+      this.invReportFormGroup.controls['customerCode'].setValue(formData.custCode);
     }
-    if(formData.customerName){      
+    if (formData.customerName) {
       this.invReportFormGroup.controls['customerName'].setValue(formData.customerName);
     }
-    if(formData.investigationReportCancelRemarks) {
+    if (formData.investigationReportCancelRemarks) {
       this.invRejectReason = formData.investigationReportCancelRemarks;//set the reject reason
-    }else{
+    } else {
       this.invRejectReason = "";
     }
-  }//end method setFormValue
+  }//end method setResValToForm
 
   //onOpenModal for opening modal from modalService
   private onOpenModal(complaintReferenceNo: string, msgBody: string) {
@@ -266,18 +302,38 @@ export class InvestigationReportDiComponent implements OnInit {
     this.busySpinner = false;
     this.sessionErrorService.routeToLogin(err._body);
   }//end of method
+  //to set items arr for submit
+  private setTotalItemArr(itemsArr:any):any{
+    let itemarrEl: any = {};  
+      itemarrEl.activityId = itemsArr.activityId;
+      itemarrEl.complaintReferenceNo = itemsArr.complaintReferenceNo;
+      itemarrEl.complaintDetailsAutoId = "";//ask sayantan da --> parseInt(valueSub);
+      itemarrEl.natureOfComplaintId = itemsArr.natureOfComplaintId;
+      itemarrEl.complaintDetails = itemsArr.complaintDetails;
+      itemarrEl.invoiceNo = itemsArr.invoiceNo;
+      itemarrEl.itemCode = itemsArr.itemCode;
+      itemarrEl.invoiceQtyInMtrs = itemsArr.invoiceQtyInMtrs;
+      itemarrEl.invoiceQtyInTons = itemsArr.invoiceQtyInTons;
+      itemarrEl.userId = this.localStorageService.user.userId;
+      itemarrEl.batchNo = itemsArr.batchNo;
+      itemarrEl.cameFrom = itemsArr.cameFrom;       
+    return itemarrEl;
+  }//end of method
 
   //start method of getTotalItemDet to get total items
   private getTotalItemDet(): any[] {
-    let items: any[] = [];
+    let totalItems: any[] = []; 
+    let arrEl: any = {};
     this.invItemDetails.forEach(invItmDet => {
-      items.push(invItmDet);
+      arrEl = this.setTotalItemArr(invItmDet);
+      totalItems.push(arrEl);
     });
     this.selectedInvItemDetails.forEach(selInvItmDet => {
-      items.push(selInvItmDet);
+      arrEl = this.setTotalItemArr(selInvItmDet);
+      totalItems.push(arrEl);
     });
-    console.log(" total itemssssss::::::", items);
-    return items;
+    console.log(" total itemssssss::::::", totalItems);
+    return totalItems;
   }//end of the method of getTotalItemDet
 
   //start method postInvoiceItemDetailWsCall to post item details
@@ -390,6 +446,12 @@ export class InvestigationReportDiComponent implements OnInit {
     console.log(" SelInvDetails after splice ", this.selectedInvItemDetails);
   }//end of the method deleteSelInvDetFromSelInvDet
 
+  //to clear itemcode and invoice no
+  private clearInvoiceNoItemCode(){
+    this.investigationReportInvoiceDetailsService.invoiceNo = "";
+    this.investigationReportInvoiceDetailsService.itemCode = "";
+  }//end of the method clearInvoiceNoItemCode
+
   //file upload event  
   public fileChange(event) {
     let plantType: string = this.localStorageService.user.plantType;
@@ -448,70 +510,74 @@ export class InvestigationReportDiComponent implements OnInit {
     }//end of if
   }//end of filechange method 
 
+  //new add
   // start method of onEditPrevItem
-  public onEditPrevItem(invItemDet: any){
+  public onEditPrevItem(invItemDet: any) {
     let invoiceNo: string = invItemDet.invoiceNo;
     let itemCode: string = invItemDet.itemNo;
-    console.log(" invoiceNo ====",invoiceNo+" itemCode==== ",itemCode);
-    this.router.navigate([ROUTE_PATHS.RouteComplaintReferenceNoSearch,invoiceNo,itemCode]);//route to comp ref search page
+    console.log(" invoiceNo ====", invoiceNo + " itemCode==== ", itemCode);
+    this.investigationReportInvoiceDetailsService.compRefNo = this.complaintReferenceNo;
+    this.investigationReportInvoiceDetailsService.complaintStatus = this.complaintStatus;
+    this.router.navigate([ROUTE_PATHS.RouteComplaintReferenceNoSearch, invoiceNo, itemCode]);
   }//end method of onEditPrevItem
-
+  //end of new add
   //on click investigationReportDISubmit method
   public investigationReportDISubmit(): void {
-    if (this.invReportFormGroup.valid) {
-      console.log("this.invReportFormGroup.value", this.invReportFormGroup.value);
-      let invReportHeaderJson: any = {};
-      invReportHeaderJson.lastActivityId = this.activityId;
-      invReportHeaderJson.userId = this.localStorageService.user.userId;
-      invReportHeaderJson.complaintReferenceNo = this.invReportFormGroup.value.complaintReferenceNo;
-      console.log(" invReportHeaderJson =========", invReportHeaderJson);
-      let action: string = "";
-      let invReportDetailJson: any = {};
-      invReportDetailJson.activityId = this.activityId;
-      invReportDetailJson.userId = this.localStorageService.user.userId;
-      console.log("invReportFormGroup: ", this.invReportFormGroup.value);
-      invReportDetailJson.complaintReferenceNo = this.invReportFormGroup.value.complaintReferenceNo;
-      invReportDetailJson.investigationReportDate = this.invReportFormGroup.value.investigationReportDate;
-      invReportDetailJson.sampleCollected = this.invReportFormGroup.value.sampleCollected;
-      invReportDetailJson.sampleCollectedDate = this.invReportFormGroup.value.sampleCollectedDate;
-      invReportDetailJson.siteVisitMade = this.invReportFormGroup.value.siteVisit;
-      invReportDetailJson.siteVisitMadeDate = this.invReportFormGroup.value.siteVisitDt;
+    this.getTotalItemDet();
+    // if (this.invReportFormGroup.valid) {
+    //   console.log("this.invReportFormGroup.value", this.invReportFormGroup.value);
+    //   let invReportHeaderJson: any = {};
+    //   invReportHeaderJson.lastActivityId = this.activityId;
+    //   invReportHeaderJson.userId = this.localStorageService.user.userId;
+    //   invReportHeaderJson.complaintReferenceNo = this.invReportFormGroup.value.complaintReferenceNo;
+    //   console.log(" invReportHeaderJson =========", invReportHeaderJson);
+    //   let action: string = "";
+    //   let invReportDetailJson: any = {};
+    //   invReportDetailJson.activityId = this.activityId;
+    //   invReportDetailJson.userId = this.localStorageService.user.userId;
+    //   console.log("invReportFormGroup: ", this.invReportFormGroup.value);
+    //   invReportDetailJson.complaintReferenceNo = this.invReportFormGroup.value.complaintReferenceNo;
+    //   invReportDetailJson.investigationReportDate = this.invReportFormGroup.value.investigationReportDate;
+    //   invReportDetailJson.sampleCollected = this.invReportFormGroup.value.sampleCollected;
+    //   invReportDetailJson.sampleCollectedDate = this.invReportFormGroup.value.sampleCollectedDate;
+    //   invReportDetailJson.siteVisitMade = this.invReportFormGroup.value.siteVisit;
+    //   invReportDetailJson.siteVisitMadeDate = this.invReportFormGroup.value.siteVisitDt;
 
-      let unloadingEquipment: string = "";
-      this.unloadingEquipmentList.forEach(unloadingEquip => {
-        unloadingEquipment = unloadingEquipment ? (unloadingEquipment + "," + unloadingEquip) : unloadingEquip;
-      });
-      console.log("unloadingEquipment ======== ", unloadingEquipment);
-      invReportDetailJson.unloadingEquipement = unloadingEquipment;
+    //   let unloadingEquipment: string = "";
+    //   this.unloadingEquipmentList.forEach(unloadingEquip => {
+    //     unloadingEquipment = unloadingEquipment ? (unloadingEquipment + "," + unloadingEquip) : unloadingEquip;
+    //   });
+    //   console.log("unloadingEquipment ======== ", unloadingEquipment);
+    //   invReportDetailJson.unloadingEquipement = unloadingEquipment;
 
-      let lubricantUsed: string = "";
-      this.lubricantUsedList.forEach(lbUsed => {
-        lubricantUsed = lubricantUsed ? (lubricantUsed + "," + lbUsed) : lbUsed;
-      });
-      console.log("lubricantUsed ======== ", lubricantUsed);
-      invReportDetailJson.lubricantUsed = lubricantUsed;
+    //   let lubricantUsed: string = "";
+    //   this.lubricantUsedList.forEach(lbUsed => {
+    //     lubricantUsed = lubricantUsed ? (lubricantUsed + "," + lbUsed) : lbUsed;
+    //   });
+    //   console.log("lubricantUsed ======== ", lubricantUsed);
+    //   invReportDetailJson.lubricantUsed = lubricantUsed;
 
-      let layingPosition: string = "";
-      this.layingPositionList.forEach(layPos => {
-        layingPosition = layingPosition ? (layingPosition + "," + layPos) : layPos;
-      });
-      console.log("layingPosition ======== ", layingPosition);
-      invReportDetailJson.layingPosition = layingPosition;
+    //   let layingPosition: string = "";
+    //   this.layingPositionList.forEach(layPos => {
+    //     layingPosition = layingPosition ? (layingPosition + "," + layPos) : layPos;
+    //   });
+    //   console.log("layingPosition ======== ", layingPosition);
+    //   invReportDetailJson.layingPosition = layingPosition;
 
-      let jointingType: string = "";
-      this.jointingTypeList.forEach(jType => {
-        jointingType = jointingType ? (jointingType + "," + jType) : jType;
-      });
-      console.log("jointingType ======== ", jointingType);
-      invReportDetailJson.jointingType = jointingType;
+    //   let jointingType: string = "";
+    //   this.jointingTypeList.forEach(jType => {
+    //     jointingType = jointingType ? (jointingType + "," + jType) : jType;
+    //   });
+    //   console.log("jointingType ======== ", jointingType);
+    //   invReportDetailJson.jointingType = jointingType;
 
-      console.log("invReportDetailJson====== ", invReportDetailJson);
+    //   console.log("invReportDetailJson====== ", invReportDetailJson);
 
-      this.submitInvReportDIDetWSCall(invReportHeaderJson, invReportDetailJson, action);//calling the me
-    } else {
-      this.errorMsgObj.errMsgShowFlag = true;
-      this.errorMsgObj.errorMsg = 'Please fillout All Data';
-    }
+    //   this.submitInvReportDIDetWSCall(invReportHeaderJson, invReportDetailJson, action);//calling the me
+    // } else {
+    //   this.errorMsgObj.errMsgShowFlag = true;
+    //   this.errorMsgObj.errorMsg = 'Please fillout All Data';
+    // }
   }//end of method investigationReportDISubmit
 
   //cancel method
@@ -650,10 +716,11 @@ export class InvestigationReportDiComponent implements OnInit {
   public selectData(invRepIndex: number) {
     this.busySpinner = true;
     this.invReportIndex = invRepIndex;
-    this.setFormValue();
-    setTimeout(() => {
-      this.busySpinner = false;
-    }, 500);
+    let comingFrom: string = "";//to check its from reg or not then set the customer details
+    let pageCompStatus: number = 40;//to fetch item 
+    this.setResValToForm();
+    let complainDetailsAutoId: number = this.invReportDetails[this.invReportIndex].complaintDetailsAutoId;
+    this.getInvoiceItemDetailWSCall(this.complaintReferenceNo, pageCompStatus, complainDetailsAutoId,comingFrom);//inv item details   
   }//end method of selectData
 
   //onOpenModal for opening modal from modalService
@@ -671,6 +738,7 @@ export class InvestigationReportDiComponent implements OnInit {
     let selItemsDet: any = {};
     selItemsDet.items = items;
     this.investigationReportInvoiceDetailsService.selectedItemDetails = selItemsDet;
+    this.clearInvoiceNoItemCode();//to clear invoice no and item code
   }//end of method onOpenModal
 
   // start method of onCloseInvoiceNo

@@ -368,4 +368,13 @@ background: #7b7b7b;
 .hidden-style {
   visibility: hidden;
 }
+.bold-font{
+  font-weight: 600;
+}
 /* end style for radio button*/
+/*red asterick style*/
+.red-asterick{
+  color: #cc100c;
+  font-weight: bolder;
+}
+/*end of asterick style*/

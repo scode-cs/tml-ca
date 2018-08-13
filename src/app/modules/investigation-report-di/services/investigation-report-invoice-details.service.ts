@@ -9,8 +9,13 @@ export class InvestigationReportInvoiceDetailsService {
     private _custName: string;
     private _salesGroup: string;
     private _salesOffice: string;
+    private _complaintTypeDesc: string;
+    private _natureOfComplaintDesc: string;
+    private _detailsOfComplaint: string;
     private _compRefNo: string;
     private _complaintStatus: number;
+    private _invoiceNo: string;
+    private _itemCode: string;
     private _fileData: FormData;
     private _fileList: FileList;
     private _testVar: string;
@@ -57,6 +62,24 @@ export class InvestigationReportInvoiceDetailsService {
     public set salesOffice(salesOffice: string){
         this._salesOffice = salesOffice;
     }   
+    public get complaintTypeDesc(): string{
+        return this._complaintTypeDesc;
+    }
+    public set complaintTypeDesc(complaintTypeDesc: string){
+        this._complaintTypeDesc = complaintTypeDesc;
+    }  
+    public get natureOfComplaintDesc(): string{
+        return this._natureOfComplaintDesc;
+    }
+    public set natureOfComplaintDesc(natureOfComplaintDesc: string){
+        this._natureOfComplaintDesc = natureOfComplaintDesc;
+    }  
+    public get detailsOfComplaint(): string{
+        return this._detailsOfComplaint;
+    }
+    public set detailsOfComplaint(detailsOfComplaint: string){
+        this._detailsOfComplaint = detailsOfComplaint;
+    }  
     public get compRefNo(): string{
         return this._compRefNo;
     }
@@ -68,6 +91,18 @@ export class InvestigationReportInvoiceDetailsService {
     }
     public set complaintStatus(complaintStatus: number){
         this._complaintStatus = complaintStatus;
+    }
+    public get invoiceNo(): string{
+        return this._invoiceNo;
+    }
+    public set invoiceNo(invoiceNo: string){
+        this._invoiceNo = invoiceNo;
+    }
+    public get itemCode(): string{
+        return this._itemCode;
+    }
+    public set itemCode(itemCode: string){
+        this._itemCode = itemCode;
     }
     public get fileData(): FormData{
         return this._fileData;

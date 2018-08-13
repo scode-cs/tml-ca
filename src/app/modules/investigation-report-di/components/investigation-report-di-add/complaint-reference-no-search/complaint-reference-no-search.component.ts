@@ -1,10 +1,8 @@
 import { Component, OnInit, Input } from '@angular/core';
-import { FormGroup, FormBuilder, Validators, FormControl } from '@angular/forms';
-import { ToastService } from "../../../../home/services/toast-service";
+import { FormGroup, Validators, FormControl } from '@angular/forms'
 import { Router, ActivatedRoute } from '@angular/router';
 import { Subscription } from 'rxjs/Subscription';//to get route param
 import { ROUTE_PATHS } from '../../../../router/router-paths';
-import { LocalStorageService } from "../../../../shared/services/local-storage.service";
 import { ComplaintDIRegisterDataService } from "../../../../complain/complain-di/services/complaint-di-register-data.service";
 import { InvestigationReportDIDataService } from "../../../services/investigation-report-di.service";
 import { InvestigationReportInvoiceDetailsService } from "../../../services/investigation-report-invoice-details.service";
@@ -16,35 +14,32 @@ import { SessionErrorService } from "../../../../shared/services/session-error.s
   styleUrls: ['complaint-reference-no-search.component.css']
 })
 export class ComplaintReferenceNoSearchComponent implements OnInit {
-  public custName: string = "";
+  private allInvDetData: any[] = [];// to store all inv det from allInvDetDefault
+  private complaintTypeName: string = "";
+  private natureCmpName: string = "";
+  private natureCmpId: string = "";
+  private complaintTypeId: string;
   public title: string = "Add Investigation Report";
-  public custCode: string = "";
-  public salesGroup: string = "";
-  public salesOffice: string = "";
+  public allInvDetDefault: any[] = [];//array for showing all invoice dets
+  public custDetails: any = { custName: '', custCode: '', salesGroup:'', salesOffice:''};
   public compRefNo: string = "";
   public complaintStatus: number;
 
-  private allInvDetData: any[] = [];// to store all inv det from allInvDetDefault
-  public allInvDetDefault: any[] = [];//array for showing all invoice dets
 
 
-  public complaintPIInvoiceDetails: any = {};//to show the complaint det in html page
+  public invoiceItemDetails: any = {};//to show the complaint det in html page
 
   public invDetailsItemsHeader: any = {};
 
   public selectedInvDet: any[] = [];// array for showing selected invoice dets
 
-  public searchFormGroup: FormGroup;
-
   public complaintTypeDropDownList: any[] = [];
   public natureOfComDropDownList: any = [];
 
   //create a formgroup for complain reg
-  public complaintRegisterFormGroup: FormGroup;
+  public investigationItemFormGroup: FormGroup;
 
-  private complaintTypeName: string = "";
-  private natureCmpName: string = "";
-  private complaintTypeId: string;
+  
   public complaintDetailsEnable: boolean = false;
   public invoiceNo: string = "";
   public itemCode: string = "";
@@ -64,12 +59,9 @@ export class ComplaintReferenceNoSearchComponent implements OnInit {
 
   ngOnInit(): void {
     this.getRouteParam();
-    this.setInvDetFromInvDataService();
     this.initform();
-    this.getItemsHeader("ispl");
     this.setInitialNatureOfCompVal();
-    this.getCustomerInvDet();
-    this.getAllDropDownVal();
+    this.getComplaintTypeVal();
 
   }//end of onInit
 
@@ -77,7 +69,7 @@ export class ComplaintReferenceNoSearchComponent implements OnInit {
    * @description init form data
    */
   private initform() {
-    this.complaintRegisterFormGroup = new FormGroup({
+    this.investigationItemFormGroup = new FormGroup({
       complaintTypeId: new FormControl({ value: '' }, Validators.required),
       natureOfComplaintId: new FormControl({ value: '' }, Validators.required),
       complaintDetails: new FormControl('')
@@ -91,27 +83,19 @@ export class ComplaintReferenceNoSearchComponent implements OnInit {
     ]
     for (let natureCmp of this.natureOfComDropDownList) {
       if (natureCmp.Key === "") {
-        this.complaintRegisterFormGroup.controls["natureOfComplaintId"].setValue(natureCmp.Key);
+        this.investigationItemFormGroup.controls["natureOfComplaintId"].setValue(natureCmp.Key);
         break;
       }//end if
     }//end for
   }//end of method
 
-  // start method of setInvDetFromInvDataService
-  private setInvDetFromInvDataService(){
-    // this.title = this.complaintDIInvoiceDetailsService.title;
-    this.custCode = this.investigationReportInvoiceDetailsService.custCode;
-    this.custName = this.investigationReportInvoiceDetailsService.custName;
-    this.salesGroup = this.investigationReportInvoiceDetailsService.salesGroup;
-    this.salesOffice = this.investigationReportInvoiceDetailsService.salesOffice;
-    this.compRefNo = this.investigationReportInvoiceDetailsService.compRefNo;
-    this.complaintStatus = this.investigationReportInvoiceDetailsService.complaintStatus;
-    // let selItmDet: any = {};
-    // selItmDet = this.investigationReportInvoiceDetailsService.selectedItemDetails;
-    // let items: any[] = [];
-    // items = selItmDet.items;
-    // this.selectedItemGrid(items);
-  }//end of the method of setInvDetFromInvDataService
+  // start method of getCustDet to customer code,customer name,sales group, sales office
+  private getCustDet(){
+    this.custDetails.custCode = this.investigationReportInvoiceDetailsService.custCode;
+    this.custDetails.custName = this.investigationReportInvoiceDetailsService.custName;
+    this.custDetails.salesGroup = this.investigationReportInvoiceDetailsService.salesGroup;
+    this.custDetails.salesOffice = this.investigationReportInvoiceDetailsService.salesOffice;
+  }//end of the method of getCustDet
 
   //start method of selectedItemGrid
   private selectedItemGrid(items:any[]){
@@ -121,6 +105,12 @@ export class ComplaintReferenceNoSearchComponent implements OnInit {
     });
   }//end of the method selectedItemGrid
 
+  // start method to get compStatus and compRefNo
+  private getCompStatusComRefNo(){
+    this.compRefNo = this.investigationReportInvoiceDetailsService.compRefNo;
+    this.complaintStatus = this.investigationReportInvoiceDetailsService.complaintStatus;
+  }//en of the method getCompStatusComRefNo
+
   //start method getRouteParam to get route parameter
   private getRouteParam() {
     let routeSubscription: Subscription;
@@ -129,12 +119,17 @@ export class ComplaintReferenceNoSearchComponent implements OnInit {
       this.itemCode = params.itemCode ? params.itemCode : '';
     });
     console.log(" invoiceNo ====",this.invoiceNo+" itemCode==== ",this.itemCode);
+    this.getCompStatusComRefNo();//to get comp status and comp ref no
+    if(!this.invoiceNo && !this.itemCode){
+      this.getItemsHeader('ispl');
+      this.getCustomerInvDet();
+    }
   }//end of the method
 
 
   //start method getItemsVal
-  private getItemsHeader(invoiceNo) {
-    this.complaintDIRegisterDataService.getInvoiceDetails(invoiceNo).
+  private getItemsHeader(param: string) {
+    this.complaintDIRegisterDataService.getInvoiceDetails(param).
       subscribe(res => {
         if (res.msgType === "Info") {
           this.invDetailsItemsHeader = res.invoiceDetails.itemsHeader;
@@ -150,15 +145,15 @@ export class ComplaintReferenceNoSearchComponent implements OnInit {
   }//end method of getItemsVal
 
   private getCustomerInvDet() {
-    if(!this.invoiceNo && !this.itemCode) {
-      this.busySpinner = true;
-    this.complaintDIRegisterDataService.getCustomerInvDet(this.custCode).
+    this.getCustDet();
+    this.busySpinner = true;
+    this.complaintDIRegisterDataService.getCustomerInvDet(this.custDetails.custCode).
       subscribe(res => {
         if (res.msgType === "Info") {
-          this.complaintPIInvoiceDetails = res;
+          this.invoiceItemDetails = res;
           if (this.selectedInvDet.length == 0) {
             this.allInvDetDefault = res.invoiceDetails.items;
-            this.invDetailsItemsHeader = this.complaintPIInvoiceDetails.invoiceDetails.itemsHeader;
+            this.invDetailsItemsHeader = this.invoiceItemDetails.invoiceDetails.itemsHeader;
           } else if (this.selectedInvDet.length > 0) {
             let allItemDet = res.invoiceDetails.items;
             let flag: boolean = false;
@@ -175,14 +170,13 @@ export class ComplaintReferenceNoSearchComponent implements OnInit {
         }
         console.log(" this.allInvDetDefault ========> ", this.allInvDetDefault);
         this.setAllInvtDetails();
-        console.log(" complaintPIInvoiceDetails ", this.complaintPIInvoiceDetails);
+        console.log(" invoiceItemDetails ", this.invoiceItemDetails);
       },
       err => {
         console.log(err);
         this.busySpinner = false;
         this.sessionErrorService.routeToLogin(err._body);
       });
-    }//end of if
   }//end of method 
 
   // start method setAllInvtDetails to push allInvDet to allInvDetData array
@@ -245,12 +239,16 @@ export class ComplaintReferenceNoSearchComponent implements OnInit {
   }// end of the method insertSelInvDetToSelInvDetArr
 
   //start method insertSelInvDetToSelInvDetArr for inserting selected inv details into all inv detais array
-  private insertSelInvDetToSelInvDetArr(selInvDetParam: any, invoiceNoParam: string, itemCodeParam: string, complaintTypeName: string, natureCmpName: string) {
+  private insertSelInvDetToSelInvDetArr(selInvDetParam: any, invoiceNoParam: string, itemCodeParam: string) {
     let setInv: any = {};
+    let cameFrom: string = "40";
+    let activityId: number = 40; 
     setInv.complaintReferenceNo = this.compRefNo;
+    setInv.activityId = activityId;
     setInv.complaintTypeDesc = this.complaintTypeName;
     setInv.natureOfComplaintDesc = this.natureCmpName;
-    setInv.complaintDetails = this.complaintRegisterFormGroup.value.complaintDetails;
+    setInv.natureOfComplaintId = this.natureCmpId;
+    setInv.complaintDetails = this.investigationItemFormGroup.value.complaintDetails;
     setInv.invoiceNo = invoiceNoParam;
     setInv.invoiceDate = selInvDetParam.invoiceDate;
     setInv.itemCode = itemCodeParam;
@@ -265,14 +263,14 @@ export class ComplaintReferenceNoSearchComponent implements OnInit {
     setInv.inspectionVendorName = selInvDetParam.inspectionVendorName;
     setInv.loadingVendorName = selInvDetParam.loadingVendorName;
     setInv.truckNo = selInvDetParam.truckNo;
+    setInv.cameFrom = cameFrom;
     this.selectedInvDet.push(setInv);
     console.log(" selectedInvDet ====", this.selectedInvDet);
-
   }// end of the method insertSelInvDetToAllInvDetArr
 
 
-  //method to get all values from ComplaintDIRegisterDataService  
-  private getAllDropDownVal() {
+  //method to get complaint type  
+  private getComplaintTypeVal() {
     this.busySpinner = true;
     //getting all values of complaintType
     this.investigationReportDIDataService.getSelectComplaintType().
@@ -280,7 +278,7 @@ export class ComplaintReferenceNoSearchComponent implements OnInit {
         this.complaintTypeDropDownList = res.details;
         for (let cmpType of this.complaintTypeDropDownList) {
           if (cmpType.Key == "") {
-            this.complaintRegisterFormGroup.controls["complaintTypeId"].setValue(cmpType.Key);
+            this.investigationItemFormGroup.controls["complaintTypeId"].setValue(cmpType.Key);
             break;
           }//end if
         }//end for
@@ -291,8 +289,7 @@ export class ComplaintReferenceNoSearchComponent implements OnInit {
         this.busySpinner = false;
         this.sessionErrorService.routeToLogin(err._body);
       });
-
-  }//end method getAllDropDownVal
+  }//end method getComplaintTypeVal
 
   //start method deleteSelInvDetFromAllInvDetArr for deleting the ivoice details from all invoice data grid array
   private deleteSelInvDetFromAllInvDetArr(invoiceNoParam?: string, itemCodeParam?: string) {
@@ -319,7 +316,7 @@ export class ComplaintReferenceNoSearchComponent implements OnInit {
     //calling the method deleteSelInvDetFromAllInvDetArr
     this.deleteSelInvDetFromAllInvDetArr(invoiceNoParam, itemCodeParam);
     //calling the method insertSelInvDetToSelInvDetArr
-    this.insertSelInvDetToSelInvDetArr(selInvDetParam, invoiceNoParam, itemCodeParam, this.complaintTypeName, this.natureCmpName);
+    this.insertSelInvDetToSelInvDetArr(selInvDetParam, invoiceNoParam, itemCodeParam);
     console.log(" selectedInvDet", this.selectedInvDet);
   }//end of the method onCheckInvoiceNo
 
@@ -335,7 +332,7 @@ export class ComplaintReferenceNoSearchComponent implements OnInit {
   //method for onchanging compaintType dropdown
   public onComplaintTypeSelect(args, complaintTypeId, selectedNatureOfComplaintId?: string) {
     this.resetAllInvtDetails();
-    let compDet: string = this.complaintRegisterFormGroup.value.complaintDetails.trim();
+    let compDet: string = this.investigationItemFormGroup.value.complaintDetails.trim();
     this.natureCmpName = "";
     this.complaintTypeId = complaintTypeId;
     if (args != null) {
@@ -348,7 +345,7 @@ export class ComplaintReferenceNoSearchComponent implements OnInit {
       this.natureOfComDropDownList = [
         { Key: '', Value: '-- Select --' }
       ]
-      this.complaintRegisterFormGroup.controls["natureOfComplaintId"].setValue("");
+      this.investigationItemFormGroup.controls["natureOfComplaintId"].setValue("");
     } else {
       this.busySpinner = true;
       this.complaintDIRegisterDataService.getSelectValNatureOfComplaint(this.complaintTypeId).
@@ -357,19 +354,19 @@ export class ComplaintReferenceNoSearchComponent implements OnInit {
           for (let natureCmp of this.natureOfComDropDownList) {
             console.log(" natureCmp.Key ", natureCmp.Key);
             if (this.complaintTypeName == "Others(CAT C)" && !compDet) {
-              this.complaintRegisterFormGroup.controls["natureOfComplaintId"].setValue(natureCmp.Key);
+              this.investigationItemFormGroup.controls["natureOfComplaintId"].setValue(natureCmp.Key);
               this.natureCmpName = natureCmp.Value;
               this.complaintDetailsEnable = true;
-              this.complaintRegisterFormGroup.controls['complaintDetails'].markAsTouched();
+              this.investigationItemFormGroup.controls['complaintDetails'].markAsTouched();
               break;
             } else if (natureCmp.Key == "" && (!selectedNatureOfComplaintId)) {
-              this.complaintRegisterFormGroup.controls["natureOfComplaintId"].setValue(natureCmp.Key);
+              this.investigationItemFormGroup.controls["natureOfComplaintId"].setValue(natureCmp.Key);
               break;
             } else if (selectedNatureOfComplaintId) {
               // (selectedNatureOfComplaintId != null || selectedNatureOfComplaintId != "" || selectedNatureOfComplaintId != undefined) {
               console.log(" selectedNatureOfComplaintId == ", selectedNatureOfComplaintId);
               if (natureCmp.Key == selectedNatureOfComplaintId) {
-                this.complaintRegisterFormGroup.controls["natureOfComplaintId"].setValue(selectedNatureOfComplaintId);
+                this.investigationItemFormGroup.controls["natureOfComplaintId"].setValue(selectedNatureOfComplaintId);
                 break;
               }//end of if
             }//end of else if
@@ -383,27 +380,27 @@ export class ComplaintReferenceNoSearchComponent implements OnInit {
         });
     }//end else
     if (this.complaintTypeName === "Others(CAT C)" && !compDet) {
-      this.complaintRegisterFormGroup.get('complaintDetails').setValidators(Validators.required);
-      this.complaintRegisterFormGroup.controls['complaintDetails'].markAsTouched();
-      this.complaintRegisterFormGroup.controls['natureOfComplaintId'].markAsUntouched();
+      this.investigationItemFormGroup.get('complaintDetails').setValidators(Validators.required);
+      this.investigationItemFormGroup.controls['complaintDetails'].markAsTouched();
+      this.investigationItemFormGroup.controls['natureOfComplaintId'].markAsUntouched();
       this.complaintDetailsEnable = true;
     } else if (this.complaintTypeName != "Others(CAT C)") {
-      this.complaintRegisterFormGroup.get('complaintDetails').setValidators(null)
-      this.complaintRegisterFormGroup.get('complaintDetails').updateValueAndValidity();
-      this.complaintRegisterFormGroup.controls['complaintDetails'].markAsUntouched();
+      this.investigationItemFormGroup.get('complaintDetails').setValidators(null)
+      this.investigationItemFormGroup.get('complaintDetails').updateValueAndValidity();
+      this.investigationItemFormGroup.controls['complaintDetails'].markAsUntouched();
       this.complaintDetailsEnable = false;
     }
   }//end of the method onComplaintTypeSelect
 
   // start method of onNatureTypeSelect
-  public onNatureTypeSelect(args) {
+  public onNatureTypeSelect(args,natureOfCompId: string) {
     this.complaintDetailsEnable = false;
     this.natureCmpName = args.target.options[args.target.selectedIndex].text;
     console.log("  this.natureCmpName ============================= ", this.natureCmpName);
     console.log("natureCmpIdParam", this.natureCmpName);
     if (this.natureCmpName == ("Others" || "Marking & Stenciling")) {
       this.complaintDetailsEnable = true;
-      this.complaintRegisterFormGroup.controls['complaintDetails'].markAsTouched();
+      this.investigationItemFormGroup.controls['complaintDetails'].markAsTouched();
     }
   }// end method of onNatureTypeSelect
 
@@ -412,12 +409,12 @@ export class ComplaintReferenceNoSearchComponent implements OnInit {
     this.complaintDetailsEnable = false;
     console.log(" complaintDetails ", complaintDetails);
     if ((complaintDetails == "" || complaintDetails == " ") && this.complaintTypeName == "Others(CAT C)") {
-      // this.complaintRegisterFormGroup.controls['natureOfComplaintId'].markAsUntouched();
+      // this.investigationItemFormGroup.controls['natureOfComplaintId'].markAsUntouched();
       this.complaintDetailsEnable = true;
     } else if ((complaintDetails == "" || complaintDetails == " ") && this.complaintTypeName != "Others(CAT C)") {
       if (this.natureCmpName == "Others") {
         this.complaintDetailsEnable = true;
-        this.complaintRegisterFormGroup.controls['complaintDetails'].markAsTouched();
+        this.investigationItemFormGroup.controls['complaintDetails'].markAsTouched();
       }
     }
 
@@ -440,10 +437,20 @@ export class ComplaintReferenceNoSearchComponent implements OnInit {
     this.router.navigate([ROUTE_PATHS.RouteInvestigationReportDiAdd,this.compRefNo,this.complaintStatus]);
   }//end of the method onSubmitSelectedInvDet
 
-  public onCancel() {
-    
-    console.log(" this.complaintDIInvoiceDetailsService.selectedItemDetails ", this.investigationReportInvoiceDetailsService.selectedItemDetails);
+  // start method of onSubmitPrevItemEdit to submit modified previous item
+  public onSubmitPrevItemEdit(){
+    this.investigationReportInvoiceDetailsService.complaintTypeDesc = this.complaintTypeName;
+    this.investigationReportInvoiceDetailsService.natureOfComplaintDesc = this.natureCmpName;
+    this.investigationReportInvoiceDetailsService.detailsOfComplaint = this.investigationItemFormGroup.value.complaintDetails;
+    this.investigationReportInvoiceDetailsService.invoiceNo = this.invoiceNo;
+    this.investigationReportInvoiceDetailsService.itemCode = this.itemCode;
     this.router.navigate([ROUTE_PATHS.RouteInvestigationReportDiAdd,this.compRefNo,this.complaintStatus]);
-  }
+  }//end of the method onSubmitPrevItemEdit
+
+  //start method of onCancel
+  public onCancel() {
+    console.log(" this.investigationReportInvoiceDetailsService.selectedItemDetails ", this.investigationReportInvoiceDetailsService.selectedItemDetails);
+    this.router.navigate([ROUTE_PATHS.RouteInvestigationReportDiAdd,this.compRefNo,this.complaintStatus]);
+  }//end method of onCancel
 
 }//end of class

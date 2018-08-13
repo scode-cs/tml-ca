@@ -154,9 +154,20 @@
               <table class="table-style">
                 <thead>
                   <tr class="th-style">
-                    <td class="hideextra" *ngFor="let invItem of  itemGridTable" [ngClass]="invItem.headerClass">
+                    <!-- <td class="hideextra" *ngFor="let invItem of  itemGridTable" [ngClass]="invItem.headerClass">
                       {{ invItem.headerDesc }}
-                    </td>
+                    </td> -->
+                    <td class="hideextra header-style-first">Official Document No</td>
+                    <td class="hideextra header-style">Item Code</td>
+                    <td class="hideextra header-style">Item Description</td>
+                    <td class="hideextra header-style">Official Document Date</td>
+                    <td class="hideextra header-style">Invoice Qty(in Mtrs)</td>
+                    <td class="hideextra header-style bold-font" style="padding-top:9px;">Complaint Qty(in Mtrs)<label class="red-asterick">*</label></td>
+                    <td class="hideextra header-style">Complaint Type</td>
+                    <td class="hideextra header-style">Nature of Complaint</td>
+                    <td class="hideextra header-style">Detail of Complaint</td>
+                    <td class="hideextra header-style">Project Name</td>
+                    <td class="hideextra header-style-last">Project Location</td>
                   </tr>
                 </thead>
                 <tbody>
