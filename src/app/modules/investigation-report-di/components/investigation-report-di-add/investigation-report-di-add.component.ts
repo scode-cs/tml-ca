@@ -68,6 +68,13 @@ export class InvestigationReportDiComponent implements OnInit {
   public invReportVar: any = { siteVisitMadeValue: '', sampleCollectedValue: '' };
   public invRejectReason: string = '';//taking a var to show reject reason
 
+  //new add for modal custoner arr
+  public invDetailsItemsHeader: any = {};
+  private allInvDetData: any[] = [];// to store all inv det from allInvDetDefault
+  public allInvDetDefault: any[] = [];//array for showing all invoice dets
+  public selectedInvDet: any[] = [];// array for showing selected invoice dets
+  //end of new add for modal customer arr
+
   public editCompTypeModal: boolean = false;
 
   constructor(
@@ -88,8 +95,6 @@ export class InvestigationReportDiComponent implements OnInit {
     this.getRouteParam();
     this.getPreviousInvHistory();
     this.getComplaintTypeVal();//get complaint type dropdown val from web service call
-    // error call of getPreviousInvHistory() => this.getInvestigationViewDetailsWSCall();
-    // this.getSelectedInvItemGridDet();//method to get inv item grid
     this.invReportTable = new InvestigationReportDIConfigModel().prevInvReportHeader;
     this.itemGridTable = new InvestigationReportDIConfigModel().invItemGridHeader;
     this.ivtReportDataList.unloadingEquipmentList = new InvestigationDataModel().unloadingEquipmentList;
@@ -146,13 +151,6 @@ export class InvestigationReportDiComponent implements OnInit {
     this.investigationReportDIDataService.getSelectComplaintType().
       subscribe(res => {
         this.complaintTypeDropDownList = res.details;
-        // for (let cmpType of this.complaintTypeDropDownList) {
-        //   if (cmpType.Key == "") {
-        //     this.investigationItemFormGroup.controls["complaintTypeId"].setValue(cmpType.Key);
-        //     break;
-        //   }//end if
-        // }//end for
-        // this.busySpinner = false;
       },
         err => {
           console.log(err);
@@ -160,6 +158,54 @@ export class InvestigationReportDiComponent implements OnInit {
           this.sessionErrorService.routeToLogin(err._body);
         });
   }//end method getComplaintTypeVal
+
+  //method of customer item details get
+  private getCustomerInvItemDet(customerCodeParam: string) {
+    this.investigationReportDIDataService.getCustomerInvDet(customerCodeParam).
+      subscribe(res => {
+        if (res.msgType === "Info") {
+          if (this.selectedInvDet.length == 0) {
+            this.allInvDetDefault = res.invoiceDetails.items;
+            this.invDetailsItemsHeader = res.invoiceDetails.itemsHeader;
+          }
+          //  else if (this.selectedInvDet.length > 0) {
+          //   let allItemDet = res.invoiceDetails.items;
+          //   let flag: boolean = false;
+          //   for (let alItm of allItemDet) {
+          //     flag = this.selectedItemDetails(alItm.invoiceNo, alItm.itemCode, alItm.customerCode);
+          //     if (flag == false) {
+          //       this.allInvDetDefault.push(alItm);
+          //     }//end of if flag == false
+          //   }//end of for
+          // }//end of else if    
+          // this.busySpinner = false;
+        } else {
+          // this.busySpinner = false;
+        }
+        console.log(" this.allInvDetDefault ========> ", this.allInvDetDefault);
+        this.setAllInvtDetails();
+      },
+      err => {
+        console.log(err);
+        // this.busySpinner = false;
+        this.sessionErrorService.routeToLogin(err._body);
+      });
+  }//end of method 
+
+  // start method setAllInvtDetails to push allInvDet to allInvDetData array
+  private setAllInvtDetails(){
+    this.allInvDetDefault.forEach(allInvDet => {
+      this.allInvDetData.push(allInvDet);
+    });
+  }//end of the method setAllInvtDetails
+
+  // start method reset AllInvtDetails t
+  private resetAllInvtDetails(){
+    this.allInvDetDefault = [];
+    this.allInvDetData.forEach(allInvDetData => {
+      this.allInvDetDefault.push(allInvDetData);
+    });
+  }//end of the method resetAllInvtDetails
 
   // //method to get invitemgrid det
   // private getSelectedInvItemGridDet() {
@@ -287,7 +333,9 @@ export class InvestigationReportDiComponent implements OnInit {
             let invItemIndex: number = 0;
             this.invReportFormGroup.controls['customerCode'].setValue(this.invItemDetails[invItemIndex].customerCode);
             this.invReportFormGroup.controls['customerName'].setValue(this.invItemDetails[invItemIndex].customerName);
-          }
+          }//end of if
+          let customerCode: string =  this.invReportFormGroup.value.customerCode;//store the cutomer code
+          this.getCustomerInvItemDet(customerCode);
           // end of new add
         } else {
           this.busySpinner = false;
@@ -486,6 +534,18 @@ export class InvestigationReportDiComponent implements OnInit {
     }//end of for
     console.log(" SelInvDetails after splice ", this.selectedInvItemDetails);
   }//end of the method deleteSelInvDetFromSelInvDet
+
+ 
+
+  //start method onKeyupComplaintQty
+  public onKeyupComplaintQty(complaintQtyInMtrsParam, itemDetEl:any ,cameFromParam: string) {
+    let flag: boolean = false;
+    console.log("complaintQtyInMtrsParam===>", complaintQtyInMtrsParam);
+    if(cameFromParam === 'regItemArr') {
+    }
+    // let cmpQtyErr : boolean = false;
+   
+  }//end of the method onKeyupComplaintQty
 
   // //to clear itemcode and invoice no
   // private clearInvoiceNoItemCode(){
@@ -764,23 +824,25 @@ export class InvestigationReportDiComponent implements OnInit {
     this.getInvoiceItemDetailWSCall(this.complaintReferenceNo, pageCompStatus, complainDetailsAutoId, comingFrom);//inv item details   
   }//end method of selectData
 
-  //onOpenModal for opening modal from modalService
+  // //onOpenModal for opening modal from modalService
   public onItemsOpenModal() {
-    const modalRef = this.modalService.open(NgbdComplaintReferenceNoModalComponent);
-    modalRef.componentInstance.modalTitle = this.title;
-    let customerCode: string = this.invReportFormGroup.value.customerCode;
-    this.investigationReportInvoiceDetailsService.custCode = customerCode;
-    let customerName: string = this.invReportFormGroup.value.customerName;
-    this.investigationReportInvoiceDetailsService.custName = customerName;
-    this.investigationReportInvoiceDetailsService.compRefNo = this.complaintReferenceNo;
-    this.investigationReportInvoiceDetailsService.complaintStatus = this.complaintStatus;
-    let items: any = [];
-    items = this.selectedInvItemDetails;
-    let selItemsDet: any = {};
-    selItemsDet.items = items;
-    this.investigationReportInvoiceDetailsService.selectedItemDetails = selItemsDet;
-    // this.clearInvoiceNoItemCode();//to clear invoice no and item code
-  }//end of method onOpenModal
+    this.toggleAddInvItemModal();
+  }
+  //   // const modalRef = this.modalService.open(NgbdComplaintReferenceNoModalComponent);
+  //   // modalRef.componentInstance.modalTitle = this.title;
+  //   // let customerCode: string = this.invReportFormGroup.value.customerCode;
+  //   // this.investigationReportInvoiceDetailsService.custCode = customerCode;
+  //   // let customerName: string = this.invReportFormGroup.value.customerName;
+  //   // this.investigationReportInvoiceDetailsService.custName = customerName;
+  //   // this.investigationReportInvoiceDetailsService.compRefNo = this.complaintReferenceNo;
+  //   // this.investigationReportInvoiceDetailsService.complaintStatus = this.complaintStatus;
+  //   // let items: any = [];
+  //   // items = this.selectedInvItemDetails;
+  //   // let selItemsDet: any = {};
+  //   // selItemsDet.items = items;
+  //   // this.investigationReportInvoiceDetailsService.selectedItemDetails = selItemsDet;
+  //   // // this.clearInvoiceNoItemCode();//to clear invoice no and item code
+  // }//end of method onOpenModal
 
   // start method of onCloseInvoiceNo
   public onCloseInvoiceNo(selectedInvDet: any) {
@@ -840,19 +902,21 @@ export class InvestigationReportDiComponent implements OnInit {
   }// end method of onNatureTypeSelect
   //end of new add
   //
-  public toggleEditCompTypeModal() {
+  private toggleEditCompTypeModal() {
     this.editCompTypeModal = this.editCompTypeModal ? false : true;
   }
-
-  public closeComplainTypeEditModal() {
-    this.toggleEditCompTypeModal();
+  public closeItemModal(closeParam:string) {
+    this.clearItemModalData();//clear all data
+    if(closeParam === 'EditItem'){
+      this.toggleEditCompTypeModal();
+    }else if(closeParam === 'AddItem') {
+      this.toggleAddInvItemModal();
+    }
   }
-
   private tempCompTypeJson: any = {};//taking json to store temp complaint type n nature of complaint val
-
-  editCompTypeOfficialDoc: string = '';
-  editCompTypeItemCode: string = '';
-  public modalErrorMsgObj: any = {
+  private editCompTypeOfficialDoc: string = '';//to store official doc no
+  private editCompTypeItemCode: string = '';//to store comp type item 
+  public modalErrorMsgObj: any = {//to show modal error msg
     modalErrorMsgShowFlag: false,
     modalErrorMsg: ''
   }
@@ -876,13 +940,12 @@ export class InvestigationReportDiComponent implements OnInit {
         this.modalErrorMsgObj.modalErrorMsg = "Details Of Complaint is Required!";
       }else{
         this.modalErrorMsgObj.modalErrorMsgShowFlag = false;
-        this.modalErrorMsgObj.modalErrorMsg = "Details Of Complaint is Required!";
+        this.modalErrorMsgObj.modalErrorMsg = "";
       }
     } else {
       this.modalErrorMsgObj.modalErrorMsgShowFlag = true;
       this.modalErrorMsgObj.modalErrorMsg = "Please Fillout All data.";
     }
-
      if(!this.modalErrorMsgObj.modalErrorMsgShowFlag){
       // Items from register
       this.invItemDetails.forEach(invItemEl => {
@@ -896,11 +959,8 @@ export class InvestigationReportDiComponent implements OnInit {
           }
         }//end of if
       });
-      //clear json 
-      this.tempCompTypeJson = {};
-      this.editCompTypeOfficialDoc = '';//clear the inv/official doc no
-      this.editCompTypeItemCode = '';//clear the item code
-      this.natureOfComDropDownList = [];//clear nature of complain arr
+      //clear data
+      this.clearItemModalData();
       this.toggleEditCompTypeModal();//close modal
      }
     // for () {
@@ -908,6 +968,24 @@ export class InvestigationReportDiComponent implements OnInit {
     // this.editCompTypeOfficialDoc = '';
     // this.editCompTypeItemCode = '';
     // }
+  }//end of method
+  clearItemModalData() {
+    //clear json 
+    this.tempCompTypeJson.complaintDetails = '';
+    this.tempCompTypeJson.complaintTypeDesc = '';
+    this.tempCompTypeJson.complaintTypeId = '';
+    this.tempCompTypeJson.natureOfComplaintId = '';
+    this.tempCompTypeJson.natureOfComplaintDesc = '';
+    this.editCompTypeOfficialDoc = '';//clear the inv/official doc no
+    this.editCompTypeItemCode = '';//clear the item code
+    this.natureOfComDropDownList = [];//clear nature of complain arr
+    //to clear the error msg
+    this.modalErrorMsgObj.modalErrorMsgShowFlag = false;
+    this.modalErrorMsgObj.modalErrorMsg = "";
   }
-
+  //for add item click
+  public addInvItemModalFlag: boolean = false;//to show add item modal
+  private toggleAddInvItemModal() {
+    this.addInvItemModalFlag = this.addInvItemModalFlag ? false : true;
+  }//end of method
 }//end of class

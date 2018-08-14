@@ -234,4 +234,19 @@ export class InvestigationReportDIDataService {
       .catch((error: Response) => { return Observable.throw(error) });
   }//end of method to getPreliViewDetForUpdate 
 
+  //get item by customer
+  getCustomerInvDet(custCode: string){
+    let actnUrl = AppUrlsConst.DI_PI_COMPLAINT_CUSTCODE_URL;
+    this.headers = this.configService();
+    let user : any = {};
+    user.customerCode = custCode;
+    user.invoiceNo = '';
+    user.itemCode = '';
+    console.log(' user======>',user);
+    return this.http.post(actnUrl, user, { headers: this.headers })
+        .map((res: Response) => { return res.json() })
+        .catch((error: Response) => { return Observable.throw(error) });
+  }//end of method
+
+
 }//end of class

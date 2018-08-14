@@ -650,6 +650,7 @@ export class ComplaintDIRegisterComponent implements OnInit {
         itemarrEl.invoiceNo = element.invoiceNo;
         itemarrEl.itemCode = element.itemCode;
         itemarrEl.invoiceQtyInMtrs = element.invoiceQtyInMtrs;
+        itemarrEl.complaintQtyInMtrs = element.complaintQtyInMtrs;
         itemarrEl.invoiceQtyInTons = element.invoiceQtyInTons;
         itemarrEl.userId = this.localStorageService.user.userId;
         itemarrEl.batchNo = element.batchNo;
@@ -835,10 +836,6 @@ export class ComplaintDIRegisterComponent implements OnInit {
       this.errorMsgObj.errMsgShowFlag = true;
       this.errorMsgObj.errorMsg = 'Please fillout All Data';
     }
-
-
-
-
   }//end of method complainregDiSubmit  
 
   //start method onKeyupComplaintQty
@@ -880,6 +877,7 @@ export class ComplaintDIRegisterComponent implements OnInit {
     }//end of outer for
     console.log(" this.selectedItemDetails onkeyup ", this.selectedItemDetails);
   }//end of the method onKeyupComplaintQty
+  
   //method for onchanging compaintType dropdown
   public onComplaintTypeSelect(args, complaintTypeId, selectedNatureOfComplaintId?: string) {
     let compDet: string = this.complaintRegisterFormGroup.value.complaintDetails.trim();
