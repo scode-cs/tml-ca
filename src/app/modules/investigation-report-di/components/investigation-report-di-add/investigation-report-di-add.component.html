@@ -1,4 +1,5 @@
 <div class="page-container">
+
   <div>
     <ol class="breadcrumb breadcrumb-custom">
       <li class="breadcrumb-item">
@@ -162,7 +163,9 @@
                     <td class="hideextra header-style">Item Description</td>
                     <td class="hideextra header-style">Official Document Date</td>
                     <td class="hideextra header-style">Invoice Qty(in Mtrs)</td>
-                    <td class="hideextra header-style bold-font" style="padding-top:9px;">Complaint Qty(in Mtrs)<label class="red-asterick">*</label></td>
+                    <td class="hideextra header-style bold-font" style="padding-top:9px;">Complaint Qty(in Mtrs)
+                      <label class="red-asterick">*</label>
+                    </td>
                     <td class="hideextra header-style">Complaint Type</td>
                     <td class="hideextra header-style">Nature of Complaint</td>
                     <td class="hideextra header-style">Detail of Complaint</td>
@@ -172,7 +175,7 @@
                 </thead>
                 <tbody>
                   <tr class="tr-style" *ngFor="let invItemDet of invItemDetails">
-                    <td class="hideextra" *ngFor="let itmGrid of itemGridTable" [ngClass]="itmGrid.dataClass">
+                    <!-- <td class="hideextra" *ngFor="let itmGrid of itemGridTable" [ngClass]="itmGrid.dataClass">
                       <ng-container *ngIf="itmGrid.headerKey === 'complaintQtyInMtrs' then thenblock; else elseblock">
                       </ng-container>
                       <ng-template #thenblock>
@@ -182,12 +185,27 @@
                         {{ invItemDet[itmGrid.headerKey] }}
                       </ng-template>
                       <ng-container *ngIf="itmGrid.headerKey === 'invoiceNo'">
-                        <i class="fa fa-pencil-square text-info" style="cursor: pointer;" (click)="onEditPrevItem(invItemDet)"></i>
+                        <i class="fa fa-pencil-square text-info" style="cursor: pointer;" (click)="openEditCompTypeModal(invItemDet)"></i>
                       </ng-container>
+                    </td> -->
+                    <td class="td-style-first hideextra">{{invItemDet.invoiceNo}}
+                      <i class="fa fa-pencil-square text-info" style="cursor: pointer;" (click)="openEditCompTypeModal(invItemDet)"></i>
                     </td>
+                    <td class="td-style hideextra">{{invItemDet.itemNo}}</td>
+                    <td class="td-style hideextra">{{invItemDet.itemName}}</td>
+                    <td class="td-style hideextra">{{invItemDet.invoiceDate}}</td>
+                    <td class="td-style hideextra">{{invItemDet.invoiceQtyInMtrs}}</td>
+                    <td class="td-style hideextra">
+                      <input type="number" value={{invItemDet.complaintQtyInMtrs}} />
+                    </td>
+                    <td class="td-style hideextra">{{invItemDet.complaintTypeDesc}}</td>
+                    <td class="td-style hideextra">{{invItemDet.natureOfComplaintDesc}}</td>
+                    <td class="td-style hideextra">{{invItemDet.complaintDetails}}</td>
+                    <td class="td-style hideextra">{{invItemDet.projectName}}</td>
+                    <td class="td-style-last hideextra">{{invItemDet.projectLocation}}</td>
                   </tr>
                   <tr class="tr-style" *ngFor="let selInvItmDet of selectedInvItemDetails">
-                    <td class="hideextra" *ngFor="let itmGrid of itemGridTable" [ngClass]="itmGrid.dataClass">
+                    <!-- <td class="hideextra" *ngFor="let itmGrid of itemGridTable" [ngClass]="itmGrid.dataClass">
                       <ng-container *ngIf="itmGrid.headerKey === 'complaintQtyInMtrs' then thenblock; else elseblock">
                       </ng-container>
                       <ng-template #thenblock>
@@ -199,7 +217,22 @@
                       <ng-container *ngIf="itmGrid.headerKey === 'invoiceNo'">
                         <i class="fa fa-minus-circle text-danger" style="cursor: pointer;" (click)="onCloseInvoiceNo(selInvItmDet)"></i>
                       </ng-container>
+                    </td> -->
+                    <td class="td-style-first hideextra">{{selInvItmDet.invoiceNo}}
+                      <i class="fa fa-minus-circle text-danger" style="cursor: pointer;" (click)="onCloseInvoiceNo(selInvItmDet)"></i>
                     </td>
+                    <td class="td-style hideextra">{{selInvItmDet.itemNo}}</td>
+                    <td class="td-style hideextra">{{selInvItmDet.itemName}}</td>
+                    <td class="td-style hideextra">{{selInvItmDet.invoiceDate}}</td>
+                    <td class="td-style hideextra">{{selInvItmDet.invoiceQtyInMtrs}}</td>
+                    <td class="td-style hideextra">
+                      <input type="number" value={{selInvItmDet.complaintQtyInMtrs}} />
+                    </td>
+                    <td class="td-style hideextra">{{selInvItmDet.complaintTypeDesc}}</td>
+                    <td class="td-style hideextra">{{selInvItmDet.natureOfComplaintDesc}}</td>
+                    <td class="td-style hideextra">{{selInvItmDet.complaintDetails}}</td>
+                    <td class="td-style hideextra">{{selInvItmDet.projectName}}</td>
+                    <td class="td-style-last hideextra">{{selInvItmDet.projectLocation}}</td>
                   </tr>
                   <tr class="tr-style">
                     <!-- invItemDetails -->
@@ -372,6 +405,70 @@
     <!-- end of main div -->
   </div>
   <!--end of page-container-->
+
+  <!-- edit modal -->
+  <div *ngIf="editCompTypeModal" class="overlay"></div>
+  <!-- <div class="modal">I'm the modal window!</div> -->
+  <div *ngIf="editCompTypeModal" class="edit-modal">
+    <!-- header div -->
+    <div class="modal-header">
+      <div> Modal Title </div>
+      <div (click)="closeComplainTypeEditModal()" style="cursor: pointer;">x</div>
+    </div>
+    <!-- end of header div -->
+    <!-- start body div -->
+    <div>
+      <!-- Body...... Body Element... -->
+      <!--inv item form group -->
+      <!-- start complaint type div -->
+      <div class="row col-xs-12 col-sm-12 col-md-12 col-lg-12">
+          <div class="form-group col-xs-12 col-sm-6 col-md-6 col-lg-4" style="display:inline-block">
+            <label>Complaint Type</label>
+            <select class="custom-select col-xs-12 col-sm-6 col-md-6 col-lg-4" (change)="onComplaintTypeSelect($event,$event.target.value)">
+              <option *ngFor="let cmpType of complaintTypeDropDownList" value="{{ cmpType.Key}}">{{ cmpType.Value }}</option>
+            </select>
+          </div>
+          <!--start div for Nature of Complaint-->
+          <div class="form-group col-xs-12 col-sm-6 col-md-6 col-lg-4" style="display:inline-block">
+            <label>Nature of Complaint</label>
+            <select class="custom-select col-xs-12 col-sm-6 col-md-6 col-lg-4" (change)="onNatureTypeSelect($event,$event.target.value)"
+              required>
+              <!---->
+              <option *ngIf="natureOfComDropDownList.length==0" value="">-- Select --</option>
+              <option *ngFor="let natureCmp of natureOfComDropDownList" value="{{ natureCmp.Key }}">{{ natureCmp.Value }}</option>
+            </select>
+          </div>
+          <!--end div for Nature of Complaint-->
+          <!--start div for Detail of Complaint-->
+          <div class="form-group col-xs-12 col-sm-6 col-md-6 col-lg-4" style="display:inline-block">
+            <label>Detail of Complaint</label>
+            <textarea class="form-control hide-horizontal-scroll" #complaintDetails></textarea>
+            <!--start div for Detail of Complaint alert-->
+          </div>
+          <!--end div for Detail of Complaint-->
+        </div>
+        <!-- end of complaint type div -->
+
+          <!--start button div-->
+          <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+            <div class="col-xs-12 col-sm-4 col-md-4 col-lg-2" style="float: right;">
+              <button type="submit" class="btn btn-primary primary-button-style" (click)="saveEditCompType(complaintDetails.value)">Save
+              </button>
+            </div>
+          </div>
+          <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" *ngIf="modalErrorMsgObj.modalErrorMsgShowFlag">
+            <div class="text-danger">
+              <i class="fa fa-exclamation-circle" aria-hidden="true"></i>
+              <b>{{modalErrorMsgObj.modalErrorMsg}}</b>&nbsp;
+            </div>
+          </div>
+          <!--end of button div-->
+        
+
+    </div>
+    <!-- end of body div -->
+  </div>
+  <!--end of edit-modal -->
 
   <!--spinner-->
   <ispl-busy-spinner *ngIf="busySpinner"></ispl-busy-spinner>

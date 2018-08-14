@@ -13,6 +13,8 @@ import { NgbdComplaintReferenceNoModalComponent } from './complaint-reference-no
 import { InvestigationReportDIConfigModel } from '../../models/investigation-report-di-config.model';
 import { InvestigationDataModel } from '../../models/investigation-data-model';
 import { InvestigationReportInvoiceDetailsService } from "../../services/investigation-report-invoice-details.service";
+import { InvestigationReportDIDataService } from "../../services/investigation-report-di.service";
+
 @Component({
   selector: 'ispl-investigation-report-di-add-form',
   templateUrl: 'investigation-report-di-add.component.html',
@@ -46,13 +48,19 @@ export class InvestigationReportDiComponent implements OnInit {
   public lubricantUsedList: any[] = [];
   public layingPositionList: any[] = [];
   public jointingTypeList: any[] = [];
+  //new add
+  public complaintTypeDropDownList: any[] = [];
+  public natureOfComDropDownList: any = [];
+  //end of new add
   public errorMsgObj: any = {
     errorMsg: '',
     errMsgShowFlag: false
   };
   public fileArr: any[] = [];//to store file details from file upload response
   //creating a FormGroup for Investigation Report
-  public invReportFormGroup: FormGroup;
+  public invReportFormGroup: FormGroup;//form group of inv report di add
+  public invItemEditModalFormGroup: FormGroup;//form group of inv item modal
+
   public complaintReferenceNo: string;//to get complaint ref no from html and send it as a parameter
   //busySpinner 
   public busySpinner: boolean = true;
@@ -60,12 +68,15 @@ export class InvestigationReportDiComponent implements OnInit {
   public invReportVar: any = { siteVisitMadeValue: '', sampleCollectedValue: '' };
   public invRejectReason: string = '';//taking a var to show reject reason
 
+  public editCompTypeModal: boolean = false;
+
   constructor(
     private activatedroute: ActivatedRoute,
     private router: Router,
     private complaintDIService: ComplaintDIService,
     private localStorageService: LocalStorageService,
     private investigationReportInvoiceDetailsService: InvestigationReportInvoiceDetailsService,
+    private investigationReportDIDataService: InvestigationReportDIDataService,
     private modalService: NgbModal,//modal
     private sessionErrorService: SessionErrorService,
     private datePipe: DatePipe//for date
@@ -76,8 +87,9 @@ export class InvestigationReportDiComponent implements OnInit {
     this.initform();
     this.getRouteParam();
     this.getPreviousInvHistory();
+    this.getComplaintTypeVal();//get complaint type dropdown val from web service call
     // error call of getPreviousInvHistory() => this.getInvestigationViewDetailsWSCall();
-    this.getSelectedInvItemGridDet();//method to get inv item grid
+    // this.getSelectedInvItemGridDet();//method to get inv item grid
     this.invReportTable = new InvestigationReportDIConfigModel().prevInvReportHeader;
     this.itemGridTable = new InvestigationReportDIConfigModel().invItemGridHeader;
     this.ivtReportDataList.unloadingEquipmentList = new InvestigationDataModel().unloadingEquipmentList;
@@ -100,6 +112,12 @@ export class InvestigationReportDiComponent implements OnInit {
       customerCode: new FormControl(''),
       customerName: new FormControl('')
     });
+    // this.invItemEditModalFormGroup = new FormGroup({
+    //   complaintTypeIdForEditItem: new FormControl(''),
+    //   natureOfComplaintIdForEditItem: new FormControl(''),
+    //   complaintDetailsForEditItem: new FormControl('')
+    // });
+
   }//end of method
 
   //start method getRouteParam to get route parameter
@@ -121,51 +139,74 @@ export class InvestigationReportDiComponent implements OnInit {
     this.invReportFormGroup.controls['investigationReportDate'].setValue(currentDate);
   }//end of method
 
-  //method to get invitemgrid det
-  private getSelectedInvItemGridDet() {
-    //if selected items grid length is greater than zero setSelectItemsGrid method will invoked
-    if (this.investigationReportInvoiceDetailsService && this.investigationReportInvoiceDetailsService.selectedItemDetails) {
-      let selItemsDet: any = {};
-      selItemsDet = this.investigationReportInvoiceDetailsService.selectedItemDetails;
-      let items: any = [];
-      items = selItemsDet.items;
-      console.log(" items ==================== ", items);
-      if (items.length > 0) {
-        this.setSelectItemsGrid(items);
-      }//end of if
-    }//end of if
-  }//end of method
+  //method to get complaint type  
+  private getComplaintTypeVal() {
+    // this.busySpinner = true;
+    //getting all values of complaintType
+    this.investigationReportDIDataService.getSelectComplaintType().
+      subscribe(res => {
+        this.complaintTypeDropDownList = res.details;
+        // for (let cmpType of this.complaintTypeDropDownList) {
+        //   if (cmpType.Key == "") {
+        //     this.investigationItemFormGroup.controls["complaintTypeId"].setValue(cmpType.Key);
+        //     break;
+        //   }//end if
+        // }//end for
+        // this.busySpinner = false;
+      },
+        err => {
+          console.log(err);
+          // this.busySpinner = false;
+          this.sessionErrorService.routeToLogin(err._body);
+        });
+  }//end method getComplaintTypeVal
 
-  //new add
-  //start method of getComplainDet
-  private getComplainDet() {
-    let compDet: any = {};
-    if (this.investigationReportInvoiceDetailsService.complaintTypeDesc && this.investigationReportInvoiceDetailsService.natureOfComplaintDesc || this.investigationReportInvoiceDetailsService.detailsOfComplaint && this.investigationReportInvoiceDetailsService.invoiceNo && this.investigationReportInvoiceDetailsService.itemCode) {
-      compDet.complaintTypeDesc = this.investigationReportInvoiceDetailsService.complaintTypeDesc;
-      compDet.natureOfComplaintDesc = this.investigationReportInvoiceDetailsService.natureOfComplaintDesc;
-      compDet.invoiceNo = this.investigationReportInvoiceDetailsService.invoiceNo;
-      compDet.itemNo = this.investigationReportInvoiceDetailsService.itemCode;
-      if (this.investigationReportInvoiceDetailsService.detailsOfComplaint) {
-        compDet.detailsOfComplaint = this.investigationReportInvoiceDetailsService.detailsOfComplaint;
-      }//end of if
-      this.updatePrevItem(compDet);
-    }//end of if
-  }//end method of getComplainDet
+  // //method to get invitemgrid det
+  // private getSelectedInvItemGridDet() {
+  //   //if selected items grid length is greater than zero setSelectItemsGrid method will invoked
+  //   if (this.investigationReportInvoiceDetailsService && this.investigationReportInvoiceDetailsService.selectedItemDetails) {
+  //     let selItemsDet: any = {};
+  //     selItemsDet = this.investigationReportInvoiceDetailsService.selectedItemDetails;
+  //     let items: any = [];
+  //     items = selItemsDet.items;
+  //     console.log(" items ==================== ", items);
+  //     if (items.length > 0) {
+  //       this.setSelectItemsGrid(items);
+  //     }//end of if
+  //   }//end of if
+  // }//end of method
 
-  //start method of updatePrevItem
-  private updatePrevItem(compDetParam: any) {
-    this.invItemDetails.forEach(invItm => {
-      if (invItm.invoiceNo === compDetParam.invoiceNo && invItm.itemNo === compDetParam.itemNo) {
-        invItm.complaintTypeDesc = compDetParam.complaintTypeDesc;
-        invItm.natureOfComplaintDesc = compDetParam.natureOfComplaintDesc;
-        invItm.complaintDetails =  compDetParam.detailsOfComplaint;
-        console.log(" ======item matched====== ");
-        console.log(" ==== compDetParam ======", compDetParam);
-      }//end of if
-    });
-  }//end of updatePrevItem
+  // //new add
+  // //start method of getComplainDet
+  // private getComplainDet() {
+  //   let compDet: any = {};
+  //   if (this.investigationReportInvoiceDetailsService.complaintTypeDesc && this.investigationReportInvoiceDetailsService.natureOfComplaintDesc || this.investigationReportInvoiceDetailsService.detailsOfComplaint && this.investigationReportInvoiceDetailsService.invoiceNo && this.investigationReportInvoiceDetailsService.itemCode) {
+  //     compDet.complaintTypeDesc = this.investigationReportInvoiceDetailsService.complaintTypeDesc;
+  //     compDet.natureOfComplaintDesc = this.investigationReportInvoiceDetailsService.natureOfComplaintDesc;
+  //     compDet.invoiceNo = this.investigationReportInvoiceDetailsService.invoiceNo;
+  //     compDet.itemNo = this.investigationReportInvoiceDetailsService.itemCode;
+  //     if (this.investigationReportInvoiceDetailsService.detailsOfComplaint) {
+  //       compDet.detailsOfComplaint = this.investigationReportInvoiceDetailsService.detailsOfComplaint;
+  //     }//end of if
+  //     this.updatePrevItem(compDet);
+  //   }//end of if
+  // }//end method of getComplainDet
+
+  // //start method of updatePrevItem
+  // private updatePrevItem(compDetParam: any) {
+  //   this.invItemDetails.forEach(invItm => {
+  //     if (invItm.invoiceNo === compDetParam.invoiceNo && invItm.itemNo === compDetParam.itemNo) {
+  //       invItm.complaintTypeDesc = compDetParam.complaintTypeDesc;
+  //       invItm.natureOfComplaintDesc = compDetParam.natureOfComplaintDesc;
+  //       invItm.complaintDetails =  compDetParam.detailsOfComplaint;
+  //       console.log(" ======item matched====== ");
+  //       console.log(" ==== compDetParam ======", compDetParam);
+  //     }//end of if
+  //   });
+  // }//end of updatePrevItem
   //end of new add
-  //start method of setSelectItemsGrid
+
+  // //start method of setSelectItemsGrid
   private setSelectItemsGrid(selItemsParam: any[]) {
     let selItems: any[] = selItemsParam;
     selItems.forEach(selItm => {
@@ -191,7 +232,7 @@ export class InvestigationReportDiComponent implements OnInit {
           let complaintDetailsAutoId: number = this.invReportDetails[this.invReportIndex].complaintDetailAutoId;
           let comingFrom: string = "";//to check its from reg or not n set customer details
           // TODO: Item for previous 
-          this.getInvoiceItemDetailWSCall(this.complaintReferenceNo, pageActivityId, complaintDetailsAutoId,comingFrom);
+          this.getInvoiceItemDetailWSCall(this.complaintReferenceNo, pageActivityId, complaintDetailsAutoId, comingFrom);
         } else {
           // this.busySpinner = false;
           this.getComplainViewDetailsWSCall();
@@ -218,7 +259,7 @@ export class InvestigationReportDiComponent implements OnInit {
           let pageActivityId: number = 10;
           let complaintDetailsAutoId: number = regDetails[regLastIndex].complaintDetailAutoId;
           let comingFrom: string = 'Reg';//to check its from reg or not n set customer details
-          this.getInvoiceItemDetailWSCall(this.complaintReferenceNo, pageActivityId, complaintDetailsAutoId,comingFrom);
+          this.getInvoiceItemDetailWSCall(this.complaintReferenceNo, pageActivityId, complaintDetailsAutoId, comingFrom);
         } else {
           this.busySpinner = false;
         }//end of else if
@@ -231,7 +272,7 @@ export class InvestigationReportDiComponent implements OnInit {
   }//end of method
 
   //start method getInvoiceItemDetailWSCall to get item details
-  private getInvoiceItemDetailWSCall(complaintReferenceNo: string, pageActivityId: number, complaintDetailsAutoId: number,comingFrom: string) {
+  private getInvoiceItemDetailWSCall(complaintReferenceNo: string, pageActivityId: number, complaintDetailsAutoId: number, comingFrom: string) {
     this.busySpinner = true;
     this.complaintDIService.getInvoiceItemDetail(complaintReferenceNo, pageActivityId, complaintDetailsAutoId).
       subscribe(res => {
@@ -241,11 +282,11 @@ export class InvestigationReportDiComponent implements OnInit {
           this.busySpinner = false;
           console.log("item details =========.........>>>>>>>>>", this.invItemDetails);
           //new add
-          this.getComplainDet();//calling the method to check n update previous item row
-          if(comingFrom){
+          // this.getComplainDet();//calling the method to check n update previous item row
+          if (comingFrom) {
             let invItemIndex: number = 0;
             this.invReportFormGroup.controls['customerCode'].setValue(this.invItemDetails[invItemIndex].customerCode);
-            this.invReportFormGroup.controls['customerName'].setValue(this.invItemDetails[invItemIndex].customerName);            
+            this.invReportFormGroup.controls['customerName'].setValue(this.invItemDetails[invItemIndex].customerName);
           }
           // end of new add
         } else {
@@ -303,26 +344,26 @@ export class InvestigationReportDiComponent implements OnInit {
     this.sessionErrorService.routeToLogin(err._body);
   }//end of method
   //to set items arr for submit
-  private setTotalItemArr(itemsArr:any):any{
-    let itemarrEl: any = {};  
-      itemarrEl.activityId = itemsArr.activityId;
-      itemarrEl.complaintReferenceNo = itemsArr.complaintReferenceNo;
-      itemarrEl.complaintDetailsAutoId = "";//ask sayantan da --> parseInt(valueSub);
-      itemarrEl.natureOfComplaintId = itemsArr.natureOfComplaintId;
-      itemarrEl.complaintDetails = itemsArr.complaintDetails;
-      itemarrEl.invoiceNo = itemsArr.invoiceNo;
-      itemarrEl.itemCode = itemsArr.itemCode;
-      itemarrEl.invoiceQtyInMtrs = itemsArr.invoiceQtyInMtrs;
-      itemarrEl.invoiceQtyInTons = itemsArr.invoiceQtyInTons;
-      itemarrEl.userId = this.localStorageService.user.userId;
-      itemarrEl.batchNo = itemsArr.batchNo;
-      itemarrEl.cameFrom = itemsArr.cameFrom;       
+  private setTotalItemArr(itemsArr: any): any {
+    let itemarrEl: any = {};
+    itemarrEl.activityId = itemsArr.activityId;
+    itemarrEl.complaintReferenceNo = itemsArr.complaintReferenceNo;
+    itemarrEl.complaintDetailsAutoId = "";//ask sayantan da --> parseInt(valueSub);
+    itemarrEl.natureOfComplaintId = itemsArr.natureOfComplaintId;
+    itemarrEl.complaintDetails = itemsArr.complaintDetails;
+    itemarrEl.invoiceNo = itemsArr.invoiceNo;
+    itemarrEl.itemCode = itemsArr.itemCode;
+    itemarrEl.invoiceQtyInMtrs = itemsArr.invoiceQtyInMtrs;
+    itemarrEl.invoiceQtyInTons = itemsArr.invoiceQtyInTons;
+    itemarrEl.userId = this.localStorageService.user.userId;
+    itemarrEl.batchNo = itemsArr.batchNo;
+    itemarrEl.cameFrom = itemsArr.cameFrom;
     return itemarrEl;
   }//end of method
 
   //start method of getTotalItemDet to get total items
   private getTotalItemDet(): any[] {
-    let totalItems: any[] = []; 
+    let totalItems: any[] = [];
     let arrEl: any = {};
     this.invItemDetails.forEach(invItmDet => {
       arrEl = this.setTotalItemArr(invItmDet);
@@ -446,11 +487,11 @@ export class InvestigationReportDiComponent implements OnInit {
     console.log(" SelInvDetails after splice ", this.selectedInvItemDetails);
   }//end of the method deleteSelInvDetFromSelInvDet
 
-  //to clear itemcode and invoice no
-  private clearInvoiceNoItemCode(){
-    this.investigationReportInvoiceDetailsService.invoiceNo = "";
-    this.investigationReportInvoiceDetailsService.itemCode = "";
-  }//end of the method clearInvoiceNoItemCode
+  // //to clear itemcode and invoice no
+  // private clearInvoiceNoItemCode(){
+  //   this.investigationReportInvoiceDetailsService.invoiceNo = "";
+  //   this.investigationReportInvoiceDetailsService.itemCode = "";
+  // }//end of the method clearInvoiceNoItemCode
 
   //file upload event  
   public fileChange(event) {
@@ -720,7 +761,7 @@ export class InvestigationReportDiComponent implements OnInit {
     let pageCompStatus: number = 40;//to fetch item 
     this.setResValToForm();
     let complainDetailsAutoId: number = this.invReportDetails[this.invReportIndex].complaintDetailsAutoId;
-    this.getInvoiceItemDetailWSCall(this.complaintReferenceNo, pageCompStatus, complainDetailsAutoId,comingFrom);//inv item details   
+    this.getInvoiceItemDetailWSCall(this.complaintReferenceNo, pageCompStatus, complainDetailsAutoId, comingFrom);//inv item details   
   }//end method of selectData
 
   //onOpenModal for opening modal from modalService
@@ -738,7 +779,7 @@ export class InvestigationReportDiComponent implements OnInit {
     let selItemsDet: any = {};
     selItemsDet.items = items;
     this.investigationReportInvoiceDetailsService.selectedItemDetails = selItemsDet;
-    this.clearInvoiceNoItemCode();//to clear invoice no and item code
+    // this.clearInvoiceNoItemCode();//to clear invoice no and item code
   }//end of method onOpenModal
 
   // start method of onCloseInvoiceNo
@@ -751,5 +792,122 @@ export class InvestigationReportDiComponent implements OnInit {
     this.errorMsgObj.errMsgShowFlag = false;
     this.errorMsgObj.errorMsg = "";
   }//end of method to delete error msg
+
+  //new add
+  //method for onchanging compaintType dropdown
+  public onComplaintTypeSelect(args, complaintTypeId: string) {
+    // let compDet: string = this.investigationItemFormGroup.value.complaintDetails.trim();
+    let complaintTypeName: string = '';
+    if (args != null) {
+      complaintTypeName = args.target.options[args.target.selectedIndex].text;
+    }
+    console.log("complaintTypeId", complaintTypeId);
+    console.log("this.complaintTypeName,=========================", complaintTypeName);
+    if (complaintTypeId && complaintTypeName) {//checking if comptype id n name is available or not
+      this.tempCompTypeJson.complaintTypeId = complaintTypeId;
+      this.tempCompTypeJson.complaintTypeDesc = complaintTypeName;
+    }//end of if
+    if (complaintTypeId) {
+      this.busySpinner = true;
+      this.investigationReportDIDataService.getSelectValNatureOfComplaint(complaintTypeId).
+        subscribe(res => {
+          if (res.msgType === 'Info') {
+            this.natureOfComDropDownList = res.details;
+            if(complaintTypeName === 'Others(CAT C)'){
+              this.tempCompTypeJson.natureOfComplaintId = this.natureOfComDropDownList[0].Key;
+              this.tempCompTypeJson.natureOfComplaintDesc = this.natureOfComDropDownList[0].Value;
+            }
+          }
+          this.busySpinner = false;
+        },
+          err => {
+            console.log(err);
+            this.busySpinner = false;
+            this.sessionErrorService.routeToLogin(err._body);
+          });
+    }//end of if
+  }//end of the method onComplaintTypeSelect
+
+  // start method of onNatureTypeSelect
+  public onNatureTypeSelect(args, natureOfCompId: string) {
+    let natureCmpName: string = args.target.options[args.target.selectedIndex].text;
+    console.log("  this.natureCmpName ============================= ", natureCmpName);
+    console.log("natureOfCompId", natureOfCompId);
+    if (natureOfCompId && natureCmpName) {//checking if nature of comp id and name is avalable or not
+      this.tempCompTypeJson.natureOfComplaintId = natureOfCompId;
+      this.tempCompTypeJson.natureOfComplaintDesc = natureCmpName;
+    }//end of if  
+  }// end method of onNatureTypeSelect
+  //end of new add
+  //
+  public toggleEditCompTypeModal() {
+    this.editCompTypeModal = this.editCompTypeModal ? false : true;
+  }
+
+  public closeComplainTypeEditModal() {
+    this.toggleEditCompTypeModal();
+  }
+
+  private tempCompTypeJson: any = {};//taking json to store temp complaint type n nature of complaint val
+
+  editCompTypeOfficialDoc: string = '';
+  editCompTypeItemCode: string = '';
+  public modalErrorMsgObj: any = {
+    modalErrorMsgShowFlag: false,
+    modalErrorMsg: ''
+  }
+  public openEditCompTypeModal(compDtl?: any) {
+    if(compDtl.complaintQtyInMtrs>0){
+      this.toggleEditCompTypeModal();
+      console.log("compDtl::", compDtl);
+      // Add Logic
+      this.editCompTypeOfficialDoc = compDtl.invoiceNo;
+      this.editCompTypeItemCode = compDtl.itemNo;
+    }
+  }//end of method
+
+  public saveEditCompType(compDetailVal: string) {
+    console.log("compDetailVal::", compDetailVal);
+    this.tempCompTypeJson.complaintDetails = compDetailVal ? compDetailVal : '';//set complain details to json
+    console.log("tempCompTypeJson::", this.tempCompTypeJson);
+    if (this.tempCompTypeJson.natureOfComplaintDesc && this.tempCompTypeJson.complaintTypeDesc) {//checking if nature of comp and comp type have data
+      if ((this.tempCompTypeJson.natureOfComplaintDesc === "Others" || this.tempCompTypeJson.natureOfComplaintDesc === "Marking & Stenciling") && !compDetailVal) {
+        this.modalErrorMsgObj.modalErrorMsgShowFlag = true;
+        this.modalErrorMsgObj.modalErrorMsg = "Details Of Complaint is Required!";
+      }else{
+        this.modalErrorMsgObj.modalErrorMsgShowFlag = false;
+        this.modalErrorMsgObj.modalErrorMsg = "Details Of Complaint is Required!";
+      }
+    } else {
+      this.modalErrorMsgObj.modalErrorMsgShowFlag = true;
+      this.modalErrorMsgObj.modalErrorMsg = "Please Fillout All data.";
+    }
+
+     if(!this.modalErrorMsgObj.modalErrorMsgShowFlag){
+      // Items from register
+      this.invItemDetails.forEach(invItemEl => {
+        if (invItemEl.invoiceNo === this.editCompTypeOfficialDoc && invItemEl.itemNo === this.editCompTypeItemCode) {
+          invItemEl.natureOfComplaintDesc = this.tempCompTypeJson.natureOfComplaintDesc;
+          invItemEl.natureOfComplaintId = this.tempCompTypeJson.natureOfComplaintId;
+          invItemEl.complaintTypeId = this.tempCompTypeJson.complaintTypeId;
+          invItemEl.complaintTypeDesc = this.tempCompTypeJson.complaintTypeDesc;
+          if (this.tempCompTypeJson.complaintDetails) {
+            invItemEl.complaintDetails = this.tempCompTypeJson.complaintDetails;
+          }
+        }//end of if
+      });
+      //clear json 
+      this.tempCompTypeJson = {};
+      this.editCompTypeOfficialDoc = '';//clear the inv/official doc no
+      this.editCompTypeItemCode = '';//clear the item code
+      this.natureOfComDropDownList = [];//clear nature of complain arr
+      this.toggleEditCompTypeModal();//close modal
+     }
+    // for () {
+    // update based om 
+    // this.editCompTypeOfficialDoc = '';
+    // this.editCompTypeItemCode = '';
+    // }
+  }
 
 }//end of class
