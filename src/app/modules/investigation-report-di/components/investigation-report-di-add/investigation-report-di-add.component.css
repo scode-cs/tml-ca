@@ -448,5 +448,14 @@ background: #7b7b7b;
   width: 1020px;
   margin-left: -410px;
   margin-top: -125px;
+  border-radius: 4px;
+}
+
+.modal-item-grid-style {
+  margin-bottom: 15px;
+  height: 300px;
+  overflow: auto;
+  overflow-y: scroll;
+  margin-right: 8px;
 }
 /* end of add item modal */

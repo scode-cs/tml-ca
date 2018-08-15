@@ -462,36 +462,43 @@
     <!-- header div -->
     <div class="modal-header">
       <div> Add Item </div>
-      <div (click)="closeItemModal('AddItem')" style="cursor: pointer;">x</div>
+      <div (click)="cancelAddItemModal()" style="cursor: pointer;">x</div>
     </div>
     <div class="modal-body">
 
-      <div style="display: inline-flex; width: 100%">
-        <div class="form-group" style="width: 32%">
+      <div class="form-group" style="display: inline-flex; width: 100%">
+        <form style="display: inline-flex; width: 100%" [formGroup]="itemListNatOfCmpFormGroup">
+        <div style="width: 32%">
           <label>Complaint Type</label>
-          <select class="custom-select" style="width: 90%;" (change)="onComplaintTypeSelect($event,$event.target.value)">
-            <option *ngFor="let cmpType of complaintTypeDropDownList" value="{{ cmpType.Key}}">
+          <select class="custom-select" style="width: 90%;" formControlName="complainType"
+            (change)="complainTypeOnChange(complaintTypeDropDownList)" required>
+            <option *ngFor="let cmpType of complaintTypeDropDownList" value="{{ cmpType.Key }}">
               {{ cmpType.Value }}
             </option>
           </select>
         </div>
-        <div class="form-group" style="width: 32%">
+        <div style="width: 32%">
           <label>Nature of Complaint</label>
-          <select class="custom-select" style="width: 90%;" (change)="onNatureTypeSelect($event,$event.target.value)" required>
+          <select class="custom-select" style="width: 90%;" formControlName="natOfComplain"
+            (change)="natOfCompOnChange(natureOfComDropDownList)" required>
             <option *ngIf="natureOfComDropDownList.length==0" value="">-- Select --</option>
             <option *ngFor="let natureCmp of natureOfComDropDownList" value="{{ natureCmp.Key }}">{{ natureCmp.Value }}</option>
           </select>
         </div>
-        <div class="form-group" style="width: 35%;">
+        <div style="width: 35%;">
           <label>Detail of Complaint</label>
-          <textarea class="form-control hide-horizontal-scroll" style="height: 70px; resize: none" #complaintDetailsForAddItems></textarea>
+          <textarea class="form-control hide-horizontal-scroll" style="height: 70px; resize: none"
+            formControlName="complainDetail">
+          </textarea>
         </div>
+        </form>
       </div>
 
 
       <!-- table -->
       <!-- start  all and not selected invoice table div -->
-      <div style="margin-bottom: 15px;height: 245px;overflow: auto;overflow-y: scroll;" *ngIf="allInvItemDetByCustomerCode.length>0">
+      <div class="modal-item-grid-style" *ngIf="allInvItemDetByCustomerCode.length>0">
+          <form [formGroup]="itemListFormGroup">
         <table class="table-style">
           <thead>
             <tr class="th-style">
@@ -543,12 +550,14 @@
             </tr>
           </thead>
           <tbody>
-            <tr class="tr-style" *ngFor=" let itemDet of allInvItemDetByCustomerCode
-            let odd = odd; let even = even;" [ngClass]="{even: even, odd: odd }">
+            
+            <tr class="tr-style" *ngFor=" let itemDet of getAddItemList()">
               <td class="td-style-first">
-                <ng-container *ngIf="addModalCheckBoolean">
+                <ng-container *ngIf="itemListNatOfCmpFormGroup.value['natOfComplain']">
                   <!--"tempCompTypeJson.complaintTypeId  && tempCompTypeJson.natureOfComplaintId"-->
-                  <input type="checkbox" (click)="onCheckInvItemFromAddModal(itemDet)" />
+                  <!-- <input type="checkbox" (click)="onCheckInvItemFromAddModal(itemDet)" /> -->
+                  <input type="checkbox" 
+                    formControlName="{{ itemDet.formKey }}" />
                 </ng-container>
               </td>
               <td class="td-style">
@@ -591,15 +600,19 @@
                 {{itemDet.truckNo}}
               </td>
             </tr>
+          
           </tbody>
         </table>
+      </form>
       </div>
       <!--end of all invoice details and not selected table div-->
       <!-- end of table -->
       <!--start button div-->
       <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
         <div class="col-xs-12 col-sm-4 col-md-4 col-lg-2" style="float: right;">
-          <button type="submit" class="btn btn-primary primary-button-style" (click)="saveAddInvItemModal(complaintDetailsForAddItems.value)">Save
+          <button type="submit" style="height: 35px; width: 160px;" class="btn btn-primary primary-button-style" 
+            (click)="addItemAtInv()">
+            Save
           </button>
         </div>
       </div>
