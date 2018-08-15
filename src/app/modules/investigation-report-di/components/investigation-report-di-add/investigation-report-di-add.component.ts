@@ -77,6 +77,10 @@ export class InvestigationReportDiComponent implements OnInit {
   public editCompTypeModal: boolean = false;
   //for complaint qty error
   public complaintQtyInMtrsError: boolean = true;
+
+  public itemListFormGroup: FormGroup;
+  public itemListNatOfCmpFormGroup: FormGroup;
+
   constructor(
     private activatedroute: ActivatedRoute,
     private router: Router,
@@ -88,6 +92,11 @@ export class InvestigationReportDiComponent implements OnInit {
     private sessionErrorService: SessionErrorService,
     private datePipe: DatePipe//for date
   ) {
+    let itemListNatOfCmpGroup: any = {};
+    itemListNatOfCmpGroup['complainType'] = new FormControl();
+    itemListNatOfCmpGroup['natOfComplain'] = new FormControl();
+    itemListNatOfCmpGroup['complainDetail'] = new FormControl();
+    this.itemListNatOfCmpFormGroup = new FormGroup(itemListNatOfCmpGroup);
   }
 
   ngOnInit(): void {
@@ -166,7 +175,20 @@ export class InvestigationReportDiComponent implements OnInit {
         if (res.msgType === "Info") {
           this.allInvItemDetByCustomerCode = res.invoiceDetails.items;
           this.invDetailsItemsHeader = res.invoiceDetails.itemsHeader;
+
+          let itemListGroup: any = {};
+          this.allInvItemDetByCustomerCode.forEach((element, index) => {
+            let key = element.invoiceNo + element.itemCode;
+            element.formKey = key;
+            itemListGroup[key] = new FormControl(false);
+          });
+
+          this.itemListFormGroup = new FormGroup(itemListGroup);
         }
+
+        this.allInvItemDetByCustomerCode;
+        this.itemListFormGroup;
+
         console.log(" this.allInvItemDetByCustomerCode ========> ", this.allInvItemDetByCustomerCode);
       },
         err => {
@@ -251,8 +273,8 @@ export class InvestigationReportDiComponent implements OnInit {
           this.invItemDetails = invItemDeatilsJson;
           this.busySpinner = false;
           console.log("item details =========.........>>>>>>>>>", this.invItemDetails);
-          this.invItemDetails.forEach(itemEl=>{
-            itemEl.complaintQtyInMtrs = parseInt(itemEl.complaintQtyInMtrs); 
+          this.invItemDetails.forEach(itemEl => {
+            itemEl.complaintQtyInMtrs = parseInt(itemEl.complaintQtyInMtrs);
             itemEl.complaintQtyInTons = parseInt(itemEl.complaintQtyInTons);
           });
           //new add
@@ -328,9 +350,9 @@ export class InvestigationReportDiComponent implements OnInit {
     itemarrEl.natureOfComplaintId = itemsArr.natureOfComplaintId;
     itemarrEl.complaintDetails = itemsArr.complaintDetails;
     itemarrEl.invoiceNo = itemsArr.invoiceNo;
-    itemarrEl.itemCode = itemsArr.itemCode? itemsArr.itemCode : itemsArr.itemNo;
-    itemarrEl.complaintQtyInMtrs = itemsArr.complaintQtyInMtrs;   
-    itemarrEl.complaintQtyInTons = itemsArr.complaintQtyInTons;   
+    itemarrEl.itemCode = itemsArr.itemCode ? itemsArr.itemCode : itemsArr.itemNo;
+    itemarrEl.complaintQtyInMtrs = itemsArr.complaintQtyInMtrs;
+    itemarrEl.complaintQtyInTons = itemsArr.complaintQtyInTons;
     // itemarrEl.invoiceQtyInMtrs = itemsArr.invoiceQtyInMtrs;
     // itemarrEl.invoiceQtyInTons = itemsArr.invoiceQtyInTons;
     itemarrEl.userId = this.localStorageService.user.userId;
@@ -465,7 +487,8 @@ export class InvestigationReportDiComponent implements OnInit {
 
     this.selectedInvItemDetailsObj = {};
     this.selectedInvItemDetails.forEach((invItemAddEl) => {
-      let itemKey = invItemAddEl.invoiceNo + invItemAddEl.itemCode + invItemAddEl.complaintTypeId + invItemAddEl.natureOfComplaintId;
+      let itemKey = invItemAddEl.complaintTypeId + invItemAddEl.natureOfComplaintId + '|' +
+        invItemAddEl.formKey; // invItemAddEl.invoiceNo + invItemAddEl.itemCode;
       this.selectedInvItemDetailsObj[itemKey] ? null : this.selectedInvItemDetailsObj[itemKey] = invItemAddEl;
     });
 
@@ -508,8 +531,8 @@ export class InvestigationReportDiComponent implements OnInit {
           itemDet.uiInpErrFlag = true;
           itemDet.uiInpErrDesc = 'Complaint Quantity can’t be less than zero';
           this.complaintQtyErrorCorrection(itemAddEditArr);
-        // } else if (complaintQtyInMtrs >= 0 && complaintQtyInMtrs <= invoiceQtyInMtrs && !(isNaN(complaintQtyInMtrs))) {
-        }else if (complaintQtyInMtrs > 0 && complaintQtyInMtrs <= invoiceQtyInMtrs && !(isNaN(complaintQtyInMtrs))) {
+          // } else if (complaintQtyInMtrs >= 0 && complaintQtyInMtrs <= invoiceQtyInMtrs && !(isNaN(complaintQtyInMtrs))) {
+        } else if (complaintQtyInMtrs > 0 && complaintQtyInMtrs <= invoiceQtyInMtrs && !(isNaN(complaintQtyInMtrs))) {
           itemDet.complaintQtyInMtrs = complaintQtyInMtrs;
           flag = true;
           itemDet.uiInpErrFlag = false;
@@ -810,12 +833,15 @@ export class InvestigationReportDiComponent implements OnInit {
 
   //new add
   //method for onchanging compaintType dropdown
-  public onComplaintTypeSelect(args, complaintTypeId: string) {
+  public onComplaintTypeSelect(args, complaintTypeId: string, comTypeName?: string) {
     // let compDet: string = this.investigationItemFormGroup.value.complaintDetails.trim();
     let complaintTypeName: string = '';
     if (args != null) {
       complaintTypeName = args.target.options[args.target.selectedIndex].text;
     }
+
+    comTypeName ? complaintTypeName = comTypeName : null;
+
     console.log("complaintTypeId", complaintTypeId);
     console.log("this.complaintTypeName,=========================", complaintTypeName);
     if (complaintTypeId && complaintTypeName) {//checking if comptype id n name is available or not
@@ -1003,14 +1029,14 @@ export class InvestigationReportDiComponent implements OnInit {
         // invItemAddEl.natureOfComplaintDesc = this.tempCompTypeJson.natureOfComplaintDesc;
         // invItemAddEl.complaintTypeId = this.tempCompTypeJson.complaintTypeId;
         // invItemAddEl.complaintTypeDesc = this.tempCompTypeJson.complaintTypeDesc; 
-        
+
         let itemKey = invItemAddEl.invoiceNo + invItemAddEl.itemCode + invItemAddEl.complaintTypeId + invItemAddEl.natureOfComplaintId;
         this.selectedInvItemDetailsObj[itemKey] ? null : this.selectedInvItemDetailsObj[itemKey] = invItemAddEl;
         // this.selectedInvItemDetails.push(invItemAddEl);//push the data 
       });
 
       for (let element in this.selectedInvItemDetailsObj) {
-        this.selectedInvItemDetails.push(this.selectedInvItemDetailsObj[element]) ;
+        this.selectedInvItemDetails.push(this.selectedInvItemDetailsObj[element]);
       }
 
       // this.selectedInvItemDetails;
@@ -1021,4 +1047,121 @@ export class InvestigationReportDiComponent implements OnInit {
       this.toggleAddInvItemModal();//close modal
     }//end of if err msg flag check
   }//end of save add item modal method
+
+  // ========= add item ===============
+
+  private selectedComplainTypeId = '';
+  private selectedComplainTypeDesc;
+  private selectedNatureOfCompId = '';
+  private selectedNatureOfCompDesc;
+
+  public getAddItemList(): any[] {
+    this.allInvItemDetByCustomerCode;
+
+    let itemList: any[] = [];
+    let keyElement = this.selectedComplainTypeId + this.selectedNatureOfCompId;
+
+    this.allInvItemDetByCustomerCode.forEach((itemDetails) => {
+      let itemIdetifier: string = ''
+      itemIdetifier = keyElement + '|' + itemDetails.formKey;
+      if (!this.selectedInvItemDetailsObj[itemIdetifier]) {
+        itemList.push(itemDetails);
+      }
+    });
+
+    return itemList;
+  }
+
+  public complainTypeOnChange(listOfElements) {
+    // listOfElements;
+    // this.itemListNatOfCmpFormGroup;
+    let selectedKey = this.itemListNatOfCmpFormGroup.value['complainType'];
+    let selectedDesc = '';
+    listOfElements.forEach((element) => {
+      if (element.Key == selectedKey) {
+        selectedDesc = element.Value;
+      }
+    });
+
+    this.selectedComplainTypeId = selectedKey;
+    this.selectedComplainTypeDesc = selectedDesc;
+
+    this.onComplaintTypeSelect(null, selectedKey, selectedDesc);
+  }
+
+  public natOfCompOnChange(natureOfComDropDownList) {
+
+    let selectedKey = this.itemListNatOfCmpFormGroup.value['natOfComplain'];
+    let selectedDesc = '';
+    natureOfComDropDownList.forEach((element) => {
+      if (element.Key == selectedKey) {
+        selectedDesc = element.Value;
+      }
+    });
+
+    this.selectedNatureOfCompId = selectedKey;
+    this.selectedNatureOfCompDesc = selectedDesc;
+  }
+
+  public addItemAtInv() {
+
+    for (let itemSelect in this.itemListFormGroup.value) {
+      if (this.itemListFormGroup.value[itemSelect]) {
+        this.allInvItemDetByCustomerCode.forEach((invItemAddEl) => {
+          if (itemSelect == invItemAddEl.formKey) {
+
+            let itemDetails: any = {};
+
+            for (let k in invItemAddEl) {
+              itemDetails[k] = invItemAddEl[k];
+            }
+
+            let complaintTypeId = '' + this.selectedComplainTypeId;
+            let complaintTypeDesc = '' + this.selectedComplainTypeDesc;
+            let natureOfComplaintId = '' + this.selectedNatureOfCompId;
+            let natureOfComplaintDesc = '' + this.selectedNatureOfCompDesc;
+
+            itemDetails.complaintTypeId = complaintTypeId;
+            itemDetails.complaintTypeDesc = complaintTypeDesc;
+            itemDetails.natureOfComplaintId = natureOfComplaintId;
+            itemDetails.natureOfComplaintDesc = natureOfComplaintDesc;
+
+            let itemKey = this.selectedComplainTypeId + this.selectedNatureOfCompId + '|' + 
+              itemDetails.formKey;
+            this.selectedInvItemDetailsObj[itemKey] ? null : 
+              this.selectedInvItemDetailsObj[itemKey] = itemDetails;
+  
+          }
+        });
+      }
+    }
+
+    this.selectedInvItemDetails = [];
+    for (let element in this.selectedInvItemDetailsObj) {
+      this.selectedInvItemDetails.push(this.selectedInvItemDetailsObj[element]);
+    }
+
+    this.resetAddItemData();
+    this.toggleAddInvItemModal();
+  }
+
+  public cancelAddItemModal() {
+    this.resetAddItemData();
+    this.toggleAddInvItemModal();
+  }
+
+  private resetAddItemData() {
+    this.itemListNatOfCmpFormGroup.controls['complainType'].setValue('');
+    this.itemListNatOfCmpFormGroup.controls['natOfComplain'].setValue('');
+    this.itemListNatOfCmpFormGroup.controls['complainDetail'].setValue('');
+
+    this.selectedComplainTypeId = '';
+    this.selectedNatureOfCompId = '';
+
+    for (let fc in this.itemListFormGroup.controls) {
+      this.itemListFormGroup.controls[fc].setValue(false);
+    }
+  }
+
+
 }//end of class
