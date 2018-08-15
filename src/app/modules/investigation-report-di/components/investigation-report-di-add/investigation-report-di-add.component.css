@@ -410,10 +410,11 @@ background: #7b7b7b;
   position: fixed;
   top: 50%;
   left: 50%;
-  height: 250px;
+  height: 320px;
   width: 650px;
   margin-left: -325px;
   margin-top: -125px;
+  border-radius: 4px;
 }
 
 .modal-header {
@@ -422,8 +423,17 @@ background: #7b7b7b;
   border-bottom-color: #CECECE;
   background: #EEEEEE;
   width: 100%;
-  height: 38px;
-  padding-top: 10px;
+  height: 50px;
+  padding-top: 13px;
+  border-top-left-radius: 4px;
+  border-top-right-radius: 4px;
+  font-size: 17px;
+}
+
+.modal-body {
+  padding-top: 15px;
+  padding-right: 10px;
+  padding-left: 35px;
 }
 
 /*end of asterick style*/
