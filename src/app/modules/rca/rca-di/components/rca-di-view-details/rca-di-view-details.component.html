@@ -14,7 +14,7 @@
     <!-- start div for rca body -->
     <div>
         <!-- start table div -->
-        <div *ngIf="prevCompDetShowFlag && rcaDetails.length > 1" class="col-lg-12 col-md-12 col-xs-12 scroll-bar grid-table-style" style="margin-top: 5px;">
+        <div *ngIf="rcaDetails.length > 1" class="col-lg-12 col-md-12 col-xs-12 scroll-bar grid-table-style" style="margin-top: 5px;">
             <table class="table-style">
                 <thead>
                     <tr class="th-style">
@@ -38,11 +38,20 @@
             </table>
         </div>
         <!--end table div-->
+        <!-- new add for reject reason -->
+        <div class="alert alert-danger" *ngIf="rcaRejectReason" style="margin-right: 29px;margin-left: 30px;">
+            <h4 style="color: #ef0600;font-size: 15px;">{{rejectLabelJson.rcaMsgForRejectLabel}} :</h4>
+            <div>
+                {{rcaRejectReason}}
+            </div>
+        </div>
+        <!-- end of reject reason -->
+
         <!--start form for rcaDIAddEditFormGroup-->
         <div class="complaint-form">
             <form [formGroup]="rcaDIAddEditFormGroup" autocomplete="off">
-                <!-- start div for row form-style class-->
-                <div class="row form-style">
+                <!-- start div for row class-->
+                <div class="row">
                     <!--start div complaint reference no -->
                     <div *ngIf="routeParam.complaintReferenceNo" class="form-group col-xs-12 col-sm-6 col-md-6 col-lg-4">
                         <label for="complaintReferenceNo">Complaint Reference No</label>
@@ -74,6 +83,18 @@
                         </div>
                     </div>
                     <!--end div for show files-->
+                    <div class="row" *ngIf="rejectFlag" class="reject-alert">
+                        <h4 style="color: #aa6708">{{rejectLabelJson.rcaMsgForRejectLabel}}</h4>
+                        <div>
+                            <textarea class="reject-alert-textarea" formControlName="rcaARejectDetails"></textarea>
+                        </div>
+                        <div style="margin-top: 8px; padding-right: 24px;">
+                            <button type="submit" style="width: 280px; float: right; background: #aa6708;color:white;" class="btn primary-button-style"
+                                (click)="onRejectSubmit()">
+                                {{rejectLabelJson.rcaBtnForRejectLabel}}
+                            </button>
+                        </div>
+                    </div>
 
                     <!-- start div for Submit  and Cancel Button-->
                     <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
@@ -84,8 +105,14 @@
                             </button>
                         </div>
                         <!-- end div for Cancel Button-->
+                        <div class="col-xs-12 col-sm-4 col-md-4 col-lg-2 button-holder" *ngIf="!rejectFlag && routeParam.complaintStatus==60">
+                            <!--&& complaintStatus==60-->
+                            <button type="submit" class="btn btn-danger danger-button-style" (click)="onClickRejectBtn()">
+                                Reject RCA
+                            </button>
+                        </div>
                     </div>
-                    <!-- start div for Submit  and Cancel Button-->
+                    <!-- end div for Submit  and Cancel Button-->
                 </div>
                 <!-- end div for row complaint-form class-->
                 <!-- error msg div -->

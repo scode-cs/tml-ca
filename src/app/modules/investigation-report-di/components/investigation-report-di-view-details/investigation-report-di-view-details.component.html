@@ -229,7 +229,7 @@
                 <textarea class="reject-alert-textarea" #rejectReasonVal></textarea>
               </div>
               <div style="margin-top: 8px; padding-right: 24px;">
-                <button type="submit" style="width: 280px; float: right; background: #aa6708" class="btn primary-button-style" (click)="onRejectSubmit(rejectReasonVal.value)">
+                <button type="submit" style="width: 280px; float: right; background: #aa6708;" class="btn primary-button-style" (click)="onRejectSubmit(rejectReasonVal.value)">
                   Re-investigate Investigation Report
                 </button>
               </div>
@@ -247,7 +247,7 @@
               Cancel
             </button>
           </div>
-          <div class="col-xs-12 col-sm-4 col-md-4 col-lg-2 button-holder" *ngIf="!rejectFlag ">
+          <div class="col-xs-12 col-sm-4 col-md-4 col-lg-2 button-holder" *ngIf="!rejectFlag && complaintStatus==50">
             <!--&& complaintStatus==50-->
             <button type="submit" class="btn btn-danger danger-button-style" (click)="onClickRejectBtn()">
               Re-investigate

@@ -8,6 +8,7 @@ import { LocalStorageService } from "../../../../shared/services/local-storage.s
 import { SessionErrorService } from "../../../../shared/services/session-error.service";
 import { PADIConfigModel } from '../../models/pa-di-config.model';
 import { ComplaintDIService } from '../../../../shared/services/complaint-di.service';
+import { MsgConfigModel } from '../../../../../modules/shared/models/msg-model';
 
 @Component({
   selector: 'ispl-pa-di-view-details',
@@ -24,6 +25,8 @@ export class PADIViewDetailsComponent implements OnInit {
     complaintReferenceNo:'',//to get complaint reference no from route param
     complaintStatus:  ''//to fetch complaint status from route
   }; 
+  public rejectLabelJson: any = {};//to store all reject label
+  public paRejectReason: string = "";//to store rca reject label
   public paReportTable: any[] = [];//to store prev rca report
   public paDetails: any[] = [];//to store complain reference detailS
   public paIndex: number = 0;
@@ -35,14 +38,14 @@ export class PADIViewDetailsComponent implements OnInit {
     errorMsg: '',
     errMsgShowFlag: false
   };
-  public prevCompDetShowFlag: boolean = false;//a flag to show previous complain det
+  public rejectFlag: boolean = false;//reject flag
 
   constructor(
     private formBuilder: FormBuilder,
     private router: Router,
     private activatedroute: ActivatedRoute,
     private datePipe: DatePipe,//for date
-    // private localStorageService: LocalStorageService,
+    private localStorageService: LocalStorageService,
     private sessionErrorService: SessionErrorService,
     private complaintDIService: ComplaintDIService
   ) {
@@ -53,6 +56,7 @@ export class PADIViewDetailsComponent implements OnInit {
     this.initform();
     this.getRouteParam();//to get route param 
     this.paReportTable = new PADIConfigModel().paReportHeader;//getting prev inv report details
+    this.rejectLabelJson = new MsgConfigModel().rejectMsgJson;
     this.getviewComplainReferenceDetailsWSCall();//service call
   }//end of on init
 
@@ -77,6 +81,7 @@ export class PADIViewDetailsComponent implements OnInit {
       complaintReferenceNo: new FormControl(''),
       paAddEditDate: new FormControl(''),
       paAddEditDetails: new FormControl(''),
+      paARejectDetails: new FormControl('')
     });
   }//end of init form
 //method to get complain det by comp ref no
@@ -115,6 +120,11 @@ private setResValToForm() {
   this.paDIAddEditFormGroup.controls['complaintReferenceNo'].setValue(paFormData.complaintReferenceNo);
   this.paDIAddEditFormGroup.controls['paAddEditDate'].setValue(this.datePipe.transform(paFormData.preventiveActionDate, 'dd-MMM-yyyy'));
   this.paDIAddEditFormGroup.controls['paAddEditDetails'].setValue(paFormData.preventiveAction);
+  if (paFormData.paCancelRemarks) {
+    this.paRejectReason = paFormData.paCancelRemarks;//set the reject reason
+  } else {
+    this.paRejectReason = "";
+  }
 }//end of method 
 
 //method to get file
@@ -147,12 +157,15 @@ public onCancel(): void {
 }// end of onCancel method
 
 public selectData(cmpIndex: number) {
+  let pageCompStatus: number = 70;
   this.busySpinner = true;
   this.paIndex = cmpIndex;
   this.setResValToForm();
-  setTimeout(() => {
-    this.busySpinner = false;
-  }, 300);
+  let complainDetailsAutoId: number = this.paDetails[this.paIndex].complaintDetailsAutoId;
+  this.getFileWSCall(this.routeParam.complaintReferenceNo, pageCompStatus, complainDetailsAutoId);//to get file
+  // setTimeout(() => {
+  //   this.busySpinner = false;
+  // }, 300);
 }
 
 //method to delete error msg
@@ -161,6 +174,51 @@ public deleteResErrorMsgOnClick() {
   this.errorMsgObj.errorMsg = "";
 }//end of method delete error msg
 
-  
+//reject click
+public onClickRejectBtn() {
+  this.rejectFlag = true;
+}//end of method
+
+//methhod to submit reject reason
+public onRejectSubmit() {
+  this.busySpinner = true;//load spinner
+  let date = new Date();
+  let currentDate: string = this.datePipe.transform(date, 'yyyy-MM-dd');
+  let rejectHeaderJson: any = {};
+  let rejectDetailJson: any = {};
+  let plantType: string = this.localStorageService.user.plantType;
+  let action: string = "";
+  rejectHeaderJson.lastActivityId = 60;
+  rejectHeaderJson.userId = this.localStorageService.user.userId;
+  rejectHeaderJson.complaintReferenceNo = this.routeParam.complaintReferenceNo;
+  rejectHeaderJson.paCancelFlag = "Y";
+  let complainDetailsAutoId: string = this.paDetails[this.paIndex].complaintDetailsAutoId;//to get auto id
+  rejectDetailJson.activityId = 70;
+  rejectDetailJson.complaintReferenceNo = this.routeParam.complaintReferenceNo;
+  rejectDetailJson.userId = this.localStorageService.user.userId;
+  rejectDetailJson.paCancelRemarks = this.paDIAddEditFormGroup.value.paARejectDetails;
+  rejectDetailJson.paCancelDate = currentDate;
+  rejectDetailJson.complaintDetailsAutoId = parseInt(complainDetailsAutoId);
+
+  console.log("rejectHeaderJson", rejectHeaderJson);
+  console.log("rejectDetailJson", rejectDetailJson);
+  this.complaintDIService.putHeader(rejectHeaderJson, plantType, action).
+    subscribe(res => {
+      console.log("res success msg", res.msg);
+    }, err => {
+      console.log(err);
+    });
+  action = "pa_cancel";
+  this.complaintDIService.postDetail(rejectDetailJson, plantType, action).
+    subscribe(res => {
+      console.log("res success msg", res.msg);
+      this.busySpinner = false;
+      this.router.navigate([ROUTE_PATHS.RouteComplainDIView]);
+    }, err => {
+      console.log(err);
+      this.busySpinner = false;
+    });
+}//end of method
+
 
 }//end of class

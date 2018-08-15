@@ -4,11 +4,11 @@ import { Router, ActivatedRoute } from '@angular/router';
 import { Subscription } from 'rxjs/Subscription';//to get route param
 import { DatePipe } from '@angular/common';
 import { ROUTE_PATHS } from '../../../../router/router-paths';
-// import { LocalStorageService } from "../../../../shared/services/local-storage.service";
+import { LocalStorageService } from "../../../../shared/services/local-storage.service";
 import { SessionErrorService } from "../../../../shared/services/session-error.service";
 import { RCADIConfigModel } from '../../models/rca-di-config.model';
 import { ComplaintDIService } from '../../../../shared/services/complaint-di.service';
-
+import { MsgConfigModel } from '../../../../../modules/shared/models/msg-model';
 @Component({
   selector: 'ispl-rca-di-view-details',
   templateUrl: 'rca-di-view-details.component.html',
@@ -20,6 +20,8 @@ export class RCADIViewDetailsComponent implements OnInit {
   // public fileList: FileList;
   public title: string = "RCA";//to show titlee on html page
   public rcaDIAddEditFormGroup: FormGroup;
+  public rejectLabelJson: any = {};//to store all reject label
+  public rcaRejectReason: string = "";//to store rca reject label
   public routeParam: any = {
     complaintReferenceNo: '',//to get complaint reference no from route param
     complaintStatus: ''//to fetch complaint status from route
@@ -34,15 +36,14 @@ export class RCADIViewDetailsComponent implements OnInit {
     errorMsg: '',
     errMsgShowFlag: false
   };
-  public prevCompDetShowFlag: boolean = false;//a flag to show previous complain det
-
+  public rejectFlag: boolean = false;//reject flag
   constructor(
     private formBuilder: FormBuilder,
     private router: Router,
     private activatedroute: ActivatedRoute,
     private datePipe: DatePipe,//for date
     private complaintDIService: ComplaintDIService,
-    // private localStorageService: LocalStorageService,
+    private localStorageService: LocalStorageService,
     private sessionErrorService: SessionErrorService,
   ) {
 
@@ -53,6 +54,7 @@ export class RCADIViewDetailsComponent implements OnInit {
     this.initform();
     this.getRouteParam();//to get route param 
     this.rcaReportTable = new RCADIConfigModel().rcaReportHeader;//getting prev inv report details
+    this.rejectLabelJson = new MsgConfigModel().rejectMsgJson;
     this.getviewComplainReferenceDetailsWSCall();//service call
   }//end of on init
 
@@ -76,6 +78,7 @@ export class RCADIViewDetailsComponent implements OnInit {
       complaintReferenceNo: new FormControl(''),
       rcaAddEditDate: new FormControl(''),
       rcaAddEditDetails: new FormControl(''),
+      rcaARejectDetails: new FormControl('')
     });
   }//end of init form
   //method to get complain det by comp ref no
@@ -113,6 +116,11 @@ export class RCADIViewDetailsComponent implements OnInit {
     this.rcaDIAddEditFormGroup.controls['complaintReferenceNo'].setValue(rcaFormData.complaintReferenceNo);
     this.rcaDIAddEditFormGroup.controls['rcaAddEditDate'].setValue(this.datePipe.transform(rcaFormData.rootCauseAnanysisDate, 'dd-MMM-yyyy'));
     this.rcaDIAddEditFormGroup.controls['rcaAddEditDetails'].setValue(rcaFormData.rootCauseAnanysisRemarks);
+    if (rcaFormData.rcaCancelRemarks) {
+      this.rcaRejectReason = rcaFormData.rcaCancelRemarks;//set the reject reason
+    } else {
+      this.rcaRejectReason = "";
+    }
   }//end of method 
 
   //method to get file
@@ -145,12 +153,15 @@ export class RCADIViewDetailsComponent implements OnInit {
   }// end of onCancel method
 
   public selectData(cmpIndex: number) {
+    let pageCompStatus: number = 50;
     this.busySpinner = true;
     this.rcaIndex = cmpIndex;
     this.setResValToForm();
-    setTimeout(() => {
-      this.busySpinner = false;
-    }, 300);
+    let complainDetailsAutoId: number = this.rcaDetails[this.rcaIndex].complaintDetailsAutoId;
+    this.getFileWSCall(this.routeParam.complaintReferenceNo, pageCompStatus, complainDetailsAutoId);//to get file
+    // setTimeout(() => {
+    //   this.busySpinner = false;
+    // }, 300);
   }
 
   //method to delete error msg
@@ -158,5 +169,51 @@ export class RCADIViewDetailsComponent implements OnInit {
     this.errorMsgObj.errMsgShowFlag = false;
     this.errorMsgObj.errorMsg = "";
   }//end of method delete error msg
+
+  //reject click
+  public onClickRejectBtn() {
+    this.rejectFlag = true;
+  }//end of method
+
+  //methhod to submit reject reason
+  public onRejectSubmit() {
+    this.busySpinner = true;//load spinner
+    let date = new Date();
+    let currentDate: string = this.datePipe.transform(date, 'yyyy-MM-dd');
+    let rejectHeaderJson: any = {};
+    let rejectDetailJson: any = {};
+    let plantType: string = this.localStorageService.user.plantType;
+    let action: string = "";
+    rejectHeaderJson.lastActivityId = 40;
+    rejectHeaderJson.userId = this.localStorageService.user.userId;
+    rejectHeaderJson.complaintReferenceNo = this.routeParam.complaintReferenceNo;
+    rejectHeaderJson.rcaCancelFlag = "Y";
+    let complainDetailsAutoId: string = this.rcaDetails[this.rcaIndex].complaintDetailsAutoId;//to get auto id
+    rejectDetailJson.activityId = 50;
+    rejectDetailJson.complaintReferenceNo = this.routeParam.complaintReferenceNo;
+    rejectDetailJson.userId = this.localStorageService.user.userId;
+    rejectDetailJson.rcaCancelRemarks = this.rcaDIAddEditFormGroup.value.rcaARejectDetails;
+    rejectDetailJson.rcaCancelDate = currentDate;
+    rejectDetailJson.complaintDetailsAutoId = parseInt(complainDetailsAutoId);
+
+    console.log("rejectHeaderJson", rejectHeaderJson);
+    console.log("rejectDetailJson", rejectDetailJson);
+    this.complaintDIService.putHeader(rejectHeaderJson, plantType, action).
+      subscribe(res => {
+        console.log("res success msg", res.msg);
+      }, err => {
+        console.log(err);
+      });
+    action = "rca_cancel";
+    this.complaintDIService.postDetail(rejectDetailJson, plantType, action).
+      subscribe(res => {
+        console.log("res success msg", res.msg);
+        this.busySpinner = false;
+        this.router.navigate([ROUTE_PATHS.RouteComplainDIView]);
+      }, err => {
+        console.log(err);
+        this.busySpinner = false;
+      });
+  }//end of method
 
 }//end of class

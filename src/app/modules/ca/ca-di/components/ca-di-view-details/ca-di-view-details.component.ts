@@ -4,11 +4,11 @@ import { Router, ActivatedRoute } from '@angular/router';
 import { Subscription } from 'rxjs/Subscription';//to get route param
 import { DatePipe } from '@angular/common';
 import { ROUTE_PATHS } from '../../../../router/router-paths';
-// import { LocalStorageService } from "../../../../shared/services/local-storage.service";
+import { LocalStorageService } from "../../../../shared/services/local-storage.service";
 import { SessionErrorService } from "../../../../shared/services/session-error.service";
 import { CADIConfigModel } from '../../models/ca-di-config.model';
 import { ComplaintDIService } from '../../../../shared/services/complaint-di.service';
-
+import { MsgConfigModel } from '../../../../../modules/shared/models/msg-model';
 @Component({
   selector: 'ispl-ca-di-view-details',
   templateUrl: 'ca-di-view-details.component.html',
@@ -23,6 +23,8 @@ export class CADIViewDetailsComponent implements OnInit {
     complaintReferenceNo:'',//to get complaint reference no from route param
     complaintStatus:  ''//to fetch complaint status from route
   }; 
+  public rejectLabelJson: any = {};//to store all reject label
+  public caRejectReason: string = "";//to store rca reject label
   public caReportTable: any[] = [];//to store prev rca report
   public caDetails: any[] = [];//to store complain reference detailS
   public caIndex: number = 0;
@@ -33,7 +35,7 @@ export class CADIViewDetailsComponent implements OnInit {
     errorMsg: '',
     errMsgShowFlag: false
   };
-  public prevCompDetShowFlag: boolean = false;//a flag to show previous complain det
+  public rejectFlag: boolean = false;//reject flag
 
   constructor(
     private formBuilder: FormBuilder,
@@ -42,6 +44,7 @@ export class CADIViewDetailsComponent implements OnInit {
     private datePipe: DatePipe,//for date
     private sessionErrorService: SessionErrorService,
     private complaintDIService: ComplaintDIService,
+    private localStorageService: LocalStorageService
   ) {
   }//end of constructor
 
@@ -50,6 +53,7 @@ export class CADIViewDetailsComponent implements OnInit {
     this.initform();
     this.getRouteParam();//to get route param 
     this.caReportTable = new CADIConfigModel().caReportHeader;//getting prev report details
+    this.rejectLabelJson = new MsgConfigModel().rejectMsgJson;
     this.getviewComplainReferenceDetailsWSCall();//service call
   }//end of on init
 
@@ -73,6 +77,7 @@ export class CADIViewDetailsComponent implements OnInit {
       complaintReferenceNo: new FormControl(''),
       caAddEditDate: new FormControl(''),
       caAddEditDetails: new FormControl(''),
+      caARejectDetails: new FormControl('')
     });
   }//end of init form
 //method to get complain det by comp ref no
@@ -111,6 +116,11 @@ private setResValToForm() {
   this.caDIAddEditFormGroup.controls['complaintReferenceNo'].setValue(caFormData.complaintReferenceNo);
   this.caDIAddEditFormGroup.controls['caAddEditDate'].setValue(this.datePipe.transform(caFormData.correctiveActionDate, 'dd-MMM-yyyy'));
   this.caDIAddEditFormGroup.controls['caAddEditDetails'].setValue(caFormData.correctiveAction);
+  if (caFormData.caCancelRemarks) {
+    this.caRejectReason = caFormData.caCancelRemarks;//set the reject reason
+  } else {
+    this.caRejectReason = "";
+  }
 }//end of method 
 
  //method to get file
@@ -144,12 +154,15 @@ public onCancel(): void {
 }// end of onCancel method
 
 public selectData(cmpIndex: number) {
+  let pageCompStatus: number = 60;
   this.busySpinner = true;
   this.caIndex = cmpIndex;
   this.setResValToForm();
-  setTimeout(() => {
-    this.busySpinner = false;
-  }, 300);
+  let complainDetailsAutoId: number = this.caDetails[this.caIndex].complaintDetailsAutoId;
+  this.getFileWSCall(this.routeParam.complaintReferenceNo, pageCompStatus, complainDetailsAutoId);//to get file
+  // setTimeout(() => {
+  //   this.busySpinner = false;
+  // }, 300);
 }
 
 //method to delete error msg
@@ -157,5 +170,53 @@ public deleteResErrorMsgOnClick() {
   this.errorMsgObj.errMsgShowFlag = false;
   this.errorMsgObj.errorMsg = "";
 }//end of method delete error msg
+
+//reject click
+public onClickRejectBtn() {
+  this.rejectFlag = true;
+}//end of method
+
+
+//methhod to submit reject reason
+public onRejectSubmit() {
+  this.busySpinner = true;//load spinner
+  let date = new Date();
+  let currentDate: string = this.datePipe.transform(date, 'yyyy-MM-dd');
+  let rejectHeaderJson: any = {};
+  let rejectDetailJson: any = {};
+  let plantType: string = this.localStorageService.user.plantType;
+  let action: string = "";
+  rejectHeaderJson.lastActivityId = 50;
+  rejectHeaderJson.userId = this.localStorageService.user.userId;
+  rejectHeaderJson.complaintReferenceNo = this.routeParam.complaintReferenceNo;
+  rejectHeaderJson.caCancelFlag = "Y";
+  let complainDetailsAutoId: string = this.caDetails[this.caIndex].complaintDetailsAutoId;//to get auto id
+  rejectDetailJson.activityId = 60;
+  rejectDetailJson.complaintReferenceNo = this.routeParam.complaintReferenceNo;
+  rejectDetailJson.userId = this.localStorageService.user.userId;
+  rejectDetailJson.caCancelRemarks = this.caDIAddEditFormGroup.value.caARejectDetails;
+  rejectDetailJson.caCancelDate = currentDate;
+  rejectDetailJson.complaintDetailsAutoId = parseInt(complainDetailsAutoId);
+
+  console.log("rejectHeaderJson", rejectHeaderJson);
+  console.log("rejectDetailJson", rejectDetailJson);
+  this.complaintDIService.putHeader(rejectHeaderJson, plantType, action).
+    subscribe(res => {
+      console.log("res success msg", res.msg);
+    }, err => {
+      console.log(err);
+    });
+  action = "ca_cancel";
+  this.complaintDIService.postDetail(rejectDetailJson, plantType, action).
+    subscribe(res => {
+      console.log("res success msg", res.msg);
+      this.busySpinner = false;
+      this.router.navigate([ROUTE_PATHS.RouteComplainDIView]);
+    }, err => {
+      console.log(err);
+      this.busySpinner = false;
+    });
+}//end of method
+
 
 }//end of class
