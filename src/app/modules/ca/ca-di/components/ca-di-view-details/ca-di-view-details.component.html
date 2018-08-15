@@ -14,7 +14,8 @@
     <!-- start ca body  -->
     <div>
         <!-- start table div -->
-        <div *ngIf="prevCompDetShowFlag && caDetails.length > 1" class="col-lg-12 col-md-12 col-xs-12 scroll-bar grid-table-style" style="margin-top: 5px;">
+        <div *ngIf="caDetails.length > 1" class="col-lg-12 col-md-12 col-xs-12 scroll-bar grid-table-style"
+            style="margin-top: 5px;">
             <table class="table-style">
                 <thead>
                     <tr class="th-style">
@@ -38,11 +39,19 @@
             </table>
         </div>
         <!--end table div-->
+        <!-- new add for reject reason -->
+        <div class="alert alert-danger" *ngIf="caRejectReason" style="margin-right: 29px;margin-left: 30px;">
+            <h4 style="color: #ef0600;font-size: 15px;">{{rejectLabelJson.caMsgForRejectLabel}} :</h4>
+            <div>
+                {{caRejectReason}}
+            </div>
+        </div>
+        <!-- end of reject reason -->
         <!--start form for rcaDIAddEditFormGroup-->
         <div class="complaint-form">
             <form [formGroup]="caDIAddEditFormGroup" autocomplete="off">
-                <!-- start div for row form-style class-->
-                <div class="row form-style">
+                <!-- start div for row class-->
+                <div class="row">
                     <!--start div complaint reference no -->
                     <div *ngIf="routeParam.complaintReferenceNo" class="form-group col-xs-12 col-sm-6 col-md-6 col-lg-4">
                         <label for="complaintReferenceNo">Complaint Reference No</label>
@@ -65,8 +74,8 @@
                     <!-- end of div for rca details -->
 
                     <!--files-->
-                     <!--start div for show files-->
-                     <div class="form-group col-xs-12 col-sm-6 col-md-6 col-lg-4" *ngIf="routeParam.complaintReferenceNo && fileDetails?.length>0">
+                    <!--start div for show files-->
+                    <div class="form-group col-xs-12 col-sm-6 col-md-6 col-lg-4" *ngIf="routeParam.complaintReferenceNo && fileDetails?.length>0">
                         <label>Uploaded file(s)</label>
                         <div *ngFor="let file of fileDetails">
                             <a href="{{file.fileUrl}}" target="_blank">{{file.fileName}}</a>
@@ -74,6 +83,19 @@
                         </div>
                     </div>
                     <!--end div for show files-->
+
+                    <div class="row" *ngIf="rejectFlag" class="reject-alert">
+                        <h4 style="color: #aa6708">{{rejectLabelJson.caMsgForRejectLabel}}</h4>
+                        <div>
+                            <textarea class="reject-alert-textarea" formControlName="caARejectDetails"></textarea>
+                        </div>
+                        <div style="margin-top: 8px; padding-right: 24px;">
+                            <button type="submit" style="width: 280px; float: right; background: #aa6708;color:white;" class="btn primary-button-style"
+                                (click)="onRejectSubmit()">
+                                {{rejectLabelJson.caBtnForRejectLabel}}
+                            </button>
+                        </div>
+                    </div>
 
                     <!-- start div for Submit  and Cancel Button-->
                     <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
@@ -84,6 +106,12 @@
                             </button>
                         </div>
                         <!-- end div for Cancel Button-->
+                        <div class="col-xs-12 col-sm-4 col-md-4 col-lg-2 button-holder" *ngIf="!rejectFlag && routeParam.complaintStatus==70">
+                            <!--&& complaintStatus==60-->
+                            <button type="submit" class="btn btn-danger danger-button-style" (click)="onClickRejectBtn()">
+                                Reject CA
+                            </button>
+                        </div>
                     </div>
                     <!-- start div for Submit  and Cancel Button-->
                 </div>

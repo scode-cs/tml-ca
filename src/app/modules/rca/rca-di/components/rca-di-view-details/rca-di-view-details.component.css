@@ -198,5 +198,30 @@
   cursor: pointer;
 }
 /* end of table grid style */
+/* start style for rca reject */
+.reject-alert {
+  width: 100%;
+  margin-left: 15px;
+  padding-left: 20px;
+  margin-right: 15px;
+  padding-top: 15px;
+  margin-bottom: 15px;
+  padding-bottom: 15px;
+  border: 1px solid #eee;
+  border-radius: 3px;
+  border-left-width: 5px;
+  border-left-color: #aa6708;
+  background: #FEFAF7;
+}
 
+.reject-alert-textarea {
+  width: 98%;
+  height: 141px;
+  box-sizing: border-box;
+  border: 1px solid rgb(204, 204, 204);
+  border-radius: 2px;
+  margin-top: 0px;
+  margin-bottom: 0px;
+}
+/* end of style for rca reject */
   
