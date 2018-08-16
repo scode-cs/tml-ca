@@ -971,82 +971,82 @@ export class InvestigationReportDiComponent implements OnInit {
   private toggleAddInvItemModal() {
     this.addInvItemModalFlag = this.addInvItemModalFlag ? false : true;
   }//end of method
-  //checkbox click on inv add item modal grid
-  public onCheckInvItemFromAddModal(checkedInvItemForAdd) {
-    checkedInvItemForAdd.complaintTypeId = this.tempCompTypeJson.complaintTypeId;
-    checkedInvItemForAdd.complaintTypeDesc = this.tempCompTypeJson.complaintTypeDesc;
-    checkedInvItemForAdd.natureOfComplaintId = this.tempCompTypeJson.natureOfComplaintId;
-    checkedInvItemForAdd.natureOfComplaintDesc = this.tempCompTypeJson.natureOfComplaintDesc;
-    checkedInvItemForAdd.complaintDetails = this.tempCompTypeJson.complaintDetails ? this.tempCompTypeJson.complaintDetails : '';
-    // //push the data to this.addInvItemArrByCheckboxClick 
-    // this.addInvItemArrByModalCheckboxClick.push(checkedInvItemForAdd);
-    if (this.addInvItemArrByModalCheckboxClick.length == 0) {
-      let itemKey = checkedInvItemForAdd.invoiceNo + checkedInvItemForAdd.itemCode + checkedInvItemForAdd.complaintTypeId + checkedInvItemForAdd.natureOfComplaintId;
-      this.selectedInvItemDetailsObj[itemKey] ? null : this.addInvItemArrByModalCheckboxClick.push(checkedInvItemForAdd);
-    } else {
-      let indexCount: number = 0;
-      let removeFlag: boolean = false;
-      for (let el of this.addInvItemArrByModalCheckboxClick) {
-        if (el.invoiceNo === checkedInvItemForAdd.invoiceNo && el.itemCode === checkedInvItemForAdd.itemCode) {
-          this.addInvItemArrByModalCheckboxClick.splice(indexCount, 1);
-          removeFlag = true;
-          break;
-        }//end of if
-        indexCount++;
-      }//end of for
-      if (!removeFlag) {
-        // this.addInvItemArrByModalCheckboxClick.push(checkedInvItemForAdd);
+  // //checkbox click on inv add item modal grid
+  // public onCheckInvItemFromAddModal(checkedInvItemForAdd) {
+  //   checkedInvItemForAdd.complaintTypeId = this.tempCompTypeJson.complaintTypeId;
+  //   checkedInvItemForAdd.complaintTypeDesc = this.tempCompTypeJson.complaintTypeDesc;
+  //   checkedInvItemForAdd.natureOfComplaintId = this.tempCompTypeJson.natureOfComplaintId;
+  //   checkedInvItemForAdd.natureOfComplaintDesc = this.tempCompTypeJson.natureOfComplaintDesc;
+  //   checkedInvItemForAdd.complaintDetails = this.tempCompTypeJson.complaintDetails ? this.tempCompTypeJson.complaintDetails : '';
+  //   // //push the data to this.addInvItemArrByCheckboxClick 
+  //   // this.addInvItemArrByModalCheckboxClick.push(checkedInvItemForAdd);
+  //   if (this.addInvItemArrByModalCheckboxClick.length == 0) {
+  //     let itemKey = checkedInvItemForAdd.invoiceNo + checkedInvItemForAdd.itemCode + checkedInvItemForAdd.complaintTypeId + checkedInvItemForAdd.natureOfComplaintId;
+  //     this.selectedInvItemDetailsObj[itemKey] ? null : this.addInvItemArrByModalCheckboxClick.push(checkedInvItemForAdd);
+  //   } else {
+  //     let indexCount: number = 0;
+  //     let removeFlag: boolean = false;
+  //     for (let el of this.addInvItemArrByModalCheckboxClick) {
+  //       if (el.invoiceNo === checkedInvItemForAdd.invoiceNo && el.itemCode === checkedInvItemForAdd.itemCode) {
+  //         this.addInvItemArrByModalCheckboxClick.splice(indexCount, 1);
+  //         removeFlag = true;
+  //         break;
+  //       }//end of if
+  //       indexCount++;
+  //     }//end of for
+  //     if (!removeFlag) {
+  //       // this.addInvItemArrByModalCheckboxClick.push(checkedInvItemForAdd);
 
-        let itemKey = checkedInvItemForAdd.invoiceNo + checkedInvItemForAdd.itemCode + checkedInvItemForAdd.complaintTypeId + checkedInvItemForAdd.natureOfComplaintId;
-        this.selectedInvItemDetailsObj[itemKey] ? null : this.addInvItemArrByModalCheckboxClick.push(checkedInvItemForAdd);
-      }//end of if
-    }//end of else
-    console.log("addInvItemArrByModalCheckboxClick::", this.addInvItemArrByModalCheckboxClick);
-  }//end of method
+  //       let itemKey = checkedInvItemForAdd.invoiceNo + checkedInvItemForAdd.itemCode + checkedInvItemForAdd.complaintTypeId + checkedInvItemForAdd.natureOfComplaintId;
+  //       this.selectedInvItemDetailsObj[itemKey] ? null : this.addInvItemArrByModalCheckboxClick.push(checkedInvItemForAdd);
+  //     }//end of if
+  //   }//end of else
+  //   console.log("addInvItemArrByModalCheckboxClick::", this.addInvItemArrByModalCheckboxClick);
+  // }//end of method
 
-  public saveAddInvItemModal(compDetailValForInvAddItem: string) {
-    console.log("compDetailValForInvAddItem::", compDetailValForInvAddItem);
-    this.tempCompTypeJson.complaintDetails = compDetailValForInvAddItem ? compDetailValForInvAddItem : '';//set complain details to json
-    console.log("tempCompTypeJson::", this.tempCompTypeJson);
-    if (this.tempCompTypeJson.natureOfComplaintDesc && this.tempCompTypeJson.complaintTypeDesc) {//checking if nature of comp and comp type have data
-      if ((this.tempCompTypeJson.natureOfComplaintDesc === "Others" || this.tempCompTypeJson.natureOfComplaintDesc === "Marking & Stenciling") && !compDetailValForInvAddItem) {
-        this.modalErrorMsgObj.modalErrorMsgShowFlag = true;
-        this.modalErrorMsgObj.modalErrorMsg = "Details Of Complaint is Required!";
-      } else {
-        this.modalErrorMsgObj.modalErrorMsgShowFlag = false;
-        this.modalErrorMsgObj.modalErrorMsg = "";
-      }
-    } else {
-      this.modalErrorMsgObj.modalErrorMsgShowFlag = true;
-      this.modalErrorMsgObj.modalErrorMsg = "Please Fillout All data.";
-    }
-    if (!this.modalErrorMsgObj.modalErrorMsgShowFlag) {
-      //inv Items arr from add item modal
-      this.addInvItemArrByModalCheckboxClick.forEach(invItemAddEl => {
-        invItemAddEl.complaintDetails = this.tempCompTypeJson.complaintDetails ? this.tempCompTypeJson.complaintDetails : '';
-        invItemAddEl.cameFrom = "40";
-        // invItemAddEl.natureOfComplaintId = this.tempCompTypeJson.natureOfComplaintId;
-        // invItemAddEl.natureOfComplaintDesc = this.tempCompTypeJson.natureOfComplaintDesc;
-        // invItemAddEl.complaintTypeId = this.tempCompTypeJson.complaintTypeId;
-        // invItemAddEl.complaintTypeDesc = this.tempCompTypeJson.complaintTypeDesc; 
+  // public saveAddInvItemModal(compDetailValForInvAddItem: string) {
+  //   console.log("compDetailValForInvAddItem::", compDetailValForInvAddItem);
+  //   this.tempCompTypeJson.complaintDetails = compDetailValForInvAddItem ? compDetailValForInvAddItem : '';//set complain details to json
+  //   console.log("tempCompTypeJson::", this.tempCompTypeJson);
+  //   if (this.tempCompTypeJson.natureOfComplaintDesc && this.tempCompTypeJson.complaintTypeDesc) {//checking if nature of comp and comp type have data
+  //     if ((this.tempCompTypeJson.natureOfComplaintDesc === "Others" || this.tempCompTypeJson.natureOfComplaintDesc === "Marking & Stenciling") && !compDetailValForInvAddItem) {
+  //       this.modalErrorMsgObj.modalErrorMsgShowFlag = true;
+  //       this.modalErrorMsgObj.modalErrorMsg = "Details Of Complaint is Required!";
+  //     } else {
+  //       this.modalErrorMsgObj.modalErrorMsgShowFlag = false;
+  //       this.modalErrorMsgObj.modalErrorMsg = "";
+  //     }
+  //   } else {
+  //     this.modalErrorMsgObj.modalErrorMsgShowFlag = true;
+  //     this.modalErrorMsgObj.modalErrorMsg = "Please Fillout All data.";
+  //   }
+  //   if (!this.modalErrorMsgObj.modalErrorMsgShowFlag) {
+  //     //inv Items arr from add item modal
+  //     this.addInvItemArrByModalCheckboxClick.forEach(invItemAddEl => {
+  //       invItemAddEl.complaintDetails = this.tempCompTypeJson.complaintDetails ? this.tempCompTypeJson.complaintDetails : '';
+  //       invItemAddEl.cameFrom = "40";
+  //       // invItemAddEl.natureOfComplaintId = this.tempCompTypeJson.natureOfComplaintId;
+  //       // invItemAddEl.natureOfComplaintDesc = this.tempCompTypeJson.natureOfComplaintDesc;
+  //       // invItemAddEl.complaintTypeId = this.tempCompTypeJson.complaintTypeId;
+  //       // invItemAddEl.complaintTypeDesc = this.tempCompTypeJson.complaintTypeDesc; 
 
-        let itemKey = invItemAddEl.invoiceNo + invItemAddEl.itemCode + invItemAddEl.complaintTypeId + invItemAddEl.natureOfComplaintId;
-        this.selectedInvItemDetailsObj[itemKey] ? null : this.selectedInvItemDetailsObj[itemKey] = invItemAddEl;
-        // this.selectedInvItemDetails.push(invItemAddEl);//push the data 
-      });
+  //       let itemKey = invItemAddEl.invoiceNo + invItemAddEl.itemCode + invItemAddEl.complaintTypeId + invItemAddEl.natureOfComplaintId;
+  //       this.selectedInvItemDetailsObj[itemKey] ? null : this.selectedInvItemDetailsObj[itemKey] = invItemAddEl;
+  //       // this.selectedInvItemDetails.push(invItemAddEl);//push the data 
+  //     });
 
-      for (let element in this.selectedInvItemDetailsObj) {
-        this.selectedInvItemDetails.push(this.selectedInvItemDetailsObj[element]);
-      }
+  //     for (let element in this.selectedInvItemDetailsObj) {
+  //       this.selectedInvItemDetails.push(this.selectedInvItemDetailsObj[element]);
+  //     }
 
-      // this.selectedInvItemDetails;
+  //     // this.selectedInvItemDetails;
 
-      //clear data
-      this.clearItemModalData();
-      this.addInvItemArrByModalCheckboxClick = [];//clear the array
-      this.toggleAddInvItemModal();//close modal
-    }//end of if err msg flag check
-  }//end of save add item modal method
+  //     //clear data
+  //     this.clearItemModalData();
+  //     this.addInvItemArrByModalCheckboxClick = [];//clear the array
+  //     this.toggleAddInvItemModal();//close modal
+  //   }//end of if err msg flag check
+  // }//end of save add item modal method
 
   // ========= add item ===============
 
