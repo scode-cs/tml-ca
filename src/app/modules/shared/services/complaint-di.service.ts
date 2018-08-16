@@ -102,8 +102,8 @@ export class ComplaintDIService {
   public getInvoiceItemDetail(compRefNo: string, activityId: number, complaintDetailsAutoId: number){
     let headers: Headers = this.configService();
     let actionUrl = AppUrlsConst.COMPLAIN_INVOICE_ITEM_DETAIL_VIEW_URL;
-    let param = "filter="+this.localStorageService.appSettings.complaintReferenceNoFieldName+"='"+compRefNo+"'&"
-    +this.localStorageService.appSettings.activityIdFieldName+"="+activityId+"&"
+    let param = "filter="+this.localStorageService.appSettings.complaintReferenceNoFieldName+"='"+compRefNo+"' AND "
+    +this.localStorageService.appSettings.activityIdFieldName+"="+activityId+" AND "
     +this.localStorageService.appSettings.complaintDetailsAutoIdFieldName+"="+complaintDetailsAutoId+
     "&sortData=&orderBy=";
 

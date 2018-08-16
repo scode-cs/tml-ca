@@ -34,7 +34,9 @@
               </td>
 
               <td class="hideextra" *ngFor="let invRprt of invReportTable" [ngClass]="invRprt.dataClass">
-                {{ invReportDet[invRprt.headerKey] }}
+                <ng-container *ngIf="invRprt.headerKey == 'investigationReportDate'">{{ invReportDet[invRprt.headerKey] | date:'dd-MMM-yyyy' }}</ng-container>
+                <ng-container *ngIf="invRprt.headerKey !='investigationReportDate'">{{ invReportDet[invRprt.headerKey] }}</ng-container>
+                <!-- {{ invReportDet[invRprt.headerKey] }} -->
               </td>
             </tr>
           </tbody>
@@ -138,7 +140,11 @@
                 <tbody>
                   <tr class="tr-style" *ngFor="let invItemDet of invItemDetails">
                     <td class="hideextra" *ngFor="let itmGrid of itemGridTable" [ngClass]="itmGrid.dataClass">
-                      {{ invItemDet[itmGrid.headerKey] }}
+                      <ng-container *ngIf="itmGrid.headerKey == 'invoiceDate'">{{ invItemDet[itmGrid.headerKey] | date:'dd-MMM-yyyy' }}</ng-container>
+                      <ng-container *ngIf="itmGrid.headerKey !='invoiceDate'">{{ invItemDet[itmGrid.headerKey] }}</ng-container>
+
+                      <!-- {{ invItemDet[itmGrid.headerKey] }} -->
+                      <!--invoiceDate-->
                     </td>
                   </tr>
                 </tbody>
@@ -262,16 +268,16 @@
       <!-- error msg div -->
       <br/>
       <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" *ngIf="errorMsgObj.errMsgShowFlag">
-          <div class="alert alert-danger">
-            {{errorMsgObj.errorMsg}}&nbsp;
-            <button aria-label="Close" class="close" type="button" (click)="deleteResErrorMsgOnClick()">
-              <span aria-hidden="true">×</span>
-            </button>
-          </div>
-          <br/>
-          <br/>
+        <div class="alert alert-danger">
+          {{errorMsgObj.errorMsg}}&nbsp;
+          <button aria-label="Close" class="close" type="button" (click)="deleteResErrorMsgOnClick()">
+            <span aria-hidden="true">×</span>
+          </button>
         </div>
-        <!-- end of error msg div -->
+        <br/>
+        <br/>
+      </div>
+      <!-- end of error msg div -->
     </div>
     <!-- end of main div -->
   </div>
