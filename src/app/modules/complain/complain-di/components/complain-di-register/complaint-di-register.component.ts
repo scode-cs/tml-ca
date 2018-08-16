@@ -170,7 +170,7 @@ export class ComplaintDIRegisterComponent implements OnInit {
   private getSystemDate() {
     //formatting the current date
     let date = new Date();
-    let currentDate: string = this.datePipe.transform(date, 'yyyy-MM-dd');
+    let currentDate: string = this.datePipe.transform(date, 'dd-MMM-yyyy');
     this.complaintRegisterFormGroup.controls["loggedOnDt"].setValue(currentDate);
     this.complaintRegisterFormGroup.controls["complaintReferenceDt"].setValue(currentDate);
 
@@ -792,6 +792,8 @@ export class ComplaintDIRegisterComponent implements OnInit {
 
     if (this.complaintRegisterFormGroup.valid) {
       this.busySpinner = true;
+      let date = new Date();
+      let currentDate: string = this.datePipe.transform(date, 'yyyy-MM-dd');
       console.log("form value::", this.complaintRegisterFormGroup.value);
       let complainHeaderJson: any = {};
       complainHeaderJson.lastActivityId = this.activityId;
@@ -804,8 +806,8 @@ export class ComplaintDIRegisterComponent implements OnInit {
       complainDetailJson.modeId = this.complaintRegisterFormGroup.value.modeId;
       complainDetailJson.siteVisit = this.siteVisitValue;
       complainDetailJson.siteVisitByDepartmentName = this.complaintRegisterFormGroup.value.siteVisitByDepartmentName;
-      complainDetailJson.complaintReferenceDt = this.complaintRegisterFormGroup.value.complaintReferenceDt;
-      complainDetailJson.loggedOnDt = this.complaintRegisterFormGroup.value.loggedOnDt;
+      complainDetailJson.complaintReferenceDt = currentDate;//this.complaintRegisterFormGroup.value.complaintReferenceDt;
+      complainDetailJson.loggedOnDt = currentDate;//this.complaintRegisterFormGroup.value.loggedOnDt;
       complainDetailJson.contactPersonName = this.complaintRegisterFormGroup.value.contactPersonName;
       complainDetailJson.contactPersonPhoneNo = this.complaintRegisterFormGroup.value.contactPersonPhoneNo;
       complainDetailJson.contactPersonEmailId = this.complaintRegisterFormGroup.value.contactPersonEmailId;

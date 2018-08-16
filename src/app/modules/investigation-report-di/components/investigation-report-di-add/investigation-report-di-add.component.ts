@@ -80,7 +80,8 @@ export class InvestigationReportDiComponent implements OnInit {
 
   public itemListFormGroup: FormGroup;
   public itemListNatOfCmpFormGroup: FormGroup;
-
+  public dateErrFlag: boolean = false;
+  public sampleDateErrFlag: boolean = false;
   constructor(
     private activatedroute: ActivatedRoute,
     private router: Router,
@@ -279,11 +280,11 @@ export class InvestigationReportDiComponent implements OnInit {
           });
           //new add
           // this.getComplainDet();//calling the method to check n update previous item row
-          if (comingFrom) {
+          // if (comingFrom) {
             let invItemIndex: number = 0;
             this.invReportFormGroup.controls['customerCode'].setValue(this.invItemDetails[invItemIndex].customerCode);
             this.invReportFormGroup.controls['customerName'].setValue(this.invItemDetails[invItemIndex].customerName);
-          }//end of if
+          // }//end of if
           let customerCode: string = this.invReportFormGroup.value.customerCode;//store the cutomer code
           this.getCustomerInvItemDet(customerCode);
           // end of new add
@@ -342,13 +343,13 @@ export class InvestigationReportDiComponent implements OnInit {
     this.sessionErrorService.routeToLogin(err._body);
   }//end of method
   //to set items arr for submit
-  private setTotalItemArr(itemsArr: any): any {
+  private setTotalItemArr(itemsArr: any,complaintDetailsAutoId: string,itemInfo: string): any {
     let itemarrEl: any = {};
-    itemarrEl.activityId = itemsArr.activityId;
+    itemarrEl.activityId = 40;//itemsArr.activityId;
     itemarrEl.complaintReferenceNo = this.complaintReferenceNo;
-    itemarrEl.complaintDetailsAutoId = "";//ask sayantan da --> parseInt(valueSub);
-    itemarrEl.natureOfComplaintId = itemsArr.natureOfComplaintId;
-    itemarrEl.complaintDetails = itemsArr.complaintDetails;
+    itemarrEl.complaintDetailsAutoId = parseInt(complaintDetailsAutoId);//ask sayantan da --> parseInt(valueSub);
+    itemarrEl.natureOfComplaintId = parseInt(itemsArr.natureOfComplaintId);
+    itemarrEl.complaintDetails = itemsArr.complaintDetails ? itemsArr.complaintDetails : '';
     itemarrEl.invoiceNo = itemsArr.invoiceNo;
     itemarrEl.itemCode = itemsArr.itemCode ? itemsArr.itemCode : itemsArr.itemNo;
     itemarrEl.complaintQtyInMtrs = itemsArr.complaintQtyInMtrs;
@@ -357,20 +358,20 @@ export class InvestigationReportDiComponent implements OnInit {
     // itemarrEl.invoiceQtyInTons = itemsArr.invoiceQtyInTons;
     itemarrEl.userId = this.localStorageService.user.userId;
     itemarrEl.batchNo = itemsArr.batchNo;
-    itemarrEl.cameFrom = parseInt(itemsArr.cameFrom);
+    itemarrEl.cameFrom = itemInfo =='editItem'? 10 : 40;//parseInt(itemsArr.cameFrom);
     return itemarrEl;
   }//end of method
 
   //start method of getTotalItemDet to get total items
-  private getTotalItemDet(): any[] {
+  private getTotalItemDet(complaintDetailsAutoId: string): any[] {
     let totalItems: any[] = [];
     let arrEl: any = {};
     this.invItemDetails.forEach(invItmDet => {
-      arrEl = this.setTotalItemArr(invItmDet);
+      arrEl = this.setTotalItemArr(invItmDet,complaintDetailsAutoId,'editItem');
       totalItems.push(arrEl);
     });
     this.selectedInvItemDetails.forEach(selInvItmDet => {
-      arrEl = this.setTotalItemArr(selInvItmDet);
+      arrEl = this.setTotalItemArr(selInvItmDet,complaintDetailsAutoId,'addItem');
       totalItems.push(arrEl);
     });
     console.log(" total itemssssss::::::", totalItems);
@@ -424,7 +425,7 @@ export class InvestigationReportDiComponent implements OnInit {
       subscribe(res => {
         if (res.msgType === 'Info') {
           console.log(" complain submitted successfully");
-          totalItems = this.getTotalItemDet();
+          totalItems = this.getTotalItemDet(res.valueSub);
           if (totalItems.length > 0) {
             this.uploadInvoiceItemDetails(totalItems);
           } if (this.fileArr.length > 0) {
@@ -530,7 +531,7 @@ export class InvestigationReportDiComponent implements OnInit {
           itemDet.uiInpErrDesc = 'Complaint Quantity can’t be less than zero';
           this.complaintQtyErrorCorrection(itemAddEditArr);
           // } else if (complaintQtyInMtrs >= 0 && complaintQtyInMtrs <= invoiceQtyInMtrs && !(isNaN(complaintQtyInMtrs))) {
-        } else if (complaintQtyInMtrs > 0 && complaintQtyInMtrs <= invoiceQtyInMtrs && !(isNaN(complaintQtyInMtrs))) {
+        } else if (complaintQtyInMtrs > 0 || (complaintQtyInMtrs <= invoiceQtyInMtrs && !(isNaN(complaintQtyInMtrs)))) {
           itemDet.complaintQtyInMtrs = complaintQtyInMtrs;
           flag = true;
           itemDet.uiInpErrFlag = false;
@@ -561,7 +562,7 @@ export class InvestigationReportDiComponent implements OnInit {
           itemDet.uiInpErrDesc = 'Complaint Quantity can’t be less than zero';
           this.complaintQtyErrorCorrection(itemAddEditArr);
           // } else if (complaintQtyInMtrs >= 0 && complaintQtyInMtrs <= invoiceQtyInMtrs && !(isNaN(complaintQtyInMtrs))) {
-        } else if (complaintQtyInMtrs == 0 && complaintQtyInMtrs <= invoiceQtyInMtrs && !(isNaN(complaintQtyInMtrs))) {
+        } else if (complaintQtyInMtrs == 0 || (complaintQtyInMtrs <= invoiceQtyInMtrs && !(isNaN(complaintQtyInMtrs)))) {
           itemDet.complaintQtyInMtrs = complaintQtyInMtrs;
           flag = true;
           itemDet.uiInpErrFlag = false;
@@ -645,62 +646,63 @@ export class InvestigationReportDiComponent implements OnInit {
   }//end of filechange method 
 
   //on click investigationReportDISubmit method
-  public investigationReportDISubmit(): void {
-    this.getTotalItemDet();
-    // if (this.invReportFormGroup.valid) {
-    //   console.log("this.invReportFormGroup.value", this.invReportFormGroup.value);
-    //   let invReportHeaderJson: any = {};
-    //   invReportHeaderJson.lastActivityId = this.activityId;
-    //   invReportHeaderJson.userId = this.localStorageService.user.userId;
-    //   invReportHeaderJson.complaintReferenceNo = this.invReportFormGroup.value.complaintReferenceNo;
-    //   console.log(" invReportHeaderJson =========", invReportHeaderJson);
-    //   let action: string = "";
-    //   let invReportDetailJson: any = {};
-    //   invReportDetailJson.activityId = this.activityId;
-    //   invReportDetailJson.userId = this.localStorageService.user.userId;
-    //   console.log("invReportFormGroup: ", this.invReportFormGroup.value);
-    //   invReportDetailJson.complaintReferenceNo = this.invReportFormGroup.value.complaintReferenceNo;
-    //   invReportDetailJson.investigationReportDate = this.invReportFormGroup.value.investigationReportDate;
-    //   invReportDetailJson.sampleCollected = this.invReportFormGroup.value.sampleCollected;
-    //   invReportDetailJson.sampleCollectedDate = this.invReportFormGroup.value.sampleCollectedDate;
-    //   invReportDetailJson.siteVisitMade = this.invReportFormGroup.value.siteVisit;
-    //   invReportDetailJson.siteVisitMadeDate = this.invReportFormGroup.value.siteVisitDt;
+  public investigationReportDISubmit(): void {    
+    if (this.invReportFormGroup.valid) {
+      console.log("this.invReportFormGroup.value", this.invReportFormGroup.value);
+      let date = new Date();
+      let currentDate: string = this.datePipe.transform(date, 'yyyy-MM-dd');
+      let invReportHeaderJson: any = {};
+      invReportHeaderJson.lastActivityId = this.activityId;
+      invReportHeaderJson.userId = this.localStorageService.user.userId;
+      invReportHeaderJson.complaintReferenceNo = this.invReportFormGroup.value.complaintReferenceNo;
+      console.log(" invReportHeaderJson =========", invReportHeaderJson);
+      let action: string = "";
+      let invReportDetailJson: any = {};
+      invReportDetailJson.activityId = this.activityId;
+      invReportDetailJson.userId = this.localStorageService.user.userId;
+      console.log("invReportFormGroup: ", this.invReportFormGroup.value);
+      invReportDetailJson.complaintReferenceNo = this.invReportFormGroup.value.complaintReferenceNo;
+      invReportDetailJson.investigationReportDate = currentDate;//this.invReportFormGroup.value.investigationReportDate;
+      invReportDetailJson.sampleCollected = this.invReportFormGroup.value.sampleCollected;
+      invReportDetailJson.sampleCollectedDate = this.invReportFormGroup.value.sampleCollectedDate;
+      invReportDetailJson.siteVisitMade = this.invReportFormGroup.value.siteVisit;
+      invReportDetailJson.siteVisitMadeDate = this.invReportFormGroup.value.siteVisitDt;
 
-    //   let unloadingEquipment: string = "";
-    //   this.unloadingEquipmentList.forEach(unloadingEquip => {
-    //     unloadingEquipment = unloadingEquipment ? (unloadingEquipment + "," + unloadingEquip) : unloadingEquip;
-    //   });
-    //   console.log("unloadingEquipment ======== ", unloadingEquipment);
-    //   invReportDetailJson.unloadingEquipement = unloadingEquipment;
+      let unloadingEquipment: string = "";
+      this.unloadingEquipmentList.forEach(unloadingEquip => {
+        unloadingEquipment = unloadingEquipment ? (unloadingEquipment + "," + unloadingEquip) : unloadingEquip;
+      });
+      console.log("unloadingEquipment ======== ", unloadingEquipment);
+      invReportDetailJson.unloadingEquipement = unloadingEquipment;
 
-    //   let lubricantUsed: string = "";
-    //   this.lubricantUsedList.forEach(lbUsed => {
-    //     lubricantUsed = lubricantUsed ? (lubricantUsed + "," + lbUsed) : lbUsed;
-    //   });
-    //   console.log("lubricantUsed ======== ", lubricantUsed);
-    //   invReportDetailJson.lubricantUsed = lubricantUsed;
+      let lubricantUsed: string = "";
+      this.lubricantUsedList.forEach(lbUsed => {
+        lubricantUsed = lubricantUsed ? (lubricantUsed + "," + lbUsed) : lbUsed;
+      });
+      console.log("lubricantUsed ======== ", lubricantUsed);
+      invReportDetailJson.lubricantUsed = lubricantUsed;
 
-    //   let layingPosition: string = "";
-    //   this.layingPositionList.forEach(layPos => {
-    //     layingPosition = layingPosition ? (layingPosition + "," + layPos) : layPos;
-    //   });
-    //   console.log("layingPosition ======== ", layingPosition);
-    //   invReportDetailJson.layingPosition = layingPosition;
+      let layingPosition: string = "";
+      this.layingPositionList.forEach(layPos => {
+        layingPosition = layingPosition ? (layingPosition + "," + layPos) : layPos;
+      });
+      console.log("layingPosition ======== ", layingPosition);
+      invReportDetailJson.layingPosition = layingPosition;
 
-    //   let jointingType: string = "";
-    //   this.jointingTypeList.forEach(jType => {
-    //     jointingType = jointingType ? (jointingType + "," + jType) : jType;
-    //   });
-    //   console.log("jointingType ======== ", jointingType);
-    //   invReportDetailJson.jointingType = jointingType;
+      let jointingType: string = "";
+      this.jointingTypeList.forEach(jType => {
+        jointingType = jointingType ? (jointingType + "," + jType) : jType;
+      });
+      console.log("jointingType ======== ", jointingType);
+      invReportDetailJson.jointingType = jointingType;
 
-    //   console.log("invReportDetailJson====== ", invReportDetailJson);
+      console.log("invReportDetailJson====== ", invReportDetailJson);
 
-    //   this.submitInvReportDIDetWSCall(invReportHeaderJson, invReportDetailJson, action);//calling the me
-    // } else {
-    //   this.errorMsgObj.errMsgShowFlag = true;
-    //   this.errorMsgObj.errorMsg = 'Please fillout All Data';
-    // }
+      this.submitInvReportDIDetWSCall(invReportHeaderJson, invReportDetailJson, action);//calling the me
+    } else {
+      this.errorMsgObj.errMsgShowFlag = true;
+      this.errorMsgObj.errorMsg = 'Please fillout All Data';
+    }
   }//end of method investigationReportDISubmit
 
   //cancel method
@@ -708,6 +710,29 @@ export class InvestigationReportDiComponent implements OnInit {
     // Not authenticated
     this.router.navigate([ROUTE_PATHS.RouteComplainDIView]);//route to complain di view page
   }//end of cancel method
+
+  //date validation
+  public dateValidation(dateInfo: string){    
+    let date = new Date(); 
+    let dateControlName = new Date(this.invReportFormGroup.controls['siteVisitDt'].value); 
+
+    //let siteVisitDate: string = this.datePipe.transform(this.invReportFormGroup.controls['siteVisitDt'].value, 'dd-MM-yyyy');
+    if (date < dateControlName){
+      this.dateErrFlag =  true;     
+    }else{
+      this.dateErrFlag = false;     
+    }
+  }
+
+  public sampledateValidation() {
+    let date = new Date(); 
+    let dateControlName = new Date(this.invReportFormGroup.controls['sampleCollectedDate'].value);
+    if(date < dateControlName){
+      this.sampleDateErrFlag = true;
+    }else{
+      this.sampleDateErrFlag = false;
+    }
+  }
 
   //start method for clicking radio button 
   public onRadioClick(radioValue: string, radioButtonName: string) {
@@ -1113,6 +1138,11 @@ export class InvestigationReportDiComponent implements OnInit {
       }
     });
 
+    if (selectedKey == '5') {
+      this.itemListNatOfCmpFormGroup.controls['natOfComplain'].setValue('44');
+      this.selectedNatureOfCompDesc = this.natureOfComDropDownList[0].Value;//set the value of nature of complaint dropdown
+    }
+
     this.selectedComplainTypeId = selectedKey;
     this.selectedComplainTypeDesc = selectedDesc;
 
@@ -1133,6 +1163,7 @@ export class InvestigationReportDiComponent implements OnInit {
     this.selectedNatureOfCompDesc = selectedDesc;
   }
 
+  public addItemModalErrorFlag: boolean = false;
   public addItemAtInv() {
 
     for (let itemSelect in this.itemListFormGroup.value) {
@@ -1151,11 +1182,13 @@ export class InvestigationReportDiComponent implements OnInit {
             let natureOfComplaintId = '' + this.selectedNatureOfCompId;
             let natureOfComplaintDesc = '' + this.selectedNatureOfCompDesc;
 
+            let complainDetails = this.itemListNatOfCmpFormGroup.value['complainDetail'];
+
             itemDetails.complaintTypeId = complaintTypeId;
             itemDetails.complaintTypeDesc = complaintTypeDesc;
             itemDetails.natureOfComplaintId = natureOfComplaintId;
             itemDetails.natureOfComplaintDesc = natureOfComplaintDesc;
-
+            itemDetails.complaintDetails = complainDetails ? complainDetails : '';
             let itemKey = this.selectedComplainTypeId + this.selectedNatureOfCompId + '|' + 
               itemDetails.formKey;
             this.selectedInvItemDetailsObj[itemKey] ? null : 
@@ -1171,8 +1204,13 @@ export class InvestigationReportDiComponent implements OnInit {
       this.selectedInvItemDetails.push(this.selectedInvItemDetailsObj[element]);
     }
 
-    this.resetAddItemData();
-    this.toggleAddInvItemModal();
+    if (this.selectedComplainTypeId == '5' && this.selectedNatureOfCompId == '44') {
+      this.addItemModalErrorFlag = true;
+    } else {
+      this.addItemModalErrorFlag = false;
+      this.resetAddItemData();
+      this.toggleAddInvItemModal();
+    }
   }
 
   public cancelAddItemModal() {
@@ -1188,9 +1226,12 @@ export class InvestigationReportDiComponent implements OnInit {
     this.selectedComplainTypeId = '';
     this.selectedNatureOfCompId = '';
 
-    for (let fc in this.itemListFormGroup.controls) {
-      this.itemListFormGroup.controls[fc].setValue(false);
+    if (this.itemListFormGroup && this.itemListFormGroup.controls) {
+      for (let fc in this.itemListFormGroup.controls) {
+        this.itemListFormGroup.controls[fc].setValue(false);
+      }
     }
+    
   }
 
 

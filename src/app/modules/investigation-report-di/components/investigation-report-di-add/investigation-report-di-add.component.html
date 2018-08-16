@@ -35,7 +35,9 @@
               </td>
 
               <td class="hideextra" *ngFor="let invRprt of invReportTable" [ngClass]="invRprt.dataClass">
-                {{ invReportDet[invRprt.headerKey] }}
+                  <ng-container *ngIf="invRprt.headerKey == 'investigationReportDate'">{{ invReportDet[invRprt.headerKey] | date:'dd-MMM-yyyy' }}</ng-container>
+                  <ng-container *ngIf="invRprt.headerKey !='investigationReportDate'">{{ invReportDet[invRprt.headerKey] }}</ng-container>
+                    <!-- {{ invReportDet[invRprt.headerKey] }} -->
               </td>
             </tr>
           </tbody>
@@ -87,9 +89,12 @@
             <ng-container *ngIf="invReportVar.siteVisitMadeValue === 'Y'">
               <div class="form-group col-xs-12 col-sm-6 col-md-6 col-lg-4">
                 <label for="siteVisitDt">Site Visit Date</label>
-                <input type="date" class="form-control" formControlName="siteVisitDt">
+                <input type="date" class="form-control" formControlName="siteVisitDt" (change)="dateValidation()">
                 <div class="alert alert-danger" *ngIf="invReportFormGroup.get('siteVisitDt').touched && invReportFormGroup.get('siteVisitDt').hasError('required')">
                   <i class="fa fa-exclamation-circle"></i> Site Visit Date is required!
+                </div>
+                <div class="alert alert-danger" *ngIf="dateErrFlag">
+                  <i class="fa fa-exclamation-circle"></i> Site Visit Date cannot be a future date!
                 </div>
               </div>
             </ng-container>
@@ -120,9 +125,12 @@
             <ng-container *ngIf="invReportVar.sampleCollectedValue === 'Y'">
               <div class="form-group col-xs-12 col-sm-6 col-md-6 col-lg-4">
                 <label for="sampleCollectedDate">Sample Collected Date</label>
-                <input type="date" class="form-control" formControlName="sampleCollectedDate">
+                <input type="date" class="form-control" formControlName="sampleCollectedDate" (change)="sampledateValidation()">
                 <div class="alert alert-danger" *ngIf="invReportFormGroup.get('sampleCollectedDate').touched && invReportFormGroup.get('sampleCollectedDate').hasError('required')">
                   <i class="fa fa-exclamation-circle"></i> Sample Collected Date is required!
+                </div>
+                <div class="alert alert-danger" *ngIf="sampleDateErrFlag">
+                  <i class="fa fa-exclamation-circle"></i> Sample Collected Date cannot be a future date!
                 </div>
               </div>
             </ng-container>
@@ -152,22 +160,22 @@
             <!-- start div for complaintQty error -->
             <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
               <ng-container *ngFor="let invItem of invItemDetails">
-                  <div class="alert alert-danger" *ngIf="invItem.uiInpErrFlag">
-                    Official Document No:
-                    <b>{{ invItem.invoiceNo }}</b>, Item code:
-                    <b>{{ invItem.itemNo }}</b>, error: {{ invItem.uiInpErrDesc }}
-                  </div>
+                <div class="alert alert-danger" *ngIf="invItem.uiInpErrFlag">
+                  Official Document No:
+                  <b>{{ invItem.invoiceNo }}</b>, Item code:
+                  <b>{{ invItem.itemNo }}</b>, error: {{ invItem.uiInpErrDesc }}
+                </div>
               </ng-container>
             </div>
             <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                <ng-container *ngFor="let selInvItem of selectedInvItemDetails">
-                    <div class="alert alert-danger" *ngIf="selInvItem.uiInpErrFlag">
-                      Official Document No:
-                      <b>{{ selInvItem.invoiceNo }}</b>, Item code:
-                      <b>{{ selInvItem.itemCode }}</b>, error: {{ selInvItem.uiInpErrDesc }}
-                    </div>
-                </ng-container>
-              </div>
+              <ng-container *ngFor="let selInvItem of selectedInvItemDetails">
+                <div class="alert alert-danger" *ngIf="selInvItem.uiInpErrFlag">
+                  Official Document No:
+                  <b>{{ selInvItem.invoiceNo }}</b>, Item code:
+                  <b>{{ selInvItem.itemCode }}</b>, error: {{ selInvItem.uiInpErrDesc }}
+                </div>
+              </ng-container>
+            </div>
             <!-- end div for complaint qty error -->
 
             <!-- start table div -->
@@ -191,7 +199,8 @@
                   </tr>
                 </thead>
                 <tbody>
-                  <tr class="tr-style" *ngFor="let invItemDet of invItemDetails"><!--previous (reg) item-->
+                  <tr class="tr-style" *ngFor="let invItemDet of invItemDetails">
+                    <!--previous (reg) item-->
                     <td class="td-style-first hideextra">{{invItemDet.invoiceNo}}
                       <i class="fa fa-pencil-square text-info" style="cursor: pointer;" (click)="openEditCompTypeModal(invItemDet)"></i>
                     </td>
@@ -209,7 +218,8 @@
                     <td class="td-style hideextra">{{invItemDet.projectName}}</td>
                     <td class="td-style-last hideextra">{{invItemDet.projectLocation}}</td>
                   </tr>
-                  <tr class="tr-style" *ngFor="let selInvItmDet of selectedInvItemDetails"><!--selected inv item-->
+                  <tr class="tr-style" *ngFor="let selInvItmDet of selectedInvItemDetails">
+                    <!--selected inv item-->
                     <td class="td-style-first hideextra">{{selInvItmDet.invoiceNo}}
                       <i class="fa fa-minus-circle text-danger" style="cursor: pointer;" (click)="onCloseInvoiceNo(selInvItmDet)"></i>
                     </td>
@@ -219,7 +229,8 @@
                     <td class="td-style hideextra">{{selInvItmDet.invoiceQtyInMtrs}}</td>
                     <td class="td-style hideextra">
                       <input type="number" value={{selInvItmDet.complaintQtyInMtrs}} #complaintQtyInMtrsForInvItemAdd (keyup)="onKeyupComplaintQtyOfInvItem(complaintQtyInMtrsForInvItemAdd.value,selInvItmDet,'addItem')"
-                      (click)="onKeyupComplaintQtyOfInvItem(complaintQtyInMtrsForInvItemAdd.value,selInvItmDet,'addItem')"/>
+                        (click)="onKeyupComplaintQtyOfInvItem(complaintQtyInMtrsForInvItemAdd.value,selInvItmDet,'addItem')"
+                      />
                     </td>
                     <td class="td-style hideextra">{{selInvItmDet.complaintTypeDesc}}</td>
                     <td class="td-style hideextra">{{selInvItmDet.natureOfComplaintDesc}}</td>
@@ -468,158 +479,163 @@
 
       <div class="form-group" style="display: inline-flex; width: 100%">
         <form style="display: inline-flex; width: 100%" [formGroup]="itemListNatOfCmpFormGroup">
-        <div style="width: 32%">
-          <label>Complaint Type</label>
-          <select class="custom-select" style="width: 90%;" formControlName="complainType"
-            (change)="complainTypeOnChange(complaintTypeDropDownList)" required>
-            <option *ngFor="let cmpType of complaintTypeDropDownList" value="{{ cmpType.Key }}">
-              {{ cmpType.Value }}
-            </option>
-          </select>
-        </div>
-        <div style="width: 32%">
-          <label>Nature of Complaint</label>
-          <select class="custom-select" style="width: 90%;" formControlName="natOfComplain"
-            (change)="natOfCompOnChange(natureOfComDropDownList)" required>
-            <option *ngIf="natureOfComDropDownList.length==0" value="">-- Select --</option>
-            <option *ngFor="let natureCmp of natureOfComDropDownList" value="{{ natureCmp.Key }}">{{ natureCmp.Value }}</option>
-          </select>
-        </div>
-        <div style="width: 35%;">
-          <label>Detail of Complaint</label>
-          <textarea class="form-control hide-horizontal-scroll" style="height: 70px; resize: none"
-            formControlName="complainDetail">
+          <div style="width: 32%">
+            <label>Complaint Type</label>
+            <select class="custom-select" style="width: 90%;" formControlName="complainType" (change)="complainTypeOnChange(complaintTypeDropDownList)"
+              required>
+              <option *ngFor="let cmpType of complaintTypeDropDownList" value="{{ cmpType.Key }}">
+                {{ cmpType.Value }}
+              </option>
+            </select>
+          </div>
+          <div style="width: 32%">
+            <label>Nature of Complaint</label>
+            <select class="custom-select" style="width: 90%;" formControlName="natOfComplain" (change)="natOfCompOnChange(natureOfComDropDownList)"
+              required>
+              <option *ngIf="natureOfComDropDownList.length==0" value="">-- Select --</option>
+              <option *ngFor="let natureCmp of natureOfComDropDownList" value="{{ natureCmp.Key }}">{{ natureCmp.Value }}</option>
+            </select>
+          </div>
+          <div style="width: 35%;">
+            <label>Detail of Complaint</label>
+            <textarea class="form-control hide-horizontal-scroll" style="height: 70px; resize: none" formControlName="complainDetail">
           </textarea>
-        </div>
+          </div>
         </form>
       </div>
 
 
       <!-- table -->
       <!-- start  all and not selected invoice table div -->
-      <div class="modal-item-grid-style" *ngIf="allInvItemDetByCustomerCode.length>0">
-          <form [formGroup]="itemListFormGroup">
-        <table class="table-style">
-          <thead>
-            <tr class="th-style">
-              <td class="header-style-first hideextra">
-              </td>
-              <td class="header-style hideextra">
-                {{invDetailsItemsHeader.invoiceNo}}
-              </td>
+      <div class="modal-item-grid-style" *ngIf="allInvItemDetByCustomerCode.length>0; else itemLoadError">
+        <form [formGroup]="itemListFormGroup">
+          <table class="table-style">
+            <thead>
+              <tr class="th-style">
+                <td class="header-style-first hideextra">
+                </td>
+                <td class="header-style hideextra">
+                  {{invDetailsItemsHeader.invoiceNo}}
+                </td>
 
-              <td class="header-style hideextra">
-                {{invDetailsItemsHeader.invoiceDate}}
-              </td>
-              <td class="header-style hideextra">
-                {{invDetailsItemsHeader.itemCode}}
-              </td>
-              <td class="header-style hideextra">
-                {{invDetailsItemsHeader.itemName}}
-              </td>
-              <td class="header-style hideextra">
-                {{invDetailsItemsHeader.invoiceQtyInMtrs}}
-              </td>
-              <td class="header-style hideextra">
-                {{invDetailsItemsHeader.customerSegment}}
-              </td>
+                <td class="header-style hideextra">
+                  {{invDetailsItemsHeader.invoiceDate}}
+                </td>
+                <td class="header-style hideextra">
+                  {{invDetailsItemsHeader.itemCode}}
+                </td>
+                <td class="header-style hideextra">
+                  {{invDetailsItemsHeader.itemName}}
+                </td>
+                <td class="header-style hideextra">
+                  {{invDetailsItemsHeader.invoiceQtyInMtrs}}
+                </td>
+                <td class="header-style hideextra">
+                  {{invDetailsItemsHeader.customerSegment}}
+                </td>
 
-              <td class="header-style hideextra">
-                {{invDetailsItemsHeader.usageGroup}}
-              </td>
-              <td class="header-style hideextra">
-                {{invDetailsItemsHeader.stateOrRegion}}
-              </td>
-              <td class="header-style hideextra">
-                {{invDetailsItemsHeader.poNo}}
-              </td>
-              <td class="header-style hideextra">
-                {{invDetailsItemsHeader.soNo}}
-              </td>
+                <td class="header-style hideextra">
+                  {{invDetailsItemsHeader.usageGroup}}
+                </td>
+                <td class="header-style hideextra">
+                  {{invDetailsItemsHeader.stateOrRegion}}
+                </td>
+                <td class="header-style hideextra">
+                  {{invDetailsItemsHeader.poNo}}
+                </td>
+                <td class="header-style hideextra">
+                  {{invDetailsItemsHeader.soNo}}
+                </td>
 
-              <td class="header-style hideextra">
-                {{invDetailsItemsHeader.inspectionVendorName}}
-              </td>
+                <td class="header-style hideextra">
+                  {{invDetailsItemsHeader.inspectionVendorName}}
+                </td>
 
-              <td class="header-style hideextra">
-                {{invDetailsItemsHeader.loadingVendorName}}
-              </td>
-              <td class="header-style hideextra">
-                {{invDetailsItemsHeader.truckNo}}
-              </td>
-            </tr>
-          </thead>
-          <tbody>
-            
-            <tr class="tr-style" *ngFor=" let itemDet of getAddItemList()">
-              <td class="td-style-first">
-                <ng-container *ngIf="itemListNatOfCmpFormGroup.value['natOfComplain']">
-                  <!--"tempCompTypeJson.complaintTypeId  && tempCompTypeJson.natureOfComplaintId"-->
-                  <!-- <input type="checkbox" (click)="onCheckInvItemFromAddModal(itemDet)" /> -->
-                  <input type="checkbox" 
-                    formControlName="{{ itemDet.formKey }}" />
-                </ng-container>
-              </td>
-              <td class="td-style">
-                {{itemDet.invoiceNo}}
-              </td>
-              <td class="td-style hideextra">
-                {{itemDet.invoiceDate|date: 'dd-MMM-yyyy'}}
-              </td>
-              <td class="td-style hideextra">
-                {{itemDet.itemCode}}
-              </td>
-              <td class="td-style hideextra">
-                {{itemDet.itemName}}
-              </td>
-              <td class="td-style hideextra">
-                {{itemDet.invoiceQtyInMtrs}}
-              </td>
-              <td class="td-style hideextra">
-                {{itemDet.customerSegment}}
-              </td>
-              <td class="td-style hideextra">
-                {{itemDet.usageGroup}}
-              </td>
-              <td class="td-style hideextra">
-                {{itemDet.stateOrRegion}}
-              </td>
-              <td class="td-style hideextra">
-                {{itemDet.poNo}}
-              </td>
-              <td class="td-style hideextra">
-                {{itemDet.soNo}}
-              </td>
-              <td class="td-style hideextra">
-                {{itemDet.inspectionVendorName}}
-              </td>
-              <td class="td-style hideextra">
-                {{itemDet.loadingVendorName}}
-              </td>
-              <td class="td-style hideextra">
-                {{itemDet.truckNo}}
-              </td>
-            </tr>
-          
-          </tbody>
-        </table>
-      </form>
+                <td class="header-style hideextra">
+                  {{invDetailsItemsHeader.loadingVendorName}}
+                </td>
+                <td class="header-style hideextra">
+                  {{invDetailsItemsHeader.truckNo}}
+                </td>
+              </tr>
+            </thead>
+            <tbody>
+
+              <tr class="tr-style" *ngFor=" let itemDet of getAddItemList()">
+                <td class="td-style-first">
+                  <ng-container *ngIf="itemListNatOfCmpFormGroup.value['natOfComplain']">
+                    <!--"tempCompTypeJson.complaintTypeId  && tempCompTypeJson.natureOfComplaintId"-->
+                    <!-- <input type="checkbox" (click)="onCheckInvItemFromAddModal(itemDet)" /> -->
+                    <input type="checkbox" formControlName="{{ itemDet.formKey }}" />
+                  </ng-container>
+                </td>
+                <td class="td-style">
+                  {{itemDet.invoiceNo}}
+                </td>
+                <td class="td-style hideextra">
+                  {{itemDet.invoiceDate|date: 'dd-MMM-yyyy'}}
+                </td>
+                <td class="td-style hideextra">
+                  {{itemDet.itemCode}}
+                </td>
+                <td class="td-style hideextra">
+                  {{itemDet.itemName}}
+                </td>
+                <td class="td-style hideextra">
+                  {{itemDet.invoiceQtyInMtrs}}
+                </td>
+                <td class="td-style hideextra">
+                  {{itemDet.customerSegment}}
+                </td>
+                <td class="td-style hideextra">
+                  {{itemDet.usageGroup}}
+                </td>
+                <td class="td-style hideextra">
+                  {{itemDet.stateOrRegion}}
+                </td>
+                <td class="td-style hideextra">
+                  {{itemDet.poNo}}
+                </td>
+                <td class="td-style hideextra">
+                  {{itemDet.soNo}}
+                </td>
+                <td class="td-style hideextra">
+                  {{itemDet.inspectionVendorName}}
+                </td>
+                <td class="td-style hideextra">
+                  {{itemDet.loadingVendorName}}
+                </td>
+                <td class="td-style hideextra">
+                  {{itemDet.truckNo}}
+                </td>
+              </tr>
+
+            </tbody>
+          </table>
+        </form>
       </div>
+
+      <ng-template #itemLoadError>
+        <div class="text-danger">
+          <i class="fa fa-exclamation-circle" aria-hidden="true"></i>
+          <b>Unable to load items!</b>
+        </div>
+      </ng-template>
       <!--end of all invoice details and not selected table div-->
       <!-- end of table -->
       <!--start button div-->
       <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
-        <div class="col-xs-12 col-sm-4 col-md-4 col-lg-2" style="float: right;">
-          <button type="submit" style="height: 35px; width: 160px;" class="btn btn-primary primary-button-style" 
+        <div class="col-xs-12 col-sm-4 col-md-4 col-lg-2" style="float: right;" *ngIf="allInvItemDetByCustomerCode.length>0">
+          <button type="submit" style="height: 35px; width: 160px;" class="btn btn-primary primary-button-style" [disabled]="addItemModalErrorFlag"
             (click)="addItemAtInv()">
             Save
           </button>
         </div>
       </div>
-      <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" *ngIf="modalErrorMsgObj.modalErrorMsgShowFlag">
+      <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" *ngIf="addItemModalErrorFlag">
         <div class="text-danger">
           <i class="fa fa-exclamation-circle" aria-hidden="true"></i>
-          <b>{{modalErrorMsgObj.modalErrorMsg}}</b>&nbsp;
+          <b>Detail of Complaint is required </b>&nbsp;
         </div>
       </div>
       <!--end of button div-->
@@ -627,6 +643,7 @@
     <!-- end of body div -->
   </div>
   <!-- end of add item modal -->
+
 
   <!--spinner-->
   <ispl-busy-spinner *ngIf="busySpinner"></ispl-busy-spinner>

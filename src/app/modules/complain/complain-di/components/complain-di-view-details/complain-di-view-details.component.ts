@@ -61,7 +61,7 @@ export class ComplainDIViewDetailsComponent implements OnInit {
     this.initform();
     this.getRouteParam();//to get route param 
     this.prevComplainReportTable = new ComplaintDIConfigModel().prevComplainHeader;//getting prev inv report details
-    this.itemGridTable = new ComplaintDIConfigModel().invItemGridHeader;
+    this.itemGridTable = new ComplaintDIConfigModel().itemGridHeader;
     this.getviewComplainReferenceDetailsWSCall();//service call
   }
   //end of on init
@@ -176,7 +176,7 @@ export class ComplainDIViewDetailsComponent implements OnInit {
   //method to set res value to form
   private setResValToForm() {
     let complainFormData: any = this.complainDetails[this.complainIndex];
-    this.complaintRegisterFormGroup.controls['modeId'].setValue(complainFormData.modeId);
+    this.complaintRegisterFormGroup.controls['modeId'].setValue(complainFormData.modeDesc);
     this.complaintRegisterFormGroup.controls['complaintReferenceDt'].setValue(this.datePipe.transform(complainFormData.complaintReferenceDt, 'dd-MMM-yyyy'));
     this.complaintRegisterFormGroup.controls['custCode'].setValue(complainFormData.custCode);
     this.complaintRegisterFormGroup.controls['custName'].setValue(complainFormData.customerName);
@@ -187,7 +187,8 @@ export class ComplainDIViewDetailsComponent implements OnInit {
     this.complaintRegisterFormGroup.controls['contactPersonEmailId'].setValue(complainFormData.contactPersonEmailId);
     this.complaintRegisterFormGroup.controls['loggedBy'].setValue(complainFormData.loggedByName);
     this.complaintRegisterFormGroup.controls['loggedOnDt'].setValue(this.datePipe.transform(complainFormData.loggedOnDt, 'dd-MMM-yyyy'));
-    this.complaintRegisterFormGroup.controls['complaintTypeId'].setValue(complainFormData.complaintTypeDesc);
+    let categoryDesc: string = complainFormData.categoryDesc ? '('+complainFormData.categoryDesc+')': '';
+    this.complaintRegisterFormGroup.controls['complaintTypeId'].setValue(complainFormData.complaintTypeDesc + categoryDesc);
     this.complaintRegisterFormGroup.controls['natureOfComplaintId'].setValue(complainFormData.natureOfComplaintDesc);
     this.complaintRegisterFormGroup.controls['complaintDetails'].setValue(complainFormData.complaintDetails);
     this.siteVisitValue = complainFormData.siteVisit;
