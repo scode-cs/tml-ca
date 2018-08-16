@@ -498,22 +498,22 @@ export class InvestigationReportDiComponent implements OnInit {
   //start method of complaintQtyErrorCorrection
   private complaintQtyErrorCorrection(itemsArr: any[]) {
     for (let itemDet of itemsArr) {
-      if (itemDet.uiInpErrFlag == true || itemDet.uiInpErrFlag == undefined) {
+      if (itemDet.uiInpErrFlag || itemDet.uiInpErrFlag == undefined) {
         this.complaintQtyInMtrsError = true;
         break;
-      } else if (itemDet.uiInpErrFlag == false) {
+      } else if (!itemDet.uiInpErrFlag) {
         this.complaintQtyInMtrsError = false;
       }//end of else if
     }//end of for     
   }//end of the method complaintQtyErrorCorrection 
 
   //method to check comp qty of inv added item
-  private onKeyupComplaintQtyOfAddEditItem(complaintQtyInMtrsParam, itemDetEl: any, itemInfoParam: string, itemAddEditArr: any[]) {
+  private onKeyupComplaintQtyOfAddItem(complaintQtyInMtrsParam, itemDetEl: any, itemInfoParam: string, itemAddEditArr: any[]) {
     let flag: boolean = false;
     console.log("complaintQtyInMtrsParam===>", complaintQtyInMtrsParam);
     let invoiceQtyInMtrParam: string = itemDetEl.invoiceQtyInMtrs;
     for (let itemDet of itemAddEditArr) {
-      if (itemDet.invoiceNo == itemDetEl.invoiceNo && ((itemDet.itemNo == itemDetEl.itemNo) || (itemDet.itemCode == itemDetEl.itemCode))) {
+      if (itemDet.invoiceNo == itemDetEl.invoiceNo && itemDet.itemCode == itemDetEl.itemCode && itemDet.complaintTypeId == itemDetEl.complaintTypeId && itemDet.natureOfComplaintId == itemDetEl.natureOfComplaintId) {
         let complaintQtyInMtrs: number = parseFloat(complaintQtyInMtrsParam);
         let invoiceQtyInMtrs: number = parseFloat(invoiceQtyInMtrParam);
         if (complaintQtyInMtrs > invoiceQtyInMtrs) {
@@ -521,12 +521,10 @@ export class InvestigationReportDiComponent implements OnInit {
           itemDet.uiInpErrDesc = 'Complaint Quantity can’t be greater than Invoice Quantity.';
           this.complaintQtyErrorCorrection(itemAddEditArr);
           break;
-        } else if (isNaN(complaintQtyInMtrs) || complaintQtyInMtrs == 0) {
-          if (itemInfoParam === 'addItem') {
+        } else if (isNaN(complaintQtyInMtrs) || complaintQtyInMtrs == 0) {          
             itemDet.uiInpErrFlag = true;
             itemDet.uiInpErrDesc = 'Complaint Quantity can’t be empty or zero';
-            this.complaintQtyErrorCorrection(itemAddEditArr);
-          }//end of if
+            this.complaintQtyErrorCorrection(itemAddEditArr);         
         } else if (complaintQtyInMtrs < 0) {
           itemDet.uiInpErrFlag = true;
           itemDet.uiInpErrDesc = 'Complaint Quantity can’t be less than zero';
@@ -544,15 +542,47 @@ export class InvestigationReportDiComponent implements OnInit {
     }//end of for   
   }//end of method  
 
+   //method to check comp qty of inv edit item
+   private onKeyupComplaintQtyOfEditItem(complaintQtyInMtrsParam, itemDetEl: any, itemInfoParam: string, itemAddEditArr: any[]) {
+    let flag: boolean = false;
+    console.log("complaintQtyInMtrsParam===>", complaintQtyInMtrsParam);
+    let invoiceQtyInMtrParam: string = itemDetEl.invoiceQtyInMtrs;
+    for (let itemDet of itemAddEditArr) {
+      if (itemDet.invoiceNo == itemDetEl.invoiceNo && itemDet.itemNo == itemDetEl.itemNo) {
+        let complaintQtyInMtrs: number = parseFloat(complaintQtyInMtrsParam);
+        let invoiceQtyInMtrs: number = parseFloat(invoiceQtyInMtrParam);
+        if (complaintQtyInMtrs > invoiceQtyInMtrs) {
+          itemDet.uiInpErrFlag = true;
+          itemDet.uiInpErrDesc = 'Complaint Quantity can’t be greater than Invoice Quantity.';
+          this.complaintQtyErrorCorrection(itemAddEditArr);
+          break;         
+        } else if (complaintQtyInMtrs < 0) {
+          itemDet.uiInpErrFlag = true;
+          itemDet.uiInpErrDesc = 'Complaint Quantity can’t be less than zero';
+          this.complaintQtyErrorCorrection(itemAddEditArr);
+          // } else if (complaintQtyInMtrs >= 0 && complaintQtyInMtrs <= invoiceQtyInMtrs && !(isNaN(complaintQtyInMtrs))) {
+        } else if (complaintQtyInMtrs == 0 && complaintQtyInMtrs <= invoiceQtyInMtrs && !(isNaN(complaintQtyInMtrs))) {
+          itemDet.complaintQtyInMtrs = complaintQtyInMtrs;
+          flag = true;
+          itemDet.uiInpErrFlag = false;
+          itemDet.uiInpErrDesc = '';
+          this.complaintQtyErrorCorrection(itemAddEditArr);
+          break;
+        }//end of else
+      }//end of if
+    }//end of for   
+  }//end of method  
+
   //start method onKeyupComplaintQtyOfEditItem
   public onKeyupComplaintQtyOfInvItem(complaintQtyInMtrsParam, itemDetEl: any, itemInfoParam: string) {
     let itemAddEditArr: any[] = [];
     if (itemInfoParam === 'editItem') {
       itemAddEditArr = this.invItemDetails;
+      this.onKeyupComplaintQtyOfEditItem(complaintQtyInMtrsParam, itemDetEl, itemInfoParam, itemAddEditArr);
     } else if (itemInfoParam === 'addItem') {
       itemAddEditArr = this.selectedInvItemDetails;
+      this.onKeyupComplaintQtyOfAddItem(complaintQtyInMtrsParam, itemDetEl, itemInfoParam, itemAddEditArr);
     }
-    this.onKeyupComplaintQtyOfAddEditItem(complaintQtyInMtrsParam, itemDetEl, itemInfoParam, itemAddEditArr);
   }//end of the method onKeyupComplaintQtyOfEditItem
 
 
