@@ -250,7 +250,7 @@ export class InvestigationReportDiComponent implements OnInit {
           console.log("Reg DTL::::", regDetails);
           let regLastIndex = regDetails ? regDetails.length - 1 : 0;
           let pageActivityId: number = 10;
-          let complaintDetailsAutoId: number = regDetails[regLastIndex].complaintDetailAutoId;
+          let complaintDetailsAutoId: number = regDetails[regLastIndex].complaintDetailsAutoId;
           let comingFrom: string = 'Reg';//to check its from reg or not n set customer details
           this.getInvoiceItemDetailWSCall(this.complaintReferenceNo, pageActivityId, complaintDetailsAutoId, comingFrom);
         } else {

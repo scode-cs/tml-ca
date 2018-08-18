@@ -102,7 +102,7 @@ export class ComplaintDIService {
   public getInvoiceItemDetail(compRefNo: string, activityId: number, complaintDetailsAutoId: number){
     let headers: Headers = this.configService();
     let actionUrl = AppUrlsConst.COMPLAIN_INVOICE_ITEM_DETAIL_VIEW_URL;
-    let param = "filter="+this.localStorageService.appSettings.complaintReferenceNoFieldName+"="+compRefNo+" AND "
+    let param = "filter="+this.localStorageService.appSettings.complaintReferenceNoFieldName+"='"+compRefNo+"' AND "
     +this.localStorageService.appSettings.activityIdFieldName+"="+activityId+" AND "
     +this.localStorageService.appSettings.complaintDetailsAutoIdFieldName+"="+complaintDetailsAutoId+
     "&sortData=&orderBy=";
@@ -145,7 +145,7 @@ public deleteInvoiceItemDetail(plantType: string,complaintReferenceNo: string,co
 getComplainViewDetails(complaintReferenceNo: string, activityIdFieldName: number) {
   let headers: Headers = this.configService();
   let actionUrl = AppUrlsConst.COMPLAIN_VIEW_DETAIL_URL;
-    let param = "filter="+this.localStorageService.appSettings.complaintReferenceNoFieldName+"="+complaintReferenceNo+" AND "+
+    let param = "filter="+this.localStorageService.appSettings.complaintReferenceNoFieldName+"='"+complaintReferenceNo+"' AND "+
     this.localStorageService.appSettings.activityIdFieldName+"="+activityIdFieldName+"&sortData=&orderBy=";
 
   return this.http.get(actionUrl+'?'+param, { headers: headers })
