@@ -222,7 +222,7 @@ export class InvestigationReportDiComponent implements OnInit {
           // set form value
           this.setResValToForm();
           let pageActivityId: number = 40;
-          let complaintDetailsAutoId: number = this.invReportDetails[this.invReportIndex].complaintDetailAutoId;
+          let complaintDetailsAutoId: number = this.invReportDetails[this.invReportIndex].complaintDetailsAutoId;
           let comingFrom: string = "";//to check its from reg or not n set customer details
           // TODO: Item for previous 
           this.getInvoiceItemDetailWSCall(this.complaintReferenceNo, pageActivityId, complaintDetailsAutoId, comingFrom);
