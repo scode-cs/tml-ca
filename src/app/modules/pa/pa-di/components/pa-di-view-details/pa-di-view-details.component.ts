@@ -39,7 +39,7 @@ export class PADIViewDetailsComponent implements OnInit {
     errMsgShowFlag: false
   };
   public rejectFlag: boolean = false;//reject flag
-  public rejectBtnShowFlg: boolean = false;//to show reject btn
+
   constructor(
     private formBuilder: FormBuilder,
     private router: Router,
@@ -124,9 +124,6 @@ private setResValToForm() {
     this.paRejectReason = paFormData.paCancelRemarks;//set the reject reason
   } else {
     this.paRejectReason = "";
-  }
-  if(paFormData.activityId == 70){
-    this.rejectBtnShowFlg = true;
   }
 }//end of method 
 
