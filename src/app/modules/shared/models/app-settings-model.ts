@@ -11,6 +11,7 @@ export class AppSettingsModel{
   private _closeComplaintActivityId: number;
   private _pendingComplaintActivityId: number;
   private _activityIdFieldName: string;
+  private _lastActivityIdFieldName: string;
   private _complaintDetailsAutoIdFieldName: string;
   private _resolutionOfComplaintsAtCustomerPlaceActivityId: number;
   private _analyseCustomerComplaintsAndActionPlanActivityId: number;
@@ -157,6 +158,13 @@ export class AppSettingsModel{
   }
   set activityIdFieldName(activityIdFieldName: string){
     this._activityIdFieldName = activityIdFieldName;
+  }
+
+  get lastActivityIdFieldName(): string {
+    return this._lastActivityIdFieldName;
+  }
+  set lastActivityIdFieldName(lastActivityIdFieldName: string) {
+    this._lastActivityIdFieldName = lastActivityIdFieldName;
   }
 
   get complaintDetailsAutoIdFieldName(): string{

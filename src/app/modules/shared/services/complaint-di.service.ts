@@ -211,13 +211,13 @@ public viewFile(complaintReferenceNo:string, activityId: number, complaintDetail
 }//end method of viewFile
 
 
-public getHeadercount(complainHeaderParam: ComplaintDIHeaderParamModel,planTye:any){
+public getHeadercount(complainHeaderParam: ComplaintDIHeaderParamModel,planType:any){
   let headers: Headers = this.configService();
   let actionUrl = AppUrlsConst.COMPLAINT_HEADER_DATA_COUNT;
 
 
   let param: string = '';
-  param+="plantType="+planTye+"&";
+  param+="plantType="+planType+"&";
   param += complainHeaderParam && complainHeaderParam.filter ? "filter="+complainHeaderParam.filter : "filter=";
   
   
