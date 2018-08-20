@@ -62,7 +62,7 @@ export class ComplaintDIRegisterComponent implements OnInit {
 
   //create a formgroup for complain reg
   public complaintRegisterFormGroup: FormGroup;
-
+  public dateErrFlag: boolean = false;//to show date err msg in ts
   public title: string = "Complaint Register";//set title
   public errorMsgObj: any = {
     errorMsg: '',
@@ -171,8 +171,9 @@ export class ComplaintDIRegisterComponent implements OnInit {
     //formatting the current date
     let date = new Date();
     let currentDate: string = this.datePipe.transform(date, 'dd-MMM-yyyy');
+    let currDate: string = this.datePipe.transform(date, 'yyyy-MM-dd');
     this.complaintRegisterFormGroup.controls["loggedOnDt"].setValue(currentDate);
-    this.complaintRegisterFormGroup.controls["complaintReferenceDt"].setValue(currentDate);
+    this.complaintRegisterFormGroup.controls["complaintReferenceDt"].setValue(currDate);
 
   }//end of method
 
@@ -806,7 +807,7 @@ export class ComplaintDIRegisterComponent implements OnInit {
       complainDetailJson.modeId = this.complaintRegisterFormGroup.value.modeId;
       complainDetailJson.siteVisit = this.siteVisitValue;
       complainDetailJson.siteVisitByDepartmentName = this.complaintRegisterFormGroup.value.siteVisitByDepartmentName;
-      complainDetailJson.complaintReferenceDt = currentDate;//this.complaintRegisterFormGroup.value.complaintReferenceDt;
+      complainDetailJson.complaintReferenceDt = this.complaintRegisterFormGroup.value.complaintReferenceDt;
       complainDetailJson.loggedOnDt = currentDate;//this.complaintRegisterFormGroup.value.loggedOnDt;
       complainDetailJson.contactPersonName = this.complaintRegisterFormGroup.value.contactPersonName;
       complainDetailJson.contactPersonPhoneNo = this.complaintRegisterFormGroup.value.contactPersonPhoneNo;
@@ -879,6 +880,17 @@ export class ComplaintDIRegisterComponent implements OnInit {
     }//end of outer for
     console.log(" this.selectedItemDetails onkeyup ", this.selectedItemDetails);
   }//end of the method onKeyupComplaintQty
+
+  //date validation
+  public dateValidation(dateInfo: string) {
+    let date = new Date();
+    let dateControlName = new Date(this.complaintRegisterFormGroup.controls['complaintReferenceDt'].value);
+    if (date < dateControlName) {
+      this.dateErrFlag = true;
+    } else {
+      this.dateErrFlag = false;
+    }
+  }//end of method
   
   //method for onchanging compaintType dropdown
   public onComplaintTypeSelect(args, complaintTypeId, selectedNatureOfComplaintId?: string) {

@@ -72,8 +72,14 @@
           <!-- start div for Compliant Reference Date-->
           <!-- <fieldset class="form-group col-xs-12 col-sm-6 col-md-6 col-lg-4" [disabled]="complaintReferenceNo!=''"> -->
           <div class="form-group col-xs-12 col-sm-6 col-md-6 col-lg-4">
-            <label for="compliantReferenceDateTime">Compliant Reference Date</label>
-            <input type="text" class="form-control" formControlName="complaintReferenceDt" readonly/>
+            <label>Complaint Reference Date</label>
+            <input type="date" class="form-control" formControlName="complaintReferenceDt" (change)="dateValidation()" />
+            <div class="alert alert-danger" *ngIf="complaintRegisterFormGroup.get('complaintReferenceDt').touched && complaintRegisterFormGroup.get('complaintReferenceDt').hasError('required')">
+              <i class="fa fa-exclamation-circle"></i> Complaint Reference Date is required!
+            </div>
+            <div class="alert alert-danger" *ngIf="dateErrFlag">
+              <i class="fa fa-exclamation-circle"></i>Complaint Reference Date cannot be a future date!
+            </div>
           </div>
           <!--end div for Compliant Reference Date-->
 
@@ -411,7 +417,7 @@
           <div class="form-group col-xs-12 col-sm-6 col-md-6 col-lg-6">
             <label for="imageFile">File(s) Upload</label>
             <label class="red-coloured-label">(max size 100 mb)</label>
-            <input type="file" #fileInput (change)="fileChange($event)"/>
+            <input type="file" #fileInput (change)="fileChange($event)" />
           </div>
           <!--end of file upload div-->
 
