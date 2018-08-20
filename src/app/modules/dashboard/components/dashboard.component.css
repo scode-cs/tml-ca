@@ -1,6 +1,5 @@
-.dashboard-container {
-  /* margin-top: 65px; */
-}
+/* .dashboard-container {
+} */
 
 .activityBar {
   /*position: absolute;
@@ -45,3 +44,22 @@
   background: #73AD21;
   cursor: pointer;
 }
+
+/* start quick links icon style */
+.quick-links-add-icon-style {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  margin-left: 500px;
+  font-size: 25px;
+  cursor:pointer;
+}
+.quick-links-view-icon-style {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  margin-left: 900px;
+  font-size: 25px;
+  cursor:pointer;
+}
+/* end of quick links icon style */
