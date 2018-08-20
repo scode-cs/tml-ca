@@ -89,10 +89,16 @@ export class DashboardComponent implements OnInit {
     };
     // role name checking
     if (this.tempPlantType === 'BOTH') {
+      this.tiles1.tilesHeader = "Total Complaints";
+      this.tiles1.tilesBodyText = "";
+
       tilesFilter.plantType = 'DI';
       this.openDIPIComplaintService = this.complaintDIService.getHeadercount(diTilesFilter, 'DI');
       // this.viewComplaintDIDataService.getcomplaintDIViewDetails(tilesFilter);
     } else if (this.tempPlantType === 'DI') {
+      this.tiles1.tilesHeader = "Total Complaints";
+      this.tiles1.tilesBodyText = "";
+
       tilesFilter.plantType = 'DI';
       this.openDIPIComplaintService = this.complaintDIService.getHeadercount(diTilesFilter, 'DI');
       // this.viewComplaintDIDataService.getcomplaintDIViewDetails(tilesFilter);
@@ -142,14 +148,14 @@ export class DashboardComponent implements OnInit {
     diTilesFilter.filter = this.localStorageService.appSettings.lastActivityIdFieldName + '=' + 80;//close activity id
     // role name checking
     if (this.tempPlantType === 'BOTH') {
-      this.tiles3.tilesHeader = "Close Complaints";
-      this.tiles3.tilesBodyText = "";
+      this.tiles2.tilesHeader = "Close Complaints";
+      this.tiles2.tilesBodyText = "";
       tilesFilter.plantType = 'DI';
       this.openDIPIComplaintService = this.complaintDIService.getHeadercount(diTilesFilter, 'DI');
       //this.viewComplaintDIDataService.getcomplaintDIViewDetails(tilesFilter);
     } else if (this.tempPlantType === 'DI') {
-      this.tiles3.tilesHeader = "Close Complaints";
-      this.tiles3.tilesBodyText = "";
+      this.tiles2.tilesHeader = "Close Complaints";
+      this.tiles2.tilesBodyText = "";
       tilesFilter.plantType = 'DI';
       this.openDIPIComplaintService = this.complaintDIService.getHeadercount(diTilesFilter, 'DI');
       //this.viewComplaintDIDataService.getcomplaintDIViewDetails(tilesFilter);
@@ -199,14 +205,14 @@ export class DashboardComponent implements OnInit {
     // role name checking
     if (this.tempPlantType === 'BOTH') {
       //set the label of tiles
-      this.tiles3.tilesHeader = "New Register Complaints";
+      this.tiles3.tilesHeader = "Newly Reg. Complaints";
       this.tiles3.tilesBodyText = "";
       tilesFilter.plantType = 'DI';
       this.openDIPIComplaintService = this.complaintDIService.getHeadercount(diTilesFilter, 'DI');
       //this.viewComplaintDIDataService.getcomplaintDIViewDetails(tilesFilter);
     } else if (this.tempPlantType === 'DI') {
       //set the label of tiles
-      this.tiles3.tilesHeader = "New Register Complaints";
+      this.tiles3.tilesHeader = "Newly Reg. Complaints";
       this.tiles3.tilesBodyText = "";
       tilesFilter.plantType = 'DI';
       this.openDIPIComplaintService = this.complaintDIService.getHeadercount(diTilesFilter, 'DI');
