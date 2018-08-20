@@ -108,6 +108,7 @@ export class LoginComponent implements OnInit {
     appSettingsModel.resolutionOfComplaintsAtCustomerPlaceActivityId = resDetails.appSettingsDetails.resolutionOfComplaintsAtCustomerPlaceActivityId;
     appSettingsModel.analyseCustomerComplaintsAndActionPlanActivityId = resDetails.appSettingsDetails.analyseCustomerComplaintsAndActionPlanActivityId;
     appSettingsModel.activityIdFieldName = resDetails.appSettingsDetails.activityIdFieldName;
+    appSettingsModel.lastActivityIdFieldName = resDetails.appSettingsDetails.lastActivityIdFieldName;
     appSettingsModel.complaintDetailsAutoIdFieldName = resDetails.appSettingsDetails.complaintDetailsAutoIdFieldName;
     appSettingsModel.menuDetails = resDetails.userDetails.menuDetails;
     //new add for field name
