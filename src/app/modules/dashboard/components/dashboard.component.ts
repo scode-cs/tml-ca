@@ -148,13 +148,13 @@ export class DashboardComponent implements OnInit {
     diTilesFilter.filter = this.localStorageService.appSettings.lastActivityIdFieldName + '=' + 80;//close activity id
     // role name checking
     if (this.tempPlantType === 'BOTH') {
-      this.tiles2.tilesHeader = "Close Complaints";
+      this.tiles2.tilesHeader = "Closed Complaints";
       this.tiles2.tilesBodyText = "";
       tilesFilter.plantType = 'DI';
       this.openDIPIComplaintService = this.complaintDIService.getHeadercount(diTilesFilter, 'DI');
       //this.viewComplaintDIDataService.getcomplaintDIViewDetails(tilesFilter);
     } else if (this.tempPlantType === 'DI') {
-      this.tiles2.tilesHeader = "Close Complaints";
+      this.tiles2.tilesHeader = "Closed Complaints";
       this.tiles2.tilesBodyText = "";
       tilesFilter.plantType = 'DI';
       this.openDIPIComplaintService = this.complaintDIService.getHeadercount(diTilesFilter, 'DI');

@@ -977,7 +977,7 @@ export class InvestigationReportDiComponent implements OnInit {
     if (this.tempCompTypeJson.natureOfComplaintDesc && this.tempCompTypeJson.complaintTypeDesc) {//checking if nature of comp and comp type have data
       if ((this.tempCompTypeJson.natureOfComplaintDesc === "Others" || this.tempCompTypeJson.natureOfComplaintDesc === "Marking & Stenciling") && !compDetailVal) {
         this.modalErrorMsgObj.modalErrorMsgShowFlag = true;
-        this.modalErrorMsgObj.modalErrorMsg = "Details Of Complaint is Required!";
+        this.modalErrorMsgObj.modalErrorMsg = "Detail of Complaint is required.";
       } else {
         this.modalErrorMsgObj.modalErrorMsgShowFlag = false;
         this.modalErrorMsgObj.modalErrorMsg = "";
