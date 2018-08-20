@@ -255,7 +255,7 @@ export class CADIAddEditComponent implements OnInit {
 
   //for clicking cancel button this method will be invoked
   public onCancel(): void {
-    this.router.navigate([ROUTE_PATHS.RouteHome]);
+    this.router.navigate([ROUTE_PATHS.RouteComplainDIView]);
   }// end of onCancel method
   //method to delete error msg
   public deleteResErrorMsgOnClick() {

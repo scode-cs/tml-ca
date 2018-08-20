@@ -255,7 +255,7 @@ export class RCADIAddEditComponent implements OnInit {
 
   //for clicking cancel button this method will be invoked
   public onCancel(): void {
-    this.router.navigate([ROUTE_PATHS.RouteHome]);
+    this.router.navigate([ROUTE_PATHS.RouteComplainDIView]);
   }// end of onCancel method
 
   //method to delete error msg
@@ -263,4 +263,6 @@ export class RCADIAddEditComponent implements OnInit {
     this.errorMsgObj.errMsgShowFlag = false;
     this.errorMsgObj.errorMsg = "";
   }//end of method delete error msg
+
+  
 }//end of class
