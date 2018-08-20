@@ -7,6 +7,7 @@ import { Router } from '@angular/router';
 import { TilesFilterModel } from "../models/tiles-filter.model";
 import { ViewUserDataService } from "../../user/services/view-user-data.service";
 import { ViewRoleDataService } from "../../role/services/view-role-data.service";
+import { ROUTE_PATHS } from '../../router/router-paths';
 @Component({
   selector: 'ppr-dashboard-batch',
   templateUrl: 'dashboard.component.html',
@@ -201,6 +202,14 @@ export class DashboardComponent implements OnInit {
     
   }//end of method DI view complaint
 
+  //method to quick links icon click route
+  public onQuickLinkIconClick(iconinfo: string) {
+    if(iconinfo === 'add'){
+      this.router.navigate([ROUTE_PATHS.RouteComplainDIRegister]);
+    }else if(iconinfo === 'view'){
+      this.router.navigate([ROUTE_PATHS.RouteComplainDIView]);
+    }
+  }
 
 
 }//end of class
