@@ -1180,7 +1180,14 @@ export class InvestigationReportDiComponent implements OnInit {
 
   public addItemModalErrorFlag: boolean = false;
   public natOfCompOtherKey: any = {
-    '44': true
+    '44': true,//Others,comp-type-->'5'-Others
+    '49': true,//Others,comp-type-->'1'-Product Related
+    '62': true,//Others,comp-type-->'2'-Jointing Related
+    '66': true,//Others,comp-type-->'4'-Supply Related
+    '70': true,//Marking & Stenciling,comp-type-->'14'-Document Related
+    '71': true,//Others,comp-type-->'14'-Document Related
+    '76': true,//Others,comp-type-->'15'-PE Sleeve Related
+    '81': true//Others,comp-type-->'16'-Handling & set up at customer side
   };
 
   public addItemAtInv() {
