@@ -10,8 +10,6 @@ export class ComplaintDIInvoiceDetailsService {
     private _salesGroup: string;
     private _salesOffice: string;
     private _compRefNo: string;
-    private _fileData: FormData;
-    private _fileList: FileList;
     private _testVar: string;
 
     public get invoiceDetails():any{
@@ -61,18 +59,6 @@ export class ComplaintDIInvoiceDetailsService {
     }
     public set compRefNo(compRefNo: string){
         this._compRefNo = compRefNo;
-    }
-    public get fileData(): FormData{
-        return this._fileData;
-    }
-    public set fileData(fileData: FormData){
-        this._fileData = fileData;
-    }
-    public get fileList(): FileList{
-        return this._fileList;
-    }
-    public set fileList(fileList: FileList){
-        this._fileList = fileList;
     }
     public get testVar(): string{
         return this._testVar;
