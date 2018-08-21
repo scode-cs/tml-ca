@@ -90,7 +90,7 @@ export class ComplaintDIRegisterComponent implements OnInit {
   //for complaint qty error
   public complaintQtyInMtrsError: boolean = true;
   //to store  selected items grid row
-  public selectedItemsGrid: any[] = [];
+  private selectedItemsGrid: any[] = [];
   //to store customer details
   public custInfo: any = { custCode: '', custName: '', custSegment: '', salesGroup: '', salesOffice: '' };
   public departmentNameDropDownList: any[] = [];//for department name dropdown
@@ -326,14 +326,14 @@ export class ComplaintDIRegisterComponent implements OnInit {
       subscribe(res => {
         this.complaintTypeDropDownList = res.details;
         //https://github.com/santanucst/tml-ca/issues/121
-        
+
         if (!this.invData || !this.invData.complaintTypeId) {
-        for (let cmpType of this.complaintTypeDropDownList) {
-          if (cmpType.Key == "") {
-            this.complaintRegisterFormGroup.controls["complaintTypeId"].setValue(cmpType.Key);
-            break;
-          }//end if
-        }//end for
+          for (let cmpType of this.complaintTypeDropDownList) {
+            if (cmpType.Key == "") {
+              this.complaintRegisterFormGroup.controls["complaintTypeId"].setValue(cmpType.Key);
+              break;
+            }//end if
+          }//end for
         }
         this.busySpinner = false;
       },
@@ -456,7 +456,7 @@ export class ComplaintDIRegisterComponent implements OnInit {
     this.invData.complaintTypeId = invDet.complaintTypeId;
     this.invData.natureOfComplaintId = invDet.natureOfComplaintId;
     this.invData.complaintTypeName = invDet.complaintTypeName;
-    this.invData.complaintDetails = invDet.complaintDetails.trim();
+    this.invData.complaintDetails = invDet.complaintDetails? invDet.complaintDetails.trim(): '';
     if (this.invData.complaintDetails) {
       this.complaintRegisterFormGroup.controls["complaintDetails"].setValue(this.invData.complaintDetails);
     }
@@ -508,7 +508,7 @@ export class ComplaintDIRegisterComponent implements OnInit {
 
 
   private setSelectItemsGrid(selItemsDetParam) {
-    if (selItemsDetParam.items.length != 0) {
+    if (selItemsDetParam.items && selItemsDetParam.items.length > 0) {
       let items: any[] = selItemsDetParam.items;
 
       for (let selItm of items) {
@@ -552,8 +552,8 @@ export class ComplaintDIRegisterComponent implements OnInit {
 
   // start method clearInvDetService to clear all inv det value
   private clearInvDetService() {
-    this.complaintDIInvoiceDetailsService.invoiceDetails = "";
-    this.complaintDIInvoiceDetailsService.selectedItemDetails = "";
+    this.complaintDIInvoiceDetailsService.invoiceDetails = {};
+    this.complaintDIInvoiceDetailsService.selectedItemDetails = {};
     this.complaintDIInvoiceDetailsService.custCode = "";
     this.complaintDIInvoiceDetailsService.custName = "";
     this.complaintDIInvoiceDetailsService.salesOffice = "";
@@ -627,6 +627,21 @@ export class ComplaintDIRegisterComponent implements OnInit {
     modalRef.componentInstance.modalMessage = msgBody;
   }//end of method onOpenModal
 
+  //method to clear class var
+  private clearClassVariables(){
+    this.selectedItemDetails = [];//clear item array
+    this.selectedItemsGrid = [];//clr the item grid
+    this.custInfo.custCode = "";//clear the value of custcode
+    this.custInfo.custName = "";//clear the value of custname
+    this.custInfo.salesGroup = "";//clr the value of sales grp
+    this.custInfo.salesOffice = "";//clr the value of sales ofc
+    this.custInfo.custSegment = "";//clr the cust segment val
+    this.siteVisitValue = "";//clr the site visit value
+    this.fileArr = [];//clr the file arr
+    console.log("this.custInfo::",this.custInfo);
+    console.log("this.complaintDIInvoiceDetailsService::",this.complaintDIInvoiceDetailsService);
+  }//end of method
+
   private wsErrorCall(err) {
     this.errorMsgObj.errMsgShowFlag = true;
     this.errorMsgObj.errorMsg = err.msg;
@@ -690,7 +705,12 @@ export class ComplaintDIRegisterComponent implements OnInit {
             this.fileUploadWSCall(plantType, fileJsonBody);//calling the file ws method
           }//end of file array check
           this.onOpenModal(complainDetailJson.complaintReferenceNo, res.msg);//calling the modal to show msg
-          this.router.navigate([ROUTE_PATHS.RouteHome]);
+          this.clearInvDetService();//to clear service
+          this.clearClassVariables();//to clear class variables
+          this.initform();//calling the initform method to clr the form
+          this.getSystemDate();//to get system date and set it to date type control
+          this.complaintRegisterFormGroup.controls["loggedBy"].setValue(this.empInfo.empName);//set emp name to control
+          this.busySpinner = false;//to stop the spinner
         } else {
           this.complaintDetailsSubmitWSCall(complainDetailJson, plantType, action);
         }//end of else of msgType 'Info'
@@ -891,7 +911,7 @@ export class ComplaintDIRegisterComponent implements OnInit {
       this.dateErrFlag = false;
     }
   }//end of method
-  
+
   //method for onchanging compaintType dropdown
   public onComplaintTypeSelect(args, complaintTypeId, selectedNatureOfComplaintId?: string) {
     let compDet: string = this.complaintRegisterFormGroup.value.complaintDetails.trim();
