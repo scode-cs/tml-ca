@@ -9,7 +9,6 @@ import { ComplaintDIService } from '../../../shared/services/complaint-di.servic
 import { NgbdModalComponent } from '../../../widget/modal/components/modal-component';
 import { DatePipe } from '@angular/common';
 import { SessionErrorService } from '../../../shared/services/session-error.service';
-import { NgbdComplaintReferenceNoModalComponent } from './complaint-reference-no-modal/complaint-reference-no-modal.component';
 import { InvestigationReportDIConfigModel } from '../../models/investigation-report-di-config.model';
 import { InvestigationDataModel } from '../../models/investigation-data-model';
 import { InvestigationReportInvoiceDetailsService } from "../../services/investigation-report-invoice-details.service";
@@ -44,10 +43,10 @@ export class InvestigationReportDiComponent implements OnInit {
   public selectedInvItemDetails: any[] = [];// to store inv item deatils from response
   public invReportIndex: number = 0;
   public ivtReportDataList: any = { unloadingEquipmentList: '', lubricantUsedList: '', layingPositionList: '', jointingTypeList: '' };
-  public unloadingEquipmentList: any[] = [];
-  public lubricantUsedList: any[] = [];
-  public layingPositionList: any[] = [];
-  public jointingTypeList: any[] = [];
+  private unloadingEquipmentList: any[] = [];
+  private lubricantUsedList: any[] = [];
+  private layingPositionList: any[] = [];
+  private jointingTypeList: any[] = [];
   //new add
   public complaintTypeDropDownList: any[] = [];
   public natureOfComDropDownList: any = [];
@@ -663,7 +662,7 @@ export class InvestigationReportDiComponent implements OnInit {
       console.log("invReportFormGroup: ", this.invReportFormGroup.value);
       invReportDetailJson.complaintReferenceNo = this.invReportFormGroup.value.complaintReferenceNo;
       invReportDetailJson.investigationReportDate = currentDate;
-      invReportDetailJson.sampleCollected = this.invReportVar.sampleCollected;
+      invReportDetailJson.sampleCollected = this.invReportVar.sampleCollectedValue;
       invReportDetailJson.sampleCollectedDate = this.invReportFormGroup.value.sampleCollectedDate;
       invReportDetailJson.siteVisitMade = this.invReportVar.siteVisitMadeValue;
       invReportDetailJson.siteVisitMadeDate = this.invReportFormGroup.value.siteVisitDt;
