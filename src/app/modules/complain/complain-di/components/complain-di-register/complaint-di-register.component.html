@@ -251,7 +251,7 @@
                       />
                     </td>
                     <td class="td-style hideextra">
-                      <input type="text" #batchNo value="{{selItem.batchNo}}" formControlName="batchNo" (keyup)="onKeyupBatchNo(batchNo.value,selItem.invoiceNo,selItem.itemCode)"
+                      <input type="text" #batchNo value="{{selItem.batchNo}}" (keyup)="onKeyupBatchNo(batchNo.value,selItem.invoiceNo,selItem.itemCode)"
                       />
                       <!-- [maxlength]="batchNoInInvoiceDetailsLength" -->
                     </td>
@@ -383,13 +383,13 @@
               <label>Site Visit Required</label>
               <label class="red-asterick">*</label>
               <label class="control control--radio">Yes
-                <input type="radio" name="siteVisit" formControlName="siteVisit" value="Y" (click)="onRadioClick('Y')" />
+                <input type="radio" name="siteVisit" formControlName="siteVisit" value="Y" (click)="onRadioClick()" />
                 <div class="control__indicator"></div>
               </label>
             </div>
             <div style="display:inline-block;">
               <label class="control control--radio">No
-                <input type="radio" name="siteVisit" formControlName="siteVisit" value="N" (click)="onRadioClick('N')" />
+                <input type="radio" name="siteVisit" formControlName="siteVisit" value="N" (click)="onRadioClick()" />
                 <div class="control__indicator"></div>
               </label>
             </div>
@@ -397,7 +397,7 @@
           <!--end div for radio button-->
 
           <!--start ng-container for site visit date and siteVisitValue = Y-->
-          <ng-container *ngIf="siteVisitValue=='Y'">
+          <ng-container *ngIf="complaintRegisterFormGroup.value.siteVisit=='Y'">
             <!-- start div for site visit by department name -->
             <div class="form-group col-xs-12 col-sm-6 col-md-6 col-lg-4">
               <label>Site Visit By</label>
@@ -431,6 +431,17 @@
           </div>
           <!--end div for show files-->
 
+          <!-- err msg div -->
+          <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" *ngIf="errorMsgObj.errMsgShowFlag">
+            <div class="alert alert-danger">
+              {{errorMsgObj.errorMsg}}&nbsp;
+              <button aria-label="Close" class="close" type="button" (click)="deleteResErrorMsgOnClick()">
+                <span aria-hidden="true">×</span>
+              </button>
+            </div>
+          </div>
+          <!-- end of err msg div -->
+
           <!-- start div for Submit  and Cancel Button-->
           <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
 
@@ -457,17 +468,6 @@
         <!-- end div for row complaint-form class-->
       </form>
       <!--end form for complaintRegisterFormGroup-->
-
-      <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" *ngIf="errorMsgObj.errMsgShowFlag">
-        <div class="alert alert-danger">
-          {{errorMsgObj.errorMsg}}&nbsp;
-          <button aria-label="Close" class="close" type="button" (click)="deleteResErrorMsgOnClick()">
-            <span aria-hidden="true">×</span>
-          </button>
-        </div>
-        <br/>
-        <br/>
-      </div>
 
     </div>
     <!-- end div for complaintRegister body-->

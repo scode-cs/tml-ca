@@ -74,7 +74,6 @@ export class ComplaintDIRegisterComponent implements OnInit {
   public natureOfComDropDownList: any = [];
 
   //variable used for radio button
-  public siteVisitValue: string = "";
   public invoiceNo: string;
 
   public buttonEnable: boolean = true;
@@ -141,9 +140,8 @@ export class ComplaintDIRegisterComponent implements OnInit {
   initform() {
     this.complaintRegisterFormGroup = new FormGroup({
       modeId: new FormControl({ value: '' }, Validators.required),
-      officialDocNo: new FormControl('', Validators.maxLength(3)),
+      officialDocNo: new FormControl(''),
       complaintReferenceDt: new FormControl(''),
-      batchNo: new FormControl(''),
       contactPersonName: new FormControl(''),
       contactPersonPhoneNo: new FormControl('', Validators.pattern(/^-?(0|[1-9]\d*)?$/)),
       contactPersonEmailId: new FormControl('', Validators.email),
@@ -152,10 +150,26 @@ export class ComplaintDIRegisterComponent implements OnInit {
       complaintTypeId: new FormControl({ value: '' }, Validators.required),
       natureOfComplaintId: new FormControl({ value: '' }, Validators.required),
       complaintDetails: new FormControl(''),
-      siteVisit: new FormControl({ value: 'N' }, Validators.required),
+      siteVisit: new FormControl('', Validators.required),
       siteVisitByDepartmentName: new FormControl('')
     });
   }//end of method
+
+
+  resetFormGroup() {
+    this.complaintRegisterFormGroup.controls['modeId'].setValue('');
+    this.complaintRegisterFormGroup.controls['officialDocNo'].setValue('');
+    this.complaintRegisterFormGroup.controls['contactPersonName'].setValue('');
+    this.complaintRegisterFormGroup.controls['contactPersonPhoneNo'].setValue('');
+    this.complaintRegisterFormGroup.controls['contactPersonEmailId'].setValue('');
+    this.complaintRegisterFormGroup.controls['loggedBy'].setValue('');
+    this.complaintRegisterFormGroup.controls['complaintTypeId'].setValue('');
+    this.complaintRegisterFormGroup.controls['natureOfComplaintId'].setValue('');
+    this.complaintRegisterFormGroup.controls['complaintDetails'].setValue('');
+    this.complaintRegisterFormGroup.controls['siteVisit'].setValue('');
+    this.complaintRegisterFormGroup.controls['siteVisitByDepartmentName'].setValue('');
+  }
+
 
   //method to get route param
   private getRouteParam() {
@@ -390,12 +404,7 @@ export class ComplaintDIRegisterComponent implements OnInit {
       this.complaintDIInvoiceDetailsService.compRefNo = this.complaintReferenceNo;
     }
     let invDet: any = {};
-    // invDet.departmentNameOther = this.complaintRegisterFormGroup.value.departmentNameOther;
-    // invDet.complaintReceivedByName = this.complaintRegisterFormGroup.value.complaintReceivedByName;
-    // invDet.complaintReceivedByPhoneNo = this.complaintRegisterFormGroup.value.complaintReceivedByPhoneNo;
     invDet.modeId = this.complaintRegisterFormGroup.value.modeId;
-    //invDet.modeReferenceNo = this.complaintRegisterFormGroup.value.modeReferenceNo;
-
     invDet.complaintReferenceDt = this.complaintRegisterFormGroup.value.complaintReferenceDt;
     invDet.contactPersonName = this.complaintRegisterFormGroup.value.contactPersonName;
     invDet.contactPersonPhoneNo = this.complaintRegisterFormGroup.value.contactPersonPhoneNo;
@@ -405,17 +414,15 @@ export class ComplaintDIRegisterComponent implements OnInit {
     invDet.natureOfComplaintId = this.complaintRegisterFormGroup.value.natureOfComplaintId;
     invDet.complaintDetails = this.complaintRegisterFormGroup.value.complaintDetails;
     invDet.loggedOnDt = this.complaintRegisterFormGroup.value.loggedOnDt;
-    invDet.siteVisit = this.complaintRegisterFormGroup.value.siteVisit;
+    invDet.siteVisit = this.complaintRegisterFormGroup.value.siteVisit;//.value;
     invDet.siteVisitBy = this.complaintRegisterFormGroup.value.siteVisitBy;
     invDet.siteVisitByDepartmentName = this.complaintRegisterFormGroup.value.siteVisitByDepartmentName;
-
     this.complaintDIInvoiceDetailsService.invoiceDetails = invDet;
 
     let items: any[] = [];
     items = this.selectedItemsGrid;
 
     let selectedItemsDet: any = {};
-
     selectedItemsDet.items = items;
     this.complaintDIInvoiceDetailsService.selectedItemDetails = selectedItemsDet;
 
@@ -426,7 +433,6 @@ export class ComplaintDIRegisterComponent implements OnInit {
       this.custInfo.salesOffice = selItm.salesOffice;
       break;
     }
-
     this.complaintDIInvoiceDetailsService.title = this.title;
     this.complaintDIInvoiceDetailsService.custCode = this.custInfo.custCode;
     this.complaintDIInvoiceDetailsService.custName = this.custInfo.custName;
@@ -441,18 +447,14 @@ export class ComplaintDIRegisterComponent implements OnInit {
     if (this.complaintDIInvoiceDetailsService && this.complaintDIInvoiceDetailsService.compRefNo) {
       this.complaintReferenceNo = this.complaintDIInvoiceDetailsService.compRefNo;
     }
-
     let complaintReferenceDate: string = invDet.complaintReferenceDt;
     if (complaintReferenceDate) {
       this.complaintRegisterFormGroup.controls["complaintReferenceDt"].setValue(complaintReferenceDate);
     }
-
-
     this.invData.modeId = invDet.modeId;
     if (this.invData.modeId) {
       this.complaintRegisterFormGroup.controls["modeId"].setValue(this.invData.modeId);
     }
-
     this.invData.complaintTypeId = invDet.complaintTypeId;
     this.invData.natureOfComplaintId = invDet.natureOfComplaintId;
     this.invData.complaintTypeName = invDet.complaintTypeName;
@@ -469,57 +471,43 @@ export class ComplaintDIRegisterComponent implements OnInit {
       }
     }
     this.getCompDetValidations(this.complaintTypeName, this.invData.complaintDetails);
-
-
     this.invData.contactPersonName = invDet.contactPersonName;
     if (this.invData.contactPersonName) {
       this.complaintRegisterFormGroup.controls["contactPersonName"].setValue(this.invData.contactPersonName);
     }
-
     this.invData.contactPersonPhoneNo = invDet.contactPersonPhoneNo;
     if (this.invData.contactPersonPhoneNo) {
       this.complaintRegisterFormGroup.controls["contactPersonPhoneNo"].setValue(this.invData.contactPersonPhoneNo);
     }
-
     this.invData.contactPersonEmailId = invDet.contactPersonEmailId;
     if (this.invData.contactPersonEmailId) {
       this.complaintRegisterFormGroup.controls["contactPersonEmailId"].setValue(this.invData.contactPersonEmailId);
     }
-
-    this.siteVisitValue = invDet.siteVisit;
-    if (this.siteVisitValue) {
-      this.complaintRegisterFormGroup.controls["siteVisit"].setValue(this.siteVisitValue);
+    let siteVisitValue: string = invDet.siteVisit;
+    if (siteVisitValue) {
+      this.complaintRegisterFormGroup.controls["siteVisit"].setValue(siteVisitValue);
     }
-
     this.invData.siteVisitByDepartmentName = invDet.siteVisitByDepartmentName;
     if (this.invData.siteVisitByDepartmentName) {
       this.complaintRegisterFormGroup.controls["siteVisitByDepartmentName"].setValue(this.invData.siteVisitByDepartmentName);
     }
-
     this.invData.siteVisitBy = invDet.siteVisitBy;
     if (this.invData.siteVisitBy) {
       this.complaintRegisterFormGroup.controls["siteVisitBy"].setValue(this.invData.siteVisitBy);
     }
-
     //setting the invoiceDetails value as blank
     this.complaintDIInvoiceDetailsService.invoiceDetails = "";
-
   }//end of the method setInvDet
-
 
   private setSelectItemsGrid(selItemsDetParam) {
     if (selItemsDetParam.items && selItemsDetParam.items.length > 0) {
       let items: any[] = selItemsDetParam.items;
-
       for (let selItm of items) {
         this.custInfo.custCode = selItm.customerCode;
         this.custInfo.custName = selItm.customerName;
         this.custInfo.custSegment = selItm.customerSegment;
         this.custInfo.salesGroup = selItm.salesGroup;
         this.custInfo.salesOffice = selItm.salesOffice;
-        // this.contactPersonNameForModify = selItm.customerContactPersonName;
-        // this.contactPersonPhoneNoForModify = selItm.customerContactPersonPhoneNo;
-        // this.contactPersonEmailIdForModify = selItm.customerContactPersonEmailId;
         break;
       }
       this.complaintDIInvoiceDetailsService.custCode = this.custInfo.custCode;
@@ -528,7 +516,6 @@ export class ComplaintDIRegisterComponent implements OnInit {
       this.complaintDIInvoiceDetailsService.salesOffice = this.custInfo.salesOffice;
       //storing the inv details which are selected
       this.selectedItemsGrid = items;
-
       //calling  method tableGridDataConverterFromRes for creating table grid json array from res and passing the res as parameter
       this.tableGridDataConverterFromRes(this.selectedItemsGrid);
     }//end of if
@@ -636,7 +623,6 @@ export class ComplaintDIRegisterComponent implements OnInit {
     this.custInfo.salesGroup = "";//clr the value of sales grp
     this.custInfo.salesOffice = "";//clr the value of sales ofc
     this.custInfo.custSegment = "";//clr the cust segment val
-    this.siteVisitValue = "";//clr the site visit value
     this.fileArr = [];//clr the file arr
     console.log("this.custInfo::",this.custInfo);
     console.log("this.complaintDIInvoiceDetailsService::",this.complaintDIInvoiceDetailsService);
@@ -707,7 +693,7 @@ export class ComplaintDIRegisterComponent implements OnInit {
           this.onOpenModal(complainDetailJson.complaintReferenceNo, res.msg);//calling the modal to show msg
           this.clearInvDetService();//to clear service
           this.clearClassVariables();//to clear class variables
-          this.initform();//calling the initform method to clr the form
+          this.resetFormGroup();//this.initform();//calling the initform method to clr the form
           this.getSystemDate();//to get system date and set it to date type control
           this.complaintRegisterFormGroup.controls["loggedBy"].setValue(this.empInfo.empName);//set emp name to control
           this.busySpinner = false;//to stop the spinner
@@ -810,7 +796,6 @@ export class ComplaintDIRegisterComponent implements OnInit {
   }//end of filechange method 
   //submit method
   public onComplainSubmit(): void {
-
     if (this.complaintRegisterFormGroup.valid) {
       this.busySpinner = true;
       let date = new Date();
@@ -825,7 +810,7 @@ export class ComplaintDIRegisterComponent implements OnInit {
       let complainDetailJson: any = {};
       complainDetailJson.activityId = this.activityId;
       complainDetailJson.modeId = this.complaintRegisterFormGroup.value.modeId;
-      complainDetailJson.siteVisit = this.siteVisitValue;
+      complainDetailJson.siteVisit = this.complaintRegisterFormGroup.value.siteVisit;//.value;
       complainDetailJson.siteVisitByDepartmentName = this.complaintRegisterFormGroup.value.siteVisitByDepartmentName;
       complainDetailJson.complaintReferenceDt = this.complaintRegisterFormGroup.value.complaintReferenceDt;
       complainDetailJson.loggedOnDt = currentDate;//this.complaintRegisterFormGroup.value.loggedOnDt;
@@ -1045,16 +1030,13 @@ export class ComplaintDIRegisterComponent implements OnInit {
   }//end of the method deleteItemDetOnClick 
 
   //start method for clicking radio button 
-  public onRadioClick(radioValue) {
-    console.log("radioValue ", radioValue);
-    this.siteVisitValue = radioValue;
+  public onRadioClick() {
+    this.complaintRegisterFormGroup;
     //  if siteVisitValue is Y then this if condition will be executed
-    if (this.siteVisitValue == "Y") {
-      this.complaintRegisterFormGroup.controls["siteVisit"].setValue(this.siteVisitValue);
+    if (this.complaintRegisterFormGroup.value.siteVisit == "Y") {
       //set sitevisitby field mandatory
       this.complaintRegisterFormGroup.get('siteVisitByDepartmentName').setValidators(Validators.required);
-      // this.complaintRegisterFormGroup.controls['siteVisitByDepartmentName'].markAsTouched();
-    } else if (this.siteVisitValue == "N") { // siteVisitValue is N then this if condition will be executed
+    } else if (this.complaintRegisterFormGroup.value.siteVisit == "N") { // siteVisitValue is N then this if condition will be executed
       this.complaintRegisterFormGroup.get('siteVisitByDepartmentName').setValidators(null);
       this.complaintRegisterFormGroup.get('siteVisitByDepartmentName').updateValueAndValidity();
       this.complaintRegisterFormGroup.controls['siteVisitByDepartmentName'].markAsUntouched();

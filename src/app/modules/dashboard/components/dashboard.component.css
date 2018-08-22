@@ -50,7 +50,7 @@
   position: absolute;
   top: 50%;
   transform: translateY(-50%);
-  margin-left: 500px;
+  margin-left:  42%;
   font-size: 25px;
   cursor:pointer;
 }
@@ -58,7 +58,7 @@
   position: absolute;
   top: 50%;
   transform: translateY(-50%);
-  margin-left: 900px;
+  margin-left: 76%;
   font-size: 25px;
   cursor:pointer;
 }
