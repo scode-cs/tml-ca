@@ -28,12 +28,16 @@ export class InvestigationReportDiComponent implements OnInit {
   private fileSizeLimit: number = 104857600;
   private formData: FormData = new FormData();
   private fileData: FormData;
-  public fileList: FileList;
-
+  
+  private unloadingEquipmentList: any[] = [];
+  private lubricantUsedList: any[] = [];
+  private layingPositionList: any[] = [];
+  private jointingTypeList: any[] = [];
   //activity Id for complain register
   private plantType: string = this.localStorageService.user.plantType;
   private activityId: number = 40;
   private selectedInvItemDetailsObj: any = {};//selected inv item det object 
+  public fileList: FileList;
   public title: string = 'Add Investigation Report';//set the title;
   public invReportTable: any[] = [];//to store prev inv report
   public itemGridTable: any[] = [];//to store item grid
@@ -43,10 +47,6 @@ export class InvestigationReportDiComponent implements OnInit {
   public selectedInvItemDetails: any[] = [];// to store inv item deatils from response
   public invReportIndex: number = 0;
   public ivtReportDataList: any = { unloadingEquipmentList: '', lubricantUsedList: '', layingPositionList: '', jointingTypeList: '' };
-  private unloadingEquipmentList: any[] = [];
-  private lubricantUsedList: any[] = [];
-  private layingPositionList: any[] = [];
-  private jointingTypeList: any[] = [];
   //new add
   public complaintTypeDropDownList: any[] = [];
   public natureOfComDropDownList: any = [];
@@ -58,7 +58,7 @@ export class InvestigationReportDiComponent implements OnInit {
   public fileArr: any[] = [];//to store file details from file upload response
   //creating a FormGroup for Investigation Report
   public invReportFormGroup: FormGroup;//form group of inv report di add
-  public invItemEditModalFormGroup: FormGroup;//form group of inv item modal
+  public invItemEditFormGroup: FormGroup;//form group of inv item modal
 
   public complaintReferenceNo: string;//to get complaint ref no from html and send it as a parameter
   //busySpinner 
@@ -97,6 +97,12 @@ export class InvestigationReportDiComponent implements OnInit {
     itemListNatOfCmpGroup['natOfComplain'] = new FormControl();
     itemListNatOfCmpGroup['complainDetail'] = new FormControl();
     this.itemListNatOfCmpFormGroup = new FormGroup(itemListNatOfCmpGroup);
+
+    let editItemListGroup: any = {};
+    editItemListGroup['complainTypeOfEditItem'] = new FormControl();
+    editItemListGroup['natureOfComplaintOfEditItem'] = new FormControl();
+    editItemListGroup['detailOfComplaintOfEditItem'] = new FormControl();
+    this.invItemEditFormGroup = new FormGroup(editItemListGroup);
   }
 
   ngOnInit(): void {
@@ -873,15 +879,13 @@ export class InvestigationReportDiComponent implements OnInit {
 
   //new add
   //method for onchanging compaintType dropdown
-  public onComplaintTypeSelect(args, complaintTypeId: string, comTypeName?: string) {
+  private onComplaintTypeSelect(args, complaintTypeId: string, comTypeName?: string) {
     // let compDet: string = this.investigationItemFormGroup.value.complaintDetails.trim();
     let complaintTypeName: string = '';
     if (args != null) {
       complaintTypeName = args.target.options[args.target.selectedIndex].text;
     }
-
     comTypeName ? complaintTypeName = comTypeName : null;
-
     console.log("complaintTypeId", complaintTypeId);
     console.log("this.complaintTypeName,=========================", complaintTypeName);
     if (complaintTypeId && complaintTypeName) {//checking if comptype id n name is available or not
@@ -895,11 +899,11 @@ export class InvestigationReportDiComponent implements OnInit {
           if (res.msgType === 'Info') {
             this.natureOfComDropDownList = res.details;
             if (complaintTypeName === 'Others(CAT C)') {
-              this.tempCompTypeJson.natureOfComplaintId = this.natureOfComDropDownList[0].Key;
+              // this.tempCompTypeJson.natureOfComplaintId = this.natureOfComDropDownList[0].Key;
               this.tempCompTypeJson.natureOfComplaintDesc = this.natureOfComDropDownList[0].Value;
-              this.addModalCheckBoolean = true;
+              // this.addModalCheckBoolean = true;
             } else {
-              this.addModalCheckBoolean = false;
+              // this.addModalCheckBoolean = false;
             }
           }
           this.busySpinner = false;
@@ -912,31 +916,46 @@ export class InvestigationReportDiComponent implements OnInit {
     }//end of if
   }//end of the method onComplaintTypeSelect
 
-  // start method of onNatureTypeSelect
-  public onNatureTypeSelect(args, natureOfCompId: string) {
-    let natureCmpName: string = args.target.options[args.target.selectedIndex].text;
-    console.log("  this.natureCmpName ============================= ", natureCmpName);
-    console.log("natureOfCompId", natureOfCompId);
-    if (natureOfCompId && natureCmpName) {//checking if nature of comp id and name is avalable or not
-      this.tempCompTypeJson.natureOfComplaintId = natureOfCompId;
-      this.tempCompTypeJson.natureOfComplaintDesc = natureCmpName;
-      this.addModalCheckBoolean = true;
+  // start method to select comp type from edit item modal
+  public onEditItemComplaintTypeSelect(compTypeDropdownListFromEditModal){
+    let selectedKey = this.invItemEditFormGroup.value['complainTypeOfEditItem'];
+    let selectedDesc = '';
+    compTypeDropdownListFromEditModal.forEach((element) => {
+      if (element.Key == selectedKey) {
+        selectedDesc = element.Value;
+      }
+    });
+    if (selectedKey == '5') {
+      this.invItemEditFormGroup.controls['natureOfComplaintOfEditItem'].setValue('44');
+      this.tempCompTypeJson.natureOfComplaintId = '44';
     } else {
-      this.addModalCheckBoolean = false;
+      this.tempCompTypeJson.natureOfComplaintId = '';
+      this.invItemEditFormGroup.controls['natureOfComplaintOfEditItem'].setValue('');
+      this.invItemEditFormGroup.controls['detailOfComplaintOfEditItem'].setValue('');
     }
-  }// end method of onNatureTypeSelect
+    this.onComplaintTypeSelect(null, selectedKey, selectedDesc);
+  }//end of method
+
+  // start method of Nature Type Select
+  public onEditItemNatureTypeSelect(natureOfComDropDownListFromEditModal) {
+    let selectedKey = this.invItemEditFormGroup.value['natureOfComplaintOfEditItem'];
+    let selectedDesc = '';
+    natureOfComDropDownListFromEditModal.forEach((element) => {
+      if (element.Key == selectedKey) {
+        selectedDesc = element.Value;
+      }
+    });
+    this.tempCompTypeJson.natureOfComplaintId = selectedKey;
+    this.tempCompTypeJson.natureOfComplaintDesc = selectedDesc;
+  }// end method
+
   //end of new add
-  //
   private toggleEditCompTypeModal() {
     this.editCompTypeModal = this.editCompTypeModal ? false : true;
   }
-  public closeItemModal(closeParam: string) {
-    this.clearItemModalData();//clear all data
-    if (closeParam === 'EditItem') {
+  public cancelEditItemModal(){
+    this.resetEditItemModalData();//clear all data  
       this.toggleEditCompTypeModal();
-    } else if (closeParam === 'AddItem') {
-      this.toggleAddInvItemModal();
-    }
   }
   private tempCompTypeJson: any = {};//taking json to store temp complaint type n nature of complaint val
   private editCompTypeOfficialDoc: string = '';//to store official doc no
@@ -955,41 +974,45 @@ export class InvestigationReportDiComponent implements OnInit {
     }
   }//end of method
 
-  public saveEditCompType(compDetailVal: string) {
-    console.log("compDetailVal::", compDetailVal);
-    this.tempCompTypeJson.complaintDetails = compDetailVal ? compDetailVal : '';//set complain details to json
-    console.log("tempCompTypeJson::", this.tempCompTypeJson);
-    if (this.tempCompTypeJson.natureOfComplaintDesc && this.tempCompTypeJson.complaintTypeDesc) {//checking if nature of comp and comp type have data
-      if ((this.tempCompTypeJson.natureOfComplaintDesc === "Others" || this.tempCompTypeJson.natureOfComplaintDesc === "Marking & Stenciling") && !compDetailVal) {
-        this.modalErrorMsgObj.modalErrorMsgShowFlag = true;
-        this.modalErrorMsgObj.modalErrorMsg = "Detail of Complaint is required.";
-      } else {
-        this.modalErrorMsgObj.modalErrorMsgShowFlag = false;
-        this.modalErrorMsgObj.modalErrorMsg = "";
-      }
-    } else {
+  public saveEditCompType() {
+    if (this.natOfCompOtherKey[this.tempCompTypeJson.natureOfComplaintId] && !this.invItemEditFormGroup.value['detailOfComplaintOfEditItem']) {
       this.modalErrorMsgObj.modalErrorMsgShowFlag = true;
-      this.modalErrorMsgObj.modalErrorMsg = "Please Fillout All data.";
-    }
-    if (!this.modalErrorMsgObj.modalErrorMsgShowFlag) {
-      // Items from register
-      this.invItemDetails.forEach(invItemEl => {
-        if (invItemEl.invoiceNo === this.editCompTypeOfficialDoc && invItemEl.itemNo === this.editCompTypeItemCode) {
-          invItemEl.natureOfComplaintDesc = this.tempCompTypeJson.natureOfComplaintDesc;
-          invItemEl.natureOfComplaintId = this.tempCompTypeJson.natureOfComplaintId;
-          invItemEl.complaintTypeId = this.tempCompTypeJson.complaintTypeId;
-          invItemEl.complaintTypeDesc = this.tempCompTypeJson.complaintTypeDesc;
-          if (this.tempCompTypeJson.complaintDetails) {
-            invItemEl.complaintDetails = this.tempCompTypeJson.complaintDetails;
-          }
-        }//end of if
-      });
-      //clear data
-      this.clearItemModalData();
-      this.toggleEditCompTypeModal();//close modal
-    }
+      this.modalErrorMsgObj.modalErrorMsg = "Detail of Complaint is required.";
+    } else {
+      this.modalErrorMsgObj.modalErrorMsgShowFlag = false;
+      this.modalErrorMsgObj.modalErrorMsg = "";
+      let complainDetails = this.invItemEditFormGroup.value['detailOfComplaintOfEditItem'];
+      this.tempCompTypeJson.complaintDetails = complainDetails ? complainDetails : '';//set complain details to json
+      if (this.tempCompTypeJson.natureOfComplaintId == '44') {
+        this.natureOfComDropDownList.forEach(el => {
+          if (el.Key == this.tempCompTypeJson.natureOfComplaintId) {
+            this.tempCompTypeJson.natureOfComplaintDesc = el.Value;
+          }//end of if                
+        });
+      }//end of if
+      console.log("tempCompTypeJson::", this.tempCompTypeJson);
+      if (!this.modalErrorMsgObj.modalErrorMsgShowFlag) {
+        // Items from register
+        this.invItemDetails.forEach(invItemEl => {
+          if (invItemEl.invoiceNo === this.editCompTypeOfficialDoc && invItemEl.itemNo === this.editCompTypeItemCode) {
+            invItemEl.natureOfComplaintDesc = this.tempCompTypeJson.natureOfComplaintDesc;
+            invItemEl.natureOfComplaintId = this.tempCompTypeJson.natureOfComplaintId;
+            invItemEl.complaintTypeId = this.tempCompTypeJson.complaintTypeId;
+            invItemEl.complaintTypeDesc = this.tempCompTypeJson.complaintTypeDesc;
+            invItemEl.complaintDetails = this.tempCompTypeJson.complaintDetails;           
+          }//end of if
+        });
+        //clear data
+        this.resetEditItemModalData();
+        this.toggleEditCompTypeModal();//close modal
+      }//end of err msg flag check
+    }//end of else
   }//end of method
-  clearItemModalData() {
+
+  resetEditItemModalData() {
+    this.invItemEditFormGroup.controls['complainTypeOfEditItem'].setValue('');
+    this.invItemEditFormGroup.controls['natureOfComplaintOfEditItem'].setValue('');
+    this.invItemEditFormGroup.controls['detailOfComplaintOfEditItem'].setValue('');
     //clear json 
     this.tempCompTypeJson.complaintDetails = '';
     this.tempCompTypeJson.complaintTypeDesc = '';
@@ -1002,12 +1025,11 @@ export class InvestigationReportDiComponent implements OnInit {
     //to clear the error msg
     this.modalErrorMsgObj.modalErrorMsgShowFlag = false;
     this.modalErrorMsgObj.modalErrorMsg = "";
-    this.addModalCheckBoolean = false;//set false to hide checkbox
+    // this.addModalCheckBoolean = false;//set false to hide checkbox
   }
   //for add item click
   public addInvItemModalFlag: boolean = false;//to show add item modal
-  public addModalCheckBoolean: boolean = false;//to show checkbox
-  private addInvItemArrByModalCheckboxClick: any = [];
+  // public addModalCheckBoolean: boolean = false;//to show checkbox
   private toggleAddInvItemModal() {
     this.addInvItemModalFlag = this.addInvItemModalFlag ? false : true;
   }//end of method
@@ -1154,18 +1176,14 @@ export class InvestigationReportDiComponent implements OnInit {
     this.itemListNatOfCmpFormGroup.controls['complainType'].setValue('');
     this.itemListNatOfCmpFormGroup.controls['natOfComplain'].setValue('');
     this.itemListNatOfCmpFormGroup.controls['complainDetail'].setValue('');
-
     this.selectedComplainTypeId = '';
-    this.selectedNatureOfCompId = '';
-
+    this.selectedNatureOfCompId = '';    
     if (this.itemListFormGroup && this.itemListFormGroup.controls) {
       for (let fc in this.itemListFormGroup.controls) {
         this.itemListFormGroup.controls[fc].setValue(false);
       }
     }
-
     this.itemListFormGroup.markAsPristine();
-
   }
 
 

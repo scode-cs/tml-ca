@@ -416,39 +416,47 @@
     <!-- header div -->
     <div class="modal-header">
       <div> Edit Item </div>
-      <div (click)="closeItemModal('EditItem')" style="cursor: pointer;">x</div>
+      <div (click)="cancelEditItemModal()" style="cursor: pointer;">x</div>
     </div>
     <!-- end of header div -->
     <!-- start body div -->
     <div class="modal-body">
-      <div class="row">
-        <div style="display: inline-flex; width: 100%">
-          <div class="form-group" style="width: 50%">
-            <label>Complaint Type</label>
-            <select class="custom-select" style="width: 90%;" (change)="onComplaintTypeSelect($event,$event.target.value)">
-              <option *ngFor="let cmpType of complaintTypeDropDownList" value="{{ cmpType.Key}}">
-                {{ cmpType.Value }}
-              </option>
-            </select>
+      <!-- start edit item modal -->
+      <div class="form-group" >
+        <!-- start form tag -->
+        <form [formGroup]="invItemEditFormGroup">
+          <div style="display: inline-flex; width: 100%">
+            <div style="width: 50%">
+              <label>Complaint Type</label>
+              <select class="custom-select" style="width: 90%;" formControlName="complainTypeOfEditItem" (change)="onEditItemComplaintTypeSelect(complaintTypeDropDownList)" required>
+                <option *ngFor="let cmpType of complaintTypeDropDownList" value="{{ cmpType.Key}}">
+                  {{ cmpType.Value }}
+                </option>
+              </select>
+            </div>
+            <div style="width: 50%">
+              <label>Nature of Complaint</label>
+              <select class="custom-select" style="width: 90%;" formControlName="natureOfComplaintOfEditItem" (change)="onEditItemNatureTypeSelect(natureOfComDropDownList)" required>
+                <option *ngIf="natureOfComDropDownList.length==0" value="">-- Select --</option>
+                <option *ngFor="let natureCmp of natureOfComDropDownList" value="{{ natureCmp.Key }}">
+                  {{ natureCmp.Value}}
+                </option>
+              </select>
+            </div>
           </div>
-          <div class="form-group" style="width: 50%">
-            <label>Nature of Complaint</label>
-            <select class="custom-select" style="width: 90%;" (change)="onNatureTypeSelect($event,$event.target.value)" required>
-              <option *ngIf="natureOfComDropDownList.length==0" value="">-- Select --</option>
-              <option *ngFor="let natureCmp of natureOfComDropDownList" value="{{ natureCmp.Key }}">{{ natureCmp.Value }}</option>
-            </select>
+          <div style="display: inline-block; width: 100%; padding-right: 30px;">
+            <label>Detail of Complaint</label>
+            <textarea class="form-control hide-horizontal-scroll" style="height: 70px; resize: none" formControlName="detailOfComplaintOfEditItem" #complaintDetails></textarea>
           </div>
-        </div>
-        <div class="form-group" style="display: inline-block; width: 100%; padding-right: 30px;">
-          <label>Detail of Complaint</label>
-          <textarea class="form-control hide-horizontal-scroll" style="height: 70px; resize: none" #complaintDetails></textarea>
-        </div>
+        </form>
+        <!-- end of form tag -->
       </div>
+      <!-- end of div -->
       <!-- start button div -->
       <div>
         <div style="float: right;">
           <button type="submit" class="btn btn-primary primary-button-style" style="width: 138px; height: 35px; margin-right: 14px;"
-            (click)="saveEditCompType(complaintDetails.value)">Save
+            (click)="saveEditCompType()" [disabled]="!invItemEditFormGroup.valid">Save
           </button>
         </div>
       </div>
@@ -566,8 +574,6 @@
               <tr class="tr-style" *ngFor=" let itemDet of getAddItemList()">
                 <td class="td-style-first">
                   <ng-container *ngIf="enableSelection()">
-                    <!--"tempCompTypeJson.complaintTypeId  && tempCompTypeJson.natureOfComplaintId"-->
-                    <!-- <input type="checkbox" (click)="onCheckInvItemFromAddModal(itemDet)" /> -->
                     <input type="checkbox" formControlName="{{ itemDet.formKey }}" />
                   </ng-container>
                 </td>
