@@ -64,7 +64,7 @@ export class InvestigationReportDiComponent implements OnInit {
   //busySpinner 
   public busySpinner: boolean = true;
   //variable used for radio button
-  public invReportVar: any = { siteVisitMadeValue: '', sampleCollectedValue: '' };
+  // public invReportVar: any = { siteVisitMadeValue: '', sampleCollectedValue: '' };
   public invRejectReason: string = '';//taking a var to show reject reason
 
   //new add for modal custoner arr
@@ -118,20 +118,14 @@ export class InvestigationReportDiComponent implements OnInit {
   initform() {
     this.invReportFormGroup = new FormGroup({
       complaintReferenceNo: new FormControl(''),
-      siteVisit: new FormControl({ value: 'N' }, Validators.required),
+      siteVisitMade: new FormControl('', Validators.required),
       siteVisitDt: new FormControl(''),
-      sampleCollected: new FormControl({ value: 'N' }, Validators.required),
+      sampleCollected: new FormControl('', Validators.required),
       sampleCollectedDate: new FormControl(''),
       investigationReportDate: new FormControl(''),
       customerCode: new FormControl(''),
       customerName: new FormControl('')
     });
-    // this.invItemEditModalFormGroup = new FormGroup({
-    //   complaintTypeIdForEditItem: new FormControl(''),
-    //   natureOfComplaintIdForEditItem: new FormControl(''),
-    //   complaintDetailsForEditItem: new FormControl('')
-    // });
-
   }//end of method
 
   //start method getRouteParam to get route parameter
@@ -197,15 +191,6 @@ export class InvestigationReportDiComponent implements OnInit {
           this.sessionErrorService.routeToLogin(err._body);
         });
   }//end of method 
-
-  // //start method of setSelectItemsGrid
-  private setSelectItemsGrid(selItemsParam: any[]) {
-    let selItems: any[] = selItemsParam;
-    selItems.forEach(selItm => {
-      this.selectedInvItemDetails.push(selItm);
-    });
-    console.log(" this.selectedInvItemDetails ======", this.selectedInvItemDetails);
-  }//end method of setSelectItemsGrid
 
   // TODO: SUSMITA
   private getPreviousInvHistory() {
@@ -302,14 +287,19 @@ export class InvestigationReportDiComponent implements OnInit {
   private setResValToForm() {
     let formData: any = this.invReportDetails[this.invReportIndex];
     this.invReportFormGroup.controls['complaintReferenceNo'].setValue(formData.complaintReferenceNo);
-    this.invReportVar.siteVisitMadeValue = formData.siteVisitMade;
-    this.invReportFormGroup.controls['siteVisit'].setValue(formData.siteVisitMade);
-    if (formData.siteVisit === 'Y') {
-      this.invReportFormGroup.controls['siteVisitDt'].setValue(this.datePipe.transform(formData.siteVisitMadeDt, 'yyyy-MM-dd'));
+    // let siteVisitMadeValue: string = formData.siteVisitMade;
+    formData.siteVisitMade ? 
+    this.invReportFormGroup.controls['siteVisitMade'].setValue(formData.siteVisitMade): 
+    this.invReportFormGroup.controls['siteVisitMade'].setValue('');
+    if (formData.siteVisitMade == 'Y') {
+      this.invReportFormGroup.controls['siteVisitDt'].setValue(this.datePipe.transform(formData.siteVisitMadeDate, 'yyyy-MM-dd'));
     }
-    this.invReportVar.sampleCollectedValue = formData.sampleCollected;
-    this.invReportFormGroup.controls['sampleCollected'].setValue(formData.sampleCollected);
-    if (formData.sampleCollected === 'Y') {
+    // this.invReportVar.sampleCollectedValue = formData.sampleCollected;
+    formData.sampleCollected ? 
+    this.invReportFormGroup.controls['sampleCollected'].setValue(formData.sampleCollected):
+    this.invReportFormGroup.controls['sampleCollected'].setValue('');
+
+    if (formData.sampleCollected == 'Y') {
       this.invReportFormGroup.controls['sampleCollectedDate'].setValue(this.datePipe.transform(formData.sampleCollectedDate, 'yyyy-MM-dd'));
     }
     if (formData.investigationReportDate) {
@@ -662,10 +652,14 @@ export class InvestigationReportDiComponent implements OnInit {
       console.log("invReportFormGroup: ", this.invReportFormGroup.value);
       invReportDetailJson.complaintReferenceNo = this.invReportFormGroup.value.complaintReferenceNo;
       invReportDetailJson.investigationReportDate = currentDate;
-      invReportDetailJson.sampleCollected = this.invReportVar.sampleCollectedValue;
-      invReportDetailJson.sampleCollectedDate = this.invReportFormGroup.value.sampleCollectedDate;
-      invReportDetailJson.siteVisitMade = this.invReportVar.siteVisitMadeValue;
-      invReportDetailJson.siteVisitMadeDate = this.invReportFormGroup.value.siteVisitDt;
+      invReportDetailJson.sampleCollected = this.invReportFormGroup.value.sampleCollected;//this.invReportVar.sampleCollectedValue;
+      if(this.invReportFormGroup.value.sampleCollected == 'Y'){
+        invReportDetailJson.sampleCollectedDate = this.invReportFormGroup.value.sampleCollectedDate;
+      }
+      invReportDetailJson.siteVisitMade = this.invReportFormGroup.value.siteVisitMade;//this.invReportVar.siteVisitMadeValue;
+      if(this.invReportFormGroup.value.siteVisitMade == 'Y') {
+        invReportDetailJson.siteVisitMadeDate = this.invReportFormGroup.value.siteVisitDt;
+      }
 
       let unloadingEquipment: string = "";
       this.unloadingEquipmentList.forEach(unloadingEquip => {
@@ -734,33 +728,25 @@ export class InvestigationReportDiComponent implements OnInit {
   }
 
   //start method for clicking radio button 
-  public onRadioClick(radioValue: string, radioButtonName: string) {
-    console.log("radioValue ", radioValue);
-    console.log("radioButtonName ", radioButtonName);
-    if (radioButtonName === "siteVisit") {
-      this.invReportVar.siteVisitMadeValue = radioValue;
-      //   //  if siteVisitValue is Y then this if condition will be executed
-      if (this.invReportVar.siteVisitMadeValue === 'Y') {
-        this.invReportFormGroup.controls["siteVisit"].setValue(this.invReportVar.siteVisitMadeValue);
-        //     //set sitevisitby field mandatory
-        this.invReportFormGroup.controls['siteVisitDt'].setValidators(Validators.required);
-      } else if (this.invReportVar.siteVisitMadeValue === "N") { // siteVisitValue is N then this if condition will be executed
-        this.invReportFormGroup.controls["siteVisit"].setValue(this.invReportVar.siteVisitMadeValue);
-        this.invReportFormGroup.controls['siteVisitDt'].setValidators(null);
-        this.invReportFormGroup.controls['siteVisitDt'].updateValueAndValidity();
+  public onRadioClick(radioButtonName: string) {
+    if (radioButtonName === "siteVisitMade") {
+      //  if siteVisitValue is Y then this if condition will be executed
+      if (this.invReportFormGroup.value.siteVisitMade == 'Y') {
+        //set sitevisitby field mandatory
+        this.invReportFormGroup.get('siteVisitDt').setValidators(Validators.required);
+      } else if (this.invReportFormGroup.value.siteVisitMadeValue == "N") {
+        this.invReportFormGroup.get('siteVisitDt').setValidators(null);
+        this.invReportFormGroup.get('siteVisitDt').updateValueAndValidity();
         this.invReportFormGroup.controls['siteVisitDt'].markAsUntouched();
       } // end of else
     } else if (radioButtonName === "sampleCollected") {
-      this.invReportVar.sampleCollectedValue = radioValue;
       //   //  if sampleCollected is Y then this if condition will be executed
-      if (this.invReportVar.sampleCollectedValue === 'Y') {
-        this.invReportFormGroup.controls["sampleCollected"].setValue(this.invReportVar.sampleCollectedValue);
-        //     //set sitevisitby field mandatory
-        this.invReportFormGroup.controls['sampleCollectedDate'].setValidators(Validators.required);
-      } else if (this.invReportVar.sampleCollectedValue === "N") { // sampleCollected is N then this if condition will be executed
-        this.invReportFormGroup.controls["sampleCollected"].setValue(this.invReportVar.sampleCollectedValue);
-        this.invReportFormGroup.controls['sampleCollectedDate'].setValidators(null);
-        this.invReportFormGroup.controls['sampleCollectedDate'].updateValueAndValidity();
+      if (this.invReportFormGroup.value.sampleCollected == 'Y') {
+        //set sitevisitby field mandatory
+        this.invReportFormGroup.get('sampleCollectedDate').setValidators(Validators.required);
+      } else if (this.invReportFormGroup.value.sampleCollected == "N") {
+        this.invReportFormGroup.get('sampleCollectedDate').setValidators(null);
+        this.invReportFormGroup.get('sampleCollectedDate').updateValueAndValidity();
         this.invReportFormGroup.controls['sampleCollectedDate'].markAsUntouched();
       } // end of else
     }//end of else if of sampleCollected
