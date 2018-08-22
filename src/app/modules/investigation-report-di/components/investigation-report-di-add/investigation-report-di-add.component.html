@@ -444,7 +444,8 @@
           <label>Detail of Complaint</label>
           <textarea class="form-control hide-horizontal-scroll" style="height: 70px; resize: none" #complaintDetails></textarea>
         </div>
-      </div>
+      </div>     
+      <!-- start button div -->
       <div>
         <div style="float: right;">
           <button type="submit" class="btn btn-primary primary-button-style" style="width: 138px; height: 35px; margin-right: 14px;"
@@ -452,13 +453,15 @@
           </button>
         </div>
       </div>
+      <!-- end of button div -->
+      <!-- start err msg show div -->
       <div *ngIf="modalErrorMsgObj.modalErrorMsgShowFlag">
         <div class="text-danger">
           <i class="fa fa-exclamation-circle" aria-hidden="true"></i>
           <b>{{modalErrorMsgObj.modalErrorMsg}}</b>&nbsp;
         </div>
       </div>
-      <!--end of button div-->
+      <!--end of err msg show div-->
     </div>
     <!-- end of body div -->
   </div>
