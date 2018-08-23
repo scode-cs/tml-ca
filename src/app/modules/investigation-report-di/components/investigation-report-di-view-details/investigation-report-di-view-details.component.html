@@ -154,8 +154,11 @@
 
             <!--start div for Unloading Equipment [view]-->
             <div class="form-group col-xs-12 col-sm-6 col-md-6 col-lg-4">
-              <label>Unloading Equipment</label>
-              <ul class="list-group ul-style">
+              <label>Unloading Equipment :</label>
+              <div *ngFor="let unloadingEquipment of selectedIvtReportDataList.unloadingEquipmentDesc">
+                <i class="fa fa-check-square"></i> {{unloadingEquipment}}
+              </div>
+              <!-- <ul class="list-group ul-style">
                 <li class="list-group-item li-style" *ngFor="let unloadingEquipment of selectedIvtReportDataList.unloadingEquipmentDesc">
                   <label class="custom-control custom-checkbox">
                     <input type="checkbox" class="custom-control-input" formControlName="unloadingEquipment" [checked]="true" />
@@ -165,14 +168,17 @@
                     </span>
                   </label>
                 </li>
-              </ul>
+              </ul> -->
             </div>
             <!--end div for Unloading Equipment [view]-->
 
             <!--start div for Lubricant Used [view]-->
             <div class="form-group col-xs-12 col-sm-6 col-md-6 col-lg-4">
-              <label>Lubricant Used</label>
-              <ul class="list-group ul-style">
+              <label>Lubricant Used :</label>
+              <div *ngFor="let lubricantUsed of selectedIvtReportDataList.lubricantUsedDesc">
+                <i class="fa fa-check-square"></i> {{lubricantUsed}}
+              </div>
+              <!-- <ul class="list-group ul-style">
                 <li class="list-group-item li-style" *ngFor="let lubricantUsed of selectedIvtReportDataList.lubricantUsedDesc">
                   <label class="custom-control custom-checkbox">
                     <input type="checkbox" class="custom-control-input" formControlName="lubricantUsed" [checked]="true" />
@@ -182,14 +188,17 @@
                     </span>
                   </label>
                 </li>
-              </ul>
+              </ul> -->
             </div>
             <!--end div for Lubricant Used [view]-->
 
             <!--start div for Unloading Equipment [view]-->
             <div class="form-group col-xs-12 col-sm-6 col-md-6 col-lg-4">
-              <label for="stencil">Laying Position</label>
-              <ul class="list-group ul-style">
+              <label for="stencil">Laying Position :</label>
+              <div *ngFor="let layingPosition of selectedIvtReportDataList.layingPositionDesc">
+                <i class="fa fa-check-square"></i> {{layingPosition}}
+              </div>
+              <!-- <ul class="list-group ul-style">
                 <li class="list-group-item li-style" *ngFor="let layingPosition of selectedIvtReportDataList.layingPositionDesc">
                   <label class="custom-control custom-checkbox">
                     <input type="checkbox" class="custom-control-input" formControlName="layingPosition" [checked]="true" />
@@ -199,14 +208,17 @@
                     </span>
                   </label>
                 </li>
-              </ul>
+              </ul> -->
             </div>
             <!--end div for Unloading Equipment [view]-->
 
             <!--start div for Unloading Equipment [view]-->
             <div class="form-group col-xs-12 col-sm-6 col-md-6 col-lg-4">
-              <label for="stencil">Jointing Type</label>
-              <ul class="list-group ul-style">
+              <label for="stencil">Jointing Type :</label>
+              <div *ngFor="let jointingType of selectedIvtReportDataList.jointingTypeDesc">
+                <i class="fa fa-check-square"></i> {{jointingType}}
+              </div>
+              <!-- <ul class="list-group ul-style">
                 <li class="list-group-item li-style" *ngFor="let jointingType of selectedIvtReportDataList.jointingTypeDesc">
                   <label class="custom-control custom-checkbox">
                     <input type="checkbox" class="custom-control-input" formControlName="jointingtype" [checked]="true" />
@@ -216,7 +228,7 @@
                     </span>
                   </label>
                 </li>
-              </ul>
+              </ul> -->
             </div>
             <!--end div for Unloading Equipment [view]-->
 
