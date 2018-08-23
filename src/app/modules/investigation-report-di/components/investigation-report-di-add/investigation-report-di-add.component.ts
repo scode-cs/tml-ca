@@ -740,7 +740,7 @@ export class InvestigationReportDiComponent implements OnInit {
       if (this.invReportFormGroup.value.siteVisitMade == 'Y') {
         //set sitevisitby field mandatory
         this.invReportFormGroup.get('siteVisitDt').setValidators(Validators.required);
-      } else if (this.invReportFormGroup.value.siteVisitMadeValue == "N") {
+      } else if (this.invReportFormGroup.value.siteVisitMadeValue == 'N') {
         this.invReportFormGroup.get('siteVisitDt').setValidators(null);
         this.invReportFormGroup.get('siteVisitDt').updateValueAndValidity();
         this.invReportFormGroup.controls['siteVisitDt'].markAsUntouched();
@@ -750,7 +750,7 @@ export class InvestigationReportDiComponent implements OnInit {
       if (this.invReportFormGroup.value.sampleCollected == 'Y') {
         //set sitevisitby field mandatory
         this.invReportFormGroup.get('sampleCollectedDate').setValidators(Validators.required);
-      } else if (this.invReportFormGroup.value.sampleCollected == "N") {
+      } else if (this.invReportFormGroup.value.sampleCollected == 'N') {
         this.invReportFormGroup.get('sampleCollectedDate').setValidators(null);
         this.invReportFormGroup.get('sampleCollectedDate').updateValueAndValidity();
         this.invReportFormGroup.controls['sampleCollectedDate'].markAsUntouched();
@@ -958,8 +958,11 @@ export class InvestigationReportDiComponent implements OnInit {
       this.toggleEditCompTypeModal();
   }
   private tempCompTypeJson: any = {};//taking json to store temp complaint type n nature of complaint val
-  private editCompTypeOfficialDoc: string = '';//to store official doc no
-  private editCompTypeItemCode: string = '';//to store comp type item 
+  // private editCompTypeOfficialDoc: string = '';//to store official doc no
+  // private editCompTypeItemCode: string = '';//to store comp type item
+  private selectedUniqueKey: string = '';
+  // private editCompTypeKey: string = '';//to store comp type id 
+  // private editNatureOfComplaintKey: string = '';//to store nature of comp id 
   public modalErrorMsgObj: any = {//to show modal error msg
     modalErrorMsgShowFlag: false,
     modalErrorMsg: ''
@@ -969,8 +972,9 @@ export class InvestigationReportDiComponent implements OnInit {
       this.toggleEditCompTypeModal();
       console.log("compDtl::", compDtl);
       // Add Logic
-      this.editCompTypeOfficialDoc = compDtl.invoiceNo;
-      this.editCompTypeItemCode = compDtl.itemNo;
+      this.selectedUniqueKey = compDtl.invoiceNo + compDtl.itemNo + compDtl.complaintTypeId + compDtl.natureOfComplaintId;
+      // this.editCompTypeOfficialDoc = compDtl.invoiceNo;
+      // this.editCompTypeItemCode = compDtl.itemNo;
     }
   }//end of method
 
@@ -994,7 +998,9 @@ export class InvestigationReportDiComponent implements OnInit {
       if (!this.modalErrorMsgObj.modalErrorMsgShowFlag) {
         // Items from register
         this.invItemDetails.forEach(invItemEl => {
-          if (invItemEl.invoiceNo === this.editCompTypeOfficialDoc && invItemEl.itemNo === this.editCompTypeItemCode) {
+          let uniqueKey: string = invItemEl.invoiceNo + invItemEl.itemNo + invItemEl.complaintTypeId + invItemEl.natureOfComplaintId;
+          if(this.selectedUniqueKey === uniqueKey){
+          // if (invItemEl.invoiceNo === this.editCompTypeOfficialDoc && invItemEl.itemNo === this.editCompTypeItemCode) {
             invItemEl.natureOfComplaintDesc = this.tempCompTypeJson.natureOfComplaintDesc;
             invItemEl.natureOfComplaintId = this.tempCompTypeJson.natureOfComplaintId;
             invItemEl.complaintTypeId = this.tempCompTypeJson.complaintTypeId;
@@ -1019,8 +1025,9 @@ export class InvestigationReportDiComponent implements OnInit {
     this.tempCompTypeJson.complaintTypeId = '';
     this.tempCompTypeJson.natureOfComplaintId = '';
     this.tempCompTypeJson.natureOfComplaintDesc = '';
-    this.editCompTypeOfficialDoc = '';//clear the inv/official doc no
-    this.editCompTypeItemCode = '';//clear the item code
+    // this.editCompTypeOfficialDoc = '';//clear the inv/official doc no
+    // this.editCompTypeItemCode = '';//clear the item code
+    this.selectedUniqueKey = '';//clr unique key
     this.natureOfComDropDownList = [];//clear nature of complain arr
     //to clear the error msg
     this.modalErrorMsgObj.modalErrorMsgShowFlag = false;
