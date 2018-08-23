@@ -89,10 +89,10 @@ export class InvestigationReportDiViewDetailsComponent implements OnInit {
       sampleCollected: new FormControl({ value: 'N', disabled: true }),
       sampleCollectedDate: new FormControl(''),
       investigationReportDate: new FormControl(''),
-      unloadingEquipment: new FormControl({ value: '', disabled: true }),
-      lubricantUsed: new FormControl({ value: '', disabled: true }),
-      layingPosition: new FormControl({ value: '', disabled: true }),
-      jointingtype: new FormControl({ value: '', disabled: true })
+      // unloadingEquipment: new FormControl({ value: '', disabled: true }),
+      // lubricantUsed: new FormControl({ value: '', disabled: true }),
+      // layingPosition: new FormControl({ value: '', disabled: true }),
+      // jointingtype: new FormControl({ value: '', disabled: true })
     });
   }//end of initform
 

@@ -9,34 +9,9 @@
   padding-left: 15px;
   color: black;
 }
-
-h1.manage-profile-title {
-  font-size: 30px;
-}
-
-.manage-profile-form {
-  padding: 30px 30px;
-}
-
-.compliant-submit-button-div{
-  padding-left: 15px;
-}
-
 .button-holder {
   float: left;
 }
-
-.compliant-submit-button-size{
-  width: 100%;
-  position: relative;
-  margin-left: -15px;
-}
-
-.button-gaps {
-  height: 10px;
-  width: 100%;
-}
-
 input:focus {
   border: 1px solid #0098DF;
   border-left: 5px solid #0098DF;
@@ -84,36 +59,21 @@ input:focus {
   width: 100%;
   height: 40px;
   box-shadow: 0px 0px 10px #A5A5A5;
-  /* background-color:#B33924; */
   color: #FFFFFF;
   cursor: pointer;
   margin-left: -15px;
 }
 
 /* scroll ul style and li style */
-.ul-style{
+/* .ul-style{
     height:150px;
     overflow-y:scroll;
     border:1px solid #DADADA;
 }
 .li-style{
   border:none;
-}
+} */
 /* end of scroll ul style and li style */
-
-/*complaintRefNo search style*/
-.complaintRefNo-search-button {
-    background-color: #0275d8;
-    border-color: #0275d8;
-    height: 42px;
-}
-
-.complaintRefNo-alert {
-  padding-top: 52px!important;
-}
-/* end of complaintRefNo search style*/
-
-
 
 /*table grid style*/
 .table-style {
@@ -227,10 +187,6 @@ input:focus {
   overflow: hidden;
    text-overflow:ellipsis;
  }
- .red-coloured-label{
-    color: #cc100c;
-}
-
 /* start style for alert danger  */
 .alert-danger {
   cursor: pointer;
@@ -262,20 +218,6 @@ input:focus {
   padding-left: 30px;
   padding-right: 30px;
 }
-
-/*red asterick style*/
-.red-asterick{
-  color: #cc100c;
-  font-weight: bolder;
-}
-
-.red-coloured-label{
-color: #cc100c;
-}
-/*end of asterick style*/
-
-
-
 /* start style for radio button*/
 
 /*Box to contain form controls*/
