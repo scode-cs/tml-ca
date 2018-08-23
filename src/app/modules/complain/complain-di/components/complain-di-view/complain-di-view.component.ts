@@ -391,7 +391,7 @@ export class ComplainDIViewComponent implements OnInit {
         break;
       };
       case '80': {
-        routePath = ROUTE_PATHS.RouteViewDetailsCloseComplainDI + '/' + complainNo + '/' + complainStatusId;
+        routePath = ROUTE_PATHS.RouteViewDetailsCloseComplainDI + '/' + complainNo + '/' + 85;
         break;
       }
     }
