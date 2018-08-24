@@ -382,13 +382,10 @@ export class InvestigationReportDiComponent implements OnInit {
       subscribe(res => {
         if (res.msgType === 'Info') {
           console.log("submit item msg====", res.msg);
-        } else {
-          this.postInvoiceItemDetailWsCall(items);
-        }
+        }//end of if
       },
         err => {
           console.log(err);
-          this.postInvoiceItemDetailWsCall(items);
         });
   }//end of the method of postInvoiceItemDetailWsCall
 
@@ -398,12 +395,9 @@ export class InvestigationReportDiComponent implements OnInit {
       subscribe(res => {
         if (res.msgType === 'Info') {
           console.log("files uploaded successfully");
-        } else {
-          this.fileUploadWSCall(plantType, fileJsonBody);
-        }
+        }//end of if
       }, err => {
         console.log(err);
-        this.fileUploadWSCall(plantType, fileJsonBody);
       });
   }//end of method
 
@@ -413,6 +407,7 @@ export class InvestigationReportDiComponent implements OnInit {
     this.postInvoiceItemDetailWsCall(totalItems);
   }//end of the method uploadInvoiceItemDetails
 
+  private detCompSubmitFlag: boolean = true;//comp det submit flag
   // start method of submitInvReportDIDetDetailWSCall to detail submit webservice calll
   private submitInvReportDIDetDetailWSCall(invReportDetailJson: any, action: string) {
     let totalItems: any[] = [];
@@ -437,15 +432,21 @@ export class InvestigationReportDiComponent implements OnInit {
             this.fileUploadWSCall(this.plantType, fileJsonBody);//calling the file ws method
           }//end of file array check
           this.onOpenModal(res.value, res.msg);//calling the modal to show msg
-          this.router.navigate([ROUTE_PATHS.RouteComplainDIView]);//route to complain view page
+          let routePath = ROUTE_PATHS.RouteAddRCADI + '/' + invReportDetailJson.complaintReferenceNo + '/' + 50;//rca status is 50
+          this.router.navigate([routePath]);//route to rca add page
         } else {
-          this.submitInvReportDIDetDetailWSCall(invReportDetailJson, action);
-        }
-
+          if(this.detCompSubmitFlag){
+            this.submitInvReportDIDetDetailWSCall(invReportDetailJson, action);
+            this.detCompSubmitFlag = false;//set it false
+          }//end of if
+        }//end of else
       },
         err => {
           console.log(err);
-          this.submitInvReportDIDetDetailWSCall(invReportDetailJson, action);
+          if(this.detCompSubmitFlag){
+            this.submitInvReportDIDetDetailWSCall(invReportDetailJson, action);
+            this.detCompSubmitFlag = false;//set it false
+          }
         });
   }//end of submitInvReportDIDetDetailWSCall method
 

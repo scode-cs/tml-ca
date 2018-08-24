@@ -78,6 +78,9 @@ export class CloseComplainDIAddEditComponent {
       'closeDate': [''
       ],
       'acknoledgementReceived': [''
+        , [
+          Validators.required,
+        ]
       ],
       'remarks': [''
         , [
