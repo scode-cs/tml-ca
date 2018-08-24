@@ -663,7 +663,7 @@ export class ComplaintDIRegisterComponent implements OnInit {
     console.log("invoiceItemArr::::", invoiceItemArr);
     return invoiceItemArr;
   }//end of method
-
+  private detCompSubmitFlag: boolean = true;//comp det submit flag
   //method of complaint details submit service call
   private complaintDetailsSubmitWSCall(complainDetailJson: any, plantType: string, action: string) {
     this.complaintDIService.postDetail(complainDetailJson, plantType, action).
@@ -698,12 +698,18 @@ export class ComplaintDIRegisterComponent implements OnInit {
           this.complaintRegisterFormGroup.controls["loggedBy"].setValue(this.empInfo.empName);//set emp name to control
           this.busySpinner = false;//to stop the spinner
         } else {
-          this.complaintDetailsSubmitWSCall(complainDetailJson, plantType, action);
+          if(this.detCompSubmitFlag){
+            this.complaintDetailsSubmitWSCall(complainDetailJson, plantType, action);
+            this.detCompSubmitFlag = false;//set it false
+          }//end of if
         }//end of else of msgType 'Info'
       },
         err => {
           console.log(err);
-          this.complaintDetailsSubmitWSCall(complainDetailJson, plantType, action);
+          if(this.detCompSubmitFlag){
+            this.complaintDetailsSubmitWSCall(complainDetailJson, plantType, action);
+            this.detCompSubmitFlag = false;//set it false
+          }//end of if
         });
   }//end of method
 
@@ -713,12 +719,9 @@ export class ComplaintDIRegisterComponent implements OnInit {
       subscribe(res => {
         if (res.msgType === 'Info') {
           console.log("Invoice items uploaded successfully");
-        } else {
-          this.invoiceItemDetailSubmitWSCall(items, plantType);
-        }
+        } 
       }, err => {
         console.log(err);
-        this.invoiceItemDetailSubmitWSCall(items, plantType);
       });
   }//end of method
 
@@ -728,12 +731,9 @@ export class ComplaintDIRegisterComponent implements OnInit {
       subscribe(res => {
         if (res.msgType === 'Info') {
           console.log("files uploaded successfully");
-        } else {
-          this.fileUploadWSCall(plantType, fileJsonBody);
-        }
+        } 
       }, err => {
         console.log(err);
-        this.fileUploadWSCall(plantType, fileJsonBody);
       });
   }//end of method
 
