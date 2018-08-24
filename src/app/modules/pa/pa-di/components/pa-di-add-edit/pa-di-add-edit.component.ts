@@ -113,15 +113,12 @@ export class PADIAddEditComponent implements OnInit {
       subscribe(res => {
         if (res.msgType === 'Info') {
           console.log("files uploaded successfully");
-        } else {
-          this.fileUploadWSCall(plantType, fileJsonBody);
-        }
+        } 
       }, err => {
-        console.log(err);
-        this.fileUploadWSCall(plantType, fileJsonBody);
+        console.log(err);        
       });
   }//end of method
-
+  private detCompSubmitFlag: boolean = true;//comp det submit flag
   //method of complaint details submit service call
   private complaintDetailsSubmitWSCall(complainDetailJson: any, plantType: string, action: string) {
     this.complaintDIService.postDetail(complainDetailJson, plantType, action).
@@ -142,14 +139,21 @@ export class PADIAddEditComponent implements OnInit {
             this.fileUploadWSCall(plantType, fileJsonBody);//calling the file ws method
           }//end of file array check
           this.onOpenModal(this.routeParam.complaintReferenceNo, res.msg);//open modal to show the msg
-          this.router.navigate([ROUTE_PATHS.RouteComplainDIView]);
+          let routePath = ROUTE_PATHS.RouteAddCloseComplainDI + '/' + this.routeParam.complaintReferenceNo + '/' + 80;//pa status
+          this.router.navigate([routePath]);//route
         } else {
-          this.complaintDetailsSubmitWSCall(complainDetailJson, plantType, action);
+          if(this.detCompSubmitFlag){
+            this.complaintDetailsSubmitWSCall(complainDetailJson, plantType, action);
+            this.detCompSubmitFlag = false;//set it false
+          }//end of if   
         }
       },
         err => {
           console.log(err);
-          this.complaintDetailsSubmitWSCall(complainDetailJson, plantType, action);
+          if(this.detCompSubmitFlag){
+            this.complaintDetailsSubmitWSCall(complainDetailJson, plantType, action);
+            this.detCompSubmitFlag = false;//set it false
+          }//end of if   
         });
   }//end of method
 
