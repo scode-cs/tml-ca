@@ -919,7 +919,9 @@ export class InvestigationReportDiComponent implements OnInit {
             this.busySpinner = false;
             this.sessionErrorService.routeToLogin(err._body);
           });
-    }//end of if
+    }else{
+      this.natureOfComDropDownList = [];//clear the nature of complain dropdown list
+    }
   }//end of the method onComplaintTypeSelect
 
   // start method to select comp type from edit item modal
@@ -938,6 +940,8 @@ export class InvestigationReportDiComponent implements OnInit {
       this.tempCompTypeJson.natureOfComplaintId = '';
       this.invItemEditFormGroup.controls['natureOfComplaintOfEditItem'].setValue('');
       this.invItemEditFormGroup.controls['detailOfComplaintOfEditItem'].setValue('');
+      this.modalErrorMsgObj.modalErrorMsgShowFlag = false;
+      this.modalErrorMsgObj.modalErrorMsg = "";
     }
     this.onComplaintTypeSelect(null, selectedKey, selectedDesc);
   }//end of method
