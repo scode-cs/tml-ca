@@ -70,7 +70,7 @@ export class CloseComplainDIViewDetailsComponent {
     this.closeComplainDIFormGroup = new FormGroup({
       complaintReferenceNo: new FormControl(''),
       closeDate: new FormControl(''),
-      acknoledgementReceived: new FormControl({value:'N',disabled:true}),
+      acknoledgementReceived: new FormControl({value:'N',disabled: true}),
       remarks: new FormControl('')
     });
   }//end of init form
@@ -138,7 +138,7 @@ private getFileWSCall(complaintReferenceNo: string, pageActivityId: number, comp
 
 //for clicking cancel button this method will be invoked
 public onCancel(): void {
-  this.router.navigate([ROUTE_PATHS.RouteHome]);
+  this.router.navigate([ROUTE_PATHS.RouteComplainDIView]);
 }// end of onCancel method
 
 public selectData(cmpIndex: number) {
