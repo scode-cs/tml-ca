@@ -130,7 +130,8 @@ export class InvestigationReportDiComponent implements OnInit {
       sampleCollectedDate: new FormControl(''),
       investigationReportDate: new FormControl(''),
       customerCode: new FormControl(''),
-      customerName: new FormControl('')
+      customerName: new FormControl(''),
+      invReportRemarks: new FormControl('')
     });
   }//end of method
 
@@ -316,6 +317,9 @@ export class InvestigationReportDiComponent implements OnInit {
     }
     if (formData.customerName) {
       this.invReportFormGroup.controls['customerName'].setValue(formData.customerName);
+    }
+    if(formData.investigationReportRemarks) {
+      this.invReportFormGroup.controls['invReportRemarks'].setValue(formData.investigationReportRemarks);
     }
     if (formData.investigationReportCancelRemarks) {
       this.invRejectReason = formData.investigationReportCancelRemarks;//set the reject reason
@@ -667,6 +671,7 @@ export class InvestigationReportDiComponent implements OnInit {
       if(this.invReportFormGroup.value.siteVisitMade == 'Y') {
         invReportDetailJson.siteVisitMadeDate = this.invReportFormGroup.value.siteVisitDt;
       }
+      invReportDetailJson.investigationReportRemarks = this.invReportFormGroup.value.invReportRemarks ? this.invReportFormGroup.value.invReportRemarks : '';
 
       let unloadingEquipment: string = "";
       this.unloadingEquipmentList.forEach(unloadingEquip => {

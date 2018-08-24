@@ -89,10 +89,7 @@ export class InvestigationReportDiViewDetailsComponent implements OnInit {
       sampleCollected: new FormControl({ value: 'N', disabled: true }),
       sampleCollectedDate: new FormControl(''),
       investigationReportDate: new FormControl(''),
-      // unloadingEquipment: new FormControl({ value: '', disabled: true }),
-      // lubricantUsed: new FormControl({ value: '', disabled: true }),
-      // layingPosition: new FormControl({ value: '', disabled: true }),
-      // jointingtype: new FormControl({ value: '', disabled: true })
+      invReportRemarks: new FormControl('')
     });
   }//end of initform
 
@@ -180,7 +177,7 @@ export class InvestigationReportDiViewDetailsComponent implements OnInit {
     this.invReportFormGroup.controls['sampleCollected'].setValue(formData.sampleCollected);
     this.invReportFormGroup.controls['sampleCollectedDate'].setValue(this.datePipe.transform(formData.sampleCollectedDate, 'dd-MMM-yyyy'));
     this.invReportFormGroup.controls['investigationReportDate'].setValue(this.datePipe.transform(formData.investigationReportDate, 'dd-MMM-yyyy'));
-
+    this.invReportFormGroup.controls['invReportRemarks'].setValue(formData.investigationReportRemarks);
     let unloadingEquipment: string = "[" + formData.unloadingEquipement + "]";
     let unloadingEquipmentKey: any[] = JSON.parse(unloadingEquipment);
     this.selectedIvtReportDataList.unloadingEquipmentDesc = this.getSelectedCheckedItemVal(this.ivtReportDataList.unloadingEquipmentList, unloadingEquipmentKey);
