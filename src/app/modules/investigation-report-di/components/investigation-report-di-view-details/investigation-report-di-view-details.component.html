@@ -34,7 +34,8 @@
               </td>
 
               <td class="hideextra" *ngFor="let invRprt of invReportTable" [ngClass]="invRprt.dataClass">
-                <ng-container *ngIf="invRprt.headerKey == 'investigationReportDate'">{{ invReportDet[invRprt.headerKey] | date:'dd-MMM-yyyy' }}</ng-container>
+                <ng-container *ngIf="invRprt.headerKey == 'investigationReportDate'">{{ invReportDet[invRprt.headerKey] |
+                  date:'dd-MMM-yyyy' }}</ng-container>
                 <ng-container *ngIf="invRprt.headerKey !='investigationReportDate'">{{ invReportDet[invRprt.headerKey] }}</ng-container>
                 <!-- {{ invReportDet[invRprt.headerKey] }} -->
               </td>
@@ -140,7 +141,8 @@
                 <tbody>
                   <tr class="tr-style" *ngFor="let invItemDet of invItemDetails">
                     <td class="hideextra" *ngFor="let itmGrid of itemGridTable" [ngClass]="itmGrid.dataClass">
-                      <ng-container *ngIf="itmGrid.headerKey == 'invoiceDate'">{{ invItemDet[itmGrid.headerKey] | date:'dd-MMM-yyyy' }}</ng-container>
+                      <ng-container *ngIf="itmGrid.headerKey == 'invoiceDate'">{{ invItemDet[itmGrid.headerKey] | date:'dd-MMM-yyyy'
+                        }}</ng-container>
                       <ng-container *ngIf="itmGrid.headerKey !='invoiceDate'">{{ invItemDet[itmGrid.headerKey] }}</ng-container>
 
                       <!-- {{ invItemDet[itmGrid.headerKey] }} -->
@@ -231,6 +233,13 @@
               </ul> -->
             </div>
             <!--end div for Unloading Equipment [view]-->
+
+            <!-- start inv report remarks textarea div -->
+            <div class="form-group col-xs-12 col-sm-12 col-md-12 col-lg-12">
+              <label>Remarks</label>
+              <textarea class="form-control comment-box-textarea-style" formControlName="invReportRemarks" readonly></textarea>
+            </div>
+            <!-- end of inv report remarks textarea div -->
 
             <!--files-->
             <!--start div for show files-->
