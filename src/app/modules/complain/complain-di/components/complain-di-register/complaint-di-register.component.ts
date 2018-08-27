@@ -887,7 +887,7 @@ export class ComplaintDIRegisterComponent implements OnInit {
   }//end of the method onKeyupComplaintQty
 
   //date validation
-  public dateValidation(dateInfo: string) {
+  public dateValidation() {
     let date = new Date();
     let dateControlName = new Date(this.complaintRegisterFormGroup.controls['complaintReferenceDt'].value);
     if (date < dateControlName) {
