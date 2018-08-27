@@ -215,19 +215,29 @@ public getHeadercount(complainHeaderParam: ComplaintDIHeaderParamModel,planType:
   let headers: Headers = this.configService();
   let actionUrl = AppUrlsConst.COMPLAINT_HEADER_DATA_COUNT;
 
-
   let param: string = '';
   param+="plantType="+planType+"&";
   param += complainHeaderParam && complainHeaderParam.filter ? "filter="+complainHeaderParam.filter : "filter=";
   
-  
-
   console.log(param);
 
   return this.http.get((actionUrl+'?'+param), { headers: headers })
   .map((res: Response) => { return res.json() })
   .catch((error: Response) => { return Observable.throw(error) });
+}
 
+/**
+ * 
+ * @param emailObj send email
+ */
+public sendEmail(emailObj:any, plantType: string, action: string) {
+  let headers: Headers = this.configService();
+  let actionUrl = AppUrlsConst.SEND_EMAIL_URL
+  +"?plantType="+plantType+"&action="+action;
+
+  return this.http.post(actionUrl, emailObj, { headers: headers })
+      .map((res: Response) => { return res.json() })
+      .catch((error: Response) => { return Observable.throw(error) });
 }
   
 
