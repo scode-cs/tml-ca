@@ -9,31 +9,32 @@
   <!-- Write Your Code -->
   <!-- start div for container -->
   <div class="container col-lg-12 col-md-12 col-sm-12 col-xs-12" style="width:100%;">
-
     <!--start search div -->
     <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" style="margin-top: -25px;">
       <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+        <!--col-lg-6 col-md-6 col-sm-6 col-xs-12-->
         <div class="input-group" style="width:100%;">
           &nbsp;
         </div>
-      </div>
+      </div>      
       <div [formGroup]="searchFormGroup" class="input-group col-lg-6 col-md-6 col-sm-6 col-xs-12" style="float: right;">
-        <input type="search" class="form-control search-input" formControlName="gridSearch" placeholder="Search">
+        <input type="search" class="form-control search-input" formControlName="gridSearch" placeholder="Local Search">
         <span class="input-group-addon">
           <i class="fa fa-search"></i>
         </span>
       </div>
     </div>
     <!-- end of search div -->
-
+    <div class="col-lg-2 col-md-2 col-sm-2 col-xs-12 cursor-pointer">
+      <button type="submit" class="btn btn-default cursor-pointer" (click)="onClickFullSearchBtn()">
+        Full Search<i class="fa fa-search"></i>
+      </button>
+    </div>
 
     <!--start div for row-->
     <div class="row col-lg-12 col-md-12 col-sm-12 col-xs-12" style="padding-top: 15px;">
-
-
       <!--start div for faceted nav-->
       <div class="col-lg-2 col-md-2 col-sm-2 col-xs-2 faceted-nav">
-
         <!--start div for status-->
         <!-- <ng-container> -->
         <div class="row faceted-header">
@@ -57,34 +58,35 @@
           <span class="label-faceted-header">Complaint Type</span>
         </div>
         <div *ngIf="facetedNavData?.complainType && complanTypeFormgroup">
-            <form [formGroup]="complanTypeFormgroup">
-          <div *ngFor="let complainTypeFacet of facetedNavData?.complainType" style="padding: 5px;">
-            <ng-container *ngIf="complainTypeFacet.complaintTypeDesc">
-              <input type="checkbox" formControlName="{{complainTypeFacet.complaintTypeId}}"/>
-              <span>
-                {{ complainTypeFacet.complaintTypeDesc }}
-              </span>
-            </ng-container>
-          </div>
-        </form>
+          <form [formGroup]="complanTypeFormgroup">
+            <div *ngFor="let complainTypeFacet of facetedNavData?.complainType" style="padding: 5px;">
+              <ng-container *ngIf="complainTypeFacet.complaintTypeDesc">
+                <input type="checkbox" formControlName="{{complainTypeFacet.complaintTypeId}}" />
+                <span>
+                  {{ complainTypeFacet.complaintTypeDesc }}
+                </span>
+              </ng-container>
+            </div>
+          </form>
         </div>
 
         <div class="row faceted-header">
           <span class="label-faceted-header">Nature of Complaint</span>
         </div>
         <div *ngIf="facetedNavData?.natureOfComplain && natureOfComplainGroup">
-          <form [formGroup]="natureOfComplainGroup"> 
+          <form [formGroup]="natureOfComplainGroup">
 
-         
-          <div *ngFor="let natureOfComplainFacet of facetedNavData?.natureOfComplain" style="padding: 5px;">
-            <ng-container *ngIf="natureOfComplainFacet.natureOfComplaintId">
-              <input type="checkbox" (click)="selectFacet('natureOfComplain', natureOfComplainFacet.natureOfComplaintId)" formControlName="{{natureOfComplainFacet.natureOfComplaintId}}" />
-              <span>
-                {{ natureOfComplainFacet.natureOfComplaintDesc }}
-              </span>
-            </ng-container>
-          </div>
-        </form>
+
+            <div *ngFor="let natureOfComplainFacet of facetedNavData?.natureOfComplain" style="padding: 5px;">
+              <ng-container *ngIf="natureOfComplainFacet.natureOfComplaintId">
+                <input type="checkbox" (click)="selectFacet('natureOfComplain', natureOfComplainFacet.natureOfComplaintId)" formControlName="{{natureOfComplainFacet.natureOfComplaintId}}"
+                />
+                <span>
+                  {{ natureOfComplainFacet.natureOfComplaintDesc }}
+                </span>
+              </ng-container>
+            </div>
+          </form>
         </div>
         <!-- </ng-container> -->
         <!--end div for status-->
@@ -177,25 +179,25 @@
             </div>
             <!-- end of table div -->
             <nav aria-label="Page navigation example" style="float:right">
-                
-                <ul *ngIf="pager.pages && pager.pages.length" class="pagination">
-                    <li class="page-item" [ngClass]="{disabled:pager.currentPage === 1}">
-                      <a class="page-link" (click)="setPage(1)">First</a>
-                    </li>
-                    <li class="page-item" [ngClass]="{disabled:pager.currentPage === 1}">
-                      <a  class="page-link" (click)="setPage(pager.currentPage - 1)">Previous</a>
-                    </li>
-                    <li class="page-item" *ngFor="let page of pager.pages" [ngClass]="{active:pager.currentPage === page}">
-                      <a class="page-link" (click)="setPage(page)">{{page}}</a>
-                    </li>
-                    <li class="page-item" [ngClass]="{disabled:pager.currentPage === pager.totalPages}">
-                      <a class="page-link" (click)="setPage(pager.currentPage + 1)">Next</a>
-                    </li>
-                    <li class="page-item" [ngClass]="{disabled:pager.currentPage === pager.totalPages}">
-                      <a class="page-link" (click)="setPage(pager.totalPages)">Last</a>
-                    </li>
-                  </ul>
-              </nav>
+
+              <ul *ngIf="pager.pages && pager.pages.length" class="pagination">
+                <li class="page-item" [ngClass]="{disabled:pager.currentPage === 1}">
+                  <a class="page-link" (click)="setPage(1)">First</a>
+                </li>
+                <li class="page-item" [ngClass]="{disabled:pager.currentPage === 1}">
+                  <a class="page-link" (click)="setPage(pager.currentPage - 1)">Previous</a>
+                </li>
+                <li class="page-item" *ngFor="let page of pager.pages" [ngClass]="{active:pager.currentPage === page}">
+                  <a class="page-link" (click)="setPage(page)">{{page}}</a>
+                </li>
+                <li class="page-item" [ngClass]="{disabled:pager.currentPage === pager.totalPages}">
+                  <a class="page-link" (click)="setPage(pager.currentPage + 1)">Next</a>
+                </li>
+                <li class="page-item" [ngClass]="{disabled:pager.currentPage === pager.totalPages}">
+                  <a class="page-link" (click)="setPage(pager.totalPages)">Last</a>
+                </li>
+              </ul>
+            </nav>
           </div>
           <!--end of div for actn btn n faceted nav-->
 
@@ -206,11 +208,79 @@
 
     </div>
     <!--end of div row-->
-    
+
   </div>
   <!-- end of div container -->
 </div>
 <!-- end of div page-container -->
+
+<!-- server-search modal -->
+<div *ngIf="serverSearchModal" class="overlay"></div>
+<!-- <div class="modal">I'm the modal window!</div> -->
+<div *ngIf="serverSearchModal" class="server-search-modal">
+  <!-- header div -->
+  <div class="modal-header">
+    <div> Full Search </div>
+    <div (click)="cancelServerSearchModal()" style="cursor: pointer;">x</div>
+  </div>
+  <!-- end of header div -->
+  <!-- start body div -->
+  <div class="modal-body">
+    <!-- start server search modal -->
+    <div class="form-group" style="margin-right: -15%;">
+      <!-- start form tag -->
+      <form [formGroup]="serverSearchModalFormGroup">
+        <!-- <div style="display: inline-flex; width: 100%"> -->
+          <div style="width: 80%">
+            <label>Any</label>
+            <input type="text" formControlName="anyTypeSearch" style="width: 100%">
+          </div>
+          <div style="width: 80%">
+            <label>Complaint Number</label>
+            <input type="text" formControlName="complaintNumber" style="width: 100%">
+          </div>
+          <div style="width: 80%">
+            <label>Customer Name</label>
+            <input type="text" formControlName="customerName" style="width: 100%">
+          </div>
+          <div style="width: 80%">
+            <label>Complaint Type</label>
+            <input type="text" formControlName="complaintType" style="width: 100%">
+          </div>
+          <div style="width: 80%">
+            <label>Nature of Complaint</label>
+            <input type="text" formControlName="natureOfComplaint" style="width: 100%">
+          </div>
+          <div style="width: 80%">
+            <label>Complaint Status</label>
+            <input type="text" formControlName="complaintStatus" style="width: 100%">
+          </div>
+        <!-- </div> -->
+      </form>
+      <!-- end of form tag -->
+    </div>
+    <!-- end of div -->
+    <!-- start button div -->
+    <div>
+      <div style="float: right;">
+        <button type="submit" class="btn btn-primary primary-button-style" style="width: 138px; height: 35px; margin-right: 40px;"
+          (click)="onClickSearchModalSubmit()">Search
+        </button>
+      </div>
+    </div>
+    <!-- end of button div -->
+    <!-- start err msg show div -->
+    <!-- <div *ngIf="modalErrorMsgObj.modalErrorMsgShowFlag">
+        <div class="text-danger">
+          <i class="fa fa-exclamation-circle" aria-hidden="true"></i>
+          <b>{{modalErrorMsgObj.modalErrorMsg}}</b>&nbsp;
+        </div>
+      </div> -->
+    <!--end of err msg show div-->
+  </div>
+  <!-- end of body div -->
+</div>
+<!--end of server-search-modal -->
 
 <ispl-busy-spinner *ngIf="busySpinner">
 </ispl-busy-spinner>

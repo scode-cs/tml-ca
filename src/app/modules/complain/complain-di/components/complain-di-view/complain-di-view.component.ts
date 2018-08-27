@@ -18,13 +18,9 @@ import { ComplaintDIHeaderParamModel } from '../../../../shared/models/complaint
   styleUrls: ['complain-di-view.component.css']
 })
 export class ComplainDIViewComponent implements OnInit {
-
+  private compHeaderTableColumnNames: any = {};//to get header table column names
   public complaintDIViewDetails: any = []//to show the complaint det in html page
-
-  public modifyComplaint: string;//for modify complaint id
-
   public facetedDataDetails: any[] = [];//to show faceted data in html
-
   public processFlowStatusDet: string[] = [];
 
   //for sorting and orderType activity id parameters
@@ -35,39 +31,10 @@ export class ComplainDIViewComponent implements OnInit {
     facetedArray: [],
     fileActivityId: this.localStorageService.appSettings.complaintRegistrationActivityId
   };
-
-  //reset filter for faceted nav for quick fix..
-  public resetFilter: any = {
-    plantType: 'DI',
-    sortData: '',
-    orderType: '',
-    facetedArray: [],
-    fileActivityId: this.localStorageService.appSettings.complaintRegistrationActivityId
-  };
-  //reset filter for faceted nav for quick fix..
-  public dashboardResetFilter: any = {
-    plantType: 'DI',
-    sortData: '',
-    orderType: '',
-    facetedArray: [],
-    fileActivityId: this.localStorageService.appSettings.complaintRegistrationActivityId
-  };
-  //takin arr for selectedData
-  public selectedData: any[] = [];
-  public searchFormGroup: FormGroup;
-  //checkbox
-  public checkAll: boolean = false;
-  public otherCheck: boolean = false;
+  //for local search
+  public searchFormGroup: FormGroup; 
   // Page Config
-  public pageConfig: any = {};
-  //present faceted data to get faceted details
-  public presentFacetedData = 'DEFAULT';
-  //taking var for filter
-  public filterOption: string = 'DEFAULT';
-  //taking var for previous filter
-  public previousFilter: string = '';
-  //taking any array for faceted
-  public facetedArray: any[] = [];
+  public pageConfig: any = {}; 
   public dashboardParameter: string = '';
 
   public gridHeader: any = {
@@ -86,7 +53,6 @@ export class ComplainDIViewComponent implements OnInit {
   public headerparams: ComplaintDIHeaderParamModel;
 
   public facetedNavData: any = {};
-
   //formgroup
   public changeStattusGroup: FormGroup;
   public complanTypeFormgroup: FormGroup;
@@ -95,6 +61,8 @@ export class ComplainDIViewComponent implements OnInit {
   datacount:number;
   // paged items
   pagedItems: any[];
+  //server search formgroup
+  public serverSearchModalFormGroup: FormGroup;
 
   constructor(
     private formBuilder: FormBuilder,
@@ -112,12 +80,22 @@ export class ComplainDIViewComponent implements OnInit {
     this.searchFormGroup = this.formBuilder.group({
       'gridSearch': ''
     });
+    //serverSearchModalFormGroup
+    let serverSearchFormGroup: any = {}
+    serverSearchFormGroup['anyTypeSearch'] = new FormControl();
+    serverSearchFormGroup['complaintNumber'] = new FormControl();
+    serverSearchFormGroup['customerName'] = new FormControl();
+    serverSearchFormGroup['complaintType'] = new FormControl();
+    serverSearchFormGroup['natureOfComplaint'] = new FormControl();
+    serverSearchFormGroup['complaintStatus'] = new FormControl();
+    this.serverSearchModalFormGroup = new FormGroup(serverSearchFormGroup);
   }//end of constructor
 
   ngOnInit(): void {
     console.log("OnInit View Complain Class");
     this.busySpinner = true;
     this.pageConfig = new ComplainDIViewModel().pageConfig;
+    this.compHeaderTableColumnNames = new ComplainDIViewModel().compHeaderTableFieldNames;
     //new add for view complaint according to parameter
     // let routeSubscription: Subscription;
     // routeSubscription = this.activatedroute.params.subscribe(params => { 
@@ -138,14 +116,10 @@ export class ComplainDIViewComponent implements OnInit {
     let routeSubscription: Subscription;
     routeSubscription = this.activatedroute.params.subscribe(params => {
       this.dashboardParameter = params.activitytype ? params.activitytype : '';//get param from dashboard
-      this.selectedData = [];//removing the array 
-
       // if(this.dashboardParameter){
       //   this.viewEditParam = "View";
       // }//end of if
-
       this.title = "View Complaints";
-
     });
   }
   //end of method to get route param
@@ -512,5 +486,58 @@ export class ComplainDIViewComponent implements OnInit {
       console.log(err);
     })
   }
+
+  //new add for server search modal
+  public serverSearchModal: boolean = false;
+  //method to open server search modal
+  public onClickFullSearchBtn(){
+    this.toggleServerSearchModal();
+  }//end of method
+  //method to open/close modal
+  private toggleServerSearchModal() {
+    this.serverSearchModal = this.serverSearchModal ? false : true;
+  }//end of method
+  //method to cancel modal
+  cancelServerSearchModal(){
+    this.toggleServerSearchModal();
+  }//end of method
+  //on search modal submit
+  public onClickSearchModalSubmit() {
+    this.compHeaderTableColumnNames;
+    let searchQuery: string;
+    let anyValue = this.serverSearchModalFormGroup.value.anyTypeSearch;
+    let complaintNumberValue = this.serverSearchModalFormGroup.value.complaintNumber;
+    let customerNameValue = this.serverSearchModalFormGroup.value.customerName;
+    let complaintTypeValue = this.serverSearchModalFormGroup.value.complaintType;
+    let natureOfComplaintValue = this.serverSearchModalFormGroup.value.natureOfComplaint;
+    let complaintStatusValue = this.serverSearchModalFormGroup.value.complaintStatus;
+    if(anyValue){
+      searchQuery = 
+      this.compHeaderTableColumnNames.complaintNumber+" LIKE '%"+anyValue+"%' OR "
+      +this.compHeaderTableColumnNames.customerName+" LIKE '%"+anyValue+"%' OR "
+      +this.compHeaderTableColumnNames.complaintType+" LIKE '%"+anyValue+"%' OR "
+      +this.compHeaderTableColumnNames.natureOfComplaint+" LIKE '%"+anyValue+"%' OR "
+      +this.compHeaderTableColumnNames.complaintStatus+" LIKE '%"+anyValue+"%'";
+    }else{
+      complaintNumberValue = 
+      complaintNumberValue ? this.compHeaderTableColumnNames.complaintNumber+" LIKE '%"+complaintNumberValue+"%'" : '';
+      customerNameValue = 
+      customerNameValue ? this.compHeaderTableColumnNames.customerName+" LIKE '%"+customerNameValue+"%' ": '';
+      complaintTypeValue = 
+      complaintTypeValue ? this.compHeaderTableColumnNames.complaintType+" LIKE '%"+complaintTypeValue+"%'" : '';
+      natureOfComplaintValue = 
+      natureOfComplaintValue ? this.compHeaderTableColumnNames.natureOfComplaint+" LIKE '%"+natureOfComplaintValue+"%'" : '';
+      complaintStatusValue = 
+      complaintStatusValue ? this.compHeaderTableColumnNames.complaintStatus+" LIKE '%"+complaintStatusValue+"%'" : '';
+      
+      searchQuery = 
+      complaintNumberValue + " AND " + customerNameValue +" AND "+
+      complaintTypeValue + " AND " + natureOfComplaintValue +" AND "+
+      complaintStatusValue;
+      
+    }
+
+    console.log("search query::",searchQuery);
+  }//end of method
 
 }//end of class

@@ -635,6 +635,27 @@ export class ComplaintDIRegisterComponent implements OnInit {
     this.sessionErrorService.routeToLogin(err._body);
   }//end of method
 
+  //method to send email
+  private sendEmail(complainDetailJson: any, customerDetailsForEmail:any,plantType: string, action: string){
+    let emailJsonBody: any = {};
+    let customerDetails: any = customerDetailsForEmail;
+    emailJsonBody.complaintReferenceNo = complainDetailJson.complaintReferenceNo;
+    emailJsonBody.complaintTypeId = complainDetailJson.complaintTypeId;//1,
+    emailJsonBody.natureOfComplaintId = complainDetailJson.natureOfComplaintId;//1,
+    emailJsonBody.loggedBy = complainDetailJson.loggedBy;// "7527",
+    emailJsonBody.userId = this.localStorageService.user.userId;//"7527",
+    emailJsonBody.siteVisit = complainDetailJson.siteVisit;//"Y",
+    emailJsonBody.customerDetails = customerDetails;
+    this.complaintDIService.sendEmail(emailJsonBody,plantType,action).
+    subscribe(res=>{
+      if(res.msgType === 'Info'){
+        console.log("mail send successfully");
+      }
+    },err=>{
+    });
+
+  }//end of method
+
   //for clicking submit button this method will be invoked
   private setInvoiceItemArrForSubmit(complaintReferenceNo: string, activityId: number, valueSub: string, natureOfComplaintId: number, complainDetails: string): any[] {
     console.log("form value::", this.complaintRegisterFormGroup.value);
@@ -690,6 +711,14 @@ export class ComplaintDIRegisterComponent implements OnInit {
             fileJsonBody.fileAutoIds = fileAutoIdStr;
             this.fileUploadWSCall(plantType, fileJsonBody);//calling the file ws method
           }//end of file array check
+          //to send email
+          let customerDetailsForEmail: any = {};
+          customerDetailsForEmail.customerCode = this.custInfo.custCode;//"001";
+          customerDetailsForEmail.customerName = this.custInfo.custName;//"ABC";
+          customerDetailsForEmail.salesGroup = this.custInfo.salesGroup;//"SG";
+          customerDetailsForEmail.salesOffice = this.custInfo.salesOffice;//"SO";
+          //new add to send email
+          this.sendEmail(complainDetailJson,customerDetailsForEmail,plantType,action);//calling the method to send email
           this.onOpenModal(complainDetailJson.complaintReferenceNo, res.msg);//calling the modal to show msg
           this.clearInvDetService();//to clear service
           this.clearClassVariables();//to clear class variables
