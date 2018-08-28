@@ -513,31 +513,48 @@ export class ComplainDIViewComponent implements OnInit {
     let complaintStatusValue = this.serverSearchModalFormGroup.value.complaintStatus;
     if(anyValue){
       searchQuery = 
-      this.compHeaderTableColumnNames.complaintNumber+" LIKE '%"+anyValue+"%' OR "
-      +this.compHeaderTableColumnNames.customerName+" LIKE '%"+anyValue+"%' OR "
-      +this.compHeaderTableColumnNames.complaintType+" LIKE '%"+anyValue+"%' OR "
-      +this.compHeaderTableColumnNames.natureOfComplaint+" LIKE '%"+anyValue+"%' OR "
-      +this.compHeaderTableColumnNames.complaintStatus+" LIKE '%"+anyValue+"%'";
-    }else{
-      complaintNumberValue = 
-      complaintNumberValue ? this.compHeaderTableColumnNames.complaintNumber+" LIKE '%"+complaintNumberValue+"%'" : '';
-      customerNameValue = 
-      customerNameValue ? this.compHeaderTableColumnNames.customerName+" LIKE '%"+customerNameValue+"%' ": '';
-      complaintTypeValue = 
-      complaintTypeValue ? this.compHeaderTableColumnNames.complaintType+" LIKE '%"+complaintTypeValue+"%'" : '';
-      natureOfComplaintValue = 
-      natureOfComplaintValue ? this.compHeaderTableColumnNames.natureOfComplaint+" LIKE '%"+natureOfComplaintValue+"%'" : '';
-      complaintStatusValue = 
-      complaintStatusValue ? this.compHeaderTableColumnNames.complaintStatus+" LIKE '%"+complaintStatusValue+"%'" : '';
-      
+      this.compHeaderTableColumnNames.complaintNumber+" LIKE '`%"+anyValue+"%' OR "
+      +this.compHeaderTableColumnNames.customerName+" LIKE '`%"+anyValue+"%' OR "
+      +this.compHeaderTableColumnNames.complaintType+" LIKE '`%"+anyValue+"%' OR "
+      +this.compHeaderTableColumnNames.natureOfComplaint+" LIKE '`%"+anyValue+"%' OR "
+      +this.compHeaderTableColumnNames.complaintStatus+" LIKE '`%"+anyValue+"%'";
+    }else if(complaintNumberValue){
       searchQuery = 
-      complaintNumberValue + " AND " + customerNameValue +" AND "+
-      complaintTypeValue + " AND " + natureOfComplaintValue +" AND "+
-      complaintStatusValue;
-      
+      complaintNumberValue ? this.compHeaderTableColumnNames.complaintNumber+" LIKE '`%"+complaintNumberValue+"%'" : '';
+     }else if(customerNameValue){
+      searchQuery = 
+      customerNameValue ? this.compHeaderTableColumnNames.customerName+" LIKE '`%"+customerNameValue+"%' ": '';
+     } else if(complaintTypeValue){
+      searchQuery = 
+      complaintTypeValue ? this.compHeaderTableColumnNames.complaintType+" LIKE '`%"+complaintTypeValue+"%'" : '';
+    } else if(natureOfComplaintValue){
+      searchQuery = 
+      natureOfComplaintValue ? this.compHeaderTableColumnNames.natureOfComplaint+" LIKE '`%"+natureOfComplaintValue+"%'" : '';
+    } else if(complaintStatusValue){
+      searchQuery = 
+      complaintStatusValue ? this.compHeaderTableColumnNames.complaintStatus+" LIKE '`%"+complaintStatusValue+"%'" : '';      
     }
 
     console.log("search query::",searchQuery);
+    this.headerparams.filter = searchQuery;//set the filter to the param
+    this.busySpinner = true;
+    this.getcomplaindetails();//to get the data
+    this.toggleServerSearchModal();//to close the modal
+
   }//end of method
+
+  enableSearchModalBtn(){
+    if(this.serverSearchModalFormGroup.value.anyTypeSearch || 
+      this.serverSearchModalFormGroup.value.complaintNumber || 
+      this.serverSearchModalFormGroup.value.customerName || 
+      this.serverSearchModalFormGroup.value.complaintType ||
+      this.serverSearchModalFormGroup.value.natureOfComplaint ||
+      this.serverSearchModalFormGroup.value.complaintStatus){
+
+      return false;
+    }else{
+      return true;
+    }
+  }
 
 }//end of class
