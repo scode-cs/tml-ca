@@ -285,4 +285,13 @@
   cursor: pointer;
 }
 /* end of table grid style */
+
+/* start textarea style of comment box */
+.comment-box-textarea-style {
+  width: 100%;
+  margin-top: 0px;
+  margin-bottom: 0px;
+  height: 120px;
+}
+/* end of textarea style of comment box */
   

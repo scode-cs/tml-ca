@@ -51,10 +51,10 @@
             <!-- end of div for edit required commercial settlement -->
 
             <!-- start div for actn details -->
-            <div class="form-group col-xs-12 col-sm-6 col-md-6 col-lg-4">
+            <div class="form-group col-xs-12 col-sm-12 col-md-12 col-lg-12">
                 <label for="remarksInResoDI">Remarks</label>
                 <label class="red-asterick">*</label>
-                <textarea rows="5" formControlName="remarks" class="form-control hide-horizontal-scroll" required></textarea>
+                <textarea formControlName="remarks" class="form-control hide-horizontal-scroll comment-box-textarea-style" required></textarea>
                 <div class="alert alert-danger" *ngIf="closeComplainDIFormGroup.get('remarks').hasError('required') && closeComplainDIFormGroup.get('remarks').touched">
                     <i class="fa fa-exclamation-circle"></i>Remarks is required!
                 </div>
