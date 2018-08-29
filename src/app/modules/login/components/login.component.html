@@ -42,14 +42,14 @@
 
     <form [formGroup]="loginForm" autocomplete="off" (ngSubmit)="loginSubmit()">
       <div class="form-group">
-        <label for="name">Username</label>
+        <label for="name">User Id</label>
         <div class="input-group">
           <span class="input-group-addon"><i class="fa fa-user"></i></span>
-          <input type="text" id="username" #userName class="form-control" formControlName="username" placeholder="Username" required>
+          <input type="text" id="username" #userName class="form-control" formControlName="username" placeholder="User Id" required>
         </div>
         <div>
           <div class="alert alert-danger" *ngIf="loginForm.get('username').hasError('required') && loginForm.get('username').touched">
-            <i class="fa fa-exclamation-circle"></i> Username is required!
+            <i class="fa fa-exclamation-circle"></i> User Id is required!
           </div>
         </div>
       </div>
