@@ -32,9 +32,9 @@ export class ComplainDIViewComponent implements OnInit {
     fileActivityId: this.localStorageService.appSettings.complaintRegistrationActivityId
   };
   //for local search
-  public searchFormGroup: FormGroup; 
+  public searchFormGroup: FormGroup;
   // Page Config
-  public pageConfig: any = {}; 
+  public pageConfig: any = {};
   public dashboardParameter: string = '';
 
   public gridHeader: any = {
@@ -58,7 +58,7 @@ export class ComplainDIViewComponent implements OnInit {
   public complanTypeFormgroup: FormGroup;
   public natureOfComplainGroup: FormGroup;
   pager: any = {};
-  datacount:number;
+  datacount: number;
   // paged items
   pagedItems: any[];
   //server search formgroup
@@ -143,7 +143,8 @@ export class ComplainDIViewComponent implements OnInit {
     this.complaintdIservice.getHeader(this.headerparams).subscribe((res: any) => {
       console.log('get data all', JSON.parse(res.mapDetails));
       this.complaintDIViewDetails = JSON.parse(res.mapDetails);
-      this.busySpinner = false;
+      setTimeout(() => { this.busySpinner = false }, 2000);
+
     }, (err: any) => {
       this.busySpinner = false;
     });
@@ -247,42 +248,42 @@ export class ComplainDIViewComponent implements OnInit {
     let cmpStatusFilter: string = '';
     for (let statusCtrl in this.changeStattusGroup.value) {
       if (this.changeStattusGroup.value[statusCtrl]) {
-        cmpStatusFilter += cmpStatusFilter ? 
-          " OR LAST_ACTIVITY_ID='" + statusCtrl + "'" : 
+        cmpStatusFilter += cmpStatusFilter ?
+          " OR LAST_ACTIVITY_ID='" + statusCtrl + "'" :
           "LAST_ACTIVITY_ID='" + statusCtrl + "'";
       }
     }
 
     if (cmpStatusFilter) {
-      cmpStatusFilter = '('+cmpStatusFilter+")"
+      cmpStatusFilter = '(' + cmpStatusFilter + ")"
       filter ? filter += " AND " + cmpStatusFilter : filter = cmpStatusFilter;
     }
 
     let cmpTypeFilter: string = '';
     for (let typeCtrl in this.complanTypeFormgroup.value) {
       if (this.complanTypeFormgroup.value[typeCtrl]) {
-        cmpTypeFilter += cmpTypeFilter ? 
-          " OR CMPLNT_TYPE_ID='" + typeCtrl + "'" : 
+        cmpTypeFilter += cmpTypeFilter ?
+          " OR CMPLNT_TYPE_ID='" + typeCtrl + "'" :
           "CMPLNT_TYPE_ID='" + typeCtrl + "'";
       }
     }
 
     if (cmpTypeFilter) {
-      cmpTypeFilter = '('+cmpTypeFilter+")"
+      cmpTypeFilter = '(' + cmpTypeFilter + ")"
       filter ? filter += " AND " + cmpTypeFilter : filter = cmpTypeFilter;
     }
 
     let natOfCmpfacetFilter: string = '';
     for (let natCtrl in this.natureOfComplainGroup.value) {
       if (this.natureOfComplainGroup.value[natCtrl]) {
-        natOfCmpfacetFilter += natOfCmpfacetFilter ? 
-          " OR NAT_CMPLNT_ID='" + natCtrl + "'" : 
+        natOfCmpfacetFilter += natOfCmpfacetFilter ?
+          " OR NAT_CMPLNT_ID='" + natCtrl + "'" :
           "NAT_CMPLNT_ID='" + natCtrl + "'";
       }
     }
 
     if (natOfCmpfacetFilter) {
-      natOfCmpfacetFilter = '('+natOfCmpfacetFilter+")"
+      natOfCmpfacetFilter = '(' + natOfCmpfacetFilter + ")"
       filter ? filter += " AND " + natOfCmpfacetFilter : filter = natOfCmpfacetFilter;
     }
 
@@ -459,7 +460,7 @@ export class ComplainDIViewComponent implements OnInit {
    */
   setPage(page: number) {
     // get current page of items this is for local paginate
-  
+
     console.log(this.datacount);
     this.pager = this.getPager(this.datacount, page, 20);
     // this.getlistofschoole(this.pager.currentPage - 1, 10);
@@ -474,13 +475,13 @@ export class ComplainDIViewComponent implements OnInit {
     // this.pagedItems = this.allschooldata.slice(this.pager.startIndex, this.pager.endIndex + 1);
 
   }
-  
+
   setPagination() {
     // let header: ComplaintDIHeaderParamModel;
     // header.filter = '';
     this.complaintdIservice.getHeadercount(this.headerparams, 'DI').subscribe((res) => {
       console.log(res);
-      this.datacount=res.xCount;
+      this.datacount = res.xCount;
       this.setPage(1);
     }, (err) => {
       console.log(err);
@@ -489,8 +490,11 @@ export class ComplainDIViewComponent implements OnInit {
 
   //new add for server search modal
   public serverSearchModal: boolean = false;
+  //array to store searched value
+  public serverSearchArr: any[] = [];
+  public anyValue: string = '';//to show the any value of search modal
   //method to open server search modal
-  public onClickFullSearchBtn(){
+  public onClickFullSearchBtn() {
     this.toggleServerSearchModal();
   }//end of method
   //method to open/close modal
@@ -498,63 +502,107 @@ export class ComplainDIViewComponent implements OnInit {
     this.serverSearchModal = this.serverSearchModal ? false : true;
   }//end of method
   //method to cancel modal
-  cancelServerSearchModal(){
+  cancelServerSearchModal() {
     this.toggleServerSearchModal();
   }//end of method
   //on search modal submit
   public onClickSearchModalSubmit() {
-    this.compHeaderTableColumnNames;
+    this.serverSearchArr = [];//clear the arr
     let searchQuery: string;
-    let anyValue = this.serverSearchModalFormGroup.value.anyTypeSearch;
+    this.anyValue = this.serverSearchModalFormGroup.value.anyTypeSearch;
     let complaintNumberValue = this.serverSearchModalFormGroup.value.complaintNumber;
     let customerNameValue = this.serverSearchModalFormGroup.value.customerName;
     let complaintTypeValue = this.serverSearchModalFormGroup.value.complaintType;
     let natureOfComplaintValue = this.serverSearchModalFormGroup.value.natureOfComplaint;
     let complaintStatusValue = this.serverSearchModalFormGroup.value.complaintStatus;
-    if(anyValue){
-      searchQuery = 
-      this.compHeaderTableColumnNames.complaintNumber+" LIKE '`%"+anyValue+"%' OR "
-      +this.compHeaderTableColumnNames.customerName+" LIKE '`%"+anyValue+"%' OR "
-      +this.compHeaderTableColumnNames.complaintType+" LIKE '`%"+anyValue+"%' OR "
-      +this.compHeaderTableColumnNames.natureOfComplaint+" LIKE '`%"+anyValue+"%' OR "
-      +this.compHeaderTableColumnNames.complaintStatus+" LIKE '`%"+anyValue+"%'";
-    }else if(complaintNumberValue){
-      searchQuery = 
-      complaintNumberValue ? this.compHeaderTableColumnNames.complaintNumber+" LIKE '`%"+complaintNumberValue+"%'" : '';
-     }else if(customerNameValue){
-      searchQuery = 
-      customerNameValue ? this.compHeaderTableColumnNames.customerName+" LIKE '`%"+customerNameValue+"%' ": '';
-     } else if(complaintTypeValue){
-      searchQuery = 
-      complaintTypeValue ? this.compHeaderTableColumnNames.complaintType+" LIKE '`%"+complaintTypeValue+"%'" : '';
-    } else if(natureOfComplaintValue){
-      searchQuery = 
-      natureOfComplaintValue ? this.compHeaderTableColumnNames.natureOfComplaint+" LIKE '`%"+natureOfComplaintValue+"%'" : '';
-    } else if(complaintStatusValue){
-      searchQuery = 
-      complaintStatusValue ? this.compHeaderTableColumnNames.complaintStatus+" LIKE '`%"+complaintStatusValue+"%'" : '';      
-    }
 
-    console.log("search query::",searchQuery);
+    if (this.anyValue) {
+      this.anyValue = this.anyValue.trim();
+      searchQuery =
+        this.compHeaderTableColumnNames.complaintNumber + " LIKE \'%" + this.anyValue + "%\' OR "
+        + this.compHeaderTableColumnNames.customerName + " LIKE \'%" + this.anyValue + "%\' OR "
+        + this.compHeaderTableColumnNames.complaintType + " LIKE \'%" + this.anyValue + "%\' OR "
+        + this.compHeaderTableColumnNames.natureOfComplaint + " LIKE \'%" + this.anyValue + "%\' OR "
+        + this.compHeaderTableColumnNames.complaintStatus + " LIKE \'%" + this.anyValue + "%\'";
+    } else {
+      this.anyValue = '';//clear the any value
+      if (complaintNumberValue) {
+        this.serverSearchArr.push({ dbColName: this.compHeaderTableColumnNames.complaintNumber, value: complaintNumberValue.trim(), htmlLblName: 'Complaint Number'});
+      }  
+      if (customerNameValue) {
+        this.serverSearchArr.push({ dbColName: this.compHeaderTableColumnNames.customerName, value: customerNameValue.trim(), htmlLblName: 'Customer Name'});
+      }  
+      if (complaintTypeValue) {
+        this.serverSearchArr.push({ dbColName: this.compHeaderTableColumnNames.complaintType, value: complaintTypeValue.trim(), htmlLblName: 'Complaint Type'});
+      }  
+      if (natureOfComplaintValue) {
+        this.serverSearchArr.push({ dbColName: this.compHeaderTableColumnNames.natureOfComplaint, value: natureOfComplaintValue.trim(), htmlLblName: 'Nature of Complaint'});
+      }  
+      if (complaintStatusValue) {
+        this.serverSearchArr.push({ dbColName: this.compHeaderTableColumnNames.complaintStatus, value: complaintStatusValue.trim(), htmlLblName: 'Complaint Status'});
+      }     
+
+      searchQuery = this.buildQueryFromSearchArr();
+    }//end of else
+  
+    console.log("search query::", searchQuery);
     this.headerparams.filter = searchQuery;//set the filter to the param
     this.busySpinner = true;
     this.getcomplaindetails();//to get the data
+    this.loadFacetedNav();
     this.toggleServerSearchModal();//to close the modal
 
   }//end of method
 
-  enableSearchModalBtn(){
-    if(this.serverSearchModalFormGroup.value.anyTypeSearch || 
-      this.serverSearchModalFormGroup.value.complaintNumber || 
-      this.serverSearchModalFormGroup.value.customerName || 
+  private buildQueryFromSearchArr(): string{
+    let searchQuery: string  = '';
+    let filterQuery: string = '';
+    if (this.serverSearchArr.length > 1) {
+      this.serverSearchArr.forEach((el, index) => {
+        filterQuery = el.dbColName + " LIKE \'%" + el.value + "%\'";
+        searchQuery = searchQuery ? searchQuery + " AND " + filterQuery: filterQuery;
+      });
+    } else if(this.serverSearchArr.length == 1) {
+      this.serverSearchArr.forEach((el, index) => {
+        filterQuery = el.dbColName + " LIKE \'%" + el.value + "%\'";
+        searchQuery = filterQuery;
+      });
+    }
+    return searchQuery;
+  }
+
+  enableSearchModalBtn() {
+    if (this.serverSearchModalFormGroup.value.anyTypeSearch ||
+      this.serverSearchModalFormGroup.value.complaintNumber ||
+      this.serverSearchModalFormGroup.value.customerName ||
       this.serverSearchModalFormGroup.value.complaintType ||
       this.serverSearchModalFormGroup.value.natureOfComplaint ||
-      this.serverSearchModalFormGroup.value.complaintStatus){
+      this.serverSearchModalFormGroup.value.complaintStatus) {
 
       return false;
-    }else{
+    } else {
       return true;
     }
   }
 
+  //method to delete by close click
+  deleteSearchedValOnClick(closeInfo: string, arrLblName?:string,arrElValue?:string){
+    let searchQuery: string = '';
+    if(closeInfo === 'AnyVal'){
+      this.anyValue = '';//set it blank
+      searchQuery = this.anyValue;
+    }else{
+      this.serverSearchArr.forEach((element,index)=>{
+        if(arrLblName == element.htmlLblName &&  arrElValue==element.value){
+          this.serverSearchArr.splice(index,1);
+        }
+      });
+      searchQuery = this.buildQueryFromSearchArr();
+    }  
+    console.log("search query::", searchQuery);
+    this.headerparams.filter = searchQuery;//set the filter to the param
+    this.busySpinner = true;
+    this.getcomplaindetails();//to get the data
+    this.loadFacetedNav();
+  }
 }//end of class

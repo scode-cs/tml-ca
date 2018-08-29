@@ -9,9 +9,27 @@
   <!-- Write Your Code -->
   <!-- start div for container -->
   <div class="container col-lg-12 col-md-12 col-sm-12 col-xs-12" style="width:100%;">
+    <div *ngIf="serverSearchArr.length > 0 || anyValue" style="margin-bottom: 10px;">
+      <b>Detailed Searched Value:</b>
+      <ng-container *ngFor="let srvrsrchArrEl of serverSearchArr">
+        <span style="color: #1c2ad4;font-weight: 500; font-size: small;">{{srvrsrchArrEl.htmlLblName}}: </span>
+        <span class="searched-data" style="color: black;font-weight: 500;font-size: small; display: inline-block;">"{{srvrsrchArrEl.value}}"
+          <button aria-label="Close" class="close" type="button" (click)="deleteSearchedValOnClick('OtherVal',srvrsrchArrEl.htmlLblName,srvrsrchArrEl.value)">
+            <span aria-hidden="true">×</span>
+          </button>&nbsp;
+        </span>
+      </ng-container>
+      <ng-container *ngIf="anyValue">
+        <span class="searched-data" style="color: black;font-weight: 500;font-size: small;display: inline-block;">"{{anyValue}}"
+          <button aria-label="Close" class="close" type="button" (click)="deleteSearchedValOnClick('AnyVal')">
+            <span aria-hidden="true">×</span>
+          </button>&nbsp;
+        </span>
+      </ng-container>
+    </div>
     <!--start search div -->
     <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-      <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12 cursor-pointer" style="display: inline-block;">
+      <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12" style="display: inline-block;">
         <button type="submit" class="btn btn-default cursor-pointer" style="float: right;" (click)="onClickFullSearchBtn()">
           Detailed Search<i class="fa fa-search" style="padding-left: 7%;"></i>
         </button>
@@ -225,30 +243,30 @@
       <!-- start form tag -->
       <form [formGroup]="serverSearchModalFormGroup">
         <!-- <div style="display: inline-flex; width: 100%"> -->
-          <div style="width: 80%">
-            <label>Any</label>
-            <input type="text" formControlName="anyTypeSearch" style="width: 100%">
-          </div>
-          <div style="width: 80%">
-            <label>Complaint Number</label>
-            <input type="text" formControlName="complaintNumber" style="width: 100%">
-          </div>
-          <div style="width: 80%">
-            <label>Customer Name</label>
-            <input type="text" formControlName="customerName" style="width: 100%">
-          </div>
-          <div style="width: 80%">
-            <label>Complaint Type</label>
-            <input type="text" formControlName="complaintType" style="width: 100%">
-          </div>
-          <div style="width: 80%">
-            <label>Nature of Complaint</label>
-            <input type="text" formControlName="natureOfComplaint" style="width: 100%">
-          </div>
-          <div style="width: 80%">
-            <label>Complaint Status</label>
-            <input type="text" formControlName="complaintStatus" style="width: 100%">
-          </div>
+        <div style="width: 80%">
+          <label>Any</label>
+          <input type="text" formControlName="anyTypeSearch" style="width: 100%">
+        </div>
+        <div style="width: 80%">
+          <label>Complaint Number</label>
+          <input type="text" formControlName="complaintNumber" style="width: 100%">
+        </div>
+        <div style="width: 80%">
+          <label>Customer Name</label>
+          <input type="text" formControlName="customerName" style="width: 100%">
+        </div>
+        <div style="width: 80%">
+          <label>Complaint Type</label>
+          <input type="text" formControlName="complaintType" style="width: 100%">
+        </div>
+        <div style="width: 80%">
+          <label>Nature of Complaint</label>
+          <input type="text" formControlName="natureOfComplaint" style="width: 100%">
+        </div>
+        <div style="width: 80%">
+          <label>Complaint Status</label>
+          <input type="text" formControlName="complaintStatus" style="width: 100%">
+        </div>
         <!-- </div> -->
       </form>
       <!-- end of form tag -->

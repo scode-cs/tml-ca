@@ -316,3 +316,28 @@
   border-radius: 4px;
 }
 /* end of server search modal */
+
+/*style for close button*/
+.close span {
+  text-align: center;
+  color: #000;
+  z-index: 1;
+}
+.close {
+    float: right;
+    font-size: 1.5rem;
+    font-weight: bold;
+    line-height: 1;
+    content:'x';
+    color: #000;
+    text-shadow: 0 1px 0 #fff;
+    opacity: 0;
+    transition: opacity .35s ease;
+}
+/*end of style for close button*/
+/* close sign style on hover class*/
+.searched-data:hover .close {
+  opacity: 1;
+  color: #000;
+}
+/* end of close sign style hover class */
