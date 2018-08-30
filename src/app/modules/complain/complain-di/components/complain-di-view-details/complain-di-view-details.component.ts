@@ -187,7 +187,7 @@ export class ComplainDIViewDetailsComponent implements OnInit {
     this.complaintRegisterFormGroup.controls['contactPersonEmailId'].setValue(complainFormData.contactPersonEmailId);
     this.complaintRegisterFormGroup.controls['loggedBy'].setValue(complainFormData.loggedByName);
     this.complaintRegisterFormGroup.controls['loggedOnDt'].setValue(this.datePipe.transform(complainFormData.loggedOnDt, 'dd-MMM-yyyy'));
-    let categoryDesc: string = complainFormData.categoryDesc ? '('+complainFormData.categoryDesc+')': '';
+    let categoryDesc: string = complainFormData.categoryDesc.trim() ? '('+complainFormData.categoryDesc+')': '';
     this.complaintRegisterFormGroup.controls['complaintTypeId'].setValue(complainFormData.complaintTypeDesc + categoryDesc);
     this.complaintRegisterFormGroup.controls['natureOfComplaintId'].setValue(complainFormData.natureOfComplaintDesc);
     this.complaintRegisterFormGroup.controls['complaintDetails'].setValue(complainFormData.complaintDetails);
