@@ -268,6 +268,7 @@ export class InvestigationReportDiComponent implements OnInit {
           this.invItemDetails.forEach(itemEl => {
             itemEl.complaintQtyInMtrs = parseInt(itemEl.complaintQtyInMtrs);
             itemEl.complaintQtyInTons = parseInt(itemEl.complaintQtyInTons);
+            itemEl.complaintTypeDesc = itemEl.categoryDesc.trim()? itemEl.complaintTypeDesc+'('+itemEl.categoryDesc+')' : itemEl.complaintTypeDesc;
           });
           //new add
           // this.getComplainDet();//calling the method to check n update previous item row

@@ -242,39 +242,40 @@
     <div class="form-group" style="margin-right: -15%;">
       <!-- start form tag -->
       <form [formGroup]="serverSearchModalFormGroup">
-        <!-- <div style="display: inline-flex; width: 100%"> -->
-        <div style="width: 80%">
+        <div style="padding: 9px;width: 80%;border: 1px solid lightgrey;border-radius: 10px;">
           <label>Any</label>
           <input type="text" formControlName="anyTypeSearch" style="width: 100%">
         </div>
-        <div style="width: 80%">
-          <label>Complaint Number</label>
-          <input type="text" formControlName="complaintNumber" style="width: 100%">
+        <span style="margin-left: 35%;color: #49007f;">OR</span>
+        <div style="padding: 9px;width: 80%;border: 1px solid lightgrey;border-radius: 10px;">
+          <div style="width: 100%">
+            <label>Complaint Number</label>
+            <input type="text" formControlName="complaintNumber" style="width: 100%">
+          </div>
+          <div style="width: 100%">
+            <label>Customer Name</label>
+            <input type="text" formControlName="customerName" style="width: 100%">
+          </div>
+          <div style="width: 100%">
+            <label>Complaint Type</label>
+            <input type="text" formControlName="complaintType" style="width: 100%">
+          </div>
+          <div style="width: 100%">
+            <label>Nature of Complaint</label>
+            <input type="text" formControlName="natureOfComplaint" style="width: 100%">
+          </div>
+          <div style="width: 100%">
+            <label>Complaint Status</label>
+            <input type="text" formControlName="complaintStatus" style="width: 100%">
+          </div>
         </div>
-        <div style="width: 80%">
-          <label>Customer Name</label>
-          <input type="text" formControlName="customerName" style="width: 100%">
-        </div>
-        <div style="width: 80%">
-          <label>Complaint Type</label>
-          <input type="text" formControlName="complaintType" style="width: 100%">
-        </div>
-        <div style="width: 80%">
-          <label>Nature of Complaint</label>
-          <input type="text" formControlName="natureOfComplaint" style="width: 100%">
-        </div>
-        <div style="width: 80%">
-          <label>Complaint Status</label>
-          <input type="text" formControlName="complaintStatus" style="width: 100%">
-        </div>
-        <!-- </div> -->
       </form>
       <!-- end of form tag -->
     </div>
     <!-- end of div -->
     <!-- start button div -->
     <div>
-      <div style="float: right;">
+      <div style="float: right;margin-top: -2%;">
         <button type="submit" class="btn btn-primary primary-button-style" style="width: 138px; height: 35px; margin-right: 40px;"
           (click)="onClickSearchModalSubmit()" [disabled]="enableSearchModalBtn()">Search
         </button>
