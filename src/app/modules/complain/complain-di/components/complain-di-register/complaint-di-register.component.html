@@ -309,13 +309,16 @@
           <!--start div for Contact Person Email Id-->
           <div class="form-group col-xs-12 col-sm-6 col-md-6 col-lg-4">
             <label for="contactPersonEmailId">Email Id</label>
-            <input type="text" id="contactPersonEmailId" class="form-control" formControlName="contactPersonEmailId" />
+            <input type="email" id="contactPersonEmailId" class="form-control" formControlName="contactPersonEmailId" />
             <!-- [maxlength]="contactPersonEmailIdLength"  -->
             <!-- <div class="alert alert-danger" *ngIf="complaintRegisterFormGroup.get('contactPersonEmailId').hasError('required') && complaintRegisterFormGroup.get('contactPersonEmailId').touched && !complaintRegisterFormGroup.get('contactPersonEmailId').hasError('email') ">
               <i class="fa fa-exclamation-circle"></i> Provide valid email id
             </div> -->
-            <div class="alert alert-danger" *ngIf="complaintRegisterFormGroup.get('contactPersonEmailId').hasError('email') && complaintRegisterFormGroup.get('contactPersonEmailId').touched">
+            <!-- <div class="alert alert-danger" *ngIf="complaintRegisterFormGroup.get('contactPersonEmailId').hasError('email') && complaintRegisterFormGroup.get('contactPersonEmailId').touched">
               <i class="fa fa-exclamation-circle"></i> Provide valid email id
+            </div> -->
+            <div class="alert alert-danger" *ngIf="complaintRegisterFormGroup.get('contactPersonEmailId').hasError('pattern') && complaintRegisterFormGroup.get('contactPersonEmailId').touched">
+              <i class="fa fa-exclamation-circle"></i> Provide valid Email Id
             </div>
           </div>
           <!--end div for Contact Person Email Id-->
