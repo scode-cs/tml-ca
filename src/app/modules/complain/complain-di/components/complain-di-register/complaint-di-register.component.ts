@@ -144,7 +144,7 @@ export class ComplaintDIRegisterComponent implements OnInit {
       complaintReferenceDt: new FormControl(''),
       contactPersonName: new FormControl(''),
       contactPersonPhoneNo: new FormControl('', Validators.pattern('[0-9]+')),//(/^-?(0|[1-9]\d*)?$/)),
-      contactPersonEmailId: new FormControl('', Validators.email),
+      contactPersonEmailId: new FormControl('', Validators.pattern('^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$')),//Validators.email),
       loggedBy: new FormControl(''),
       loggedOnDt: new FormControl(''),
       complaintTypeId: new FormControl({ value: '' }, Validators.required),
