@@ -487,7 +487,7 @@ export class ComplainDIViewComponent implements OnInit {
       console.log(err);
     })
   }
-
+  //===== server search =====
   //new add for server search modal
   public serverSearchModal: boolean = false;
   //array to store searched value
@@ -585,20 +585,22 @@ export class ComplainDIViewComponent implements OnInit {
     }
   }
 
+  //to reset all search form value
+  private resetServerSeachModalForm(){
+    this.serverSearchModalFormGroup.controls['anyTypeSearch'].setValue('');
+    this.serverSearchModalFormGroup.controls['complaintNumber'].setValue('');
+    this.serverSearchModalFormGroup.controls['customerName'].setValue('');
+    this.serverSearchModalFormGroup.controls['complaintType'].setValue('');
+    this.serverSearchModalFormGroup.controls['natureOfComplaint'].setValue('');
+    this.serverSearchModalFormGroup.controls['complaintStatus'].setValue('');
+  }
+
   //method to delete by close click
-  deleteSearchedValOnClick(closeInfo: string, arrLblName?:string,arrElValue?:string){
+  deleteSearchedValOnClick(){
     let searchQuery: string = '';
-    if(closeInfo === 'AnyVal'){
-      this.anyValue = '';//set it blank
-      searchQuery = this.anyValue;
-    }else{
-      this.serverSearchArr.forEach((element,index)=>{
-        if(arrLblName == element.htmlLblName &&  arrElValue==element.value){
-          this.serverSearchArr.splice(index,1);
-        }
-      });
-      searchQuery = this.buildQueryFromSearchArr();
-    }  
+    this.anyValue = '';
+    this.serverSearchArr = [];
+    this.resetServerSeachModalForm();  
     console.log("search query::", searchQuery);
     this.headerparams.filter = searchQuery;//set the filter to the param
     this.busySpinner = true;

@@ -9,23 +9,22 @@
   <!-- Write Your Code -->
   <!-- start div for container -->
   <div class="container col-lg-12 col-md-12 col-sm-12 col-xs-12" style="width:100%;">
-    <div *ngIf="serverSearchArr.length > 0 || anyValue" style="margin-bottom: 10px;">
+    <div *ngIf="serverSearchArr.length > 0 || anyValue" style="margin-bottom: 10px;" class="cross-cls searched-data">
       <b>Detailed Searched Value:</b>
-      <ng-container *ngFor="let srvrsrchArrEl of serverSearchArr">
-        <span style="color: #1c2ad4;font-weight: 500; font-size: small;">{{srvrsrchArrEl.htmlLblName}}: </span>
-        <span class="searched-data" style="color: black;font-weight: 500;font-size: small; display: inline-block;">"{{srvrsrchArrEl.value}}"
-          <button aria-label="Close" class="close" type="button" (click)="deleteSearchedValOnClick('OtherVal',srvrsrchArrEl.htmlLblName,srvrsrchArrEl.value)">
-            <span aria-hidden="true">×</span>
-          </button>&nbsp;
-        </span>
-      </ng-container>
-      <ng-container *ngIf="anyValue">
-        <span class="searched-data" style="color: black;font-weight: 500;font-size: small;display: inline-block;">"{{anyValue}}"
-          <button aria-label="Close" class="close" type="button" (click)="deleteSearchedValOnClick('AnyVal')">
-            <span aria-hidden="true">×</span>
-          </button>&nbsp;
-        </span>
-      </ng-container>
+      <!-- <div style="display:inline-block;" class="searched-data"> -->
+        <ng-container *ngFor="let srvrsrchArrEl of serverSearchArr">
+          <span style="color: #1c2ad4;font-weight: 500; font-size: small;">{{srvrsrchArrEl.htmlLblName}}: </span>
+          <span style="color: black;font-weight: 500;font-size: small;">"{{srvrsrchArrEl.value}}"</span>
+        </ng-container>
+        <ng-container *ngIf="anyValue">
+          <span class="searched-data" style="color: black;font-weight: 500;font-size: small;">"{{anyValue}}"</span>
+        </ng-container>
+      <!-- </div> -->
+      <div style="display:inline-block;">
+        <button aria-label="Close" class="close" type="button" style="margin-top: 10%;" title="Clear All" (click)="deleteSearchedValOnClick()">
+          <span aria-hidden="true">×</span>
+        </button>&nbsp;
+      </div>
     </div>
     <!--start search div -->
     <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
@@ -242,12 +241,12 @@
     <div class="form-group" style="margin-right: -15%;">
       <!-- start form tag -->
       <form [formGroup]="serverSearchModalFormGroup">
-        <div style="padding: 9px;width: 80%;border: 1px solid lightgrey;border-radius: 10px;">
+        <div style="padding: 9px;width: 80%;border-radius: 10px;">
           <label>Any</label>
           <input type="text" formControlName="anyTypeSearch" style="width: 100%">
         </div>
         <span style="margin-left: 35%;color: #49007f;">OR</span>
-        <div style="padding: 9px;width: 80%;border: 1px solid lightgrey;border-radius: 10px;">
+        <div style="padding: 9px;width: 80%;border-radius: 10px;">
           <div style="width: 100%">
             <label>Complaint Number</label>
             <input type="text" formControlName="complaintNumber" style="width: 100%">
@@ -276,7 +275,7 @@
     <!-- start button div -->
     <div>
       <div style="float: right;margin-top: -2%;">
-        <button type="submit" class="btn btn-primary primary-button-style" style="width: 138px; height: 35px; margin-right: 40px;"
+        <button type="submit" class="btn btn-primary primary-button-style" style="width: 138px; height: 35px; margin-right: 40px;cursor:pointer;"
           (click)="onClickSearchModalSubmit()" [disabled]="enableSearchModalBtn()">Search
         </button>
       </div>

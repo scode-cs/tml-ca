@@ -336,7 +336,10 @@
 }
 /*end of style for close button*/
 /* close sign style on hover class*/
-.searched-data:hover .close {
+.searched-data:hover {
+  text-decoration: line-through;
+}
+.cross-cls:hover .close {
   opacity: 1;
   color: #000;
 }
