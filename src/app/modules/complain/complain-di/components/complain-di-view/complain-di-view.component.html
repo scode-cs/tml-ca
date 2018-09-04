@@ -9,22 +9,22 @@
   <!-- Write Your Code -->
   <!-- start div for container -->
   <div class="container col-lg-12 col-md-12 col-sm-12 col-xs-12" style="width:100%;">
-    <div *ngIf="serverSearchArr.length > 0 || anyValue" style="margin-bottom: 10px;" class="cross-cls searched-data">
-      <b>Detailed Searched Value:</b>
-      <!-- <div style="display:inline-block;" class="searched-data"> -->
+    <div *ngIf="serverSearchArr.length > 0 || anyValue" style="margin-bottom: 10px;">
+      <span style="cursor: pointer;" class="searched-data" title="Clear All" (click)="deleteSearchedValOnClick()">
+        <b>Detailed Searched Value:</b>
         <ng-container *ngFor="let srvrsrchArrEl of serverSearchArr">
           <span style="color: #1c2ad4;font-weight: 500; font-size: small;">{{srvrsrchArrEl.htmlLblName}}: </span>
           <span style="color: black;font-weight: 500;font-size: small;">"{{srvrsrchArrEl.value}}"</span>
         </ng-container>
         <ng-container *ngIf="anyValue">
-          <span class="searched-data" style="color: black;font-weight: 500;font-size: small;">"{{anyValue}}"</span>
+          <span style="color: black;font-weight: 500;font-size: small;">"{{anyValue}}"</span>
         </ng-container>
-      <!-- </div> -->
-      <div style="display:inline-block;">
-        <button aria-label="Close" class="close" type="button" style="margin-top: 10%;" title="Clear All" (click)="deleteSearchedValOnClick()">
-          <span aria-hidden="true">×</span>
-        </button>&nbsp;
-      </div>
+        <div style="display:inline-block;">
+          <button aria-label="Close" class="close" type="button" style="margin-top: 10%;" >
+            <span aria-hidden="true">×</span>
+          </button>&nbsp;
+        </div>
+      </span>
     </div>
     <!--start search div -->
     <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
@@ -90,7 +90,7 @@
 
             <div *ngFor="let natureOfComplainFacet of facetedNavData?.natureOfComplain" style="padding: 5px;">
               <ng-container *ngIf="natureOfComplainFacet.natureOfComplaintId">
-                <input type="checkbox" (click)="selectFacet('natureOfComplain', natureOfComplainFacet.natureOfComplaintId)" formControlName="{{natureOfComplainFacet.natureOfComplaintId}}"
+                <input type="checkbox" formControlName="{{natureOfComplainFacet.natureOfComplaintId}}"
                 />
                 <span>
                   {{ natureOfComplainFacet.natureOfComplaintDesc }}
