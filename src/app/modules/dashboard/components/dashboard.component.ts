@@ -39,7 +39,7 @@ export class DashboardComponent implements OnInit {
     tilesBodyNumber: '-',
     color: '#3078BE',
     buttonText: 'View Details',
-    buttonLink: 'filtered'
+    buttonLink: '80'
 
   };
   tiles3: any = {
@@ -48,7 +48,7 @@ export class DashboardComponent implements OnInit {
     tilesBodyNumber: '-',
     color: '#00ad21',
     buttonText: 'View Details',
-    buttonLink: 'filtered'
+    buttonLink: '10'
 
   };
 
