@@ -1,4 +1,4 @@
-import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
+import { Component, OnInit, OnChanges, ChangeDetectorRef } from '@angular/core';
 import { FormGroup, FormBuilder, Validators, FormControl } from '@angular/forms';
 import { LocalStorageService } from '../../../../shared/services/local-storage.service';
 import { ViewComplaintDIDataService } from '../../services/complaint-di-view-data.service';
@@ -17,7 +17,7 @@ import { ComplaintDIHeaderParamModel } from '../../../../shared/models/complaint
   templateUrl: 'complain-di-view.component.html',
   styleUrls: ['complain-di-view.component.css']
 })
-export class ComplainDIViewComponent implements OnInit {
+export class ComplainDIViewComponent implements OnInit, OnChanges {
   private compHeaderTableColumnNames: any = {};//to get header table column names
   public complaintDIViewDetails: any = []//to show the complaint det in html page
   public facetedDataDetails: any[] = [];//to show faceted data in html
@@ -91,16 +91,18 @@ export class ComplainDIViewComponent implements OnInit {
     this.serverSearchModalFormGroup = new FormGroup(serverSearchFormGroup);
   }//end of constructor
 
+  ngOnChanges() {
+    
+    console.log("onchanges of complainDiVIew class");
+    // this.headerparams = new ComplaintDIHeaderParamModel();
+  }
+
   ngOnInit(): void {
     console.log("OnInit View Complain Class");
     this.busySpinner = true;
     this.pageConfig = new ComplainDIViewModel().pageConfig;
     this.compHeaderTableColumnNames = new ComplainDIViewModel().compHeaderTableFieldNames;
-    //new add for view complaint according to parameter
-    // let routeSubscription: Subscription;
-    // routeSubscription = this.activatedroute.params.subscribe(params => { 
-    //   this.dashboardParameter = params.activitytype ? params.activitytype : '';
-    // });
+  
     this.headerparams = new ComplaintDIHeaderParamModel();
     this.getParamFromRoute();//to get route param
     console.log("view complaint according to parameter [dashboard]: ", this.dashboardParameter);
@@ -110,15 +112,11 @@ export class ComplainDIViewComponent implements OnInit {
     this.setPagination();
   }//end of onInit
 
-
   //method to get route param
   private getParamFromRoute() {
     let routeSubscription: Subscription;
     routeSubscription = this.activatedroute.params.subscribe(params => {
       this.dashboardParameter = params.activitytype ? params.activitytype : '';//get param from dashboard
-      // if(this.dashboardParameter){
-      //   this.viewEditParam = "View";
-      // }//end of if
       this.title = "View Complaints";
     });
   }
@@ -126,13 +124,23 @@ export class ComplainDIViewComponent implements OnInit {
 
   //checking if parameter have value or not
   private parameterCheck(routeParameter: string) {
-    if (this.dashboardParameter == '') {
-
-      this.getcomplaindetails();
-    } else {
-
+    if (this.dashboardParameter) {
+      let query: string ="";
+      switch(this.dashboardParameter){//dashboard param is available or not
+        case '10':{
+          query = "LAST_ACTIVITY_ID='" + this.dashboardParameter + "'";
+          this.headerparams.filter =  '(' + query +")";
+          break;
+        }
+        case '80': {
+          query = "LAST_ACTIVITY_ID='" + this.dashboardParameter + "'";
+          this.headerparams.filter =  '(' + query +")";
+          break;
+        }
+      }
 
     }
+    this.getcomplaindetails();
   }//end of checking if parameter have value or not
 
   /**
