@@ -550,7 +550,7 @@ export class InvestigationReportDiComponent implements OnInit {
     console.log("complaintQtyInMtrsParam===>", complaintQtyInMtrsParam);
     let invoiceQtyInMtrParam: string = itemDetEl.invoiceQtyInMtrs;
     for (let itemDet of itemAddEditArr) {
-      if (itemDet.invoiceNo == itemDetEl.invoiceNo && itemDet.itemNo == itemDetEl.itemNo) {
+      if (itemDet.invoiceNo == itemDetEl.invoiceNo && itemDet.itemNo == itemDetEl.itemNo && itemDet.complaintTypeId == itemDetEl.complaintTypeId && itemDet.natureOfComplaintId == itemDetEl.natureOfComplaintId) {
         let complaintQtyInMtrs: number = parseFloat(complaintQtyInMtrsParam);
         let invoiceQtyInMtrs: number = parseFloat(invoiceQtyInMtrParam);
         if (complaintQtyInMtrs > invoiceQtyInMtrs) {
