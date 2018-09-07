@@ -225,3 +225,12 @@
 }
 /* end of style for rca reject */
   
+.hideextra { 
+  white-space: nowrap; 
+  overflow: hidden;
+   text-overflow:ellipsis;
+ }
+ .scroll-bar{
+  overflow: auto;
+  overflow-y: hidden;
+}
