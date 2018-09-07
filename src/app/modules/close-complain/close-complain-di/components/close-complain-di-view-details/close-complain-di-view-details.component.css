@@ -295,3 +295,13 @@
 }
 /* end of textarea style of comment box */
   
+ 
+.hideextra { 
+  white-space: nowrap; 
+  overflow: hidden;
+   text-overflow:ellipsis;
+ }
+ .scroll-bar{
+  overflow: auto;
+  overflow-y: hidden;
+}
