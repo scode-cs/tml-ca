@@ -31,7 +31,11 @@
                             <i class="fa" [ngClass]="rcaIndex == rcaIndx ? 'fa-dot-circle-o' : 'fa-circle-o'"></i>
                         </td>
                         <td class="hideextra" *ngFor="let rcaRprt of rcaReportTable" [ngClass]="rcaRprt.dataClass">
-                            {{ rcaDet[rcaRprt.headerKey] }}
+                            <ng-container *ngIf="rcaRprt.headerKey == 'rootCauseAnanysisDate'">{{ rcaDet[rcaRprt.headerKey] | date:'dd-MMM-yyyy'
+                            }}</ng-container>
+                            <ng-container *ngIf="rcaRprt.headerKey !='rootCauseAnanysisDate'">{{ rcaDet[rcaRprt.headerKey] }}</ng-container>
+    
+                            <!-- {{ rcaDet[rcaRprt.headerKey] }} -->
                         </td>
                     </tr>
                 </tbody>

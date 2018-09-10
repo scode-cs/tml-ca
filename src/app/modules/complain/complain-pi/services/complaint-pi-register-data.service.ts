@@ -152,6 +152,7 @@ export class ComplaintPIRegisterDataService {
     this.headers = this.configService();
     let user : any = {};
     user.customerName = customerName;
+    user.plantType = this.localStorageService.user.plantType;
     console.log(" user======>",user);
     return this.http.post(actnUrl, user, { headers: this.headers })
         .map((res: Response) => { return res.json() })
@@ -163,6 +164,7 @@ export class ComplaintPIRegisterDataService {
     this.headers = this.configService();
     let user : any = {};
     user.customerCode = custCode;
+    user.plantType = this.localStorageService.user.plantType;
     user.invoiceNo = "";
     user.itemCode = "";
     console.log(" user======>",user);

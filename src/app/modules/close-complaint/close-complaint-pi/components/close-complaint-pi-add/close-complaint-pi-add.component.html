@@ -94,7 +94,7 @@
             <ng-container *ngIf="capaClose==' '">
                 <div class="form-group col-xs-12 col-sm-6 col-md-6 col-lg-4">
                     <div style="display:inline-block;">
-                        <label>Do you agree with Capa?</label>
+                        <label>Do you agree with CAPA?</label>
                         <label class="red-asterick">*</label>
                         <label class="control control--radio">Yes
                             <input type="radio" name="cpAction" formControlName="cpAction" (click)="onCAPARadioClick('Y')" />
@@ -114,7 +114,7 @@
             <ng-container *ngIf="capaClose=='Y'">
                 <div class="form-group col-xs-12 col-sm-6 col-md-6 col-lg-4">
                     <div style="display:inline-block;">
-                        <label>Do you agree with Capa?</label>
+                        <label>Do you agree with CAPA?</label>
                         <label class="red-asterick">*</label>
                         <label class="control control--radio">Yes
                             <input type="radio" name="cpAction" formControlName="cpAction" [checked]=true (click)="onCAPARadioClick('Y')" />
@@ -132,7 +132,7 @@
             <ng-container *ngIf="capaClose=='N'">
                 <div class="form-group col-xs-12 col-sm-6 col-md-6 col-lg-4">
                     <div style="display:inline-block;">
-                        <label>Do you agree with Capa?</label>
+                        <label>Do you agree with CAPA?</label>
                         <label class="red-asterick">*</label>
                         <label class="control control--radio">Yes
                             <input type="radio" name="cpAction" formControlName="cpAction" (click)="onCAPARadioClick('Y')" />
@@ -150,11 +150,11 @@
             <!-- end of div to edit Yes and preventive actn -->
             <!-- start div for capa rsn details -->
             <div class="form-group col-xs-12 col-sm-6 col-md-6 col-lg-4" *ngIf="capaClose=='N'">
-                <label>Reason for Capa</label>
+                <label>Reason for CAPA</label>
                 <label class="red-asterick">*</label>
                 <textarea rows="5" formControlName="caparsn" [maxlength]="capaAgreementReasonInCloseLength" [value]="capaRsnDet" class="form-control hide-horizontal-scroll" required></textarea>
                 <div class="alert alert-danger" *ngIf="closeComplaintPIAddFormGroup.get('caparsn').hasError('required') && closeComplaintPIAddFormGroup.get('caparsn').touched">
-                    <i class="fa fa-exclamation-circle"></i>Reason for Capa is required!
+                    <i class="fa fa-exclamation-circle"></i>Reason for CAPA is required!
                 </div>
             </div>
             <!-- end of div for capa rsn details -->

@@ -4,7 +4,7 @@ import { ToastService } from "../../../../../home/services/toast-service";
 import { Router, ActivatedRoute } from '@angular/router';
 import { Subscription } from 'rxjs/Subscription';//to get route param
 import { ROUTE_PATHS } from '../../../../../router/router-paths';
-import { LocalStorageService } from "../../../../../shared/services/local-storage.service";
+// import { LocalStorageService } from "../../../../../shared/services/local-storage.service";
 import { ComplaintDIRegisterDataService } from "../../../services/complaint-di-register-data.service";
 import { ComplaintDIRegisterEmitService } from "../../../services/complaint-di-register-emit.service";
 import { ComplaintDIInvoiceDetailsService } from "../../../services/complaint-di-invoice-details.service";
@@ -36,8 +36,7 @@ export class ComplaintDICustomerSearchComponent implements OnInit {
         private router: Router,
         private complaintDIRegisterDataService: ComplaintDIRegisterDataService,
         private sessionErrorService: SessionErrorService,
-        private complaintDIInvoiceDetailsService: ComplaintDIInvoiceDetailsService
-       
+        private complaintDIInvoiceDetailsService: ComplaintDIInvoiceDetailsService       
     ) {
     }//end of constructor
 

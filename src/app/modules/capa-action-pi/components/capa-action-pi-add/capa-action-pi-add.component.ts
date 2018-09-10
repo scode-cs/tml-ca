@@ -54,6 +54,8 @@ export class CAPAActionPIAddComponent {
   public resErrorMsg: string;
   public errorConst: string = "Error";
   public submitButtonEnable: boolean = true;//to disable submit button
+  public correctiveAction: string;
+  public actionTypeTakenAtPlantInShort : string;
 
   constructor(
     private activatedroute: ActivatedRoute,
@@ -98,7 +100,13 @@ export class CAPAActionPIAddComponent {
         , [
           Validators.required,
         ]
+      ],
+      'correctiveAction': [''
+        // , [
+        //   Validators.required,
+        // ]
       ]
+
     });
 
   }//end of method buildForm
@@ -156,6 +164,7 @@ export class CAPAActionPIAddComponent {
           let requiredCommercialSettlementFromRes: string = this.selectedComplaintReferenceDetails.requiredCommercialSettlementInCapa;
           this.requiredCommercialSettlement = requiredCommercialSettlementFromRes.substring(0, 1);
           this.plantType = this.selectedComplaintReferenceDetails.plantType;
+          this.correctiveAction = this.selectedComplaintReferenceDetails.correctiveAction.trim();
         } else {
           // show error msg on html page
           this.resMsgType = this.errorConst;

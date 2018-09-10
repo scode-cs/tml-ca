@@ -32,7 +32,11 @@
                             <i class="fa" [ngClass]="caIndex == caIndx ? 'fa-dot-circle-o' : 'fa-circle-o'"></i>
                         </td>
                         <td class="hideextra" *ngFor="let caRprt of caReportTable" [ngClass]="caRprt.dataClass">
-                            {{ caDet[caRprt.headerKey] }}
+                            <ng-container *ngIf="caRprt.headerKey == 'correctiveActionDate'">{{ caDet[caRprt.headerKey] | date:'dd-MMM-yyyy'
+                            }}</ng-container>
+                          <ng-container *ngIf="caRprt.headerKey !='correctiveActionDate'">{{ caDet[caRprt.headerKey] }}</ng-container>
+    
+                            <!-- {{ caDet[caRprt.headerKey] }} -->
                         </td>
                     </tr>
                 </tbody>
