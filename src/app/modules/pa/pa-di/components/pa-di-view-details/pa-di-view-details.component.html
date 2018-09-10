@@ -32,7 +32,11 @@
                             <i class="fa" [ngClass]="paIndex == paIndx ? 'fa-dot-circle-o' : 'fa-circle-o'"></i>
                         </td>
                         <td class="hideextra" *ngFor="let paRprt of paReportTable" [ngClass]="paRprt.dataClass">
-                            {{ paDet[paRprt.headerKey] }}
+                            <ng-container *ngIf="paRprt.headerKey == 'preventiveActionDate'">{{ paDet[paRprt.headerKey] | date:'dd-MMM-yyyy'
+                            }}</ng-container>
+                            <ng-container *ngIf="paRprt.headerKey !='preventiveActionDate'">{{ paDet[paRprt.headerKey] }}</ng-container>
+        
+                            <!-- {{ paDet[paRprt.headerKey] }} -->
                         </td>
                     </tr>
                 </tbody>

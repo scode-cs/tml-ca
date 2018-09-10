@@ -66,7 +66,7 @@
                     <div style="display:inline-block;">
                         <label>Corrective/Preventive Action</label>
                         <label class="red-asterick">*</label>
-                        <label class="control control--radio">Corrective
+                        <label class="control control--radio"  *ngIf="actionTypeTakenAtPlantInShort === 'C'">Corrective
                             <input type="radio" name="cpAction" formControlName="cpAction" (click)="onCAPARadioClick('C')" />
                             <div class="control__indicator"></div>
                         </label>
@@ -90,6 +90,11 @@
                 </div> 
             </div>
             <!-- end of div for actn details -->
+
+            <div class="form-group col-xs-12 col-sm-6 col-md-6 col-lg-4" *ngIf="actionTypeTakenAtPlantInShort === 'P'">
+                <label for="detailOfComplaint">Corrective Action Details</label>
+                <textarea readonly rows="5" formControlName="correctiveAction" [value]="correctiveAction" class="form-control hide-horizontal-scroll" required></textarea>
+            </div>
 
             <!-- start div for edit required comercial settlement  -->
             <div class="form-group col-xs-12 col-sm-6 col-md-6 col-lg-4">

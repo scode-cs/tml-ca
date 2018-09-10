@@ -240,6 +240,7 @@ export class InvestigationReportDIDataService {
     this.headers = this.configService();
     let user : any = {};
     user.customerCode = custCode;
+    user.plantType = this.localStorageService.user.plantType;
     user.invoiceNo = '';
     user.itemCode = '';
     console.log(' user======>',user);
