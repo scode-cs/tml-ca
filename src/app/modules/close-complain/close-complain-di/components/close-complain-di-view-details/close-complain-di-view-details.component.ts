@@ -17,7 +17,7 @@ import { ComplaintDIService } from '../../../../shared/services/complaint-di.ser
 })
 export class CloseComplainDIViewDetailsComponent {
   
-  public title: string = 'Close Complain';
+  public title: string = 'Close Complaint';
   public closeComplainDIFormGroup: FormGroup;
   public routeParam: any ={
     complaintReferenceNo:'',//to get complaint reference no from route param

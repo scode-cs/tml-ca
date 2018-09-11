@@ -91,8 +91,7 @@ export class ComplainDIViewComponent implements OnInit, OnChanges {
     this.serverSearchModalFormGroup = new FormGroup(serverSearchFormGroup);
   }//end of constructor
 
-  ngOnChanges() {
-    
+  ngOnChanges(changes: any) {
     console.log("onchanges of complainDiVIew class");
     // this.headerparams = new ComplaintDIHeaderParamModel();
   }
@@ -106,7 +105,7 @@ export class ComplainDIViewComponent implements OnInit, OnChanges {
     this.headerparams = new ComplaintDIHeaderParamModel();
     this.getParamFromRoute();//to get route param
     console.log("view complaint according to parameter [dashboard]: ", this.dashboardParameter);
-    this.parameterCheck(this.dashboardParameter);
+    this.parameterCheck();
     this.loadFacetedNav();
 
     this.setPagination();
@@ -123,7 +122,7 @@ export class ComplainDIViewComponent implements OnInit, OnChanges {
   //end of method to get route param
 
   //checking if parameter have value or not
-  private parameterCheck(routeParameter: string) {
+  private parameterCheck() {
     if (this.dashboardParameter) {
       let query: string ="";
       switch(this.dashboardParameter){//dashboard param is available or not
@@ -155,6 +154,7 @@ export class ComplainDIViewComponent implements OnInit, OnChanges {
 
     }, (err: any) => {
       this.busySpinner = false;
+      this.sessionErrorService.routeToLogin(err._body);
     });
   }
 
