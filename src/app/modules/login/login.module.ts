@@ -5,13 +5,14 @@ import { LoginComponent } from './components/login.component';
 import { LoginService } from './services/login.service';
 import { HomeModule } from '../home/home.module';
 import { SharedModule } from '../shared/shared.module';
-
+import { BusySpinnerModule } from '../widget/busy-spinner/busy-spinner.module';
 @NgModule({
   imports: [
     ReactiveFormsModule,
     BrowserModule,
     HomeModule,
-    SharedModule
+    SharedModule,
+    BusySpinnerModule
   ],
   declarations: [
     LoginComponent
