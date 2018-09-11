@@ -22,7 +22,8 @@ export class LoginComponent implements OnInit {
   public loginError: string = '';
 
   public tstJson: any[] = [];
-
+  public busySpinner: boolean = false;
+  
   constructor(
     private formBuilder: FormBuilder,
     private router: Router,
@@ -53,6 +54,7 @@ export class LoginComponent implements OnInit {
   }
 
   public loginSubmit(): void {
+    this.busySpinner = true;//to load the spinner
     console.log("login click");
     let user: any = {};
 
