@@ -25,7 +25,7 @@ export class CloseComplainDIAddEditComponent {
   private fileSizeLimit: number = 104857600;
   private fileData: FormData;
   private fileList: FileList;
-  public title: string = "Close Complain";
+  public title: string = "Close Complaint";
   public closeComplainDIFormGroup: FormGroup;
   public closeRemarksLength: number = this.localStorageService.dbSettings.closeRemarks;
   public fileActivityId: number = this.localStorageService.appSettings.closeComplaintActivityId;//to load the files
