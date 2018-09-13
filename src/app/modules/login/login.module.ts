@@ -6,13 +6,15 @@ import { LoginService } from './services/login.service';
 import { HomeModule } from '../home/home.module';
 import { SharedModule } from '../shared/shared.module';
 import { BusySpinnerModule } from '../widget/busy-spinner/busy-spinner.module';
+import { CompStatusStructureModule } from '../widget/comp-status-structure/comp-status-structure.module';
 @NgModule({
   imports: [
     ReactiveFormsModule,
     BrowserModule,
     HomeModule,
     SharedModule,
-    BusySpinnerModule
+    BusySpinnerModule,
+    CompStatusStructureModule//for comp status structure 
   ],
   declarations: [
     LoginComponent
