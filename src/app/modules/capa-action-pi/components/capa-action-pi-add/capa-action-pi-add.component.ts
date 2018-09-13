@@ -165,6 +165,7 @@ export class CAPAActionPIAddComponent {
           this.requiredCommercialSettlement = requiredCommercialSettlementFromRes.substring(0, 1);
           this.plantType = this.selectedComplaintReferenceDetails.plantType;
           this.correctiveAction = this.selectedComplaintReferenceDetails.correctiveAction.trim();
+          this.actionTypeTakenAtPlantInShort = this.selectedComplaintReferenceDetails.actionTypeTakenAtPlantInShort.trim();
         } else {
           // show error msg on html page
           this.resMsgType = this.errorConst;
