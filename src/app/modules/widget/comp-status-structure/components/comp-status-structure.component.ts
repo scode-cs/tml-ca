@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-
+import { CompStatusStructureModel } from '../models/comp-status-structure.model';
 
 @Component({
     selector: 'ispl-comp-status-structure',
@@ -7,10 +7,14 @@ import { Component, OnInit } from '@angular/core';
     styleUrls: ['comp-status-structure.component.css']
   })
 
-  export class CompStatusStructureComponent{
-
-    constructor(){          
+  export class CompStatusStructureComponent implements OnInit{
+    public compStatusStructure: any[] = [];
+    
+    constructor(){ 
+      this.compStatusStructure = new CompStatusStructureModel().compStatusStructureModel;
     }
 
-    
+    ngOnInit(): void {
+
+    }
 }

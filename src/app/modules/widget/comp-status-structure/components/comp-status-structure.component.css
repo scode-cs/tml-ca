@@ -1,5 +1,10 @@
 /* new aqdded fort span border  */
-.span-border-style {
-    border: 1px solid #b9b5b5;
-    background: azure;
+.short-name-style {
+    /* border: 1px solid #b9b5b5; */
+    background: #0275d8;
+    color: white;
+  }
+  .message-style {
+    background: #0787f4;
+    color: white;
   }

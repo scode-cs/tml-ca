@@ -1,42 +1,23 @@
 <div>
-
     <table>
         <tr>
-            <td>
-                <span class="span-border-style">Reg</span>
-                <span class="span-border-style">Pending 2 days</span>
-                <br />
-                12-sep-2018
-            </td>
-            <td>
-                <span class="span-border-style">Inv</span>
-                <span class="span-border-style">Pending 3 days</span>
-                <br />
-                12-sep-2018
-            </td>
-            <td>
-                <span class="span-border-style">RCA</span>
-                <span class="span-border-style">Pending 4 days</span>
-                <br />
-                12-sep-2018
-            </td>
-            <td>
-                <span class="span-border-style">CA</span>
-                <span class="span-border-style">Pending 5 days</span>
-                <br />
-                12-sep-2018
-            </td>
-            <td>
-                <span class="span-border-style">PA</span>
-                <span class="span-border-style">Pending 6 days</span>
-                <br />
-                12-sep-2018
-            </td>
-            <td>
-                <span class="span-border-style">Cl</span>
-                <span class="span-border-style">Pending 7 days</span>
-                <br />
-                12-sep-2018
+            <td *ngFor="let compStatusStruc of compStatusStructure">
+                <div style="text-align: center;margin-right: 0px;margin-right: 0px;">
+                    <div style="display: inline-flex;height: 100%;"  class="col-xs-12 col-sm-12 col-md-12 col-lg-12" >
+                        <div style=" background: #0275d8;color: white;padding:10px;text-align: center;vertical-align: middle;">
+                            <span style="font-size:medium;position: relative;
+                            top: 50%;
+                            transform: translateY(-50%);">{{compStatusStruc.shortName}}</span>
+                        </div>
+                        <div style="background: #0787f4;
+                    color: white;word-break: break-all;padding:10px;vertical-align: middle;">
+                            <span style="font-size:medium;position: relative;
+                            top: 50%;
+                            transform: translateY(-50%);">{{compStatusStruc.messege}}</span>
+                        </div>
+                    </div>
+                    {{compStatusStruc.date}}
+                </div>
             </td>
         </tr>
     </table>
