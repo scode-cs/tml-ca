@@ -1,0 +1,21 @@
+<div>
+    <table>
+        <tr>
+          <td *ngFor="let compStatusStruc of compStatusStructure">
+            <div style="text-align: center;padding-right:0px;padding-left:0px;margin-right: -25px;width: 100px;">
+              <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                <div style=" background: #0275d8;color:white;">
+                  <span style="font-size: 16px;text-align: center;vertical-align: middle;
+                  line-height: 25px;letter-spacing: 1px;">{{compStatusStruc.shortName}}</span>
+                </div>
+                <div style="background: #0787f4;color: white;height:50px;">
+                  <span style="font-size: 12px;display: table-cell;text-align: center;vertical-align: middle;
+                  line-height: 14px;padding: 5px;word-wrap: break-word;">{{compStatusStruc.messege}}</span>
+                </div>
+              </div>
+              <span style="font-size: 12px;">{{compStatusStruc.date}}</span>
+            </div>
+          </td>
+        </tr>
+      </table>
+</div>
