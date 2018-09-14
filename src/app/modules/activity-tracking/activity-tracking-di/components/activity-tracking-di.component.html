@@ -1,0 +1,28 @@
+<div>
+    <table>
+        <thead style="text-align:center;">
+            <tr>
+                <td>
+                    Complaint Number
+                </td>
+                <td>
+                    Commercial Settlement
+                </td>
+                <td>
+                    Status
+                </td>
+                <td>
+                    Enable/Disable Settlement
+                </td>
+            </tr>
+        </thead>
+        <tbody>
+            <tr *ngFor="let activityTracDI of testjson">
+                <td>{{activityTracDI.compNo}}</td>
+                <td>{{activityTracDI.comSetStatus}}</td>
+                <td><ispl-comp-status-structure></ispl-comp-status-structure></td><!--status-->
+                <td><input type="checkbox" checked="{{activityTracDI.checked}}"/></td>
+            </tr>
+        </tbody>
+    </table>
+</div>
