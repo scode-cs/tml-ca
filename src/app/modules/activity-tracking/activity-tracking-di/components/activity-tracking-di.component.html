@@ -16,12 +16,12 @@
                 </td>
             </tr>
         </thead>
-        <tbody>
+        <tbody style="text-align: center;">
             <tr *ngFor="let activityTracDI of testjson">
                 <td>{{activityTracDI.compNo}}</td>
                 <td>{{activityTracDI.comSetStatus}}</td>
-                <td><ispl-comp-status-structure></ispl-comp-status-structure></td><!--status-->
-                <td><input type="checkbox" checked="{{activityTracDI.checked}}"/></td>
+                <td><ispl-comp-status-structure compStatus={{activityTracDI.compstatus}}></ispl-comp-status-structure></td><!--status-->
+                <td><input type="checkbox" [checked]=activityTracDI.checked/></td>
             </tr>
         </tbody>
     </table>
