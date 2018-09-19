@@ -8,6 +8,9 @@ import { CompStatusStructureModule } from '../../widget/comp-status-structure/co
 import { ActivityTrackingDIComponent } from '../activity-tracking-di/components/activity-tracking-di.component';
 @NgModule({
     imports:[
+        CommonModule,
+        BrowserModule,
+        ReactiveFormsModule,
         CompStatusStructureModule//for comp status structure 
     ],
     declarations:[

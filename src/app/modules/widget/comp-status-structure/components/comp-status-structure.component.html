@@ -2,13 +2,12 @@
     <table>
         <tr>
           <td *ngFor="let compStatusStruc of compStatusStructureList">
-            <div style="text-align: center;padding-right:0px;padding-left:0px;margin-right: -25px;width: 100px;">
-              <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
-                <!-- <div style=" background: #0275d8;color:white;"> -->
+            <div class="comp-struc-div-style">
+              <div>                
                 <div [ngClass]="compStatusStruc.headerClass">
                   <span class="header-span-style">{{compStatusStruc.flowName}}</span>
                 </div>
-                <div [ngClass]="compStatusStruc.footerClass" style="height:30px;"><!--30px-->
+                <div [ngClass]="compStatusStruc.footerClass">
                   <span class="footer-span-style">{{compStatusStruc.flowMsg}}</span>
                 </div>
               </div>

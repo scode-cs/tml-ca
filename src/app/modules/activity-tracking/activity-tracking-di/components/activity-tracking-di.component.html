@@ -1,28 +1,35 @@
-<div>
-    <table>
-        <thead style="text-align:center;">
-            <tr>
-                <td>
-                    Complaint Number
-                </td>
-                <td>
-                    Commercial Settlement
-                </td>
-                <td>
-                    Status
-                </td>
-                <td>
-                    Enable/Disable Settlement
-                </td>
-            </tr>
-        </thead>
-        <tbody style="text-align: center;">
-            <tr *ngFor="let activityTracDI of testjson">
-                <td>{{activityTracDI.compNo}}</td>
-                <td>{{activityTracDI.comSetStatus}}</td>
-                <td><ispl-comp-status-structure compStatus={{activityTracDI.compstatus}}></ispl-comp-status-structure></td><!--status-->
-                <td><input type="checkbox" [checked]=activityTracDI.checked/></td>
-            </tr>
-        </tbody>
-    </table>
+<div style="margin-left:10px;">
+    <form [formGroup]="activityTrackingFormGroup">
+        <table class="table-style">
+            <thead class="text-align-style">
+                <tr class="header-tr-style">
+                    <td class="header-first-td-style">
+                        Complaint Number
+                    </td>
+                    <td class="header-mid-td-style">
+                        Status
+                    </td>
+                    <td class="header-last-td-style">
+                        Enable/Disable Settlement
+                    </td>
+                </tr>
+            </thead>
+            <tbody class="text-align-style">
+                <tr *ngFor="let activityTracDI of testjson" class="tbody-tr-style">
+                    <td class="tbody-first-td-style">{{activityTracDI.compNo}}</td>
+                    <td class="tbody-mid-td-style">
+                        <!--status-->
+                        <ispl-comp-status-structure compStatus={{activityTracDI.compstatus}}></ispl-comp-status-structure>
+                    </td>
+                    <td class="tbody-last-td-style">
+                        <label class="switch">
+                            <input type="checkbox" [checked]=activityTracDI.checked formControlName="commercialCheck">
+                            <span class="slider round"></span>
+                        </label>
+                        <!-- <input type="checkbox" [checked]=activityTracDI.checked /> -->
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </form>
 </div>
