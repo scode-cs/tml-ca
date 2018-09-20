@@ -1,5 +1,6 @@
 import { OnInit, Component } from '@angular/core';
 import { FormGroup, Validators, FormControl } from '@angular/forms';
+import { ActiivityTrackingModel } from '../models/activity-tracking-di.model';
 
 @Component({
     selector: 'ispl-activity-tracking-di',
@@ -9,16 +10,19 @@ import { FormGroup, Validators, FormControl } from '@angular/forms';
 
 export class ActivityTrackingDIComponent implements OnInit {
     public activityTrackingFormGroup: FormGroup;
+    public gridConfigModel: any = {};
 
     constructor(
-    ) { 
-        let formGroup: any ={};
+    ) {
+        let formGroup: any = {};
         formGroup['commercialCheck'] = new FormControl();
         this.activityTrackingFormGroup = new FormGroup(formGroup);
     }
 
     ngOnInit(): void {
-        console.log("onInit of ActivityTrackingDIComponent..");       
+        console.log("onInit of ActivityTrackingDIComponent..");
+
+        this.gridConfigModel = new  ActiivityTrackingModel().activityTrackingGridConfig;
     }//end of on init
 
     public testjson: any[] = [
@@ -31,4 +35,9 @@ export class ActivityTrackingDIComponent implements OnInit {
         { compNo: 'DI000007', checked: true, compstatus: 50 },
         { compNo: 'DI000008', checked: true, compstatus: 10 }
     ];
+
+   
+
+   
+
 }

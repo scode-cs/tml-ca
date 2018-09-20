@@ -3,30 +3,30 @@
         <table class="table-style">
             <thead class="text-align-style">
                 <tr class="header-tr-style">
-                    <td class="header-first-td-style">
-                        Complaint Number
+                    <td *ngIf="gridConfigModel['complainNo']" [ngClass]="gridConfigModel['complainNo'].headerClass">
+                        {{ gridConfigModel['complainNo'].headerDesc }}
                     </td>
-                    <td class="header-mid-td-style">
-                        Status
+                    <td *ngIf="gridConfigModel['status']" [ngClass]="gridConfigModel['status'].headerClass">
+                        {{ gridConfigModel['status'].headerDesc }}
                     </td>
-                    <td class="header-last-td-style">
-                        Enable/Disable Settlement
+                    <td *ngIf="gridConfigModel['commSett']" [ngClass]="gridConfigModel['commSett'].headerClass">
+                        {{ gridConfigModel['commSett'].headerDesc }}
                     </td>
                 </tr>
             </thead>
             <tbody class="text-align-style">
                 <tr *ngFor="let activityTracDI of testjson" class="tbody-tr-style">
-                    <td class="tbody-first-td-style">{{activityTracDI.compNo}}</td>
-                    <td class="tbody-mid-td-style">
+                    <td *ngIf="gridConfigModel['complainNo']" [ngClass]="gridConfigModel['complainNo'].dataClass">{{activityTracDI.compNo}}</td>
+                    <td *ngIf="gridConfigModel['status']" [ngClass]="gridConfigModel['status'].dataClass">
                         <!--status-->
                         <ispl-comp-status-structure compStatus={{activityTracDI.compstatus}}></ispl-comp-status-structure>
                     </td>
-                    <td class="tbody-last-td-style">
-                        <label class="switch">
+                    <td *ngIf="gridConfigModel['commSett']" [ngClass]="gridConfigModel['commSett'].dataClass">
+                        <label class="switch"  *ngIf="!activityTracDI.checked">
                             <input type="checkbox" [checked]=activityTracDI.checked formControlName="commercialCheck">
                             <span class="slider round"></span>
                         </label>
-                        <!-- <input type="checkbox" [checked]=activityTracDI.checked /> -->
+                        <span *ngIf="activityTracDI.checked" class="custom-link">Details</span>
                     </td>
                 </tr>
             </tbody>

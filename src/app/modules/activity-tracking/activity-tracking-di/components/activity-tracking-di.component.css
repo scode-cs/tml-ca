@@ -58,12 +58,29 @@
     border-top: 1px solid #b9bdbf;
     border-right: 1px solid #b9bdbf;
 }
+.tbody-last-td-style-partial-grid {
+    padding-right:10px;
+    padding-left: 10px;padding-top: 10px;
+    border-bottom: 1px solid #b9bdbf;
+    border-top: 1px solid #b9bdbf;
+    border-right: 1px solid #b9bdbf;
+}
 /* end of table style */
 /* start text align style */
 .text-align-style {
     text-align:center;
 }
 /* end of text align style */
+/* start custom-link style */
+.custom-link{
+    color:#0275d8;
+  }  
+  .custom-link:hover{
+    color: #014c8c;
+    text-decoration: underline;
+    cursor: pointer;
+  }
+/* end of custom-link style */
 /* toogle switch style */
 .switch {
     position: relative;
