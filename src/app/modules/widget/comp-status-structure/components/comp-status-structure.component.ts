@@ -11,7 +11,9 @@ export interface IcompStatusStructure {
 
 export class CompStatusStructureComponent implements OnInit, OnChanges {
   @Input() compStatus;
-  public compStatusStructure: any[] = [];
+  @Input() displayArr: any[];
+
+  public compStatusStructure: any = {};
   public compStatusStructureList: IcompStatusStructure[] = [];
   constructor() {
   }
@@ -21,21 +23,51 @@ export class CompStatusStructureComponent implements OnInit, OnChanges {
   }
   ngOnChanges() {
     this.compStatusStructure = new CompStatusStructureModel().compStatusStructureModel;
-    console.log(this.compStatusStructure);
-
-    this.compStatus;
+    console.log(this.displayArr);
+    // this.compStatus;
     this.compStatusStructureList = this.constructCompStatusStructureFlow();
   }
 
+  
+private getFlowName(statusDisplayActivityId: number):string{
+  let flowname: string;
+  switch(statusDisplayActivityId){
+    case 10:{
+      flowname = this.compStatusStructure['10'].shortName;
+      break;
+    }
+    case 40:{
+      flowname = this.compStatusStructure['40'].shortName;
+      break;
+    }
+    case 50:{
+      flowname = this.compStatusStructure['50'].shortName;
+      break;
+    }
+    case 60:{
+      flowname = this.compStatusStructure['60'].shortName;
+      break;
+    }
+    case 70:{
+      flowname = this.compStatusStructure['70'].shortName;
+      break;
+    }
+    case 80:{
+      flowname = this.compStatusStructure['80'].shortName;
+      break;
+    }
+  }
+  return flowname;
+}
+
   private constructCompStatusStructureFlow() {
-    // let stopFlag: boolean = false;
     let pageFlowData: any[] = [];
 
-    for (let process of this.compStatusStructure) {
+    for (let process of this.displayArr) {
       let compStatusStruc: IcompStatusStructure = {
-        flowName: process.shortName,
-        flowMsg: process.messege,
-        flowDate: process.date
+        flowName: this.getFlowName(process.status),//process.shortName,
+        flowMsg: process.difference,
+        flowDate: process.completionDate
       };
       if (process.status <= this.compStatus) {
         compStatusStruc.headerClass = 'active-header-style';
@@ -44,7 +76,6 @@ export class CompStatusStructureComponent implements OnInit, OnChanges {
       else if (process.statusId != this.compStatus) {
         compStatusStruc.headerClass = 'inactive-header-style';
         compStatusStruc.footerClass = 'inactive-footer-style';
-
       }
       pageFlowData.push(compStatusStruc);
     }

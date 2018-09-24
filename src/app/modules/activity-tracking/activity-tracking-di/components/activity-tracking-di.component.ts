@@ -26,18 +26,120 @@ export class ActivityTrackingDIComponent implements OnInit {
     }//end of on init
 
     public testjson: any[] = [
-        { compNo: 'DI000001', checked: true, compstatus: 10 },
-        { compNo: 'DI000002', checked: false, compstatus: 40 },
-        { compNo: 'DI000003', checked: true, compstatus: 50 },
-        { compNo: 'DI000004', checked: true, compstatus: 60 },
-        { compNo: 'DI000005', checked: false, compstatus: 70 },
-        { compNo: 'DI000006', checked: true, compstatus: 80 },
-        { compNo: 'DI000007', checked: true, compstatus: 50 },
-        { compNo: 'DI000008', checked: true, compstatus: 10 }
+        { 
+            complainRefNo: 'DI000001', 
+            commercialSett: false, 
+            currentStatus: 10 ,
+            currentStatusDate: '24-Sep-2018',
+            statusDisplay:  [
+                { status: 10, completionDate: '23-Sep-2018', difference: '1 day' },
+                { status: 40, completionDate: 'NA', difference: 'pending 4 hrs' },
+                { status: 50, completionDate: 'NA', difference: 'pending 4 hrs' },
+                { status: 60, completionDate: 'NA', difference: 'pending 4 hrs' },
+                { status: 70, completionDate: 'NA', difference: 'pending 4 hrs' },
+                { status: 80, completionDate: 'NA', difference: 'pending 4 hrs'},
+            ]
+        },
+        { 
+            complainRefNo: 'DI000002', 
+            commercialSett: false, 
+            currentStatus: 40 ,
+            currentStatusDate: '24-Sep-2018',
+            statusDisplay:  [
+                { status: 10, completionDate: '18-Sep-2018', difference: '6 days' },
+                { status: 40, completionDate: '24-Sep-2018', difference: '15 hrs' },
+                { status: 50, completionDate: 'NA', difference: 'pending 4 hrs' },
+                { status: 60, completionDate: 'NA', difference: 'pending 4 hrs' },
+                { status: 70, completionDate: 'NA', difference: 'pending 4 hrs' },
+                { status: 80, completionDate: 'NA', difference: 'pending 4 hrs'},
+            ]
+        },
+        { 
+            complainRefNo: 'DI000003', 
+            commercialSett: false, 
+            currentStatus: 50 ,
+            currentStatusDate: '24-Sep-2018',
+            statusDisplay:  [
+                { status: 10, completionDate: '17-Sep-2018', difference: '4 days' },
+                { status: 40, completionDate: '20-Sep-2018', difference: '5 days' },
+                { status: 50, completionDate: '24-Sep-2018', difference: '4 hrs' },
+                { status: 60, completionDate: 'NA', difference: 'pending 4 hrs' },
+                { status: 70, completionDate: 'NA', difference: 'pending 4 hrs' },
+                { status: 80, completionDate: 'NA', difference: 'pending 4 hrs'},
+            ]
+        },
+        { 
+            complainRefNo: 'DI000004', 
+            commercialSett: false, 
+            currentStatus: 50 ,
+            currentStatusDate: '23-Sep-2018',
+            statusDisplay:  [
+                { status: 10, completionDate: '17-Sep-2018', difference: '3 days' },
+                { status: 40, completionDate: '20-Sep-2018', difference: '3 days' },
+                { status: 50, completionDate: '23-Sep-2018', difference: '4 hrs' },
+                { status: 60, completionDate: 'NA', difference: 'pending 4 hrs' },
+                { status: 70, completionDate: 'NA', difference: 'pending 4 hrs' },
+                { status: 80, completionDate: 'NA', difference: 'pending 4 hrs'},
+            ]
+         },
+        { 
+            complainRefNo: 'DI000005', 
+            commercialSett: false, 
+            currentStatus: 60 ,
+            currentStatusDate: '23-Sep-2018',
+            statusDisplay:  [
+                { status: 10, completionDate: '17-Sep-2018', difference: '3 days' },
+                { status: 40, completionDate: '20-Sep-2018', difference: '3 days' },
+                { status: 50, completionDate: '23-Sep-2018', difference: '4 hrs' },
+                { status: 60, completionDate: '23-Sep-2018', difference: '4 hrs' },
+                { status: 70, completionDate: 'NA', difference: 'pending 4 hrs' },
+                { status: 80, completionDate: 'NA', difference: 'pending 4 hrs'},
+            ]
+        },
+        { 
+            complainRefNo: 'DI000006', 
+            commercialSett: false, 
+            currentStatus: 70 ,
+            currentStatusDate: '24-Sep-2018',
+            statusDisplay:  [
+                { status: 10, completionDate: '17-Sep-2018', difference: '4 days' },
+                { status: 40, completionDate: '21-Sep-2018', difference: '2 days' },
+                { status: 50, completionDate: '23-Sep-2018', difference: '1 day' },
+                { status: 60, completionDate: '24-Sep-2018', difference: '10 hrs' },
+                { status: 70, completionDate: '24-Sep-2018', difference: '11 hrs' },
+                { status: 80, completionDate: 'NA', difference: 'pending 4 hrs'},
+            ]
+        },
+        { 
+            complainRefNo: 'DI000007', 
+            commercialSett: true, 
+            currentStatus: 80 ,
+            currentStatusDate: '24-Sep-2018',
+            statusDisplay:  [
+                { status: 10, completionDate: '17-Sep-2018', difference: '4 days' },
+                { status: 40, completionDate: '21-Sep-2018', difference: '2 days' },
+                { status: 50, completionDate: '23-Sep-2018', difference: '1 day' },
+                { status: 60, completionDate: '24-Sep-2018', difference: '11 hrs' },
+                { status: 70, completionDate: '24-Sep-2018', difference: '12 hrs' },
+                { status: 80, completionDate: '24-Sep-2018', difference: '18 hrs'},
+            ]
+        }
     ];
 
    
-
-   
+    //modal
+    comSetFlag: boolean = false;
+    private toggleModalBtn(){
+        this.comSetFlag = this.comSetFlag ? false : true;
+    }
+    onCommSetSwitchBtnClick(){
+        this.toggleModalBtn();
+    }
+    cancelModal(){
+        this.toggleModalBtn();
+    }
+    onCommSetModalSubmitClick(btnVal){
+        this.toggleModalBtn();
+    }  
 
 }
