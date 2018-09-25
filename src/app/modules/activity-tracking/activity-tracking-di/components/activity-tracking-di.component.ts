@@ -129,16 +129,28 @@ export class ActivityTrackingDIComponent implements OnInit {
    
     //modal
     comSetFlag: boolean = false;
+    private compRefNoOfCommSet: string = '';
     private toggleModalBtn(){
         this.comSetFlag = this.comSetFlag ? false : true;
     }
-    onCommSetSwitchBtnClick(){
+    onCommSetSwitchBtnClick(compRefNo: string){
+        this.compRefNoOfCommSet = compRefNo;
         this.toggleModalBtn();
     }
     cancelModal(){
         this.toggleModalBtn();
     }
     onCommSetModalSubmitClick(btnVal){
+            this.testjson.forEach((el,index)=>{
+                if(el.complainRefNo == this.compRefNoOfCommSet){
+                    if(btnVal === 'Y'){
+                        el.commercialSett = true;
+                    }else if(btnVal === 'N'){
+                        el.commercialSett = false;
+                        this.activityTrackingFormGroup.controls['commercialCheck'].setValue(false);
+                    }
+                }
+            });
         this.toggleModalBtn();
     }  
 

@@ -19,11 +19,11 @@
                     <td *ngIf="gridConfigModel['complainNo']" [ngClass]="gridConfigModel['complainNo'].dataClass">{{activityTrackDI.complainRefNo}}</td>
                     <td *ngIf="gridConfigModel['status']" [ngClass]="gridConfigModel['status'].dataClass">
                         <!--status-->
-                        <ispl-comp-status-structure compStatus={{activityTrackDI.currentStatus}} [displayArr]="activityTrackDI.statusDisplay"></ispl-comp-status-structure>
+                        <ispl-comp-status-structure [compStatus]="activityTrackDI.currentStatus" [displayArr]="activityTrackDI.statusDisplay"></ispl-comp-status-structure>
                     </td>
                     <td *ngIf="gridConfigModel['commSett']" [ngClass]="gridConfigModel['commSett'].dataClass">
                         <label class="switch" *ngIf="!activityTrackDI.commercialSett">
-                            <input type="checkbox" [checked]=activityTrackDI.commercialSett formControlName="commercialCheck" (click)="onCommSetSwitchBtnClick()">
+                            <input type="checkbox" [checked]=activityTrackDI.commercialSett formControlName="commercialCheck" (click)="onCommSetSwitchBtnClick(activityTrackDI.complainRefNo)">
                             <span class="slider round"></span>
                         </label>
                         <span *ngIf="activityTrackDI.commercialSett" class="custom-link">Details</span>
@@ -44,12 +44,15 @@
     <div (click)="cancelModal()" style="cursor: pointer;">x</div>
   </div>
   <div class="modal-body">  
-  <span>Do you want to Enable Commercial Settlement?</span>
+  <div class="text-align-style">Enable Commercial Settlement?</div>
   <div class="text-align-style" style="margin-top: 20px;">
-      <button type="submit" class="btn btn-primary cursor-pointer" (click)="onCommSetModalSubmitClick(Y)">Yes</button>
-      <button type="submit" class="btn btn-secondary cursor-pointer" (click)="onCommSetModalSubmitClick(N)">No</button>
+      <button type="submit" class="btn btn-primary cursor-pointer" (click)="onCommSetModalSubmitClick('Y')">Yes</button>
+      <button type="submit" class="btn btn-secondary cursor-pointer" (click)="onCommSetModalSubmitClick('N')">No</button>
   </div>
   </div>
   <!-- end of body div -->
 </div>
 <!-- end of modal -->
+
+
+
