@@ -10,6 +10,17 @@
     height:22px;
     display: grid;
   }
+  .complete-header-style {
+    background-color: #246b04;
+    color:white;
+  }
+  .complete-footer-style {
+    background-color: #009D22;
+    color: white;
+    height:22px;
+    display: grid;
+  }
+
 
   .inactive-header-style {
     background-color: #8c8d8e;
@@ -52,4 +63,5 @@
     padding-right:0px;
     padding-left:0px;
     width: 115px;
+    height:60px;
   }

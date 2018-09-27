@@ -6,6 +6,7 @@ import { BusySpinnerModule } from '../../widget/busy-spinner/busy-spinner.module
 import { DatePipe } from '@angular/common';
 import { CompStatusStructureModule } from '../../widget/comp-status-structure/comp-status-structure.module';
 import { ActivityTrackingDIComponent } from '../activity-tracking-di/components/activity-tracking-di.component';
+import { ActivityTrackingDIService } from '../activity-tracking-di/services/activity-tracking-di.services';
 @NgModule({
     imports:[
         CommonModule,
@@ -18,6 +19,9 @@ import { ActivityTrackingDIComponent } from '../activity-tracking-di/components/
     ],
     exports:[
         ActivityTrackingDIComponent
+    ],
+    providers:[
+        ActivityTrackingDIService
     ]
 })
 export class ActivityTrackingDIModule {}

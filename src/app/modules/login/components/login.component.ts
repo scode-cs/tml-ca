@@ -68,11 +68,13 @@ export class LoginComponent implements OnInit {
             this.setLoginDetailsToLocalstorageService(res);       
             this.router.navigate([ROUTE_PATHS.RouteHome]);               
           }else{
+            this.busySpinner = false;//to stop the spinner
             this.loginError = res.msg;
             // "Netowrk/Server Problem";
           }
         },
         err => {
+          this.busySpinner = false;//to stop the spinner
           if (err.status == 401) {
             this.loginError = "Invalid User Credentials";
           } else {

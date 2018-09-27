@@ -1,6 +1,8 @@
 import { OnInit, Component } from '@angular/core';
 import { FormGroup, Validators, FormControl } from '@angular/forms';
 import { ActiivityTrackingModel } from '../models/activity-tracking-di.model';
+import { ActivityTrackingDIService } from '../services/activity-tracking-di.services';
+import { ActivityTrackingDIParamModel } from '../models/activity-tracking-di-param.model';
 
 @Component({
     selector: 'ispl-activity-tracking-di',
@@ -9,10 +11,14 @@ import { ActiivityTrackingModel } from '../models/activity-tracking-di.model';
 })
 
 export class ActivityTrackingDIComponent implements OnInit {
+    private headerParam: ActivityTrackingDIParamModel;//model
+
     public activityTrackingFormGroup: FormGroup;
-    public gridConfigModel: any = {};
+    public gridConfigModel: any = {};//to store the grid model 
+    public testjson: any[] = [];//to store comp status 
 
     constructor(
+        private activityTrackingDIService: ActivityTrackingDIService
     ) {
         let formGroup: any = {};
         formGroup['commercialCheck'] = new FormControl();
@@ -21,110 +27,126 @@ export class ActivityTrackingDIComponent implements OnInit {
 
     ngOnInit(): void {
         console.log("onInit of ActivityTrackingDIComponent..");
-
         this.gridConfigModel = new  ActiivityTrackingModel().activityTrackingGridConfig;
+        this.getCompStatusWSCall();
     }//end of on init
 
-    public testjson: any[] = [
-        { 
-            complainRefNo: 'DI000001', 
-            commercialSett: false, 
-            currentStatus: 10 ,
-            currentStatusDate: '24-Sep-2018',
-            statusDisplay:  [
-                { status: 10, completionDate: '23-Sep-2018', difference: '1 day' },
-                { status: 40, completionDate: 'NA', difference: 'pending 4 hrs' },
-                { status: 50, completionDate: 'NA', difference: 'pending 4 hrs' },
-                { status: 60, completionDate: 'NA', difference: 'pending 4 hrs' },
-                { status: 70, completionDate: 'NA', difference: 'pending 4 hrs' },
-                { status: 80, completionDate: 'NA', difference: 'pending 4 hrs'},
-            ]
+
+    //method to get comp-status details by ws call
+    private getCompStatusWSCall(){
+        // this.headerParam.pageNo = '0';
+        // this.headerParam.perPage = '25';
+        this.activityTrackingDIService.getComStatusDet().
+        subscribe(res =>{
+            console.log(res);
+            this.testjson = res;
         },
-        { 
-            complainRefNo: 'DI000002', 
-            commercialSett: false, 
-            currentStatus: 40 ,
-            currentStatusDate: '24-Sep-2018',
-            statusDisplay:  [
-                { status: 10, completionDate: '18-Sep-2018', difference: '6 days' },
-                { status: 40, completionDate: '24-Sep-2018', difference: '15 hrs' },
-                { status: 50, completionDate: 'NA', difference: 'pending 4 hrs' },
-                { status: 60, completionDate: 'NA', difference: 'pending 4 hrs' },
-                { status: 70, completionDate: 'NA', difference: 'pending 4 hrs' },
-                { status: 80, completionDate: 'NA', difference: 'pending 4 hrs'},
-            ]
-        },
-        { 
-            complainRefNo: 'DI000003', 
-            commercialSett: false, 
-            currentStatus: 50 ,
-            currentStatusDate: '24-Sep-2018',
-            statusDisplay:  [
-                { status: 10, completionDate: '17-Sep-2018', difference: '4 days' },
-                { status: 40, completionDate: '20-Sep-2018', difference: '5 days' },
-                { status: 50, completionDate: '24-Sep-2018', difference: '4 hrs' },
-                { status: 60, completionDate: 'NA', difference: 'pending 4 hrs' },
-                { status: 70, completionDate: 'NA', difference: 'pending 4 hrs' },
-                { status: 80, completionDate: 'NA', difference: 'pending 4 hrs'},
-            ]
-        },
-        { 
-            complainRefNo: 'DI000004', 
-            commercialSett: false, 
-            currentStatus: 50 ,
-            currentStatusDate: '23-Sep-2018',
-            statusDisplay:  [
-                { status: 10, completionDate: '17-Sep-2018', difference: '3 days' },
-                { status: 40, completionDate: '20-Sep-2018', difference: '3 days' },
-                { status: 50, completionDate: '23-Sep-2018', difference: '4 hrs' },
-                { status: 60, completionDate: 'NA', difference: 'pending 4 hrs' },
-                { status: 70, completionDate: 'NA', difference: 'pending 4 hrs' },
-                { status: 80, completionDate: 'NA', difference: 'pending 4 hrs'},
-            ]
-         },
-        { 
-            complainRefNo: 'DI000005', 
-            commercialSett: false, 
-            currentStatus: 60 ,
-            currentStatusDate: '23-Sep-2018',
-            statusDisplay:  [
-                { status: 10, completionDate: '17-Sep-2018', difference: '3 days' },
-                { status: 40, completionDate: '20-Sep-2018', difference: '3 days' },
-                { status: 50, completionDate: '23-Sep-2018', difference: '4 hrs' },
-                { status: 60, completionDate: '23-Sep-2018', difference: '4 hrs' },
-                { status: 70, completionDate: 'NA', difference: 'pending 4 hrs' },
-                { status: 80, completionDate: 'NA', difference: 'pending 4 hrs'},
-            ]
-        },
-        { 
-            complainRefNo: 'DI000006', 
-            commercialSett: false, 
-            currentStatus: 70 ,
-            currentStatusDate: '24-Sep-2018',
-            statusDisplay:  [
-                { status: 10, completionDate: '17-Sep-2018', difference: '4 days' },
-                { status: 40, completionDate: '21-Sep-2018', difference: '2 days' },
-                { status: 50, completionDate: '23-Sep-2018', difference: '1 day' },
-                { status: 60, completionDate: '24-Sep-2018', difference: '10 hrs' },
-                { status: 70, completionDate: '24-Sep-2018', difference: '11 hrs' },
-                { status: 80, completionDate: 'NA', difference: 'pending 4 hrs'},
-            ]
-        },
-        { 
-            complainRefNo: 'DI000007', 
-            commercialSett: true, 
-            currentStatus: 80 ,
-            currentStatusDate: '24-Sep-2018',
-            statusDisplay:  [
-                { status: 10, completionDate: '17-Sep-2018', difference: '4 days' },
-                { status: 40, completionDate: '21-Sep-2018', difference: '2 days' },
-                { status: 50, completionDate: '23-Sep-2018', difference: '1 day' },
-                { status: 60, completionDate: '24-Sep-2018', difference: '11 hrs' },
-                { status: 70, completionDate: '24-Sep-2018', difference: '12 hrs' },
-                { status: 80, completionDate: '24-Sep-2018', difference: '18 hrs'},
-            ]
-        }
-    ];
+        err => {
+            console.log(err);
+        });
+        
+    }//end of method
+
+    // public testjson: any[] = [
+    //     { 
+    //         complainRefNo: 'DI000001', 
+    //         commercialSett: false, 
+    //         currentStatus: 10 ,
+    //         currentStatusDate: '24-Sep-2018',
+    //         statusDisplay:  [
+    //             { status: 10, completionDate: '23-Sep-2018', difference: '1 day' },
+    //             { status: 40, completionDate: 'NA', difference: 'pending 4 hrs' },
+    //             { status: 50, completionDate: 'NA', difference: 'pending 4 hrs' },
+    //             { status: 60, completionDate: 'NA', difference: 'pending 4 hrs' },
+    //             { status: 70, completionDate: 'NA', difference: 'pending 4 hrs' },
+    //             { status: 80, completionDate: 'NA', difference: 'pending 4 hrs'},
+    //         ]
+    //     },
+    //     { 
+    //         complainRefNo: 'DI000002', 
+    //         commercialSett: false, 
+    //         currentStatus: 40 ,
+    //         currentStatusDate: '24-Sep-2018',
+    //         statusDisplay:  [
+    //             { status: 10, completionDate: '18-Sep-2018', difference: '6 days' },
+    //             { status: 40, completionDate: '24-Sep-2018', difference: '15 hrs' },
+    //             { status: 50, completionDate: 'NA', difference: 'pending 4 hrs' },
+    //             { status: 60, completionDate: 'NA', difference: 'pending 4 hrs' },
+    //             { status: 70, completionDate: 'NA', difference: 'pending 4 hrs' },
+    //             { status: 80, completionDate: 'NA', difference: 'pending 4 hrs'},
+    //         ]
+    //     },
+    //     { 
+    //         complainRefNo: 'DI000003', 
+    //         commercialSett: false, 
+    //         currentStatus: 50 ,
+    //         currentStatusDate: '24-Sep-2018',
+    //         statusDisplay:  [
+    //             { status: 10, completionDate: '17-Sep-2018', difference: '4 days' },
+    //             { status: 40, completionDate: '20-Sep-2018', difference: '5 days' },
+    //             { status: 50, completionDate: '24-Sep-2018', difference: '4 hrs' },
+    //             { status: 60, completionDate: 'NA', difference: 'pending 4 hrs' },
+    //             { status: 70, completionDate: 'NA', difference: 'pending 4 hrs' },
+    //             { status: 80, completionDate: 'NA', difference: 'pending 4 hrs'},
+    //         ]
+    //     },
+    //     { 
+    //         complainRefNo: 'DI000004', 
+    //         commercialSett: false, 
+    //         currentStatus: 50 ,
+    //         currentStatusDate: '23-Sep-2018',
+    //         statusDisplay:  [
+    //             { status: 10, completionDate: '17-Sep-2018', difference: '3 days' },
+    //             { status: 40, completionDate: '20-Sep-2018', difference: '3 days' },
+    //             { status: 50, completionDate: '23-Sep-2018', difference: '4 hrs' },
+    //             { status: 60, completionDate: 'NA', difference: 'pending 4 hrs' },
+    //             { status: 70, completionDate: 'NA', difference: 'pending 4 hrs' },
+    //             { status: 80, completionDate: 'NA', difference: 'pending 4 hrs'},
+    //         ]
+    //      },
+    //     { 
+    //         complainRefNo: 'DI000005', 
+    //         commercialSett: false, 
+    //         currentStatus: 60 ,
+    //         currentStatusDate: '23-Sep-2018',
+    //         statusDisplay:  [
+    //             { status: 10, completionDate: '17-Sep-2018', difference: '3 days' },
+    //             { status: 40, completionDate: '20-Sep-2018', difference: '3 days' },
+    //             { status: 50, completionDate: '23-Sep-2018', difference: '4 hrs' },
+    //             { status: 60, completionDate: '23-Sep-2018', difference: '4 hrs' },
+    //             { status: 70, completionDate: 'NA', difference: 'pending 4 hrs' },
+    //             { status: 80, completionDate: 'NA', difference: 'pending 4 hrs'},
+    //         ]
+    //     },
+    //     { 
+    //         complainRefNo: 'DI000006', 
+    //         commercialSett: false, 
+    //         currentStatus: 70 ,
+    //         currentStatusDate: '24-Sep-2018',
+    //         statusDisplay:  [
+    //             { status: 10, completionDate: '17-Sep-2018', difference: '4 days' },
+    //             { status: 40, completionDate: '21-Sep-2018', difference: '2 days' },
+    //             { status: 50, completionDate: '23-Sep-2018', difference: '1 day' },
+    //             { status: 60, completionDate: '24-Sep-2018', difference: '10 hrs' },
+    //             { status: 70, completionDate: '24-Sep-2018', difference: '11 hrs' },
+    //             { status: 80, completionDate: 'NA', difference: 'pending 4 hrs'},
+    //         ]
+    //     },
+    //     { 
+    //         complainRefNo: 'DI000007', 
+    //         commercialSett: true, 
+    //         currentStatus: 80 ,
+    //         currentStatusDate: '24-Sep-2018',
+    //         statusDisplay:  [
+    //             { status: 10, completionDate: '17-Sep-2018', difference: '4 days' },
+    //             { status: 40, completionDate: '21-Sep-2018', difference: '2 days' },
+    //             { status: 50, completionDate: '23-Sep-2018', difference: '1 day' },
+    //             { status: 60, completionDate: '24-Sep-2018', difference: '11 hrs' },
+    //             { status: 70, completionDate: '24-Sep-2018', difference: '12 hrs' },
+    //             { status: 80, completionDate: '24-Sep-2018', difference: '18 hrs'},
+    //         ]
+    //     }
+    // ];
 
    
     //modal

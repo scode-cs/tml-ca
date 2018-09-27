@@ -23,9 +23,9 @@ export class CompStatusStructureComponent implements OnInit, OnChanges {
   }
   ngOnChanges() {
     this.compStatusStructure = new CompStatusStructureModel().compStatusStructureModel;
-    console.log(this.displayArr);
     // this.compStatus;
     this.compStatusStructureList = this.constructCompStatusStructureFlow();
+    console.log(this.compStatusStructureList);
   }
 
   
@@ -72,8 +72,11 @@ private getFlowName(statusDisplayActivityId: number):string{
       if (process.status <= this.compStatus) {
         compStatusStruc.headerClass = 'active-header-style';
         compStatusStruc.footerClass = 'active-footer-style';
-      }
-      else if (process.statusId != this.compStatus) {
+        if((process.status == this.compStatus)&&(compStatusStruc.flowName=='CLOSE')){
+          compStatusStruc.headerClass = 'complete-header-style';
+          compStatusStruc.footerClass = 'complete-footer-style';
+        }
+      }else if (process.statusId != this.compStatus) {
         compStatusStruc.headerClass = 'inactive-header-style';
         compStatusStruc.footerClass = 'inactive-footer-style';
       }

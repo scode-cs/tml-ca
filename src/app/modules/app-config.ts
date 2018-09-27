@@ -2,7 +2,7 @@
 const URL_IP: string =
     'http://45.114.142.125';
 // // for production
-const URL_PORT: string = '90';
+const URL_PORT: string = '91';
 const URL_PATH: string = URL_IP + ':' + URL_PORT + '/';
 
 export const AppUrlsConst: any = {
@@ -165,7 +165,8 @@ export const AppUrlsConst: any = {
     COMPLAIN_FILE_UPLOAD_URL: URL_PATH + 'api/complaint/uploadfile',//to upload file
     COMPLAIN_FILE_VIEW_URL: URL_PATH + 'api/complaintview/viewfiledetail',//to view file
     COMPLAINT_HEADER_DATA_COUNT: URL_PATH + 'api/complaintview/viewcomplaintheadercount',//header data count
-    SEND_EMAIL_URL: URL_PATH + 'api/comp/sendemail'//to send email
+    SEND_EMAIL_URL: URL_PATH + 'api/comp/sendemail',//to send email
+    VIEW_COMP_STATUS_WITH_COM_SET_URL: URL_PATH + 'api/complaintview/viewcomrcmsetlmnt'//view complaint status with comm set
 }
 
 export const WebServiceConst: any = {
