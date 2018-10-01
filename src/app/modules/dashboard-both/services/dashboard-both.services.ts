@@ -31,7 +31,7 @@ export class DashboardBothService {
     getLoginDetailsByPlantType(plantType: string) {
        this.headers =  this.configService();
         
-        console.log("headers of dashboard-both...",this.headers);
+        // console.log("headers of dashboard-both...",this.headers);
     this.actionUrl = AppUrlsConst.CHANGE_PLANT_TYPE_URL + "/" + plantType;
     let urlBody: any = {};
     return this.http.post(this.actionUrl,urlBody,{ headers: this.headers })
