@@ -247,6 +247,8 @@ export class DashboardComponent implements OnInit {
       this.router.navigate([ROUTE_PATHS.RouteComplainDIRegister]);
     } else if (iconinfo === 'view') {
       this.router.navigate([ROUTE_PATHS.RouteComplainDIView]);
+    }else if(iconinfo === 'viewstatus') {
+      this.router.navigate([ROUTE_PATHS.RouteViewComplainDIStatus]);
     }
   }//end of method
 

@@ -62,4 +62,12 @@
   font-size: 25px;
   cursor:pointer;
 }
+.quick-links-view-status-icon-style {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  margin-left: 58%;
+  font-size: 25px;
+  cursor:pointer;
+}
 /* end of quick links icon style */

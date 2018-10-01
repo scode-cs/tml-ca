@@ -1,0 +1,59 @@
+<div style="margin-left:10px;">
+    <form [formGroup]="activityTrackingFormGroup">
+        <table class="table-style">
+            <thead class="text-align-style">
+                <tr class="header-tr-style">
+                    <td *ngIf="gridConfigModel['complainNo']" [ngClass]="gridConfigModel['complainNo'].headerClass">
+                        {{ gridConfigModel['complainNo'].headerDesc }}
+                    </td>
+                    <td *ngIf="gridConfigModel['status']" [ngClass]="gridConfigModel['status'].headerClass">
+                        {{ gridConfigModel['status'].headerDesc }}
+                    </td>
+                    <td *ngIf="gridConfigModel['commSett']" [ngClass]="gridConfigModel['commSett'].headerClass">
+                        {{ gridConfigModel['commSett'].headerDesc }}
+                    </td>
+                </tr>
+            </thead>
+            <tbody class="text-align-style">
+                <tr *ngFor="let activityTrackDI of compDIStatusRes" class="tbody-tr-style">
+                    <td *ngIf="gridConfigModel['complainNo']" [ngClass]="gridConfigModel['complainNo'].dataClass">{{activityTrackDI.complainRefNo}}</td>
+                    <td *ngIf="gridConfigModel['status']" [ngClass]="gridConfigModel['status'].dataClass">
+                        <!--status-->
+                        <ispl-comp-status-structure [compStatus]="activityTrackDI.currentStatus" [displayArr]="activityTrackDI.statusDisplay"></ispl-comp-status-structure>
+                    </td>
+                    <td *ngIf="gridConfigModel['commSett']" [ngClass]="gridConfigModel['commSett'].dataClass">
+                        <label class="switch" *ngIf="!activityTrackDI.commercialSett">
+                            <input type="checkbox" [checked]=activityTrackDI.commercialSett formControlName="commercialCheck" (click)="onCommSetSwitchBtnClick(activityTrackDI.complainRefNo)">
+                            <span class="slider round"></span>
+                        </label>
+                        <span *ngIf="activityTrackDI.commercialSett" class="custom-link">Details</span>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </form>
+</div>
+<ispl-busy-spinner *ngIf="busySpinner"></ispl-busy-spinner>
+
+<!-- modal for comm set  -->
+<!-- add item modal -->
+<div *ngIf="comSetFlag" class="overlay"></div>
+<div *ngIf="comSetFlag" class="com-set-modal-style">
+  <!-- header div -->
+  <div class="modal-header">
+    <div> Commercial Settlement </div>
+    <div (click)="cancelModal()" style="cursor: pointer;">x</div>
+  </div>
+  <div class="modal-body">  
+  <div class="text-align-style">Enable Commercial Settlement?</div>
+  <div class="text-align-style" style="margin-top: 20px;">
+      <button type="submit" class="btn btn-primary cursor-pointer" (click)="onCommSetModalSubmitClick('Y')">Yes</button>
+      <button type="submit" class="btn btn-secondary cursor-pointer" (click)="onCommSetModalSubmitClick('N')">No</button>
+  </div>
+  </div>
+  <!-- end of body div -->
+</div>
+<!-- end of modal -->
+
+
+

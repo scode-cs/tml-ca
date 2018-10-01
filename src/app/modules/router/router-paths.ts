@@ -39,23 +39,14 @@ const ROUTE_COMP_DI_VIEW: string = 'viewcomplaindi';//for complaint di view
 const ROUTE_COMP_DI_VIEW_DETAILS: string = ROUTE_COMP_DI_VIEW + '/' + ':complaintReferenceNo'+ '/' + ':complaintStatus';
 const ROUTE_COMP_DI_VIEW_FULL: string = ROUTE_HOME_FULL + '/' + ROUTE_COMP_DI_VIEW;//view
 
-
-
-
-// //new add for view or modify COMP_DI - 19.02.18 from menu
-// const ROUTE_VIEW_MODIFY_COMP_DI: string =  ROUTE_COMP_DI_VIEW + '/' + ':viewEditParam';
-// const ROUTE_VIEW_MODIFY_COMP_DI_FULL: string = ROUTE_HOME_FULL + '/' + ROUTE_COMP_DI_VIEW;
-
-// //new add for single view COMP_DI 15.02.18 for view button
-// const ROUTE_VIEW_DETAILS_COMPLAINT_DI: string =  ROUTE_COMP_DI_VIEW + '/' + ':viewEditParam' + '/' + ':complaintReferenceNo';
-// const ROUTE_VIEW_DETAILS_COMPLAINT_DI_FULL: string = ROUTE_HOME_FULL + '/' + ROUTE_COMP_DI_VIEW;
-
-
 //view complaint di according to parameter
 const ROUTE_COMP_DI_VIEW_FROM_DASHBOARD: string = 'complainViewDIDashboard';
 const ROUTE_COMP_DI_VIEW_WITH_PARAMETER: string = ROUTE_COMP_DI_VIEW_FROM_DASHBOARD + '/' + ':activitytype';//for complaint di view from dashboard
 const ROUTE_COMP_DI_VIEW_WITH_PARAMETER_FULL: string = ROUTE_HOME_FULL + '/' +  ROUTE_COMP_DI_VIEW_FROM_DASHBOARD;
 
+//for route view compliaint status
+const ROUTE_VIEW_COMP_DI_STATUS: string = 'compdistatusview';
+const ROUTE_VIEW_COMP_DI_STATUS_FULL: string = ROUTE_HOME_FULL + '/' + ROUTE_VIEW_COMP_DI_STATUS;
 
 //for complain pi register 09.08.17
 const ROUTE_COMP_PI_REG: string = 'compregisterpi';
@@ -74,13 +65,9 @@ const ROUTE_MODIFY_COMPLAINT_PI_REFERENCE_NO: string = ROUTE_COMP_PI_REG + '/' +
 const ROUTE_MODIFY_COMPLAINT_PI_FULL: string = ROUTE_HOME_FULL + '/' + ROUTE_COMP_PI_REG;//modify pi complaint
 
 //new add for PRELIMINRY_INVESTIGATION_DI 19.07.17
-// const ROUTE_PRELIMINRY_INVESTIGATION_DI_ADD: string = 'sitevisitadddi';
-// const ROUTE_PRELIMINRY_INVESTIGATION_DI_ADD_FULL : string = ROUTE_HOME_FULL + '/' + ROUTE_PRELIMINRY_INVESTIGATION_DI_ADD;
 const ROUTE_INVESTIGATION_REPORT_DI_ADD_CONST: string = 'addinvestigationreportdi';
 const ROUTE_INVESTIGATION_REPORT_DI_ADD: string = ROUTE_INVESTIGATION_REPORT_DI_ADD_CONST + '/' + ':complaintReferenceNo'+ '/' + ':complaintStatus';
 const ROUTE_INVESTIGATION_REPORT_DI_ADD_FULL: string = ROUTE_HOME_FULL + '/' + ROUTE_INVESTIGATION_REPORT_DI_ADD_CONST;//add
-
-
 
 //new add for view INVESTIGATION_REPORT_DI (inv report view details)
 const ROUTE_INVESTIGATION_REPORT_DI_VIEW: string = 'viewinvestigationreportdi';
@@ -223,10 +210,9 @@ export const ROUTE_PATHS = {
     RouteComplainPIRegister: ROUTE_COMP_PI_REG_FULL, //complain register pi 09.08.17
     RouteDashboard: ROUTE_DASHBOARD_FULL,
     RouteDashboardBoth: ROUTE_DASHBOARD_BOTH_FULL,//for dashboard full
+    RouteViewComplainDIStatus: ROUTE_VIEW_COMP_DI_STATUS_FULL,//for comp di status view
     RouteComplainDIRegister: ROUTE_COMP_DI_REG_FULL,//complaint di reg from menu
     RouteComplainDIView: ROUTE_COMP_DI_VIEW_FULL,//complain di view full
-    // RouteComplainDIViewModify: ROUTE_VIEW_MODIFY_COMP_DI_FULL,//from menu comp view or modify
-    // RouteComplainDIViewDetails: ROUTE_VIEW_DETAILS_COMPLAINT_DI_FULL,//complaint di view details by clicking on view button
     RouteModifyComplaint: ROUTE_MODIFY_COMPLAINT_DI_FULL,//modify di complaint
     RouteComplaintDIViewWithParameter: ROUTE_COMP_DI_VIEW_WITH_PARAMETER_FULL,//complaint DI view with parameter for dashboard to view di
     RouteComplaintPIViewWithParameter: ROUTE_COMP_PI_VIEW_WITH_PARAMETER_FULL,//complaint PI view with parameter
@@ -235,14 +221,7 @@ export const ROUTE_PATHS = {
     RouteViewUser: ROUTE_VIEW_USER_FULL,
     RouteManageProfile: ROUTE_MANAGE_PROFILE_FULL,
     //new add for PRELIMINRY_INVESTIGATION_DI 19.07.17
-    RouteInvestigationReportDiAdd: ROUTE_INVESTIGATION_REPORT_DI_ADD_FULL,//preli add
-    //RoutePreliminaryInvestigationDiAdd: ROUTE_PRELIMINRY_INVESTIGATION_DI_ADD_FULL,//preli add
-
-    //RoutePreliminaryInvestigationDIViewModify: ROUTE_VIEW_MODIFY_PRELIMINRY_INVESTIGATION_DI_FULL,//from menu preli view or edit
-    // RouteInvestigationReportDIViewModify: ROUTE_VIEW_MODIFY_INVESTIGATION_REPORT_DI_FULL,//from menu preli view or edit
-    // RoutePreliminaryInvestigationDIView: ROUTE_PRELIMINRY_INVESTIGATION_DI_VIEW_FULL,//preli view
-    //RouteModifyPreliminaryInvestigationDi: ROUTE_MODIFY_PRELIMINRY_INVESTIGATION_DI_FULL,//preli modify
-    //RouterViewDetailsPreliminaryInvestigationDi: ROUTE_VIEW_DETAILS_PRELIMINRY_INVESTIGATION_DI_FULL,//preli view details for single view
+    RouteInvestigationReportDiAdd: ROUTE_INVESTIGATION_REPORT_DI_ADD_FULL,//preli add  
     RouteViewDetailsInvestigationReportDi: ROUTE_VIEW_DETAILS_INVESTIGATION_REPORT_DI_FULL,//preli view details for single view
     RouteComplaintReferenceNoSearch: ROUTE_COMPLAINT_REFERENCE_NO_SEARCH_FULL,//to search comp ref no of investigation reoport
     RouteComplainPIView: ROUTE_COMP_PI_VIEW_FULL,//for complaint pi view
@@ -286,11 +265,10 @@ export const ROUTER_PATHS = {
     LoginRouter: ROUTE_LOGIN,
     LogoutRouter: ROUTE_LOGOUT,
     HomeRouter: ROUTE_HOME,
+    ViewComplainDIStatus: ROUTE_VIEW_COMP_DI_STATUS,//complain di status view from menu
     ComplainDIRegisterRouter: ROUTE_COMP_DI_REG,//complaint di reg from menu
     ComplainDIViewRouter: ROUTE_COMP_DI_VIEW,//complain di view
     ComplainDIViewDetailsRouter: ROUTE_COMP_DI_VIEW_DETAILS,//comp view details(Reg page in view mode)
-    // ComplainDIViewModifyRouter: ROUTE_VIEW_MODIFY_COMP_DI,//complain di view or modify from menu
-    // ComplainDIViewDetailsRouter: ROUTE_VIEW_DETAILS_COMPLAINT_DI,//view di by clicking on view button
     ModifyComplaintDIRouter: ROUTE_MODIFY_COMPLAINT_REFERENCE_NO,//modify complain di 
     DIViewComplaintWithParameterRouter: ROUTE_COMP_DI_VIEW_WITH_PARAMETER,//DI view comp with parameter from dashboard 
     ComplainPIRegisterRouter: ROUTE_COMP_PI_REG, //complain register pi 09.08.17
