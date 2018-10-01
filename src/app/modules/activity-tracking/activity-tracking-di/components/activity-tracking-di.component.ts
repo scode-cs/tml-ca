@@ -67,7 +67,20 @@ export class ActivityTrackingDIComponent implements OnInit {
             this.compDIStatusRes.forEach((el,index)=>{
                 if(el.complainRefNo == this.compRefNoOfCommSet){
                     if(btnVal === 'Y'){
-                        el.commercialSett = true;
+                        this.busySpinner = true;
+                        // this.updateComSetWSCall();
+                        let updateComSetBody: any = {};
+                        updateComSetBody.complainRefNo = this.compRefNoOfCommSet;
+                        updateComSetBody.commercialSett = true;
+                        this.activityTrackingDIService.updateComSetFromCompStatusGrid(updateComSetBody).
+                        subscribe(res=>{
+                            el.commercialSett = true;
+                            this.busySpinner = false;
+                        },err=>{
+                            el.commercialSett = false;
+                            console.log(err);
+                            this.busySpinner = false;
+                        })
                     }else if(btnVal === 'N'){
                         el.commercialSett = false;
                         this.activityTrackingFormGroup.controls['commercialCheck'].setValue(false);

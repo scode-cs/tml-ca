@@ -166,7 +166,8 @@ export const AppUrlsConst: any = {
     COMPLAIN_FILE_VIEW_URL: URL_PATH + 'api/complaintview/viewfiledetail',//to view file
     COMPLAINT_HEADER_DATA_COUNT: URL_PATH + 'api/complaintview/viewcomplaintheadercount',//header data count
     SEND_EMAIL_URL: URL_PATH + 'api/comp/sendemail',//to send email
-    VIEW_COMP_STATUS_WITH_COM_SET_URL: URL_PATH + 'api/complaintview/viewcomrcmsetlmnt'//view complaint status with comm set
+    VIEW_COMP_STATUS_WITH_COM_SET_URL: URL_PATH + 'api/complaintview/viewcomrcmsetlmnt',//view complaint status with comm set
+    UPDATE_COM_SET_FROM_COMP_STATUS_GRID_URL: URL_PATH + 'api/complaint/updatecomrcmsetlmnt'//update com set from comp status grid 
 }
 
 export const WebServiceConst: any = {

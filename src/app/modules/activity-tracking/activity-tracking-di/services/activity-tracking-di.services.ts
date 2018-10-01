@@ -42,5 +42,15 @@ export class ActivityTrackingDIService {
     .catch((error: Response) => { return Observable.throw(error) });
   }
 
+  //update com set by switch btn
+  public updateComSetFromCompStatusGrid(jsonBody:any) {
+    let headers: Headers = this.configService();
+    let actionUrl = AppUrlsConst.UPDATE_COM_SET_FROM_COMP_STATUS_GRID_URL;
+   
+    return this.http.put(actionUrl, jsonBody, { headers: headers })
+        .map((res: Response) => { return res.json() })
+        .catch((error: Response) => { return Observable.throw(error) });
+  }
+
 
 }
