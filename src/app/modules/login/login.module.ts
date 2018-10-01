@@ -6,15 +6,13 @@ import { LoginService } from './services/login.service';
 import { HomeModule } from '../home/home.module';
 import { SharedModule } from '../shared/shared.module';
 import { BusySpinnerModule } from '../widget/busy-spinner/busy-spinner.module';
-import { ActivityTrackingDIModule } from '../../modules/activity-tracking/activity-tracking-di/activity-tracking-di.module';
 @NgModule({
   imports: [
     ReactiveFormsModule,
     BrowserModule,
     HomeModule,
     SharedModule,
-    BusySpinnerModule,
-    ActivityTrackingDIModule    
+    BusySpinnerModule   
   ],
   declarations: [
     LoginComponent

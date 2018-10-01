@@ -15,7 +15,7 @@
                 </tr>
             </thead>
             <tbody class="text-align-style">
-                <tr *ngFor="let activityTrackDI of testjson" class="tbody-tr-style">
+                <tr *ngFor="let activityTrackDI of compDIStatusRes" class="tbody-tr-style">
                     <td *ngIf="gridConfigModel['complainNo']" [ngClass]="gridConfigModel['complainNo'].dataClass">{{activityTrackDI.complainRefNo}}</td>
                     <td *ngIf="gridConfigModel['status']" [ngClass]="gridConfigModel['status'].dataClass">
                         <!--status-->
@@ -33,6 +33,7 @@
         </table>
     </form>
 </div>
+<ispl-busy-spinner *ngIf="busySpinner"></ispl-busy-spinner>
 
 <!-- modal for comm set  -->
 <!-- add item modal -->
