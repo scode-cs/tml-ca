@@ -95,6 +95,8 @@ public dashboardModalSubmit(){
     appSettingsModel.resolutionOfComplaintsAtCustomerPlaceActivityId = resDetails.appSettingsDetails.resolutionOfComplaintsAtCustomerPlaceActivityId;
     appSettingsModel.analyseCustomerComplaintsAndActionPlanActivityId = resDetails.appSettingsDetails.analyseCustomerComplaintsAndActionPlanActivityId;
     appSettingsModel.activityIdFieldName = resDetails.appSettingsDetails.activityIdFieldName;
+    appSettingsModel.lastActivityIdFieldName = resDetails.appSettingsDetails.lastActivityIdFieldName;
+    appSettingsModel.complaintDetailsAutoIdFieldName = resDetails.appSettingsDetails.complaintDetailsAutoIdFieldName;
     appSettingsModel.menuDetails = resDetails.userDetails.menuDetails;
     //new add for field name
     appSettingsModel.validComplaintFieldName = resDetails.appSettingsDetails.validComplaintFieldName;
@@ -107,6 +109,9 @@ public dashboardModalSubmit(){
     appSettingsModel.siteVisitByFieldName = resDetails.appSettingsDetails.siteVisitByFieldName;
     appSettingsModel.siteVisitRequiredFieldName = resDetails.appSettingsDetails.siteVisitRequiredFieldName;
     appSettingsModel.allocationOfComplaintReadFieldName = resDetails.appSettingsDetails.allocationOfComplaintReadFieldName;
+    appSettingsModel.complaintReferenceNoFieldName = 
+    resDetails.appSettingsDetails.complaintReferenceNoFieldName;
+
     this.localStorageService.appSettings = appSettingsModel;
 
     //set the dbsettings details to dbsettings model
@@ -164,7 +169,7 @@ public dashboardModalSubmit(){
    dbSettingsModel.unloadingRelatedToolsUsed = resDetails.dbSettingsDetails.unloadingRelatedToolsUsed;
    dbSettingsModel.userId = resDetails.dbSettingsDetails.userId;
    dbSettingsModel.validInvalidComplaintRemarks = resDetails.dbSettingsDetails.validInvalidComplaintRemarks;
-
+   dbSettingsModel.batchNoInInvoiceDetails = resDetails.dbSettingsDetails.batchNoInInvoiceDetails;
    this.localStorageService.dbSettings = dbSettingsModel;
     console.log("Localstorage of dashboard-both::::",this.localStorageService);
   }
