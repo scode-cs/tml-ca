@@ -7,11 +7,7 @@ import { InvestigationReportDiViewDetailsComponent } from "./components/investig
 import { InvestigationReportDIDataService } from "./services/investigation-report-di.service";
 import { InvestigationReportDIViewDataService } from "./services/investigation-report-di-view.service";
 import { BusySpinnerModule } from "../widget/busy-spinner/busy-spinner.module";
-import { InvestigationReportDIViewComponent } from "./components/investigation-report-di-view/investigation-report-di-view.component";
 import { SharedModule } from "../shared/shared.module";
-import { NgbdComplaintReferenceNoModalComponent } from "./components/investigation-report-di-add/complaint-reference-no-modal/complaint-reference-no-modal.component";
-import { InvestigationReportInvoiceDetailsService } from "./services/investigation-report-invoice-details.service";
-import { ComplaintReferenceNoSearchComponent } from "./components/investigation-report-di-add/complaint-reference-no-search/complaint-reference-no-search.component";
 @NgModule({
   imports:      [
     ReactiveFormsModule,
@@ -22,24 +18,18 @@ import { ComplaintReferenceNoSearchComponent } from "./components/investigation-
   ],
   declarations: [
     InvestigationReportDiComponent,//preli add
-    InvestigationReportDIViewComponent,//preli view
-    InvestigationReportDiViewDetailsComponent,//preli view details
-    NgbdComplaintReferenceNoModalComponent,//comp ref no modal
-    ComplaintReferenceNoSearchComponent//comp no search
+    InvestigationReportDiViewDetailsComponent//preli view details
+   
   ],
   exports: [
     InvestigationReportDiComponent,//preli add
-    InvestigationReportDIViewComponent,//preli view
     InvestigationReportDiViewDetailsComponent//preli view details
   ],
   providers: [
     InvestigationReportDIDataService,//preli add
-    InvestigationReportDIViewDataService,//preli view
-    InvestigationReportInvoiceDetailsService
-  ],
-  entryComponents: [
-    NgbdComplaintReferenceNoModalComponent//comp ref no modal
+    InvestigationReportDIViewDataService//preli view
   ]
+  
   
 })
 export class InvestigationReportDiModule { }
