@@ -60,7 +60,6 @@ export class ComplainDIViewComponent implements OnInit, OnChanges {
   pager: any = {};
   datacount: number;
   // paged items
-  pagedItems: any[];
   //server search formgroup
   public serverSearchModalFormGroup: FormGroup;
 
