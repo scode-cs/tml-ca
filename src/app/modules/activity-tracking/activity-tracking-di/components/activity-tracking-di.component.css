@@ -1,3 +1,15 @@
+/* .hideextra { 
+    white-space: nowrap; 
+    overflow: hidden;
+     text-overflow:ellipsis;
+}   */
+/* breadcrumb style */
+.breadcrumb-custom {
+    border-bottom: 1px solid #DADADA;
+    box-shadow: 0px 2px 2px #E7E7E7;
+  }
+/* end of breadcrumb style */
+
 /* start table style */
 .table-style {
     border-collapse: separate;
@@ -19,17 +31,29 @@
     border-bottom: 1px solid #BCBCBC;
     border-top: 1px solid #BCBCBC;
     border-left: 1px solid #BCBCBC;
+
+    white-space: nowrap; 
+    overflow: hidden;
+    text-overflow:ellipsis;
 }
 .header-mid-td-style {
     padding-left: 10px;
     border-bottom: 1px solid #BCBCBC;
     border-top: 1px solid #BCBCBC;
+
+    white-space: nowrap; 
+    overflow: hidden;
+    text-overflow:ellipsis;
 }
 .header-last-td-style{
     padding-right: 10px;
     border-bottom: 1px solid #BCBCBC;
     border-top: 1px solid #BCBCBC;
     border-right: 1px solid #BCBCBC;
+
+    white-space: nowrap; 
+    overflow: hidden;
+    text-overflow:ellipsis;
 }
 
 .tbody-tr-style {

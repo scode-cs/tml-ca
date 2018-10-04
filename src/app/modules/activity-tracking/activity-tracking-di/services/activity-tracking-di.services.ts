@@ -8,6 +8,7 @@ import 'rxjs/add/operator/map';
 import { AppUrlsConst, WebServiceConst } from '../../../app-config';
 import { LocalStorageService } from '../../../shared/services/local-storage.service';
 import { ActivityTrackingDIParamModel } from '../models/activity-tracking-di-param.model';
+import { ComplaintDIHeaderParamModel } from '../../../shared/models/complaint-di-header-param.model';
 
 @Injectable()
 export class ActivityTrackingDIService {
@@ -31,13 +32,17 @@ export class ActivityTrackingDIService {
 
   /**
    * 
-   * @param activityTrackingDIParam 
+   * @param complainHeaderParam 
    */
-  public getComStatusDet(){//activityTrackingDIParam: ActivityTrackingDIParamModel){
+  public getComStatusDet(complainHeaderParam: ComplaintDIHeaderParamModel){//activityTrackingDIParam: ActivityTrackingDIParamModel){
     let headers: Headers = this.configService();
-    let actionUrl = AppUrlsConst.VIEW_COMP_STATUS_WITH_COM_SET_URL + '?plantType=DI&pageNo=0&perPage=0'; //+ this.localStorageService.user.plantType;
+    let actionUrl = AppUrlsConst.VIEW_COMP_STATUS_WITH_COM_SET_URL;// + '?plantType=DI&pageNo=0&perPage=0'; //+ this.localStorageService.user.plantType;
 
-    return this.http.get((actionUrl), { headers: headers })
+    let param: string = '';
+    param += complainHeaderParam && complainHeaderParam.perPage ? "perPage="+complainHeaderParam.perPage+"&" : "perPage=&";
+    param += complainHeaderParam && complainHeaderParam.pageNo ? "pageNo="+complainHeaderParam.pageNo+"" : "pageNo=";
+
+    return this.http.get((actionUrl+'?'+param), { headers: headers })
     .map((res: Response) => { return res.json() })
     .catch((error: Response) => { return Observable.throw(error) });
   }
