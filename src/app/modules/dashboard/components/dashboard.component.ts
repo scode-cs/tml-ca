@@ -4,11 +4,13 @@ import { ViewComplaintDIDataService } from "../../complain/complain-di/services/
 import { ViewComplaintPIDataService } from "../../complain/complain-pi/services/complaint-pi-view-data.service";
 import { LocalStorageService } from "../../shared/services/local-storage.service";
 import { Router } from '@angular/router';
+import { DatePipe } from '@angular/common'
 import { TilesFilterModel } from "../models/tiles-filter.model";
 import { ViewUserDataService } from "../../user/services/view-user-data.service";
 import { ViewRoleDataService } from "../../role/services/view-role-data.service";
 import { ROUTE_PATHS } from '../../router/router-paths';
 import { ComplaintDIService } from '../../shared/services/complaint-di.service';
+import { FormGroup, FormControlName, FormControl } from '@angular/forms';
 
 @Component({
   selector: 'ppr-dashboard-batch',
@@ -18,9 +20,11 @@ import { ComplaintDIService } from '../../shared/services/complaint-di.service';
 })
 export class DashboardComponent implements OnInit {
 
-  public tempPlantType: string = '';//for rolename
   private openDIPIComplaintService: any;//for common service
+  public tempPlantType: string = '';//for rolename
   // public commonButtonLink: any;//for common button link
+  //from group for date range
+  public dateRangeFormGroup: FormGroup;
 
   result: Array<any>;
   tiles1: any = {
@@ -55,7 +59,7 @@ export class DashboardComponent implements OnInit {
   constructor(
     private router: Router,
     private localStorageService: LocalStorageService,
-    // private viewComplaintDIDataService: ViewComplaintDIDataService,
+    private datePipe: DatePipe,
     private complaintDIService: ComplaintDIService,
     private viewComplaintPIDataService: ViewComplaintPIDataService,
     private viewUserDataService: ViewUserDataService,
@@ -63,7 +67,17 @@ export class DashboardComponent implements OnInit {
   ) {
 
     this.tempPlantType = this.localStorageService.user.plantType;
+    //new add for date range
+    let dateRangeFormGroup: any = {};
+    dateRangeFormGroup['fromDate'] = new FormControl();
+    dateRangeFormGroup['toDate'] = new FormControl();
+    this.dateRangeFormGroup = new FormGroup(dateRangeFormGroup);
 
+    let date = new Date();
+    let currentDate: string = this.datePipe.transform(date, 'yyyy-MM-dd');
+    this.dateRangeFormGroup.controls['fromDate'].setValue(currentDate);
+    this.dateRangeFormGroup.controls['toDate'].setValue(currentDate);
+    //end of new add for date range
     console.log("Dashboard Batch Constructor...");
     console.log("tempPlantType : ", this.tempPlantType);
   }
@@ -254,6 +268,18 @@ export class DashboardComponent implements OnInit {
       this.router.navigate([ROUTE_PATHS.RouteViewComplainDIStatus]);
     }
   }//end of method
+
+  //start date range modal
+  public dateRangeModalFlag: boolean = false;
+  toogleDateRange(){
+    this.dateRangeModalFlag = this.dateRangeModalFlag? false: true;
+  }
+  openDateRangeModal(){
+    this.toogleDateRange();
+  }
+  cancelModal() {
+    this.toogleDateRange();
+  }
 
 
 }//end of class

@@ -643,6 +643,7 @@ export class ComplaintDIRegisterComponent implements OnInit {
     emailJsonBody.complaintTypeId = complainDetailJson.complaintTypeId;//1,
     emailJsonBody.natureOfComplaintId = complainDetailJson.natureOfComplaintId;//1,
     emailJsonBody.loggedBy = complainDetailJson.loggedBy;// "7527",
+    emailJsonBody.loggedOnDt = complainDetailJson.loggedOnDt;// logged on dt
     emailJsonBody.userId = this.localStorageService.user.userId;//"7527",
     emailJsonBody.siteVisit = complainDetailJson.siteVisit;//"Y",
     emailJsonBody.customerDetails = customerDetails;
