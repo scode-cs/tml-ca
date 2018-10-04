@@ -257,13 +257,13 @@
             <!-- end of div for file upload -->
 
             <!-- start div for approval file upload -->
-            <div class="form-group col-xs-12 col-sm-6 col-md-6 col-lg-4" *ngIf="requiredCommercialSettlement=='Y'">
+            <!-- <div class="form-group col-xs-12 col-sm-6 col-md-6 col-lg-4" *ngIf="requiredCommercialSettlement=='Y'">
                 <div class="form-group col-xs-12 col-sm-12 col-md-12 col-lg-12" style="padding-left: 0px;">
                     <label for="imageFile">File(s) Upload for Approval</label>
                     <label class="red-asterick">*</label>
                     <input type="file" (change)="approvalFileChange($event)" multiple/>
                 </div>
-            </div>
+            </div> -->
             <!-- end of div for approval file upload -->
              <!--start div for show files-->
              <div class="form-group col-xs-12 col-sm-6 col-md-6 col-lg-4" *ngIf="complaintReferenceNo && selectedComplaintReferenceDetails.files?.length!=0">
@@ -275,13 +275,13 @@
             </div>
             <!--end div for show files-->
             <!--start div for show approval files-->
-            <div class="form-group col-xs-12 col-sm-6 col-md-6 col-lg-4" *ngIf="complaintReferenceNo && selectedComplaintReferenceDetails.approvalFilesInClose?.length!=0">
+            <!-- <div class="form-group col-xs-12 col-sm-6 col-md-6 col-lg-4" *ngIf="complaintReferenceNo && selectedComplaintReferenceDetails.approvalFilesInClose?.length!=0">
             <label>Uploaded Approval file(s)</label>
             <div *ngFor="let approvalFiles of selectedComplaintReferenceDetails.approvalFilesInClose">
                 <a href="{{approvalFiles.fileUrl}}" target="_blank">{{approvalFiles.fileName}}</a>
                 <br/>
             </div>
-            </div>
+            </div> -->
             <!--end div for show approval files-->
             
             <!-- start div for remarks details -->

@@ -97,7 +97,9 @@ export class DashboardComponent implements OnInit {
       // this.viewComplaintDIDataService.getcomplaintDIViewDetails(tilesFilter);
     } else if (this.tempPlantType === 'DI') {
       this.tiles1.tilesHeader = "Total Complaints";
-      this.tiles1.tilesBodyText = "";
+      this.tiles1.tilesBodyText = "";//"Total logged complaints";
+      this.tiles1.tilesBodyDateRange ="";// "from 03-Apr-2018 to 04-Oct-2018";
+      // this.tiles1.tilesBodyText = "";
 
       tilesFilter.plantType = 'DI';
       this.openDIPIComplaintService = this.complaintDIService.getHeadercount(diTilesFilter, 'DI');
@@ -213,6 +215,7 @@ export class DashboardComponent implements OnInit {
     } else if (this.tempPlantType === 'DI') {
       //set the label of tiles
       this.tiles3.tilesHeader = "Newly Reg. Complaints";
+      this.tiles3.tilesHeaderInfo ="(Investigation Report pending for submission)";
       this.tiles3.tilesBodyText = "";
       tilesFilter.plantType = 'DI';
       this.openDIPIComplaintService = this.complaintDIService.getHeadercount(diTilesFilter, 'DI');
