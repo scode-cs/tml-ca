@@ -14,6 +14,10 @@
       <div class="quick-links-view-icon-style" title="View Complaint" (click)="onQuickLinkIconClick('view')"><i class="fa fa-clone"
         style="color:#00ad21;" aria-hidden="true"></i></div>
     </ng-container>
+    <!-- date range -->
+    <div class="quick-links-date-range-icon-style" title="Click Here to set Date Range" (click)="openDateRangeModal();">
+      <i class="fa fa-calendar" style="color:#3078be;" area-hidden="true"></i>
+    </div>
   </div>
   <!-- End Activiy Bar -->
 
@@ -41,4 +45,33 @@
   </div>
 </div>
 
-<!--<router-outlet></router-outlet>-->
+<!-- start modal for date range -->
+<!-- add item modal -->
+<div *ngIf="dateRangeModalFlag" class="overlay"></div>
+<div *ngIf="dateRangeModalFlag" class="com-set-modal-style">
+    <!-- header div -->
+    <div class="modal-header">
+        <div> Date Range </div>
+        <div (click)="cancelModal()" style="cursor: pointer;">x</div>
+    </div>
+    <div class="modal-body">
+      <div class="form-group" style="display: inline-flex; width: 100%">
+        <form style="display: inline-flex; width: 100%" [formGroup]="dateRangeFormGroup">
+            <div style="width:50%;">
+              <span>From Date</span>
+              <input type="date" formControlName="fromDate" style="width: 95%;height: 65%;"/>
+            </div>
+            <div style="width:50%;">
+              <span>To Date</span>
+              <input type="date" formControlName="toDate" style="width: 95%;height: 65%;"/>
+            </div>
+          </form>
+      </div>
+        <div style="margin-top: 20px;float:right;margin-right: 3%;">
+            <button type="submit" class="btn btn-primary cursor-pointer" (click)="onCommSetModalSubmitClick('Y')" [disabled]="!dateRangeFormGroup.valid">Show</button>
+            <button type="submit" class="btn btn-secondary cursor-pointer" (click)="onCommSetModalSubmitClick('N')">Cancel</button>
+        </div>
+    </div>
+    <!-- end of body div -->
+</div>
+<!-- end of modal -->
