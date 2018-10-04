@@ -32,7 +32,7 @@
     display: block;
     font-weight: normal;
     font-family: sans-serif;
-    padding-top: 10%;
+    padding-top:4%;
     text-align: center;
      margin-left: 10%;
     margin-right: 10%;
@@ -42,12 +42,27 @@
     font-size: 22px;
     font-family: sans-serif;
     font-stretch: normal; 
-    font-stretch: normal;
     font-style: normal;
     font-variant-caps: normal;
     font-variant-ligatures: normal;
     font-variant-numeric: normal;
-    color: black; 
+    /* color: black;  */
+    outline-color: rgb(65, 65, 65);
+    color: rgb(65, 65, 65);
+    word-wrap: break-word;
+}
+
+.tiles-header-content-info{
+    font-size: 11px;
+    font-weight: bold;
+    font-family: sans-serif;
+    font-stretch: normal;
+    font-style: normal;
+    font-variant-caps: normal;
+    -webkit-font-variant-ligatures: normal;
+    font-variant-ligatures: normal;
+    font-variant-numeric: normal;
+    /* color: black; */
     outline-color: rgb(65, 65, 65);
     color: rgb(65, 65, 65);
     word-wrap: break-word;
@@ -55,8 +70,15 @@
 
 .tiles-body-text{
     display: block;   
-    font-size: 17px;
+    font-size: 14px;
     margin-bottom: 6%;
+}
+
+.tiles-body-date-range{
+    display: block;   
+    font-size: 14px;
+    margin-top: -12px;
+    margin-bottom: 20px;
 }
 
 .tiles-body-number{
@@ -64,4 +86,5 @@
     font-size: 72px;
     font-weight: normal;
     cursor: pointer;
+    margin-top: 22%;
 }

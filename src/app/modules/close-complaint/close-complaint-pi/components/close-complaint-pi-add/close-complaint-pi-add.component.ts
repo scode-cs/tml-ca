@@ -53,13 +53,13 @@ export class CloseComplaintPIAddComponent {
 
   // form data for file upload
   private formData: FormData = new FormData();
-  private totalFileSizeForApprovalFile: number = 0;//for approval file upload
+  // private totalFileSizeForApprovalFile: number = 0;//for approval file upload
   private totalFileSizeForUploadFile: number = 0;//for close file upload  
   private fileSizeLimit: number = 104857600;
   private fileData: FormData;
-  private approvalFileData: FormData;
+  // private approvalFileData: FormData;
   public fileList: FileList;
-  public approvalFileList: FileList;
+  // public approvalFileList: FileList;
   public submitButtonEnable: boolean = true;//to disable submit button
 
 
@@ -118,14 +118,14 @@ export class CloseComplaintPIAddComponent {
       ]
       ],
       'commercialsettlementRsn': [''
-        , [
-          Validators.required,
-        ]
+        // , [
+        //   Validators.required,
+        // ]
       ],
       'creditNoteNo': [''
-      , [
-        Validators.required,
-      ]
+      // , [
+      //   Validators.required,
+      // ]
       ],
       'remarks': [''
       , [
@@ -164,6 +164,19 @@ export class CloseComplaintPIAddComponent {
     console.log("commercialSettlementRadioValue:: ", commercialSettlementRadioValue);
     this.requiredCommercialSettlement = commercialSettlementRadioValue;
     this.closeComplaintPIAddFormGroup.controls["commercialSettlement"].setValue(this.requiredCommercialSettlement);
+    if(commercialSettlementRadioValue === "N"){
+      this.closeComplaintPIAddFormGroup.controls["commercialsettlementRsn"].setValue(this.selectedComplaintReferenceDetails.requiredCommercialSettlementReasonInClose.trim());
+      // this.closeComplaintPIAddFormGroup.controls["commercialsettlementRsn"].setValidators(Validators.required);
+      this.closeComplaintPIAddFormGroup.controls["creditNoteNo"].setValidators(null);//setr credit note validators null
+      this.closeComplaintPIAddFormGroup.controls["creditNoteNo"].updateValueAndValidity();
+      this.closeComplaintPIAddFormGroup.controls["creditNoteNo"].markAsUntouched();
+    }else if(commercialSettlementRadioValue === "Y"){
+      this.closeComplaintPIAddFormGroup.controls["creditNoteNo"].setValue(this.selectedComplaintReferenceDetails.creditNoteNo.trim());
+      // this.closeComplaintPIAddFormGroup.controls["creditNoteNo"].setValidators(Validators.required);
+      this.closeComplaintPIAddFormGroup.controls["commercialsettlementRsn"].setValidators(null);//set com set reason validators null
+      this.closeComplaintPIAddFormGroup.controls["commercialsettlementRsn"].updateValueAndValidity();
+      this.closeComplaintPIAddFormGroup.controls["commercialsettlementRsn"].markAsUntouched();
+    }
   }//end of method onCommercialSettlementRadioClick  
   // start method of deleteResErrorMsgOnClick
   public deleteResErrorMsgOnClick(resErrorType) {
@@ -213,15 +226,17 @@ export class CloseComplaintPIAddComponent {
           let creditNoteNoRes: string = this.selectedComplaintReferenceDetails.creditNoteNo;
           this.creditNoteNoDet = creditNoteNoRes.trim();
           if (this.requiredCommercialSettlement == "N") {
-            this.closeComplaintPIAddFormGroup.controls["commercialsettlementRsn"].setValue(this.commercialSettlementDet);
-            this.closeComplaintPIAddFormGroup.controls["creditNoteNo"].setValue(" ");
+            this.closeComplaintPIAddFormGroup.controls["commercialsettlementRsn"].setValue(this.commercialSettlementDet.trim());
+            this.closeComplaintPIAddFormGroup.controls["commercialsettlementRsn"].setValidators(Validators.required);
+            this.closeComplaintPIAddFormGroup.controls["creditNoteNo"].setValidators(null);
           } else {
-            this.closeComplaintPIAddFormGroup.controls["commercialsettlementRsn"].setValue(" ");
-            this.closeComplaintPIAddFormGroup.controls["creditNoteNo"].setValue(this.creditNoteNoDet);
+            this.closeComplaintPIAddFormGroup.controls["creditNoteNo"].setValue(this.creditNoteNoDet.trim());
+            this.closeComplaintPIAddFormGroup.controls["creditNoteNo"].setValidators(Validators.required);
+            this.closeComplaintPIAddFormGroup.controls["commercialsettlementRsn"].setValidators(null);
           }
-          if(this.requiredCommercialSettlement.trim() == ""){
-            this.closeComplaintPIAddFormGroup.controls["creditNoteNo"].setValue(" ");
-          }
+          // if(this.requiredCommercialSettlement.trim() == ""){
+          //   this.closeComplaintPIAddFormGroup.controls["creditNoteNo"].setValue(" ");
+          // }
           let remarksDetRes: string = this.selectedComplaintReferenceDetails.closeRemarks;
           this.remarksDet = remarksDetRes.trim();
           this.closeComplaintPIAddFormGroup.controls["remarks"].setValue(this.remarksDet);
@@ -257,23 +272,23 @@ export class CloseComplaintPIAddComponent {
     closeComplaintSubmitDet.closeRemarks = this.closeComplaintPIAddFormGroup.value.remarks;
     closeComplaintSubmitDet.plantType = this.plantType;
     console.log("onCloseComplaintSubmit: ", closeComplaintSubmitDet);
-    console.log("this.totalFileSizeForApprovalFile on submit method:::::::::::", this.totalFileSizeForApprovalFile);
+    // console.log("this.totalFileSizeForApprovalFile on submit method:::::::::::", this.totalFileSizeForApprovalFile);
     console.log("this.totalFileSizeForUploadFile on submit method:::::::::::", this.totalFileSizeForUploadFile);
-    let approvalBoolean: boolean = false;
-    if(this.requiredCommercialSettlement == "Y") { 
-      if(this.totalFileSizeForApprovalFile > 0) { 
-        approvalBoolean = true;
-      } else{
-        this.resErrorType = this.errorConst;
-        this.resErrorMsg = "Please choose approval file.";
-        approvalBoolean = false;
-      }//end of else approval file size check
-    }else{
-      approvalBoolean = true;
-    }
-    //checking boolean is true or false
-    if(approvalBoolean == true){   
-      let totalFileSize: number = this.totalFileSizeForUploadFile + this.totalFileSizeForApprovalFile;
+    // // let approvalBoolean: boolean = false;
+    // if(this.requiredCommercialSettlement == "Y") { 
+    //   if(this.totalFileSizeForApprovalFile > 0) { 
+    //     approvalBoolean = true;
+    //   } else{
+    //     this.resErrorType = this.errorConst;
+    //     this.resErrorMsg = "Please choose approval file.";
+    //     approvalBoolean = false;
+    //   }//end of else approval file size check
+    // }else{
+    //   approvalBoolean = true;
+    // }
+    // //checking boolean is true or false
+    // if(approvalBoolean == true){   
+      let totalFileSize: number = this.totalFileSizeForUploadFile ;//+ this.totalFileSizeForApprovalFile;
         if (totalFileSize > this.fileSizeLimit) {
           this.resErrorType = this.errorConst;
           this.resErrorMsg = "File size should be within 100 mb !";
@@ -290,15 +305,15 @@ export class CloseComplaintPIAddComponent {
               }//end of if
             }//end of for
           }//end of if fileData is !undefined
-          //method to add or update approval close pi
-          if (this.approvalFileData != undefined) {
-            for (let i: number = 0; i < this.approvalFileList.length; i++) {
-              console.log("approval file upload", this.approvalFileData.get('approvalUploadFile' + i.toString()));
-              if (this.approvalFileData.get('approvalUploadFile' + i.toString()) != null) {
-                this.formData.append('approvalUploadFile' + i.toString(), this.approvalFileData.get('approvalUploadFile' + i.toString()));
-              }//end of if
-            }//end of for
-          }//end of if approval fileData is !undefined
+          // //method to add or update approval close pi
+          // if (this.approvalFileData != undefined) {
+          //   for (let i: number = 0; i < this.approvalFileList.length; i++) {
+          //     console.log("approval file upload", this.approvalFileData.get('approvalUploadFile' + i.toString()));
+          //     if (this.approvalFileData.get('approvalUploadFile' + i.toString()) != null) {
+          //       this.formData.append('approvalUploadFile' + i.toString(), this.approvalFileData.get('approvalUploadFile' + i.toString()));
+          //     }//end of if
+          //   }//end of for
+          // }//end of if approval fileData is !undefined
           this.formData.append('Accept', 'application/json');
           this.formData.append('accessToken', 'bearer ' + this.localStorageService.user.accessToken);
           this.formData.append('menuId', 'DEFAULT1');
@@ -334,7 +349,7 @@ export class CloseComplaintPIAddComponent {
             });
         }//end of else
         //end of if approval file submit
-      }//end of if boolean is true
+      // }//end of if boolean is true
   } //end of method submit modify capa actn pi
   //file upload event  
   public fileChange(event) {
@@ -350,20 +365,21 @@ export class CloseComplaintPIAddComponent {
       }//end of for
     }//end of if
   }//end of filechange method      
-  //approvalFileChange event  
-  public approvalFileChange(event) {
-    this.approvalFileData = new FormData();
-    this.totalFileSizeForApprovalFile = 0;
-    this.approvalFileList = event.target.files;
-    if (this.approvalFileList.length > 0) {
-      for (let i: number = 0; i < this.approvalFileList.length; i++) {
-        let file: File = this.approvalFileList[i];
-        this.approvalFileData.append('approvalUploadFile' + i.toString(), file, file.name);
-        this.totalFileSizeForApprovalFile = this.totalFileSizeForApprovalFile + file.size;
-        console.log("this.totalFileSizeForApprovalFile:::::::::::", this.totalFileSizeForApprovalFile);
-      }//end of for
-    }//end of if
-  }//end of approvalFileChange method
+  // //approvalFileChange event  
+  // public approvalFileChange(event) {
+  //   this.approvalFileData = new FormData();
+  //   this.totalFileSizeForApprovalFile = 0;
+  //   this.approvalFileList = event.target.files;
+  //   if (this.approvalFileList.length > 0) {
+  //     for (let i: number = 0; i < this.approvalFileList.length; i++) {
+  //       let file: File = this.approvalFileList[i];
+  //       this.approvalFileData.append('approvalUploadFile' + i.toString(), file, file.name);
+  //       this.totalFileSizeForApprovalFile = this.totalFileSizeForApprovalFile + file.size;
+  //       console.log("this.totalFileSizeForApprovalFile:::::::::::", this.totalFileSizeForApprovalFile);
+  //     }//end of for
+  //   }//end of if
+  // }//end of approvalFileChange method
+
   //for clicking cancel button this method will be invoked
   public onCancel(): void {
     this.router.navigate([ROUTE_PATHS.RouteHome]);
