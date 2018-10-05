@@ -67,6 +67,20 @@
           <!--start div for actn btn and faceted nav -->
           <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" style="padding-left: 10px;">
 
+            <!-- start div to show dashboard filter -->
+            <div class="col-lg-12 col-md-12 col-xs-12" style="margin-bottom: 1%;" >
+                <span style="color: #292b2c;font-weight: 700;">Complaint Logged On Date: </span> 
+                <span style="color: #1c2ad4;font-weight: 500;font-size: 14px;">
+                  <ng-container *ngIf="dashboardParameter">
+                    "{{tilesInteractionService.wsFilter?.fromDate}}" to "{{tilesInteractionService.wsFilter?.toDate}}"
+                  </ng-container>
+                  <ng-container *ngIf="dashboardParameter==''">
+                      "01-JAN-2018" to "{{fromDate | date: 'dd-MMM-yyyy'}}"
+                    </ng-container>
+                </span>
+              </div>
+              <!-- end of div for dashboard filter -->
+
             <!--start div for action button-->
             <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" style="padding-top: 15px;padding-bottom: 0px;">
               <button type="button" class="btn btn-style1 cursor-pointer" (click)="addComplaint();">

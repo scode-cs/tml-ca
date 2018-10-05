@@ -312,7 +312,7 @@ export class AddUserComponent implements OnInit {
         } else {
           // show error msg on html page
           this.resMsgType = this.errorConst;
-          this.resErrorMsg = "Sorry! Netowrk/Server Problem. Please try again.";
+          this.resErrorMsg = res.msg;
         }//end of else 
       this.busySpinner.busy = false;//to stop spinner
     

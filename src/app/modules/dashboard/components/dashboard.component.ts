@@ -113,7 +113,9 @@ export class DashboardComponent implements OnInit {
       plantType: '',
       sortData: '',
       orderType: '',
-      filter: '',
+      filter: "CMPLNT_LOGD_ON BETWEEN \'" + this.fromDate + " 00:00:00\' AND \'" + this.toDate + " 23:59:59\'",
+      fromDate: this.fromDate,
+      toDate: this.toDate,
       fileActivityId: this.localStorageService.appSettings.defaultActivityId
     };
     //set filter to get di total complaint  
@@ -134,6 +136,7 @@ export class DashboardComponent implements OnInit {
       this.tiles1.wsFilter = diTilesFilter;//set tiles filter for di tiles
     } else if (this.tempPlantType === 'PI') {
       tilesFilter.plantType = 'PI';
+      this.tiles1.tilesBodyDateRange = "from " + this.fromDate + " to " + this.toDate;
       this.openDIPIComplaintService =
         this.viewComplaintPIDataService.getComplaintViewDetails(tilesFilter);
       this.tiles1.wsFilter = tilesFilter;
@@ -165,10 +168,14 @@ export class DashboardComponent implements OnInit {
       sortData: '',
       orderType: '',
       filter: '',
+      fromDate: this.fromDate,
+      toDate: this.toDate,
       fileActivityId: this.localStorageService.appSettings.defaultActivityId
     };
     tilesFilter.filter = this.localStorageService.appSettings.activityIdFieldName + " = "
-      + this.localStorageService.appSettings.closeComplaintActivityId;
+      + this.localStorageService.appSettings.closeComplaintActivityId
+      + " AND CMPLNT_LOGD_ON BETWEEN '" + this.fromDate + " 00:00:00' AND '" + this.toDate + " 23:59:59'";
+      
     tilesFilter.fileActivityId = this.localStorageService.appSettings.closeComplaintActivityId;
 
     //set filter for di
@@ -190,6 +197,7 @@ export class DashboardComponent implements OnInit {
       //this.viewComplaintDIDataService.getcomplaintDIViewDetails(tilesFilter);
     } else if (this.tempPlantType === 'PI') {
       tilesFilter.plantType = 'PI';
+      this.tiles2.tilesBodyDateRange = "from " + this.fromDate + " to " + this.toDate;
       this.openDIPIComplaintService = this.viewComplaintPIDataService.getComplaintViewDetails(tilesFilter);
       this.tiles2.wsFilter = tilesFilter;
     }
@@ -217,12 +225,15 @@ export class DashboardComponent implements OnInit {
       sortData: '',
       orderType: '',
       filter: '',
+      fromDate: this.fromDate,
+      toDate: this.toDate,
       fileActivityId: this.localStorageService.appSettings.defaultActivityId
     };
     tilesFilter.filter = this.localStorageService.appSettings.activityIdFieldName + " >= "
       + this.localStorageService.appSettings.complaintRegistrationActivityId
       + " AND " + this.localStorageService.appSettings.activityIdFieldName + " < "
-      + this.localStorageService.appSettings.closeComplaintActivityId;
+      + this.localStorageService.appSettings.closeComplaintActivityId
+      + " AND CMPLNT_LOGD_ON BETWEEN \'" + this.fromDate + " 00:00:00\' AND \'" + this.toDate + " 23:59:59\'";
 
     tilesFilter.fileActivityId = this.localStorageService.appSettings.pendingComplaintActivityId;
 
@@ -245,6 +256,7 @@ export class DashboardComponent implements OnInit {
       this.tiles3.wsFilter = diTilesFilter;//set ti;es filter
     } else if (this.tempPlantType === 'PI') {
       tilesFilter.plantType = 'PI';
+      this.tiles3.tilesBodyDateRange = "from " + this.fromDate + " to " + this.toDate;
       this.openDIPIComplaintService = this.viewComplaintPIDataService.getComplaintViewDetails(tilesFilter);
       this.tiles3.wsFilter = tilesFilter;//set tiles filter
     } else if (this.tempPlantType === 'ADMN') {
