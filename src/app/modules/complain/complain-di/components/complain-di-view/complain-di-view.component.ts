@@ -1,5 +1,6 @@
 import { Component, OnInit, OnChanges, ChangeDetectorRef } from '@angular/core';
 import { FormGroup, FormBuilder, Validators, FormControl } from '@angular/forms';
+import { DatePipe } from '@angular/common';
 import { LocalStorageService } from '../../../../shared/services/local-storage.service';
 import { ViewComplaintDIDataService } from '../../services/complaint-di-view-data.service';
 import { Router, ActivatedRoute } from '@angular/router';
@@ -62,9 +63,11 @@ export class ComplainDIViewComponent implements OnInit, OnChanges {
   // paged items
   //server search formgroup
   public serverSearchModalFormGroup: FormGroup;
+  public fromDate: string;
 
   constructor(
     private formBuilder: FormBuilder,
+    private datePipe: DatePipe,
     private localStorageService: LocalStorageService,
     private viewComplaintDIDataService: ViewComplaintDIDataService,
     private router: Router,
@@ -88,6 +91,9 @@ export class ComplainDIViewComponent implements OnInit, OnChanges {
     serverSearchFormGroup['natureOfComplaint'] = new FormControl();
     serverSearchFormGroup['complaintStatus'] = new FormControl();
     this.serverSearchModalFormGroup = new FormGroup(serverSearchFormGroup);
+
+    let currentDate = new Date();
+    this.fromDate = this.datePipe.transform(currentDate,'yyyy-MM-dd');
   }//end of constructor
 
   ngOnChanges(changes: any) {
@@ -104,7 +110,7 @@ export class ComplainDIViewComponent implements OnInit, OnChanges {
     this.headerparams = new ComplaintDIHeaderParamModel();
     this.getParamFromRoute();//to get route param
     console.log("view complaint according to parameter [dashboard]: ", this.dashboardParameter);
-    this.parameterCheck();
+    this.getcomplaindetails();
     this.loadFacetedNav();
 
     this.setPagination();
@@ -117,35 +123,24 @@ export class ComplainDIViewComponent implements OnInit, OnChanges {
       this.dashboardParameter = params.activitytype ? params.activitytype : '';//get param from dashboard
       this.title = "View Complaints";
     });
+    if(this.dashboardParameter){
+      console.log("dashboard filter::::::::::",this.tilesInteractionService.wsFilter);
+    }
   }
   //end of method to get route param
-
-  //checking if parameter have value or not
-  private parameterCheck() {
-    if (this.dashboardParameter) {
-      let query: string ="";
-      switch(this.dashboardParameter){//dashboard param is available or not
-        case '10':{
-          query = "LAST_ACTIVITY_ID='" + this.dashboardParameter + "'";
-          this.headerparams.filter =  '(' + query +")";
-          break;
-        }
-        case '80': {
-          query = "LAST_ACTIVITY_ID='" + this.dashboardParameter + "'";
-          this.headerparams.filter =  '(' + query +")";
-          break;
-        }
-      }
-
-    }
-    this.getcomplaindetails();
-  }//end of checking if parameter have value or not
 
   /**
    * @description get compliant data
    */
   private getcomplaindetails() {
     // this.busySpinner = true;
+    //new add for dashboard param check
+    if(this.dashboardParameter){
+      this.headerparams.filter = this.headerparams.filter? 
+        this.headerparams.filter + ' AND ' + this.tilesInteractionService.wsFilter.filter :
+        this.tilesInteractionService.wsFilter.filter;
+    }
+    this.headerparams.filter;
     this.complaintdIservice.getHeader(this.headerparams).subscribe((res: any) => {
       console.log('get data all', JSON.parse(res.mapDetails));
       this.complaintDIViewDetails = JSON.parse(res.mapDetails);
