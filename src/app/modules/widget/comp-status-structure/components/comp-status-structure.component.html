@@ -11,7 +11,7 @@
                   <span class="footer-span-style">{{compStatusStrucEl.flowMsg}}</span>
                 </div>
               </div>
-              <span style="font-size: 12px;"><ng-container *ngIf="compStatusStrucEl.flowDate !='NA'">{{compStatusStrucEl.flowDate| date}}</ng-container></span>
+              <span style="font-size: 12px;"><ng-container *ngIf="compStatusStrucEl.flowDate !='NA'">{{compStatusStrucEl.flowDate| date: 'dd-MMM-yyyy'}}</ng-container></span>
             </div>
           </td>
         </tr>

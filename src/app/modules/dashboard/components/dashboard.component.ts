@@ -27,9 +27,9 @@ export class DashboardComponent implements OnInit {
   private openDIPIComplaintService: any;//for common service
   public tempPlantType: string = '';//for rolename
   //taking a var to show error msg obj
-  public modalErrorMsgObj: any ={
-    modalErrorMsg:'',
-    modalErrMsgShowFlag:false
+  public modalErrorMsgObj: any = {
+    modalErrorMsg: '',
+    modalErrMsgShowFlag: false
   };//for common button link
   //from group for date range
   public dateRangeFormGroup: FormGroup;
@@ -88,13 +88,13 @@ export class DashboardComponent implements OnInit {
     let date = new Date();
     let currentDate: string = this.datePipe.transform(date, 'yyyy-MM-dd');
     let fDateForShow: string = '2018-01-01';
-    let fDate = this.datePipe.transform(fDateForShow,'yyyy-MM-dd');//'dd-MMM-yyyy'
-    this.fromDate = this.datePipe.transform(fDateForShow,'dd-MMM-yyyy');//to show the from date
-    this.toDate = this.datePipe.transform(date,'dd-MMM-yyyy');//to show the to date
+    let fDate = this.datePipe.transform(fDateForShow, 'yyyy-MM-dd');//'dd-MMM-yyyy'
+    this.fromDate = this.datePipe.transform(fDateForShow, 'dd-MMM-yyyy');//to show the from date
+    this.toDate = this.datePipe.transform(date, 'dd-MMM-yyyy');//to show the to date
     this.dateRangeFormGroup.controls['fromDate'].setValue(fDate);
     this.dateRangeFormGroup.controls['toDate'].setValue(currentDate);
 
-    
+
 
     //end of new add for date range
     console.log("Dashboard Batch Constructor...");
@@ -118,14 +118,15 @@ export class DashboardComponent implements OnInit {
     };
     //set filter to get di total complaint  
     let diTilesFilter: any = {
-      filter: "CMPLNT_LOGD_ON BETWEEN \'"+this.fromDate+" 00:00:00\' AND \'"+this.toDate+" 23:59:59\'"
+      filter: "CMPLNT_LOGD_ON BETWEEN \'" + this.fromDate + " 00:00:00\' AND \'" + this.toDate + " 23:59:59\'",
+      fromDate: this.fromDate,
+      toDate: this.toDate
     };
-    // role name checking
-   if (this.tempPlantType === 'DI') {
+    // plant type checking
+    if (this.tempPlantType === 'DI') {
       this.tiles1.tilesHeader = "Total Complaints";
       this.tiles1.tilesBodyText = "Total logged complaints";
-      this.tiles1.tilesBodyDateRange ="from "+this.fromDate+" to "+this.toDate;
-      // this.tiles1.tilesBodyText = "";
+      this.tiles1.tilesBodyDateRange = "from " + this.fromDate + " to " + this.toDate;
 
       // tilesFilter.plantType = 'DI';
       this.openDIPIComplaintService = this.complaintDIService.getHeadercount(diTilesFilter, 'DI');
@@ -172,15 +173,17 @@ export class DashboardComponent implements OnInit {
 
     //set filter for di
     let diTilesFilter: any = {
-      filter: ''
+      filter: this.localStorageService.appSettings.lastActivityIdFieldName + '=' + 80
+        + " AND CMPLNT_LOGD_ON BETWEEN '" + this.fromDate + " 00:00:00' AND '" + this.toDate + " 23:59:59'",//close activity id
+      fromDate: this.fromDate,
+      toDate: this.toDate
     };
-    diTilesFilter.filter = this.localStorageService.appSettings.lastActivityIdFieldName + '=' + 80 
-    +" AND CMPLNT_LOGD_ON BETWEEN '"+this.fromDate+" 00:00:00' AND '"+this.toDate+" 23:59:59'";//close activity id
+
     // plant type checking
-   if (this.tempPlantType === 'DI') {
+    if (this.tempPlantType === 'DI') {
       this.tiles2.tilesHeader = "Closed Complaints";
       this.tiles2.tilesBodyText = "Total closed complaints";
-      this.tiles2.tilesBodyDateRange ="from "+this.fromDate+" to "+this.toDate;
+      this.tiles2.tilesBodyDateRange = "from " + this.fromDate + " to " + this.toDate;
       // tilesFilter.plantType = 'DI';
       this.openDIPIComplaintService = this.complaintDIService.getHeadercount(diTilesFilter, 'DI');
       this.tiles2.wsFilter = diTilesFilter;//set filter for di tiles
@@ -225,17 +228,18 @@ export class DashboardComponent implements OnInit {
 
     //set filter for di
     let diTilesFilter: any = {
-      filter: ''
+      filter: this.localStorageService.appSettings.lastActivityIdFieldName + '=' + 10
+        + " AND CMPLNT_LOGD_ON BETWEEN \'" + this.fromDate + " 00:00:00\' AND \'" + this.toDate + " 23:59:59\'",
+      fromDate: this.fromDate,
+      toDate: this.toDate
     };
-    diTilesFilter.filter = this.localStorageService.appSettings.lastActivityIdFieldName + '=' + 10
-    +" AND CMPLNT_LOGD_ON BETWEEN \'"+this.fromDate+" 00:00:00\' AND \'"+this.toDate+" 23:59:59\'";
     //plant type checking
     if (this.tempPlantType === 'DI') {
       //set the label of tiles
       this.tiles3.tilesHeader = "Newly Reg. Complaints";
       // this.tiles3.tilesHeaderInfo ="(Investigation Report pending for submission)";
       this.tiles3.tilesBodyText = "Pending for Investigation Report";
-      this.tiles3.tilesBodyDateRange ="from "+this.fromDate+" to "+this.toDate;
+      this.tiles3.tilesBodyDateRange = "from " + this.fromDate + " to " + this.toDate;
       // tilesFilter.plantType = 'DI';
       this.openDIPIComplaintService = this.complaintDIService.getHeadercount(diTilesFilter, 'DI');
       this.tiles3.wsFilter = diTilesFilter;//set ti;es filter
@@ -250,7 +254,7 @@ export class DashboardComponent implements OnInit {
       this.openDIPIComplaintService =
         this.viewRoleDataService.getRoleViewDetails();
     }
-    
+
 
     console.log("dashboard parameter for pending complaint: ", tilesFilter);
     this.openDIPIComplaintService
@@ -271,39 +275,44 @@ export class DashboardComponent implements OnInit {
       this.router.navigate([ROUTE_PATHS.RouteComplainDIRegister]);
     } else if (iconinfo === 'view') {
       this.router.navigate([ROUTE_PATHS.RouteComplainDIView]);
-    }else if(iconinfo === 'viewstatus') {
+    } else if (iconinfo === 'viewstatus') {
       this.router.navigate([ROUTE_PATHS.RouteViewComplainDIStatus]);
     }
   }//end of method
 
   //start date range modal
   public dateRangeModalFlag: boolean = false;
-  toogleDateRange(){
-    this.dateRangeModalFlag = this.dateRangeModalFlag? false: true;
+  toogleDateRange() {
+    this.dateRangeModalFlag = this.dateRangeModalFlag ? false : true;
   }
-  openDateRangeModal(){
+  openDateRangeModal() {
     this.toogleDateRange();
   }
   cancelModal() {
     this.toogleDateRange();
   }
   //method to date range modal submit
-  onDateRangeModalSubmit(){
+  onDateRangeModalSubmit() {
     this.fromDate = this.dateRangeFormGroup.controls.fromDate.value;
     this.toDate = this.dateRangeFormGroup.controls.toDate.value;
-    if(this.fromDate && this.toDate){
+    if (this.fromDate && this.toDate) {
       this.fromDate = this.transform(this.fromDate);
       this.toDate = this.transform(this.toDate);
-      console.log("FromDate::",this.fromDate);
-      console.log("toDate::",this.toDate);
+      console.log("FromDate::", this.fromDate);
+      console.log("toDate::", this.toDate);
 
-        this.getDataTile1();
-        this.getDataTile2();
-        this.getDataTile3();
-        this.toogleDateRange();
-        this.modalErrorMsgObj.modalErrMsgShowFlag = false;
-        this.modalErrorMsgObj.modalErrorMsg = "";
-    }else{
+      //new add for number spinner
+      this.tiles1.tilesBodyNumber=  '-';
+      this.tiles2.tilesBodyNumber=  '-';
+      this.tiles3.tilesBodyNumber=  '-';
+      
+      this.getDataTile1();
+      this.getDataTile2();
+      this.getDataTile3();
+      this.toogleDateRange();
+      this.modalErrorMsgObj.modalErrMsgShowFlag = false;
+      this.modalErrorMsgObj.modalErrorMsg = "";
+    } else {
       this.modalErrorMsgObj.modalErrMsgShowFlag = true;
       this.modalErrorMsgObj.modalErrorMsg = "Please Select Dates";
     }
@@ -311,29 +320,29 @@ export class DashboardComponent implements OnInit {
 
   transform(value: string) {
     var datePipe = new DatePipe("en-US");
-     value = datePipe.transform(value, 'dd-MMM-yyyy');
-     return value;
- }
+    value = datePipe.transform(value, 'dd-MMM-yyyy');
+    return value;
+  }
 
-    //method for Complaint Logged On and Compliant Reference Date validation 
-    public compareTwoDates(controlName: string) {
+  //method for Complaint Logged On and Compliant Reference Date validation 
+  public compareTwoDates(controlName: string) {
     let fromDate = new Date(this.dateRangeFormGroup.controls['fromDate'].value);
     let toDate = new Date(this.dateRangeFormGroup.controls['toDate'].value);
-    if(controlName === 'fromDate'){
+    if (controlName === 'fromDate') {
       if (fromDate > toDate) {
         console.log("fromDate Date error.");
         this.modalErrorMsgObj.modalErrMsgShowFlag = true;
         this.modalErrorMsgObj.modalErrorMsg = "From Date should be less than or equals to To Date!";
-      }else{
+      } else {
         this.modalErrorMsgObj.modalErrMsgShowFlag = false;
         this.modalErrorMsgObj.modalErrorMsg = "";
       }
-    }else if(controlName === 'toDate'){
+    } else if (controlName === 'toDate') {
       if (toDate < fromDate) {
         console.log("toDate Date error.");
         this.modalErrorMsgObj.modalErrMsgShowFlag = true;
         this.modalErrorMsgObj.modalErrorMsg = "To Date should be greater than or equals to From Date!";
-      }else{
+      } else {
         this.modalErrorMsgObj.modalErrMsgShowFlag = false;
         this.modalErrorMsgObj.modalErrorMsg = "";
       }
