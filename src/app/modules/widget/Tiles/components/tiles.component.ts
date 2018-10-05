@@ -29,8 +29,7 @@ export class Tiles {
     console.log("clickParam: ", clickParam);
 
     if(this.tiles && this.tiles.wsFilter){
-      this.tilesInteractionService.wsFilter = this.tiles.wsFilter;
-      
+      this.tilesInteractionService.wsFilter = this.tiles.wsFilter;      
     }
 
     if (this.tempPlantType === 'DI' || this.tempPlantType == 'BOTH') {
