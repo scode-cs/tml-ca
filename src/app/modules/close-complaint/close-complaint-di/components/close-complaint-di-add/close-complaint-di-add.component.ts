@@ -165,7 +165,7 @@ export class CloseComplaintDIAddComponent {
         } else {
           // show error msg on html page
           this.resErrorType = this.errorConst;
-          this.resErrorMsg = "Sorry! Netowrk/Server Problem. Please try again.";
+          this.resErrorMsg = res.msg;
         }//end of else
         this.busySpinner.compRefDetBusy = false;//busy spinner
         this.updateBusySpinner();//method for busy spinner
