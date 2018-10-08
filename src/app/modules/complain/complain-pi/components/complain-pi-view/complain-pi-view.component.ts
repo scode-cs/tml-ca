@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { DatePipe } from '@angular/common';
 import { FormGroup, FormBuilder, Validators, FormControl } from '@angular/forms';
 import { Router,ActivatedRoute } from '@angular/router';
 import { LocalStorageService } from "../../../../shared/services/local-storage.service";
@@ -67,12 +68,14 @@ export class ComplainPIViewComponent implements OnInit {
     facetedNavBusy: true,
     busy: true
   };
+  public fromDate: string;
 
   constructor(
     private formBuilder: FormBuilder,
     private localStorageService: LocalStorageService,
     private viewComplaintPIDataService: ViewComplaintPIDataService,
     private router: Router,
+    private datePipe: DatePipe,
     private tilesInteractionService: TilesInteractionService,
     private sessionErrorService: SessionErrorService,
     private activatedroute: ActivatedRoute//route parameter    
@@ -82,6 +85,8 @@ export class ComplainPIViewComponent implements OnInit {
     this.searchFormGroup = this.formBuilder.group({
       'gridSearch': ''
     });
+    let currentDate = new Date();
+    this.fromDate = this.datePipe.transform(currentDate,'yyyy-MM-dd');
   }//end of constructor
 
   ngOnInit(): void {

@@ -229,11 +229,11 @@
             <!-- start div for Credit Note No  -->
             <div class="form-group col-xs-12 col-sm-6 col-md-6 col-lg-4" *ngIf="requiredCommercialSettlement=='Y'">
                 <label for="detailOfComplaint">Credit Note No </label>
-                <label class="red-asterick">*</label>
-                <input type="text" formControlName="creditNoteNo" [maxlength]="creditNoteNoLength" [value]="creditNoteNoDet" class="form-control"required/>
-                <div class="alert alert-danger" *ngIf="closeComplaintPIAddFormGroup.get('creditNoteNo').hasError('required') && closeComplaintPIAddFormGroup.get('creditNoteNo').touched">
+                <!-- <label class="red-asterick">*</label> -->
+                <input type="text" formControlName="creditNoteNo" [maxlength]="creditNoteNoLength" [value]="creditNoteNoDet" class="form-control"/>
+                <!-- <div class="alert alert-danger" *ngIf="closeComplaintPIAddFormGroup.get('creditNoteNo').hasError('required') && closeComplaintPIAddFormGroup.get('creditNoteNo').touched">
                     <i class="fa fa-exclamation-circle"></i>Credit Note No is required!
-                </div>
+                </div> -->
             </div>
             <!-- end of div for Credit Note No  -->
             <!--files-->
@@ -260,7 +260,7 @@
             <div class="form-group col-xs-12 col-sm-6 col-md-6 col-lg-4" *ngIf="requiredCommercialSettlement=='Y'">
                 <div class="form-group col-xs-12 col-sm-12 col-md-12 col-lg-12" style="padding-left: 0px;">
                     <label for="imageFile">File(s) Upload for Approval</label>
-                    <label class="red-asterick">*</label>
+                    <!-- <label class="red-asterick">*</label> -->
                     <input type="file" (change)="approvalFileChange($event)" multiple/>
                 </div>
             </div>

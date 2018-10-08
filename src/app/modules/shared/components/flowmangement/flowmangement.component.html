@@ -4,8 +4,8 @@
     <!-- start div for active step -->
     <div class="step-col" style="display:inline-block; width: 16%;" [ngClass]="processData?.flowClass">
       <p style="padding-top: 8px;text-align:center;">
-        <a style="color:white" *ngIf="processData.isRoutable" [href]="processData.route">{{processData?.flowName}}</a>
-        <span style="color: #2084A4;" *ngIf="!processData.isRoutable">{{processData?.flowName}}</span>
+        <a style="color:white;font-size: 80%;word-break: break-word;font-family: arial;" *ngIf="processData.isRoutable" [href]="processData.route">{{processData?.flowName}}</a>
+        <span style="color: #2084A4;font-size: 80%;word-break: break-word;font-family: arial;" *ngIf="!processData.isRoutable">{{processData?.flowName}}</span>
       </p>
     </div>
 

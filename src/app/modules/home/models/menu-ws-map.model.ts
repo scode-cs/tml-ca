@@ -13,23 +13,16 @@ export class MenuWsMapModel{
     SSM0000002: '#'+ROUTE_PATHS.RouteComplainDIRegister,//di reg
     SSM0000003: '#'+ROUTE_PATHS.RouteComplainDIView,//for view di
     SSM0000026: '#'+ROUTE_PATHS.RouteComplainDIView,//for view di - [SSM0000026- modify menu id]
-    // SSM0000026: '#'+ROUTE_PATHS.RouteComplainDIViewModify+"/Modify",//for complain di modify
     SSM0000017: '#'+ROUTE_PATHS.RouteAddUser,
     SSM0000019: '#'+ROUTE_PATHS.RouteViewUser,
     logout: '#'+ROUTE_PATHS.RouteLogout,
     manageProfile: '#'+ROUTE_PATHS.RouteManageProfile,
     dashboardBoth: '#'+ROUTE_PATHS.RouteDashboardBoth,
-    // new add for preliminaryinvestigationdi navigation 12.07.17
-    // SSM0000005: '#'+ROUTE_PATHS.RoutePreliminaryInvestigationDiAdd,//preli add
-    // SSM0000006: '#'+ROUTE_PATHS.RoutePreliminaryInvestigationDIViewModify+"/view",//preli view
-    // SSM0000027: '#'+ROUTE_PATHS.RoutePreliminaryInvestigationDIViewModify+"/modify",//preli modify  
-    // new add for preliminaryinvestigationdi navigation 12.07.17
     SSM0000005: '#'+ROUTE_PATHS.RouteInvestigationReportDiAdd,//preli add
-    // SSM0000006: '#'+ROUTE_PATHS.RouteInvestigationReportDIViewModify+"/view",//preli view
-    // SSM0000027: '#'+ROUTE_PATHS.RouteInvestigationReportDIViewModify+"/modify",//preli modify   
     //new add for ComplainPiRegister navigation 09-08-17
     SSM0000011:  '#'+ROUTE_PATHS.RouteComplainPIRegister,
     SSM0000012: '#'+ROUTE_PATHS.RouteComplainPIView,
+    SSM0000032: '#'+ROUTE_PATHS.RouteViewComplainDIStatus,//to view complain di status   
     SSM0000007: '#'+ROUTE_PATHS.RouteComplaintResolutionDI, // for  adding Corrective Preventive Action
     SSM0000004: '#'+ROUTE_PATHS.RouteAllocateComplaint+"/Edit",//for allocate complint modify
     SSM0000031:'#'+ROUTE_PATHS.RouteAllocateComplaint+"/View",//for allocate complint view

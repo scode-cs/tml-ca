@@ -11,7 +11,6 @@ import { DatePipe } from '@angular/common';
 import { SessionErrorService } from '../../../shared/services/session-error.service';
 import { InvestigationReportDIConfigModel } from '../../models/investigation-report-di-config.model';
 import { InvestigationDataModel } from '../../models/investigation-data-model';
-import { InvestigationReportInvoiceDetailsService } from "../../services/investigation-report-invoice-details.service";
 import { InvestigationReportDIDataService } from "../../services/investigation-report-di.service";
 
 @Component({
@@ -55,6 +54,10 @@ export class InvestigationReportDiComponent implements OnInit {
     errorMsg: '',
     errMsgShowFlag: false
   };
+   // for checking fromDate and toDate error
+   public fromDateErr: boolean = false;
+   public toDateErr: boolean = false;
+
   public fileArr: any[] = [];//to store file details from file upload response
   //creating a FormGroup for Investigation Report
   public invReportFormGroup: FormGroup;//form group of inv report di add
@@ -86,7 +89,6 @@ export class InvestigationReportDiComponent implements OnInit {
     private router: Router,
     private complaintDIService: ComplaintDIService,
     private localStorageService: LocalStorageService,
-    private investigationReportInvoiceDetailsService: InvestigationReportInvoiceDetailsService,
     private investigationReportDIDataService: InvestigationReportDIDataService,
     private modalService: NgbModal,//modal
     private sessionErrorService: SessionErrorService,
@@ -128,7 +130,8 @@ export class InvestigationReportDiComponent implements OnInit {
       siteVisitDt: new FormControl(''),
       sampleCollected: new FormControl('', Validators.required),
       sampleCollectedDate: new FormControl(''),
-      investigationReportDate: new FormControl(''),
+      investigationReportFromDate: new FormControl('', Validators.required),//from date
+      investigationReportToDate: new FormControl('', Validators.required),//to date
       customerCode: new FormControl(''),
       customerName: new FormControl(''),
       invReportRemarks: new FormControl('')
@@ -150,8 +153,9 @@ export class InvestigationReportDiComponent implements OnInit {
   private getSystemDate() {
     //formatting the current date
     let date = new Date();
-    let currentDate: string = this.datePipe.transform(date, 'dd-MM-yyyy');
-    this.invReportFormGroup.controls['investigationReportDate'].setValue(currentDate);
+    let currentDate: string = this.datePipe.transform(date, 'yyyy-MM-dd');
+    this.invReportFormGroup.controls['investigationReportFromDate'].setValue(currentDate);
+    this.invReportFormGroup.controls['investigationReportToDate'].setValue(currentDate);
   }//end of method
 
   //method to get complaint type  
@@ -310,8 +314,11 @@ export class InvestigationReportDiComponent implements OnInit {
     if (formData.sampleCollected == 'Y') {
       this.invReportFormGroup.controls['sampleCollectedDate'].setValue(this.datePipe.transform(formData.sampleCollectedDate, 'yyyy-MM-dd'));
     }
+    if (formData.investigationReportFromDate) {
+      this.invReportFormGroup.controls['investigationReportFromDate'].setValue(this.datePipe.transform(formData.investigationReportFromDate, 'yyyy-MM-dd'));
+    }
     if (formData.investigationReportDate) {
-      this.invReportFormGroup.controls['investigationReportDate'].setValue(this.datePipe.transform(formData.investigationReportDate, 'dd-MM-yyyy'));
+      this.invReportFormGroup.controls['investigationReportToDate'].setValue(this.datePipe.transform(formData.investigationReportDate, 'yyyy-MM-dd'));
     }
     if (formData.custCode) {
       this.invReportFormGroup.controls['customerCode'].setValue(formData.custCode);
@@ -651,7 +658,7 @@ export class InvestigationReportDiComponent implements OnInit {
     if (this.invReportFormGroup.valid) {
       console.log("this.invReportFormGroup.value", this.invReportFormGroup.value);
       let date = new Date();
-      let currentDate: string = this.datePipe.transform(date, 'yyyy-MM-dd');
+      // let currentDate: string = this.datePipe.transform(date, 'yyyy-MM-dd');
       let invReportHeaderJson: any = {};
       invReportHeaderJson.lastActivityId = this.activityId;
       invReportHeaderJson.userId = this.localStorageService.user.userId;
@@ -663,7 +670,9 @@ export class InvestigationReportDiComponent implements OnInit {
       invReportDetailJson.userId = this.localStorageService.user.userId;
       console.log("invReportFormGroup: ", this.invReportFormGroup.value);
       invReportDetailJson.complaintReferenceNo = this.invReportFormGroup.value.complaintReferenceNo;
-      invReportDetailJson.investigationReportDate = currentDate;
+      // invReportDetailJson.investigationReportDate = currentDate;
+      invReportDetailJson.investigationReportFromDate = this.invReportFormGroup.value.investigationReportFromDate;//from date
+      invReportDetailJson.investigationReportDate = this.invReportFormGroup.value.investigationReportToDate;//to date
       invReportDetailJson.sampleCollected = this.invReportFormGroup.value.sampleCollected;//this.invReportVar.sampleCollectedValue;
       if(this.invReportFormGroup.value.sampleCollected == 'Y'){
         invReportDetailJson.sampleCollectedDate = this.invReportFormGroup.value.sampleCollectedDate;
@@ -741,28 +750,27 @@ export class InvestigationReportDiComponent implements OnInit {
   }
 
   //start method for clicking radio button 
-  public onRadioClick(radioButtonName: string) {
-    if (radioButtonName === "siteVisitMade") {
+  public onRadioClick(radioButtonName: string,radioBtnValue: string) {
+    
       //  if siteVisitValue is Y then this if condition will be executed
-      if (this.invReportFormGroup.value.siteVisitMade == 'Y') {
+      if (radioBtnValue == 'Y') {
+        if (radioButtonName === "siteVisitMade") {
+          this.invReportFormGroup.get('siteVisitDt').setValidators(Validators.required);
+        }else if(radioButtonName === "sampleCollected"){
+          this.invReportFormGroup.get('sampleCollectedDate').setValidators(Validators.required);
+        }
         //set sitevisitby field mandatory
-        this.invReportFormGroup.get('siteVisitDt').setValidators(Validators.required);
-      } else if (this.invReportFormGroup.value.siteVisitMadeValue == 'N') {
-        this.invReportFormGroup.get('siteVisitDt').setValidators(null);
-        this.invReportFormGroup.get('siteVisitDt').updateValueAndValidity();
-        this.invReportFormGroup.controls['siteVisitDt'].markAsUntouched();
-      } // end of else
-    } else if (radioButtonName === "sampleCollected") {
-      //   //  if sampleCollected is Y then this if condition will be executed
-      if (this.invReportFormGroup.value.sampleCollected == 'Y') {
-        //set sitevisitby field mandatory
-        this.invReportFormGroup.get('sampleCollectedDate').setValidators(Validators.required);
-      } else if (this.invReportFormGroup.value.sampleCollected == 'N') {
-        this.invReportFormGroup.get('sampleCollectedDate').setValidators(null);
-        this.invReportFormGroup.get('sampleCollectedDate').updateValueAndValidity();
-        this.invReportFormGroup.controls['sampleCollectedDate'].markAsUntouched();
-      } // end of else
-    }//end of else if of sampleCollected
+      } else if (radioBtnValue == 'N') {
+        if (radioButtonName === "siteVisitMade") {
+          this.invReportFormGroup.get('siteVisitDt').setValidators(null);
+          this.invReportFormGroup.get('siteVisitDt').updateValueAndValidity();
+          this.invReportFormGroup.controls['siteVisitDt'].markAsUntouched();
+        } else if(radioButtonName === "sampleCollected"){
+          this.invReportFormGroup.get('sampleCollectedDate').setValidators(null);
+          this.invReportFormGroup.get('sampleCollectedDate').updateValueAndValidity();
+          this.invReportFormGroup.controls['sampleCollectedDate'].markAsUntouched();
+        }   
+      }
   }//end of method onRadioClick
 
   //start method of onclickUnloadingEquipmentSelect
@@ -857,6 +865,27 @@ export class InvestigationReportDiComponent implements OnInit {
       console.log("after pushing jointingTypeList items : ", this.jointingTypeList);
     }//end of else
   }//end of method onclickJointingTypeListSelect
+
+    //method for Complaint Logged On and Compliant Reference Date validation 
+    public compareTwoDates(controlName: string) {
+      this.fromDateErr = false;
+      this.toDateErr = false;
+      let fromDate = new Date(this.invReportFormGroup.controls['investigationReportFromDate'].value);
+      let toDate = new Date(this.invReportFormGroup.controls['investigationReportToDate'].value);
+      if(controlName === 'investigationReportFromDate'){
+        if (fromDate > toDate) {
+          console.log("fromDate Date error.")
+          this.fromDateErr = true;
+          this.toDateErr = false;
+        }//end of if
+      }else if(controlName === 'investigationReportToDate'){
+        if (toDate < fromDate) {
+          console.log("toDate Date error.")
+          this.toDateErr = true;
+          this.fromDateErr = false;
+        }//end of if
+      }//end of else if
+    }//end of method
 
   //start method selectData
   public selectData(invRepIndex: number) {

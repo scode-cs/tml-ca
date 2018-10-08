@@ -12,7 +12,7 @@ import { BusySpinnerModule } from '../widget/busy-spinner/busy-spinner.module';
     BrowserModule,
     HomeModule,
     SharedModule,
-    BusySpinnerModule
+    BusySpinnerModule   
   ],
   declarations: [
     LoginComponent

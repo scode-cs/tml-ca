@@ -8,11 +8,7 @@ import { AuthenticationGuardService } from './services/route-guard.service';
 import { AddUserComponent } from '../user/components/user-add/user-add.component';
 import { ViewUserComponent } from '../user/components/user-view/user-view.component';
 import { ManageProfileComponent } from '../manage-profile/components/manage-profile.component'
-//importing PreliminaryInvestigationDiComponent 19.07.17
-//import { PreliminaryInvestigationDiComponent } from '../preliminary-investigation-di/components/preliminary-investigation-di-add/preliminary-investigavtion-di-add.component';
 import { InvestigationReportDiComponent } from '../investigation-report-di/components/investigation-report-di-add/investigation-report-di-add.component';
-//import { PreliminaryInvestigationReportDIViewComponent } from '../preliminary-investigation-di/components/preliminary-investigation-di-view/preliminary-investigavtion-di-view.component';
-import { InvestigationReportDIViewComponent } from '../investigation-report-di/components/investigation-report-di-view/investigation-report-di-view.component';
 import { ComplaintPIRegisterComponent } from '../complain/complain-pi/components/complain-pi-register/complaint-pi-register.component';
 import { ComplainPIViewComponent } from '../complain/complain-pi/components/complain-pi-view/complain-pi-view.component';
 import { AllocateComplaintComponent } from '../allocate-reallocate-complaint/components/allocate-complaints/allocate-complaint.component';
@@ -50,7 +46,6 @@ import { InvestigationReportDiViewDetailsComponent } from '../investigation-repo
 import { ComplainDIViewDetailsComponent } from '../complain/complain-di/components/complain-di-view-details/complain-di-view-details.component';
 import { ReportsDIViewComponent } from '../report/report-di/components/report-di-view/report-di-view.component';
 import { ReportDIViewDetailsComponent } from '../report/report-di/components/report-di-view-details/report-di-view-details.component';
-import { ComplaintReferenceNoSearchComponent } from '../investigation-report-di/components/investigation-report-di-add/complaint-reference-no-search/complaint-reference-no-search.component';
 
 import { RCADIAddEditComponent } from '../rca/rca-di/components/rca-di-add-edit/rca-di-add-edit.component';
 import { RCADIViewDetailsComponent } from '../rca/rca-di/components/rca-di-view-details/rca-di-view-details.component';
@@ -60,6 +55,8 @@ import { PADIAddEditComponent } from '../pa/pa-di/components/pa-di-add-edit/pa-d
 import { PADIViewDetailsComponent } from '../pa/pa-di/components/pa-di-view-details/pa-di-view-details.component';
 import { CloseComplainDIAddEditComponent } from '../close-complain/close-complain-di/components/close-complain-di-add-edit/close-complain-di-add-edit.component';
 import { CloseComplainDIViewDetailsComponent } from '../close-complain/close-complain-di/components/close-complain-di-view-details/close-complain-di-view-details.component';
+import { ActivityTrackingDIComponent } from '../activity-tracking/activity-tracking-di/components/activity-tracking-di.component';
+
 export const HOME_ROUTES: Routes = [
   {
     path: ROUTER_PATHS.HomeRouter,
@@ -140,7 +137,12 @@ export const HOME_ROUTES: Routes = [
         //pi customer search
         path: ROUTER_PATHS.ComplaintPICustomerSearch,
         component: ComplaintPICustomerSearchComponent      
-      },      
+      },
+      {
+        //complain di status view
+        path: ROUTER_PATHS.ViewComplainDIStatus,
+        component: ActivityTrackingDIComponent
+      },     
       {
         path: ROUTER_PATHS.AddUserRouter,//add user
         component: AddUserComponent
@@ -169,40 +171,15 @@ export const HOME_ROUTES: Routes = [
         path: ROUTER_PATHS.ManageProfileRouter,
         component: ManageProfileComponent
       },
-      //new add for PreliminaryInvestigationDiRouter and PreliminaryInvestigationDiComponent 19.07.17
-      // {
-      //   path: ROUTER_PATHS.PreliminaryInvestigationDiAddRouter,
-      //   component: PreliminaryInvestigationDiComponent
-      // },//
       {
         path: ROUTER_PATHS.InvestigationReportDiAddRouter,
         component: InvestigationReportDiComponent
-      },//
-      //new add for preli view or edit from menu
-      // {
-      //   path: ROUTER_PATHS.ViewModifyPreliminaryInvestigationRouter,
-      //   component: PreliminaryInvestigationReportDIViewComponent
-      // },
-      // {
-      //   path: ROUTER_PATHS.ViewModifyInvestigationReportRouter,
-      //   component: InvestigationReportDIViewComponent
-      // },
-      // {//preli view details
-      //   path: ROUTER_PATHS.ViewDetailsPreliminaryInvestigationDiRouter,
-      //   component: PreliminaryInvestigationDiViewDetailsComponent
-      // },  
+      },
       {//preli view details
         path: ROUTER_PATHS.ViewDetailsInvestigationReportDiRouter,
         component: InvestigationReportDiViewDetailsComponent
-      },      
-      // {//preli modify
-      //   path: ROUTER_PATHS.ModifyPreliminaryInvestigationDiRouter,//modify user
-      //   component: PreliminaryInvestigationDiComponent
-      // },
-      {
-        path: ROUTER_PATHS.ComplaintReferenceNoSearchRouter,//complaint ref no search of investigation report
-        component: ComplaintReferenceNoSearchComponent
       },
+     
       {//add allocate complaint route
         path: ROUTER_PATHS.AddAllocateComplaint,//allocate complaint route
         component: AllocateComplaintAddComponent

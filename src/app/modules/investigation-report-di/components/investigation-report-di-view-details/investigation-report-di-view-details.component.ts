@@ -88,7 +88,8 @@ export class InvestigationReportDiViewDetailsComponent implements OnInit {
       siteVisitDate: new FormControl(''),
       sampleCollected: new FormControl({ value: 'N', disabled: true }),
       sampleCollectedDate: new FormControl(''),
-      investigationReportDate: new FormControl(''),
+      investigationReportFromDate: new FormControl(''),
+      investigationReportToDate: new FormControl(''),
       invReportRemarks: new FormControl('')
     });
   }//end of initform
@@ -176,7 +177,8 @@ export class InvestigationReportDiViewDetailsComponent implements OnInit {
     this.invReportVar.sampleCollectedValue = formData.sampleCollected;
     this.invReportFormGroup.controls['sampleCollected'].setValue(formData.sampleCollected);
     this.invReportFormGroup.controls['sampleCollectedDate'].setValue(this.datePipe.transform(formData.sampleCollectedDate, 'dd-MMM-yyyy'));
-    this.invReportFormGroup.controls['investigationReportDate'].setValue(this.datePipe.transform(formData.investigationReportDate, 'dd-MMM-yyyy'));
+    this.invReportFormGroup.controls['investigationReportFromDate'].setValue(this.datePipe.transform(formData.investigationReportFromDate, 'dd-MMM-yyyy'));
+    this.invReportFormGroup.controls['investigationReportToDate'].setValue(this.datePipe.transform(formData.investigationReportDate, 'dd-MMM-yyyy'));
     this.invReportFormGroup.controls['invReportRemarks'].setValue(formData.investigationReportRemarks);
     let unloadingEquipment: string = "[" + formData.unloadingEquipement + "]";
     let unloadingEquipmentKey: any[] = JSON.parse(unloadingEquipment);

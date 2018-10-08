@@ -32,6 +32,7 @@ import { RCADIModule } from '../rca/rca-di/rca-di.module';
 import { CADIModule } from '../ca/ca-di/ca-di.module';
 import { PADIModule } from '../pa/pa-di/pa-di.module';
 import { CloseComplainDIModule } from '../close-complain/close-complain-di/close-complain-di.module';
+import { ActivityTrackingDIModule } from '../../modules/activity-tracking/activity-tracking-di/activity-tracking-di.module';
 
 @NgModule({
   imports: [
@@ -60,7 +61,8 @@ import { CloseComplainDIModule } from '../close-complain/close-complain-di/close
     RCADIModule,//rca di module
     CADIModule,//for ca di module
     PADIModule,//for pa di module
-    CloseComplainDIModule//close complain di
+    CloseComplainDIModule,//close complain di
+    ActivityTrackingDIModule//comp status module
   ],
   declarations: [
     HomeComponent
