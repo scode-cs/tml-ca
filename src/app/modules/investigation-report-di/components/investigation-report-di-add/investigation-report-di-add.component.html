@@ -665,7 +665,7 @@
       <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
         <div class="col-xs-12 col-sm-4 col-md-4 col-lg-2" style="float: right;" *ngIf="allInvItemDetByCustomerCode.length>0">
           <button type="submit" style="height: 35px; width: 160px;" class="btn btn-primary primary-button-style" (click)="addItemAtInv()"
-            [disabled]="!this.itemListFormGroup.dirty">
+            [disabled]="!itemListFormGroup.dirty">
             Save
           </button>
         </div>

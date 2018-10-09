@@ -134,7 +134,7 @@ export class ComplainDIViewComponent implements OnInit, OnChanges {
    */
   private getcomplaindetails() {
     // this.busySpinner = true;
-    //new add for dashboard param check
+    // new add for dashboard param check
     if(this.dashboardParameter){
       this.headerparams.filter = this.headerparams.filter? 
         this.headerparams.filter + ' AND ' + this.tilesInteractionService.wsFilter.filter :
@@ -144,6 +144,7 @@ export class ComplainDIViewComponent implements OnInit, OnChanges {
     this.complaintdIservice.getHeader(this.headerparams).subscribe((res: any) => {
       console.log('get data all', JSON.parse(res.mapDetails));
       this.complaintDIViewDetails = JSON.parse(res.mapDetails);
+      this.headerparams.filter = '';//new add to clear the filter param
       setTimeout(() => { this.busySpinner = false }, 2000);
 
     }, (err: any) => {
@@ -242,6 +243,7 @@ export class ComplainDIViewComponent implements OnInit, OnChanges {
    * @description change status dettect 
    */
   changeFacetElement(callingFacet: string) {
+    this.dashboardParameter = '';//set dashboard param blank to reset the filter
     this.changeStattusGroup;
     this.busySpinner = true;
     console.log(this.changeStattusGroup);
@@ -509,6 +511,7 @@ export class ComplainDIViewComponent implements OnInit, OnChanges {
   }//end of method
   //on search modal submit
   public onClickSearchModalSubmit() {
+    this.dashboardParameter = '';//to reset the filter
     this.serverSearchArr = [];//clear the arr
     let searchQuery: string;
     this.anyValue = this.serverSearchModalFormGroup.value.anyTypeSearch;
@@ -550,7 +553,8 @@ export class ComplainDIViewComponent implements OnInit, OnChanges {
     console.log("search query::", searchQuery);
     this.headerparams.filter = searchQuery;//set the filter to the param
     this.busySpinner = true;
-    this.getcomplaindetails();//to get the data
+    this.setPagination();//to get the data and set paginations
+    // this.getcomplaindetails();//to get the data
     this.loadFacetedNav();
     this.toggleServerSearchModal();//to close the modal
 
@@ -606,7 +610,8 @@ export class ComplainDIViewComponent implements OnInit, OnChanges {
     console.log("search query::", searchQuery);
     this.headerparams.filter = searchQuery;//set the filter to the param
     this.busySpinner = true;
-    this.getcomplaindetails();//to get the data
+    this.setPagination();//to get the data and set paginations
+    // this.getcomplaindetails();//to get the data
     this.loadFacetedNav();
   }
 }//end of class

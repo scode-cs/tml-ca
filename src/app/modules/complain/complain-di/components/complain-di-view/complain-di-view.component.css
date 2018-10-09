@@ -258,7 +258,14 @@
    text-overflow:ellipsis;
  }
 
- 
+ /* start dashboard predefined filter style */
+.dashboard-predefined-filter-style{
+  color: #6b6767;
+  font-size: 12px;
+  font-style: italic;
+  font-weight: 400;
+}
+ /* end of dashboard predefined filter style */
 
  /* start style for custom-link */
 .custom-link{
