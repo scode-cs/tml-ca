@@ -41,3 +41,7 @@
 }
 
 /* end fix custom height for nav and alert box */
+/* tart style for cursor-pointer */
+.cursor-pointer-style{
+  cursor: pointer;
+}
