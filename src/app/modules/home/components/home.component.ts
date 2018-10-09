@@ -96,53 +96,50 @@ export class HomeComponent implements OnInit, AfterViewInit {
   logout() {
     console.log("Log out");
   }//end of logout
-  //start method to call a function in every 10 sec
-  public functioncallInEveryMin() {//10000= 10 sec.
-    // this.timeInterval = 
-    
-    Observable.interval(this.timeInterval).takeWhile(() => true).subscribe(() => this.getAllocateWS());
-  }//end of functioncalleverymin method to call a function in every 10 sec 
-  // start service call method to get allocate details of logged in user
-  private getAllocateWS() {
-    console.log("in getAllocateWS method");
-    this.tempPlantTypeForNotification = this.localStorageService.user.plantType;
-    console.log("allocateJson ===>>>>", this.allocateJson);
-    this.homeDataService.getUserAllocationReport(this.allocateJson).
-    subscribe(res => {
-      console.log("test service call success:::: ", res);
-      if(res.msgType === 'Info'){
-        if(this.tempPlantTypeForNotification === 'DI'){
-          this.notificationNumber = res.xCountAllocateComplanitNotRead;
-        }else if(this.tempPlantTypeForNotification === 'PI'){
-          this.notificationNumber = 0;
-        }
-      }else{
-        this.notificationNumber = 0;
-      }
-      //check if xcount of di or pi have atlst 1 value
-      if(this.notificationNumber>0){
-        // this.toastrService.success('Please Check The Menu!','You have Notifications!');
-        this.booleanToCheckAllocateUser = false;
-      }else{
-        this.booleanToCheckAllocateUser = true;
-      }
-      console.log("this.booleanToCheckAllocateUser::::", this.booleanToCheckAllocateUser);
-    },
-    err => {
-      console.log("err of test service call:::",err);
-      this.booleanToCheckAllocateUser = true;
-      this.sessionErrorService.routeToLogin(err._body);
-    });
-  }// end of service call method to get allocate details of logged in user
 
-  // start method of deleteResErrorMsgOnClick
-  public deleteResErrorMsgOnClick() {
-    // if (resMsgType == '') {
-    //   this
-    // }
-    this.booleanToCheckAllocateUser = true;
-    this.router.navigate([ROUTE_PATHS.RouteAllocateComplaint+"/Alert"])
-  }//method to delete error msg
+  // //start method to call a function in every 10 sec
+  // public functioncallInEveryMin() {//10000= 10 sec.     
+  //   Observable.interval(this.timeInterval).takeWhile(() => true).subscribe(() => this.getAllocateWS());
+  // }//end of functioncalleverymin method to call a function in every 10 sec 
+
+  // start service call method to get allocate details of logged in user  
+  // private getAllocateWS() {
+  //   console.log("in getAllocateWS method");
+  //   this.tempPlantTypeForNotification = this.localStorageService.user.plantType;
+  //   console.log("allocateJson ===>>>>", this.allocateJson);
+  //   this.homeDataService.getUserAllocationReport(this.allocateJson).
+  //   subscribe(res => {
+  //     console.log("test service call success:::: ", res);
+  //     if(res.msgType === 'Info'){
+  //       if(this.tempPlantTypeForNotification === 'DI'){
+  //         this.notificationNumber = res.xCountAllocateComplanitNotRead;
+  //       }else if(this.tempPlantTypeForNotification === 'PI'){
+  //         this.notificationNumber = 0;
+  //       }
+  //     }else{
+  //       this.notificationNumber = 0;
+  //     }
+  //     //check if xcount of di or pi have atlst 1 value
+  //     if(this.notificationNumber>0){
+  //       // this.toastrService.success('Please Check The Menu!','You have Notifications!');
+  //       this.booleanToCheckAllocateUser = false;
+  //     }else{
+  //       this.booleanToCheckAllocateUser = true;
+  //     }
+  //     console.log("this.booleanToCheckAllocateUser::::", this.booleanToCheckAllocateUser);
+  //   },
+  //   err => {
+  //     console.log("err of test service call:::",err);
+  //     this.booleanToCheckAllocateUser = true;
+  //     this.sessionErrorService.routeToLogin(err._body);
+  //   });
+  // }// end of service call method to get allocate details of logged in user
+
+  // // start method of deleteResErrorMsgOnClick
+  // public deleteResErrorMsgOnClick() {
+  //   this.booleanToCheckAllocateUser = true;
+  //   this.router.navigate([ROUTE_PATHS.RouteAllocateComplaint+"/Alert"])
+  // }//method to delete error msg
 
   setLocalStoragevariable(subId:string){
     console.log(" subId =======>>>>>>>>>",subId);
@@ -151,6 +148,52 @@ export class HomeComponent implements OnInit, AfterViewInit {
     }else if( subId === "SSM0000012" || subId === "SSM0000011"){//for add complaint pi\view submenu
       this.invoiceSearchDetailsModel.testVar = "";
     }
-  }
+  }//end of method
+
+  //====== file download=====
+  //to download file
+  public onClickForFileDownload(val: string) {
+    console.log("clicked value : ", val);
+    let fileDownloadJson: any = {};
+    if(val === 'User Manual'){
+      fileDownloadJson.fileDesc = "User Manual";
+    }
+    this.homeDataService.downloadFile(fileDownloadJson).
+      subscribe(res => {
+        console.log("onClickForFileDownload: ", res);
+
+        if (res.msgType === 'Info') {
+          let byteCharacters = atob(res.valueSub);
+          let byteNumbers = new Array(byteCharacters.length);
+          for (var i = 0; i < byteCharacters.length; i++) {
+            byteNumbers[i] = byteCharacters.charCodeAt(i);
+          }
+
+          let byteArray = new Uint8Array(byteNumbers);
+          let blob = new Blob([byteArray], { "type": "application/octet-stream" });
+
+          if (navigator.msSaveBlob) {
+            let fileName = res.value;
+            navigator.msSaveBlob(blob, fileName);
+          } else {
+            let link = document.createElement("a");
+            link.href = URL.createObjectURL(blob);
+            link.setAttribute('visibility', 'hidden');
+            link.download = res.value;
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+          }//end else
+        }
+     
+      },
+        err => {
+          console.log(err);
+          // this.sessionErrorService.routeToLander(err._body);
+          
+        });
+
+  }//end of method
+
 
 }//end of class

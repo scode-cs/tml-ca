@@ -29,6 +29,15 @@ export class HomeDataService {
         return headers;
     }
 
+    //method to download file
+    downloadFile(fileDetails: any) {
+        this.headers = this.configService();
+        this.actionUrl = AppUrlsConst.FILE_DOWNLOAD_FROM_MENU_URL;
+        return this.http.post(this.actionUrl, fileDetails, { headers: this.headers })
+          .map(this.successCallback)
+          .catch(this.errorCallBack);
+      }//end of method to download file
+
     //method for get Complaint view details by web service
     getUserAllocationReport(compParaJson: any) {
         
@@ -48,7 +57,8 @@ export class HomeDataService {
     private errorCallBack(error: Response) {
         console.error(error);
         return Observable.throw(error);
-    }
+    }   
+
 
 }//end of class
 
