@@ -53,7 +53,7 @@
         </div>
         <div *ngIf="facetedNavData?.complainStatus && changeStattusGroup">
           <form [formGroup]="changeStattusGroup">
-            <div *ngFor="let statusFacet of facetedNavData?.complainStatus" style="padding: 5px;">
+            <div *ngFor="let statusFacet of facetedNavData?.complainStatus" style="padding: 2px;">
               <ng-container *ngIf="statusFacet.lastActivityId">
                 <input type="checkbox" formControlName="{{statusFacet.lastActivityId}}" />
                 <span>
@@ -70,7 +70,7 @@
         </div>
         <div *ngIf="facetedNavData?.complainType && complanTypeFormgroup">
           <form [formGroup]="complanTypeFormgroup">
-            <div *ngFor="let complainTypeFacet of facetedNavData?.complainType" style="padding: 5px;">
+            <div *ngFor="let complainTypeFacet of facetedNavData?.complainType" style="padding: 2px;">
               <ng-container *ngIf="complainTypeFacet.complaintTypeDesc">
                 <input type="checkbox" formControlName="{{complainTypeFacet.complaintTypeId}}" />
                 <span>
@@ -87,7 +87,7 @@
         <div *ngIf="facetedNavData?.natureOfComplain && natureOfComplainGroup">
           <form [formGroup]="natureOfComplainGroup">
 
-            <div *ngFor="let natureOfComplainFacet of facetedNavData?.natureOfComplain" style="padding: 5px;">
+            <div *ngFor="let natureOfComplainFacet of facetedNavData?.natureOfComplain" style="padding: 2px;">
               <ng-container *ngIf="natureOfComplainFacet.natureOfComplaintId">
                 <input type="checkbox" formControlName="{{natureOfComplainFacet.natureOfComplaintId}}"
                 />
@@ -114,10 +114,11 @@
 
             <!-- start div to show dashboard filter -->
             <div class="col-lg-12 col-md-12 col-xs-12" style="margin-bottom: 1%;" >
-              <span style="color: #292b2c;font-weight: 700;">Complaint Logged On Date: </span> 
+              <span style="color: #292b2c;font-weight: 700;">Effective Date: </span> 
               <span style="color: #1c2ad4;font-weight: 500;font-size: 14px;">
                 <ng-container *ngIf="dashboardParameter">
                   "{{tilesInteractionService.wsFilter?.fromDate}}" to "{{tilesInteractionService.wsFilter?.toDate}}"
+                  <span class="dashboard-predefined-filter-style">(Faceted Nav and Search will reset predefined filter)</span>
                 </ng-container>
                 <ng-container *ngIf="dashboardParameter==''">
                     "01-Jan-2018" to "{{fromDate | date: 'dd-MMM-yyyy'}}"

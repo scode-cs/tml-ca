@@ -113,14 +113,20 @@ export class DashboardComponent implements OnInit {
       plantType: '',
       sortData: '',
       orderType: '',
-      filter: "CMPLNT_LOGD_ON BETWEEN \'" + this.fromDate + " 00:00:00\' AND \'" + this.toDate + " 23:59:59\'",
+       //filter: "CMPLNT_LOGD_ON BETWEEN \'" + this.fromDate + " 00:00:00\' AND \'" + this.toDate + " 23:59:59\'",
+       filter: "CMPLNT_LOGD_ON BETWEEN \'" + this.datePipe.transform(this.fromDate, 'MM/dd/yyyy')
+       + " 00:00:00\' AND \'" + this.datePipe.transform(this.toDate, 'MM/dd/yyyy') + " 23:59:59\'",
+
       fromDate: this.fromDate,
       toDate: this.toDate,
       fileActivityId: this.localStorageService.appSettings.defaultActivityId
     };
     //set filter to get di total complaint  
     let diTilesFilter: any = {
-      filter: "CMPLNT_LOGD_ON BETWEEN \'" + this.fromDate + " 00:00:00\' AND \'" + this.toDate + " 23:59:59\'",
+      //filter: "CMPLNT_LOGD_ON BETWEEN \'" + this.fromDate + " 00:00:00\' AND \'" + this.toDate + " 23:59:59\'",
+      filter: "CMPLNT_LOGD_ON BETWEEN \'" + this.datePipe.transform(this.fromDate, 'MM/dd/yyyy')
+      + " 00:00:00\' AND \'" + this.datePipe.transform(this.toDate, 'MM/dd/yyyy') + " 23:59:59\'",
+      
       fromDate: this.fromDate,
       toDate: this.toDate
     };
@@ -174,14 +180,18 @@ export class DashboardComponent implements OnInit {
     };
     tilesFilter.filter = this.localStorageService.appSettings.activityIdFieldName + " = "
       + this.localStorageService.appSettings.closeComplaintActivityId
-      + " AND CMPLNT_LOGD_ON BETWEEN '" + this.fromDate + " 00:00:00' AND '" + this.toDate + " 23:59:59'";
-      
+      //+ " AND CMPLNT_LOGD_ON BETWEEN '" + this.fromDate + " 00:00:00' AND '" + this.toDate + " 23:59:59'"
+      + " AND CMPLNT_LOGD_ON BETWEEN '" + this.datePipe.transform(this.fromDate, 'MM/dd/yyyy')
+      + " 00:00:00' AND '" + this.datePipe.transform(this.toDate, 'MM/dd/yyyy') + " 23:59:59'";
+
     tilesFilter.fileActivityId = this.localStorageService.appSettings.closeComplaintActivityId;
 
     //set filter for di
     let diTilesFilter: any = {
-      filter: this.localStorageService.appSettings.lastActivityIdFieldName + '=' + 80
-        + " AND CMPLNT_LOGD_ON BETWEEN '" + this.fromDate + " 00:00:00' AND '" + this.toDate + " 23:59:59'",//close activity id
+      filter: this.localStorageService.appSettings.lastActivityIdFieldName + '=' + 80//close activity id
+        //+ " AND CMPLNT_LOGD_ON BETWEEN '" + this.fromDate + " 00:00:00' AND '" + this.toDate + " 23:59:59'",
+        + " AND CMPLNT_LOGD_ON BETWEEN '" + this.datePipe.transform(this.fromDate, 'MM/dd/yyyy')
+        + " 00:00:00' AND '" + this.datePipe.transform(this.toDate, 'MM/dd/yyyy') + " 23:59:59'",
       fromDate: this.fromDate,
       toDate: this.toDate
     };
@@ -233,14 +243,18 @@ export class DashboardComponent implements OnInit {
       + this.localStorageService.appSettings.complaintRegistrationActivityId
       + " AND " + this.localStorageService.appSettings.activityIdFieldName + " < "
       + this.localStorageService.appSettings.closeComplaintActivityId
-      + " AND CMPLNT_LOGD_ON BETWEEN \'" + this.fromDate + " 00:00:00\' AND \'" + this.toDate + " 23:59:59\'";
+      //+ " AND CMPLNT_LOGD_ON BETWEEN \'" + this.fromDate + " 00:00:00\' AND \'" + this.toDate + " 23:59:59\'";
+      + " AND CMPLNT_LOGD_ON BETWEEN \'" + this.datePipe.transform(this.fromDate, 'MM/dd/yyyy')
+      + " 00:00:00\' AND \'" + this.datePipe.transform(this.toDate, 'MM/dd/yyyy') + " 23:59:59\'";
 
     tilesFilter.fileActivityId = this.localStorageService.appSettings.pendingComplaintActivityId;
 
     //set filter for di
     let diTilesFilter: any = {
       filter: this.localStorageService.appSettings.lastActivityIdFieldName + '=' + 10
-        + " AND CMPLNT_LOGD_ON BETWEEN \'" + this.fromDate + " 00:00:00\' AND \'" + this.toDate + " 23:59:59\'",
+        //+ " AND CMPLNT_LOGD_ON BETWEEN \'" + this.fromDate + " 00:00:00\' AND \'" + this.toDate + " 23:59:59\'",
+        + " AND CMPLNT_LOGD_ON BETWEEN \'" + this.datePipe.transform(this.fromDate, 'MM/dd/yyyy')
+              + " 00:00:00\' AND \'" + this.datePipe.transform(this.toDate, 'MM/dd/yyyy') + " 23:59:59\'",
       fromDate: this.fromDate,
       toDate: this.toDate
     };
