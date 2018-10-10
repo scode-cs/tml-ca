@@ -1279,13 +1279,13 @@ export class ComplaintPIRegisterComponent implements OnInit {
   }
 
   //start method onKeyupComplaintQty
-  onKeyupComplaintQty(complaintQtyInTonsParam, invoiceNo, itemCode, invoiceQtyInTonsParam) {
+  onKeyupComplaintQty(complaintQtyInTonsParam, invoiceNo, itemCode, invoiceQtyInTonsParam,batchNo:string) {
     let flag: boolean = false;
     console.log("complaintQtyInTonsParam===>", complaintQtyInTonsParam);
     // let cmpQtyErr : boolean = false;
     for (let selectedItmDet of this.selectedItemDetails) {
       for (let itemDet of selectedItmDet.value.selectedItem) {
-        if (itemDet.invoiceNo == invoiceNo && itemDet.itemCode == itemCode) {
+        if (itemDet.invoiceNo == invoiceNo && itemDet.itemCode == itemCode && itemDet.batchNo == batchNo) {
           let complaintQtyInTons: number = parseFloat(complaintQtyInTonsParam);
           let invoiceQtyInTons: number = parseFloat(invoiceQtyInTonsParam);
           if (complaintQtyInTons > invoiceQtyInTons) {
@@ -1324,7 +1324,7 @@ export class ComplaintPIRegisterComponent implements OnInit {
   }//end of the method onKeyupComplaintQty
 
 
-    //start method onKeyupComplaintQty
+    //start method 
     complaintQtyErrorCheck() {
       console.log("complaintQtyErrorCheck start===>");
       for (let selectedItmDet of this.selectedItemDetails) {

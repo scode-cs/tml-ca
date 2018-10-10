@@ -160,13 +160,13 @@ export class ComplaintPIInvoiceSearchComponent implements OnInit {
 
 
   //start method deleteSelInvDetFromAllInvDetArr for deleting the ivoice details from all invoice data grid array
-  private deleteSelInvDetFromAllInvDetArr(invoiceNoParam?: string, itemCodeParam?: string) {
+  private deleteSelInvDetFromAllInvDetArr(invoiceNoParam?: string, itemCodeParam?: string,batchNo?:string) {
     console.log(" allInvDetails before splice ", this.allInvDetails);
     let indexCount: number = 0;
     let allInvDetailsSplice: any[] = [];
     allInvDetailsSplice = this.allInvDetails;
     for (let allInvDet of allInvDetailsSplice) {
-      if (allInvDet.invoiceNo == invoiceNoParam && allInvDet.itemCode == itemCodeParam) {
+      if (allInvDet.invoiceNo == invoiceNoParam && allInvDet.itemCode == itemCodeParam && allInvDet.batchNo == batchNo) {
         allInvDetailsSplice.splice(indexCount, 1);
         break;
       }//end of if
@@ -179,11 +179,11 @@ export class ComplaintPIInvoiceSearchComponent implements OnInit {
   }//end of the method deleteSelInvDetFromAllInvDet
 
   //start method deleteSelInvDetFromAllInvDetArr for deleting the ivoice details from selected invoice data grid array
-  private deleteSelInvDetFromSelInvDetArr(invoiceNoParam?: string, itemCodeParam?: string) {
+  private deleteSelInvDetFromSelInvDetArr(invoiceNoParam?: string, itemCodeParam?: string, batchNo?: string) {
     console.log(" SelInvDetails before splice ", this.selectedInvDet);
     let indexCount: number = 0;
     for (let selInvDet of this.selectedInvDet) {
-      if (selInvDet.invoiceNo == invoiceNoParam && selInvDet.itemCode == itemCodeParam) {
+      if (selInvDet.invoiceNo == invoiceNoParam && selInvDet.itemCode == itemCodeParam && selInvDet.batchNo == batchNo) {
         this.selectedInvDet.splice(indexCount, 1);
         break;
       }//end of if
@@ -202,13 +202,19 @@ export class ComplaintPIInvoiceSearchComponent implements OnInit {
       this.allInvDetails.push(selInvDetParam);
     } else {
         for (let allInvDet of this.allInvDetails) {
-          if (allInvDet.invoiceNo == invoiceNoParam && allInvDet.itemCode != itemCodeParam) {
+          let invMainArrCompositKey: string = allInvDet.invoiceNo + allInvDet.itemCode + allInvDet.batchNo;
+          let invSelectedRowCompositeKey: string = selInvDetParam.invoiceNo + selInvDetParam.itemCode + selInvDetParam.batchNo;
+          if(invMainArrCompositKey!=invSelectedRowCompositeKey){
             this.allInvDetails.push(selInvDetParam);
             break;
-          } else if (allInvDet.invoiceNo != invoiceNoParam) {
-            this.allInvDetails.push(selInvDetParam);
-            break;
-          }//end of else if
+          }
+          // if (allInvDet.invoiceNo == invoiceNoParam && allInvDet.itemCode != itemCodeParam) {
+          //   this.allInvDetails.push(selInvDetParam);
+          //   break;
+          // } else if (allInvDet.invoiceNo != invoiceNoParam) {
+          //   this.allInvDetails.push(selInvDetParam);
+          //   break;
+          // }//end of else if
         }//end of for
     }//end of else
 
@@ -222,13 +228,20 @@ export class ComplaintPIInvoiceSearchComponent implements OnInit {
       this.selectedInvDet.push(selInvDetParam);
     } else {
         for (let selInvDet of this.selectedInvDet) {
-          if (selInvDet.invoiceNo == invoiceNoParam && selInvDet.itemCode != itemCodeParam) {
+          let invMainArrCompositKey: string = selInvDet.invoiceNo + selInvDet.itemCode + selInvDet.batchNo;
+          let invSelectedRowCompositeKey: string = selInvDetParam.invoiceNo + selInvDetParam.itemCode + selInvDetParam.batchNo;
+          if(invMainArrCompositKey!=invSelectedRowCompositeKey){
             this.selectedInvDet.push(selInvDetParam);
             break;
-          } else if (selInvDet.invoiceNo != invoiceNoParam) {
-            this.selectedInvDet.push(selInvDetParam);
-            break;
-          }//end of else if
+          }
+
+          // if (selInvDet.invoiceNo == invoiceNoParam && selInvDet.itemCode != itemCodeParam && selInvDet.batchNo != selInvDetParam.batchNo) {
+          //   this.selectedInvDet.push(selInvDetParam);
+          //   break;
+          // } else if (selInvDet.invoiceNo != invoiceNoParam) {
+          //   this.selectedInvDet.push(selInvDetParam);
+          //   break;
+          // }//end of else if
         }//end of for
     }//end of else
     
@@ -238,7 +251,7 @@ export class ComplaintPIInvoiceSearchComponent implements OnInit {
   //start method onCheckInvoiceNo method for checking a selected item code and creating selected invoice grid
   onCheckInvoiceNo(selInvDetParam, invoiceNoParam, itemCodeParam) {
     //calling the method deleteSelInvDetFromAllInvDetArr
-    this.deleteSelInvDetFromAllInvDetArr(invoiceNoParam, itemCodeParam);
+    this.deleteSelInvDetFromAllInvDetArr(invoiceNoParam, itemCodeParam,selInvDetParam.batchNo);
     //calling the method insertSelInvDetToSelInvDetArr
     this.insertSelInvDetToSelInvDetArr(selInvDetParam, invoiceNoParam, itemCodeParam);
 
@@ -256,7 +269,7 @@ export class ComplaintPIInvoiceSearchComponent implements OnInit {
   //start method onCloseInvoiceNo for deleting selected invoice details
   onCloseInvoiceNo(selectedInvDet, invoiceNoParam, itemCodeParam) {
     //calling method deleteSelInvDetFromSelInvDetArr
-    this.deleteSelInvDetFromSelInvDetArr(invoiceNoParam, itemCodeParam);
+    this.deleteSelInvDetFromSelInvDetArr(invoiceNoParam, itemCodeParam,selectedInvDet.batchNo);
     //calling the method insertSelInvDetToAllInvDetArr
     this.insertSelInvDetToAllInvDetArr(selectedInvDet, invoiceNoParam, itemCodeParam);
   }//end of the method onCloseInvoiceNo

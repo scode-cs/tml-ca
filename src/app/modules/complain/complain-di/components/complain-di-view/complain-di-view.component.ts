@@ -136,15 +136,13 @@ export class ComplainDIViewComponent implements OnInit, OnChanges {
     // this.busySpinner = true;
     // new add for dashboard param check
     if(this.dashboardParameter){
-      this.headerparams.filter = this.headerparams.filter? 
-        this.headerparams.filter + ' AND ' + this.tilesInteractionService.wsFilter.filter :
+      this.headerparams.filter = 
         this.tilesInteractionService.wsFilter.filter;
     }
     this.headerparams.filter;
     this.complaintdIservice.getHeader(this.headerparams).subscribe((res: any) => {
       console.log('get data all', JSON.parse(res.mapDetails));
       this.complaintDIViewDetails = JSON.parse(res.mapDetails);
-      this.headerparams.filter = '';//new add to clear the filter param
       setTimeout(() => { this.busySpinner = false }, 2000);
 
     }, (err: any) => {
