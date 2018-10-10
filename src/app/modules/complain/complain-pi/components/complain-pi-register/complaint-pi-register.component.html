@@ -275,6 +275,9 @@
                   {{itemsHeader?.itemName}}
                 </td>
                 <td class="header-style hideextra">
+                  {{itemsHeader?.batchNo}}
+                </td>
+                <td class="header-style hideextra">
                   {{itemsHeader?.invoiceQtyInTons}}
                 </td>
                 <td class="header-style hideextra" style="padding-top:9px;font-weight: 600;">
@@ -334,11 +337,14 @@
                     {{selItem.itemName}}
                   </td>
                   <td class="td-style hideextra">
+                    {{selItem.batchNo}}
+                  </td>
+                  <td class="td-style hideextra">
                     {{selItem.invoiceQtyInTons}}
                   </td>
                   <td class="td-style hideextra">
-                    <input type="number" #complaintQtyInTons value="{{selItem.complaintQtyInTons}}" (keyup)="onKeyupComplaintQty(complaintQtyInTons.value,selItem.invoiceNo,selItem.itemCode,selItem.invoiceQtyInTons)"
-                    (click)="onKeyupComplaintQty(complaintQtyInTons.value,selItem.invoiceNo,selItem.itemCode,selItem.invoiceQtyInTons)"/>
+                    <input type="number" #complaintQtyInTons value="{{selItem.complaintQtyInTons}}" (keyup)="onKeyupComplaintQty(complaintQtyInTons.value,selItem.invoiceNo,selItem.itemCode,selItem.invoiceQtyInTons,selItem.batchNo)"
+                    (click)="onKeyupComplaintQty(complaintQtyInTons.value,selItem.invoiceNo,selItem.itemCode,selItem.invoiceQtyInTons,selItem.batchNo)"/>
                   </td>
                   <!-- <td class="td-style hideextra">
                   {{selItem.customerSegment}}
