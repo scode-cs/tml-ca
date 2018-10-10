@@ -462,17 +462,17 @@ export class ComplainDIViewComponent implements OnInit, OnChanges {
    */
   setPage(page: number) {
     // get current page of items this is for local paginate
-
     console.log(this.datacount);
     this.pager = this.getPager(this.datacount, page, 20);
-    // this.getlistofschoole(this.pager.currentPage - 1, 10);
-    this.headerparams.pageNo = (this.pager.currentPage - 1).toString();
+    //// this.getlistofschoole(this.pager.currentPage - 1, 10);
+    if((this.pager.currentPage - 1) <0){
+      this.headerparams.pageNo = "0";
+    }else{
+      this.headerparams.pageNo = (this.pager.currentPage - 1).toString();
+    }
     this.headerparams.perPage = '20';
     this.getcomplaindetails();
     this.cd.detectChanges();
-
-
-
     //use to do for local pagination
     // this.pagedItems = this.allschooldata.slice(this.pager.startIndex, this.pager.endIndex + 1);
 
@@ -563,12 +563,12 @@ export class ComplainDIViewComponent implements OnInit, OnChanges {
     let filterQuery: string = '';
     if (this.serverSearchArr.length > 1) {
       this.serverSearchArr.forEach((el, index) => {
-        filterQuery = el.dbColName + " LIKE \'%" + el.value + "%\'";
+        filterQuery = el.dbColName + " LIKE \'%~" + el.value + "%~\'";
         searchQuery = searchQuery ? searchQuery + " AND " + filterQuery: filterQuery;
       });
     } else if(this.serverSearchArr.length == 1) {
       this.serverSearchArr.forEach((el, index) => {
-        filterQuery = el.dbColName + " LIKE \'%" + el.value + "%\'";
+        filterQuery = el.dbColName + " LIKE \'%~" + el.value + "%~\'";
         searchQuery = filterQuery;
       });
     }
