@@ -826,7 +826,7 @@ export class ComplaintDIRegisterComponent implements OnInit {
   }//end of filechange method 
   //submit method
   public onComplainSubmit(): void {
-    if (this.complaintRegisterFormGroup.valid) {
+    if (this.complaintRegisterFormGroup.valid && (this.selectedItemDetails && this.selectedItemDetails.length>0)) {
       this.busySpinner = true;
       let date = new Date();
       let currentDate: string = this.datePipe.transform(date, 'yyyy-MM-dd');
