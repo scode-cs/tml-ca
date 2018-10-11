@@ -8,6 +8,9 @@ export class UserModel {
   private _plantType: string;
   //new add for both plant type
   private _plantTypeForBoth: string;
+  //new add for from date n to date
+  private _fromDate: string;
+  private _toDate: string;
 
   get plantTypeForBoth(): string {
     return this._plantTypeForBoth;
@@ -62,6 +65,20 @@ export class UserModel {
   }
   set plantType(plantType: string){
     this._plantType = plantType;
+  }
+
+  get fromDate():string {
+    return this._fromDate;
+  }
+  set fromDate(fromDate:string) {
+    this._fromDate = fromDate;
+  }
+
+  get toDate():string {
+    return this._toDate;
+  }
+  set toDate(toDate:string) {
+    this._toDate = toDate;
   }
   
 }//end of class

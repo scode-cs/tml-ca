@@ -85,14 +85,16 @@ export class DashboardComponent implements OnInit {
     dateRangeFormGroup['toDate'] = new FormControl();
     this.dateRangeFormGroup = new FormGroup(dateRangeFormGroup);
 
-    let date = new Date();
-    let currentDate: string = this.datePipe.transform(date, 'yyyy-MM-dd');
-    let fDateForShow: string = '2018-01-01';
+    // let date = new Date();
+    // let currentDate: string = this.datePipe.transform(date, 'yyyy-MM-dd');
+    // let fDateForShow: string = '2018-01-01';
+    let toDate = this.localStorageService.user.toDate;
+    let fDateForShow = this.localStorageService.user.fromDate;
     let fDate = this.datePipe.transform(fDateForShow, 'yyyy-MM-dd');//'dd-MMM-yyyy'
     this.fromDate = this.datePipe.transform(fDateForShow, 'dd-MMM-yyyy');//to show the from date
-    this.toDate = this.datePipe.transform(date, 'dd-MMM-yyyy');//to show the to date
+    this.toDate = this.datePipe.transform(toDate, 'dd-MMM-yyyy');//to show the to date//date,'dd-MMM-yyyy'
     this.dateRangeFormGroup.controls['fromDate'].setValue(fDate);
-    this.dateRangeFormGroup.controls['toDate'].setValue(currentDate);
+    this.dateRangeFormGroup.controls['toDate'].setValue(toDate);
 
 
 
@@ -321,6 +323,8 @@ export class DashboardComponent implements OnInit {
   onDateRangeModalSubmit() {
     this.fromDate = this.dateRangeFormGroup.controls.fromDate.value;
     this.toDate = this.dateRangeFormGroup.controls.toDate.value;
+    this.localStorageService.user.fromDate = this.fromDate;//set the date to localstorage service
+    this.localStorageService.user.toDate = this.toDate;//set todate to localstorage service
     if (this.fromDate && this.toDate) {
       this.fromDate = this.transform(this.fromDate);
       this.toDate = this.transform(this.toDate);
