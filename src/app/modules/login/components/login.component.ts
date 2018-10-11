@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormBuilder, Validators, FormControl } from '@angular/forms';
+import { DatePipe } from '@angular/common';
 import { Router } from '@angular/router';
 import { LoginModel } from '../models/login-model';
 import { UserValidators } from '../models/user-validator';
@@ -27,6 +28,7 @@ export class LoginComponent implements OnInit {
   constructor(
     private formBuilder: FormBuilder,
     private router: Router,
+    private datePipe: DatePipe,
     private loginService: LoginService,
     private localStorageService: LocalStorageService) {
 
@@ -94,7 +96,14 @@ export class LoginComponent implements OnInit {
     userModel.roleId = resDetails.userDetails.roleId;
     userModel.roleName = resDetails.userDetails.roleName;
     userModel.plantType = resDetails.userDetails.plantType; 
-    userModel.plantTypeForBoth = resDetails.userDetails.plantType;                            
+    userModel.plantTypeForBoth = resDetails.userDetails.plantType; 
+    //new add for dashboard date features- 11.10.18   
+    let date = new Date();
+    let currentDate: string = this.datePipe.transform(date, 'yyyy-MM-dd');
+    let fDateForShow: string = '2018-01-01';
+    userModel.fromDate = fDateForShow;
+    userModel.toDate = currentDate;
+    //end of new add for dashboard date features- 11.10.18               
     this.localStorageService.user = userModel;
 
     let appSettingsModel: AppSettingsModel = new AppSettingsModel();

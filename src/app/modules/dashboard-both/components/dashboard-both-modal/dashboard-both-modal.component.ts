@@ -1,6 +1,7 @@
 import { Component, Input, ElementRef, ViewChild, OnInit } from '@angular/core';
 import { NgbModal, NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { Router } from '@angular/router';
+import { DatePipe } from '@angular/common';
 import "rxjs/add/operator/do";
 import "rxjs/add/operator/map";
 import { Observable } from 'rxjs';
@@ -26,6 +27,7 @@ export class DashboardBothModalComponent implements OnInit {
   
   constructor(
     private router: Router,
+    private datePipe: DatePipe,
     public activeModal: NgbActiveModal,
     private localStorageService: LocalStorageService,
     private dashboardBothService: DashboardBothService
@@ -77,7 +79,14 @@ public dashboardModalSubmit(){
     userModel.roleId = resDetails.userDetails.roleId;
     userModel.roleName = resDetails.userDetails.roleName;
     userModel.plantType = this.plantTypeRadioValue;//set the radiovalue to plant type(DI/PI)
-    userModel.plantTypeForBoth = resDetails.userDetails.plantType;                              
+    userModel.plantTypeForBoth = resDetails.userDetails.plantType;   
+     //new add for dashboard date features- 11.10.18   
+     let date = new Date();
+     let currentDate: string = this.datePipe.transform(date, 'yyyy-MM-dd');
+     let fDateForShow: string = '2018-01-01';
+     userModel.fromDate = fDateForShow;
+     userModel.toDate = currentDate;
+     //end of new add for dashboard date features- 11.10.18                             
     this.localStorageService.user = userModel;
 
     let appSettingsModel: AppSettingsModel = new AppSettingsModel();
