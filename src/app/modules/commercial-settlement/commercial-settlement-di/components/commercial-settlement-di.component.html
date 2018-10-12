@@ -1,0 +1,200 @@
+<div class="page-container">
+    <div>
+        <ol class="breadcrumb breadcrumb-custom">
+            <li class="breadcrumb-item">
+                <a href="#/home">
+                    <i class="fa fa-home"></i> Home </a>
+            </li>
+            <li class="breadcrumb-item active">Commercial Settlement</li>
+        </ol>
+    </div>
+    <!--start form for commerCialSettlementFromGroup-->
+    <form [formGroup]="commerCialSettlementFromGroup" autocomplete="off" ><!--(ngSubmit)="onComplaintResolutionPISubmit()"-->
+        <!-- start div for row complaint-form class-->
+        <div class="row form-style">
+            <!--start div complaint reference no -->
+            <div class="form-group col-xs-12 col-sm-6 col-md-6 col-lg-4">
+                <label for="complaintReferenceNo">Complaint Reference No</label>
+                <input type="text" class="form-control" formControlName="complaintReferenceNo" readonly="readonly" />
+            </div>
+            <!--end of div for complaint reference no-->
+
+            <!--start div closeDate-->
+            <div class="form-group col-xs-12 col-sm-6 col-md-6 col-lg-4">
+                <label>Date</label>
+                <input type="text" class="form-control" formControlName="date" readonly="readonly" />
+            </div>
+            <!--end of div for closeDate-->
+
+            <!-- start table div -->
+            <div class="col-lg-12 col-md-12 col-xs-12 scroll-bar" style="margin-bottom: 10px;" *ngIf="itemDetails?.length>0">
+                <table class="table-style">
+                    <thead>
+                        <tr class="th-style">
+                            <td class="hideextra header-style-first">Official Document No</td>
+                            <td class="hideextra header-style">Item Code</td>
+                            <td class="hideextra header-style">Item Description</td>
+                            <td class="hideextra header-style">Official Document Date</td>
+                            <td class="hideextra header-style">Invoice Qty(in Mtrs)</td>
+                            <td class="hideextra header-style bold-font" style="padding-top:9px;">Complaint Qty(in
+                                Mtrs)
+                                <label class="red-asterick">*</label>
+                            </td>
+                            <td class="hideextra header-style">Complaint Type</td>
+                            <td class="hideextra header-style">Nature of Complaint</td>
+                            <td class="hideextra header-style">Detail of Complaint</td>
+                            <td class="hideextra header-style">Project Name</td>
+                            <td class="hideextra header-style-last">Project Location</td>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr class="tr-style" *ngFor="let itemDet of itemDetails">
+                            <td class="td-style-first hideextra">
+                                {{itemDet.invoiceNo}}
+                                <!-- <i class="fa fa-pencil-square text-info" style="cursor: pointer;" (click)="openEditCompTypeModal(itemDet)"></i> -->
+                            </td>
+                            <td class="td-style hideextra">
+                                {{itemDet.itemNo}}
+                            </td>
+                            <td class="td-style hideextra">
+                                {{itemDet.itemName}}
+                            </td>
+                            <td class="td-style hideextra">
+                                {{itemDet.invoiceDate}}
+                            </td>
+                            <td class="td-style hideextra">
+                                {{itemDet.invoiceQtyInMtrs}}
+                            </td>
+                            <td class="td-style hideextra">
+                                {{itemDet.complaintQtyInMtrs}}
+                            </td>
+                            <td class="td-style hideextra">
+                                {{itemDet.complaintTypeDesc}}
+                            </td>
+                            <td class="td-style hideextra">
+                                {{itemDet.natureOfComplaintDesc}}
+                            </td>
+                            <td class="td-style hideextra">
+                                {{itemDet.complaintDetails}}
+                            </td>
+                            <td class="td-style hideextra">
+                                {{itemDet.projectName}}
+                            </td>
+                            <td class="td-style-last hideextra">
+                                {{itemDet.projectLocation}}
+                            </td>
+                        </tr>
+
+                        <tr class="tr-style">
+                            <td class="td-style-first hideextra">
+                                Add Item(s)
+                                <i style="font-size:16px;cursor: pointer;" title="Click here" class="fa fa-plus-circle"
+                                    ></i>
+                            </td>
+                            <td class="td-style">
+
+                            </td>
+                            <td class="td-style">
+
+                            </td>
+                            <td class="td-style">
+
+                            </td>
+                            <td class="td-style">
+
+                            </td>
+                            <td class="td-style">
+
+                            </td>
+                            <td class="td-style">
+
+                            </td>
+                            <td class="td-style">
+
+                            </td>
+                            <td class="td-style">
+
+                            </td>
+                            <td class="td-style">
+
+                            </td>
+                            <td class="td-style-last">
+
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <!--end table div-->
+
+            <!-- start div for edit required comercial settlement  -->
+            <div class="form-group col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                <label>Compensation </label>
+                <label class="red-asterick">*</label>
+                <div>
+                    <label class="control control--radio display-style">Accept
+                        <input type="radio" name="compensation" formControlName="compensation" value="A" />
+                        <div class="control__indicator"></div>
+                    </label>
+                    <label class="control control--radio display-style">Reject
+                        <input type="radio" name="compensation" formControlName="compensation" value="R" />
+                        <div class="control__indicator"></div>
+                    </label>
+                    <label class="control control--radio display-style">Query
+                        <input type="radio" name="compensation" formControlName="compensation" value="Q" />
+                        <div class="control__indicator"></div>
+                    </label>
+                </div>
+            </div>
+            <!-- end of div for edit required commercial settlement -->
+
+            <!-- start div for actn details -->
+            <div class="form-group col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                <label>Remarks</label>
+                <label class="red-asterick">*</label>
+                <textarea formControlName="remarks" class="form-control hide-horizontal-scroll comment-box-textarea-style"
+                    required></textarea>
+                <div class="alert alert-danger" *ngIf="commerCialSettlementFromGroup.get('remarks').hasError('required') && commerCialSettlementFromGroup.get('remarks').touched">
+                    <i class="fa fa-exclamation-circle"></i>Remarks is required!
+                </div>
+            </div>
+            <!-- end of div for actn details -->
+
+            <!-- start div for Submit  and Cancel Button-->
+            <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                <!-- start div for Submit Button-->
+                <div class="col-xs-12 col-sm-4 col-md-4 col-lg-2 button-holder">
+                    <button type="submit" class="btn btn-primary primary-button-style" disabled="disabled">Submit
+                    </button>
+                    <!--[disabled]="!(commerCialSettlementFromGroup.valid)"-->
+                </div>
+                <!-- end div for Submit Button-->
+                <!-- start div for Cancel Button-->
+                <div class="col-xs-12 col-sm-4 col-md-4 col-lg-2 button-holder">
+                    <button type="submit" class="btn default-button-style" (click)="onCancel()">
+                        Cancel
+                    </button>
+                </div>
+                <!-- end div for Cancel Button-->
+            </div>
+            <!-- start div for Submit  and Cancel Button-->
+        </div>
+        <!-- end div for row complaint-form class-->
+        <!-- error msg div -->
+        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" *ngIf="errorMsgObj.errMsgShowFlag">
+            <div class="alert alert-danger">
+                {{errorMsgObj.errorMsg}}&nbsp;
+                <button aria-label="Close" class="close" type="button" (click)="deleteResErrorMsgOnClick()">
+                    <span aria-hidden="true">×</span>
+                </button>
+            </div>
+            <br />
+            <br />
+        </div>
+        <!-- end of error msg div -->
+    </form>
+    <!--end form for commerCialSettlementFromGroup-->
+</div>
+<!--end of div page-container-->
+
+<ispl-busy-spinner *ngIf="busySpinner"></ispl-busy-spinner>
