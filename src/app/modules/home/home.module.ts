@@ -33,6 +33,7 @@ import { CADIModule } from '../ca/ca-di/ca-di.module';
 import { PADIModule } from '../pa/pa-di/pa-di.module';
 import { CloseComplainDIModule } from '../close-complain/close-complain-di/close-complain-di.module';
 import { ActivityTrackingDIModule } from '../../modules/activity-tracking/activity-tracking-di/activity-tracking-di.module';
+import { CommercialSettlementDIModule } from '../commercial-settlement/commercial-settlement-di/commercial-settlement-di.module';
 
 @NgModule({
   imports: [
@@ -62,7 +63,8 @@ import { ActivityTrackingDIModule } from '../../modules/activity-tracking/activi
     CADIModule,//for ca di module
     PADIModule,//for pa di module
     CloseComplainDIModule,//close complain di
-    ActivityTrackingDIModule//comp status module
+    ActivityTrackingDIModule,//comp status module
+    CommercialSettlementDIModule//commercial settlement
   ],
   declarations: [
     HomeComponent

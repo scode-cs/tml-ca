@@ -175,8 +175,14 @@ export class ActivityTrackingDIComponent implements OnInit {
         }    
         this.router.navigate([routePath]);
     }//end of method route by comp ref id
+
+    public onClickCommSetLinkClick(activityTrackingSelectedRowVal: any){
+      let compRefNo: string = activityTrackingSelectedRowVal.complainRefNo;
+      let lastActivityId = activityTrackingSelectedRowVal.currentStatus;
+      this.router.navigate([ROUTE_PATHS.RouteCommercialSettlementDI,compRefNo,lastActivityId]);
+    }//end of method
    
-    //modal
+    //modal------------------------------------>>
     comSetFlag: boolean = false;
     private compRefNoOfCommSet: string = '';
     private toggleModalBtn(){

@@ -49,7 +49,7 @@
                                             (click)="onCommSetSwitchBtnClick(activityTrackDI.complainRefNo)">
                                         <span class="slider round"></span>
                                     </label>
-                                    <span *ngIf="activityTrackDI.commercialSett" class="custom-link">Details</span>
+                                    <span *ngIf="activityTrackDI.commercialSett" class="custom-link" (click)="onClickCommSetLinkClick(activityTrackDI)">Details</span>
                                 </td>
                             </tr>
                         </tbody>

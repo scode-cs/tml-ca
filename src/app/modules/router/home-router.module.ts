@@ -56,6 +56,7 @@ import { PADIViewDetailsComponent } from '../pa/pa-di/components/pa-di-view-deta
 import { CloseComplainDIAddEditComponent } from '../close-complain/close-complain-di/components/close-complain-di-add-edit/close-complain-di-add-edit.component';
 import { CloseComplainDIViewDetailsComponent } from '../close-complain/close-complain-di/components/close-complain-di-view-details/close-complain-di-view-details.component';
 import { ActivityTrackingDIComponent } from '../activity-tracking/activity-tracking-di/components/activity-tracking-di.component';
+import { CommercialSettlementDIComponent } from '../commercial-settlement/commercial-settlement-di/components/commercial-settlement-di.component';
 
 export const HOME_ROUTES: Routes = [
   {
@@ -271,6 +272,10 @@ export const HOME_ROUTES: Routes = [
       {
         path: ROUTER_PATHS.ViewDetailsCloseComplainDIRouter,//close complain di view 
         component: CloseComplainDIViewDetailsComponent
+      },
+      {
+        path: ROUTER_PATHS.CommercialsettlementDIRouter,//commercial settlement route add
+        component: CommercialSettlementDIComponent
       }
 
 
