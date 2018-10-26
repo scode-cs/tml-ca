@@ -98,11 +98,8 @@ export class LoginComponent implements OnInit {
     userModel.plantType = resDetails.userDetails.plantType; 
     userModel.plantTypeForBoth = resDetails.userDetails.plantType; 
     //new add for dashboard date features- 11.10.18   
-    let date = new Date();
-    let currentDate: string = this.datePipe.transform(date, 'yyyy-MM-dd');
-    let fDateForShow: string = '2018-01-01';
-    userModel.fromDate = fDateForShow;
-    userModel.toDate = currentDate;
+    userModel.fromDate = resDetails.userDetails.dashboardSelectedFromDate;
+    userModel.toDate = resDetails.userDetails.dashboardSelectedToDate;
     //end of new add for dashboard date features- 11.10.18               
     this.localStorageService.user = userModel;
 
