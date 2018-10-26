@@ -239,6 +239,20 @@ public sendEmail(emailObj:any, plantType: string, action: string) {
       .map((res: Response) => { return res.json() })
       .catch((error: Response) => { return Observable.throw(error) });
 }
+
+/**
+ * 
+ * @param jsonBody set data to update
+ */
+public updateDashboardDate(jsonBody:any) {
+  let headers: Headers = this.configService();
+  let actionUrl = AppUrlsConst.DASHBOARD_DATE_UPDATE_URL;
+
+  return this.http.put(actionUrl, jsonBody, { headers: headers })
+      .map((res: Response) => { return res.json() })
+      .catch((error: Response) => { return Observable.throw(error) });
+}
+
   
 
 }

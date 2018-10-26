@@ -323,25 +323,43 @@ export class DashboardComponent implements OnInit {
   onDateRangeModalSubmit() {
     this.fromDate = this.dateRangeFormGroup.controls.fromDate.value;
     this.toDate = this.dateRangeFormGroup.controls.toDate.value;
-    this.localStorageService.user.fromDate = this.fromDate;//set the date to localstorage service
-    this.localStorageService.user.toDate = this.toDate;//set todate to localstorage service
     if (this.fromDate && this.toDate) {
-      this.fromDate = this.transform(this.fromDate);
-      this.toDate = this.transform(this.toDate);
-      console.log("FromDate::", this.fromDate);
-      console.log("toDate::", this.toDate);
+      this.localStorageService.user.fromDate = this.fromDate;//set the date to localstorage service
+      this.localStorageService.user.toDate = this.toDate;//set todate to localstorage service
 
-      //new add for number spinner
-      this.tiles1.tilesBodyNumber=  '-';
-      this.tiles2.tilesBodyNumber=  '-';
-      this.tiles3.tilesBodyNumber=  '-';
+      // dashboard date update ws call
+      let jsonBody: any = {};
+      jsonBody.userId = this.localStorageService.user.userId;
+      jsonBody.dashboardSelectedFromDate = this.fromDate;
+      jsonBody.dashboardSelectedToDate = this.toDate;
+      this.complaintDIService.updateDashboardDate(jsonBody).
+      subscribe(res=>{
+        if(res.msgType === 'Info'){
+          this.fromDate = this.transform(this.fromDate);
+          this.toDate = this.transform(this.toDate);
+          console.log("FromDate::", this.fromDate);
+          console.log("toDate::", this.toDate);
+
+          //new add for number spinner
+          this.tiles1.tilesBodyNumber=  '-';
+          this.tiles2.tilesBodyNumber=  '-';
+          this.tiles3.tilesBodyNumber=  '-';
+          
+          this.getDataTile1();
+          this.getDataTile2();
+          this.getDataTile3();
+          this.toogleDateRange();
+          this.modalErrorMsgObj.modalErrMsgShowFlag = false;
+          this.modalErrorMsgObj.modalErrorMsg = "";
+        }else{
+          this.modalErrorMsgObj.modalErrMsgShowFlag = true;
+          this.modalErrorMsgObj.modalErrorMsg = res.msg;
+        }
+      },err=>{
+        this.modalErrorMsgObj.modalErrMsgShowFlag = true;
+        this.modalErrorMsgObj.modalErrorMsg = err.msg;
+      });
       
-      this.getDataTile1();
-      this.getDataTile2();
-      this.getDataTile3();
-      this.toogleDateRange();
-      this.modalErrorMsgObj.modalErrMsgShowFlag = false;
-      this.modalErrorMsgObj.modalErrorMsg = "";
     } else {
       this.modalErrorMsgObj.modalErrMsgShowFlag = true;
       this.modalErrorMsgObj.modalErrorMsg = "Please Select Dates";

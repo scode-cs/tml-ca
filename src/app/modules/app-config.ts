@@ -168,7 +168,8 @@ export const AppUrlsConst: any = {
     SEND_EMAIL_URL: URL_PATH + 'api/comp/sendemail',//to send email
     VIEW_COMP_STATUS_WITH_COM_SET_URL: URL_PATH + 'api/complaintview/viewcomrcmsetlmnt',//view complaint status with comm set
     UPDATE_COM_SET_FROM_COMP_STATUS_GRID_URL: URL_PATH + 'api/complaint/updatecomrcmsetlmnt',//update com set from comp status grid 
-    FILE_DOWNLOAD_FROM_MENU_URL: URL_PATH + 'api/util/download'//file download url from menu
+    FILE_DOWNLOAD_FROM_MENU_URL: URL_PATH + 'api/util/download',//file download url from menu
+    DASHBOARD_DATE_UPDATE_URL: URL_PATH + 'api/user/updatedboard'//dashboard date update url
 }
 
 export const WebServiceConst: any = {
