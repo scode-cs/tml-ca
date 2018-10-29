@@ -1,5 +1,5 @@
 import { OnInit, Component, ChangeDetectorRef } from '@angular/core';
-import { FormGroup, Validators, FormControl } from '@angular/forms';
+import { FormGroup, Validators, FormControl,FormBuilder } from '@angular/forms';
 import { Router } from '@angular/router';
 import { ActiivityTrackingModel } from '../models/activity-tracking-di.model';
 import { ActivityTrackingDIService } from '../services/activity-tracking-di.services';
@@ -23,13 +23,19 @@ export class ActivityTrackingDIComponent implements OnInit {
     //pagination var
     pager: any = {};
     datacount: number;
-
+    //for local search
+    public searchFormGroup: FormGroup;
     constructor(
         private changeDetectorRef: ChangeDetectorRef,
         private router: Router,
+        private formBuilder: FormBuilder,
         private activityTrackingDIService: ActivityTrackingDIService,
         private complaintDIService: ComplaintDIService
     ) {
+      // this.gridSearch = new FormControl('');
+      this.searchFormGroup = this.formBuilder.group({
+        'gridSearch': ''
+      });
         let formGroup: any = {};
         formGroup['commercialCheck'] = new FormControl();
         this.activityTrackingFormGroup = new FormGroup(formGroup);

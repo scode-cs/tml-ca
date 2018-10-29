@@ -10,6 +10,28 @@
   }
 /* end of breadcrumb style */
 
+/*start style for faceted nav*/
+.faceted-nav{
+    border-right: 1pt solid #EAEBED;
+  }
+  .faceted-header{
+    background-color: #dbdada;
+    color: #69696B;
+    font-family: sans-serif;
+    text-align: left;
+    height: 33px;
+    margin-left: -16px;
+    margin-right: -16px;
+    border: 1px solid #BCBCBC;
+    
+  }
+  .label-faceted-header {
+    padding-left: 10px;
+    padding-bottom: 2px;
+    padding-top: 5px;
+  }
+  /*end style for faceted nav*/
+
 /* start table style */
 .table-style {
     border-collapse: separate;
