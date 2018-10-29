@@ -1,22 +1,22 @@
 export class ActiivityTrackingModel {
 
     private _activityTrackingGridConfig: any = {
-        'complainNo': {
+        'complainRefNo': {
             headerDesc: 'Complaint Number', headerClass: 'header-first-td-style', dataClass: 'tbody-first-td-style'
         },
-        'status': {
+        'statusDisplay': {
             headerDesc: 'Status', headerClass: 'header-mid-td-style', dataClass: 'tbody-mid-td-style'
         },
-        'commSett': {
+        'commercialSett': {
             headerDesc: 'Commercial Settlement', headerClass: 'header-last-td-style', dataClass: 'tbody-last-td-style'
         }
     }
 
     private _activityTrackingGridConfigWithOutCommSet: any = {
-        'complainNo': {
+        'complainRefNo': {
             headerDesc: 'Complaint Number', headerClass: 'header-first-td-style', dataClass: 'tbody-first-td-style'
         },
-        'status': {
+        'statusDisplay': {
             headerDesc: 'Status', headerClass: 'header-last-td-style', dataClass: 'tbody-last-td-style-partial-grid'
         }
     }
