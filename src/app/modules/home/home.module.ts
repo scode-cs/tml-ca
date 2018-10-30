@@ -34,6 +34,7 @@ import { PADIModule } from '../pa/pa-di/pa-di.module';
 import { CloseComplainDIModule } from '../close-complain/close-complain-di/close-complain-di.module';
 import { ActivityTrackingDIModule } from '../../modules/activity-tracking/activity-tracking-di/activity-tracking-di.module';
 import { CommercialSettlementDIModule } from '../commercial-settlement/commercial-settlement-di/commercial-settlement-di.module';
+import { CommercialSettlementPIModule } from '../commercial-settlement/commercial-settlement-pi/commercial-settlement-pi.module';
 
 @NgModule({
   imports: [
@@ -64,7 +65,8 @@ import { CommercialSettlementDIModule } from '../commercial-settlement/commercia
     PADIModule,//for pa di module
     CloseComplainDIModule,//close complain di
     ActivityTrackingDIModule,//comp status module
-    CommercialSettlementDIModule//commercial settlement
+    CommercialSettlementDIModule,//commercial settlement di
+    CommercialSettlementPIModule//comm sett pi
   ],
   declarations: [
     HomeComponent
