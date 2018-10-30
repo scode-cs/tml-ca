@@ -57,6 +57,7 @@ import { CloseComplainDIAddEditComponent } from '../close-complain/close-complai
 import { CloseComplainDIViewDetailsComponent } from '../close-complain/close-complain-di/components/close-complain-di-view-details/close-complain-di-view-details.component';
 import { ActivityTrackingDIComponent } from '../activity-tracking/activity-tracking-di/components/activity-tracking-di.component';
 import { CommercialSettlementDIComponent } from '../commercial-settlement/commercial-settlement-di/components/commercial-settlement-di.component';
+import { CommercialSettlementPIComponent } from '../commercial-settlement/commercial-settlement-pi/components/commercial-settlement-pi.component';
 
 export const HOME_ROUTES: Routes = [
   {
@@ -274,8 +275,12 @@ export const HOME_ROUTES: Routes = [
         component: CloseComplainDIViewDetailsComponent
       },
       {
-        path: ROUTER_PATHS.CommercialsettlementDIRouter,//commercial settlement route add
+        path: ROUTER_PATHS.CommercialsettlementDIRouter,//commercial settlement di route add
         component: CommercialSettlementDIComponent
+      },
+      {
+        path: ROUTER_PATHS.CommercialsettlementPIRouter,//commercial settlement pi router add
+        component: CommercialSettlementPIComponent
       }
 
 

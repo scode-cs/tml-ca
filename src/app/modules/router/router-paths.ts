@@ -207,6 +207,12 @@ const ROUTE_COMM_SET_DI_CONST: string = 'commercialsettlementdi';
 const ROUTE_COMM_SET_DI: string = ROUTE_COMM_SET_DI_CONST + '/' + ':complaintReferenceNo'+ '/' + ':complaintStatus';
 const ROUTE_COMM_SET_DI_FULL: string = ROUTE_HOME_FULL + '/' + ROUTE_COMM_SET_DI_CONST;//add
 
+//commercial settlement pi
+const ROUTE_COMM_SET_PI_CONST: string = 'commercialsettlementpi';
+const ROUTE_COMM_SET_PI: string = ROUTE_COMM_SET_PI_CONST + '/' + ':complaintReferenceNo';
+const ROUTE_COMM_SET_PI_FULL: string = ROUTE_HOME_FULL + '/' + ROUTE_COMM_SET_PI_CONST;//add
+
+
 // Full route path (/login, /home/dashboard etc.)
 export const ROUTE_PATHS = {
     RouteLogin: ROUTE_LOGIN_FULL,
@@ -263,7 +269,8 @@ export const ROUTE_PATHS = {
     RouteViewDetailsPADI: ROUTE_VIEW_DETAILS_PA_DI_FULL,//view pa
     RouteAddCloseComplainDI: ROUTE_ADD_CLOSE_COMPLAIN_DI_FULL,//add close complain di
     RouteViewDetailsCloseComplainDI: ROUTE_VIEW_DETAILS_CLOSE_COMPLAIN_DI_FULL,//view close complain
-    RouteCommercialSettlementDI: ROUTE_COMM_SET_DI_FULL//route di commercial settlement add
+    RouteCommercialSettlementDI: ROUTE_COMM_SET_DI_FULL,//route di commercial settlement add
+    RouteCommercialSettlementPI: ROUTE_COMM_SET_PI_FULL//route pi commercial settlement add
 }
 
 // Router names (like login, home, dashboard etc.)
@@ -330,5 +337,6 @@ export const ROUTER_PATHS = {
     ViewDetailsPADIRouter: ROUTE_VIEW_DETAILS_PA_DI,//pa view details
     AddCloseComplainDIRouter: ROUTE_ADD_CLOSE_COMPLAIN_DI,//add CloseComplain di
     ViewDetailsCloseComplainDIRouter: ROUTE_VIEW_DETAILS_CLOSE_COMPLAIN_DI,//CloseComplain view details
-    CommercialsettlementDIRouter: ROUTE_COMM_SET_DI//comm set di add route
+    CommercialsettlementDIRouter: ROUTE_COMM_SET_DI,//comm set di add route
+    CommercialsettlementPIRouter: ROUTE_COMM_SET_PI,//comm set pi add route
 }
