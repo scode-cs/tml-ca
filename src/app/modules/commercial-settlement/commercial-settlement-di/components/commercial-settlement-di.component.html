@@ -9,7 +9,8 @@
         </ol>
     </div>
     <!--start form for commerCialSettlementFromGroup-->
-    <form [formGroup]="commerCialSettlementFromGroup" autocomplete="off" ><!--(ngSubmit)="onComplaintResolutionPISubmit()"-->
+    <form [formGroup]="commerCialSettlementFromGroup" autocomplete="off">
+        <!--(ngSubmit)="onComplaintResolutionPISubmit()"-->
         <!-- start div for row complaint-form class-->
         <div class="row form-style">
             <!--start div complaint reference no -->
@@ -25,105 +26,134 @@
                 <input type="text" class="form-control" formControlName="date" readonly="readonly" />
             </div>
             <!--end of div for closeDate-->
+            <!--start div closeDate-->
+            <div class="form-group col-xs-12 col-sm-6 col-md-6 col-lg-4">
+                <label>Total Compensation Amount</label>
+                <input type="text" class="form-control" formControlName="totalCompensationAmount" readonly="readonly" />
+            </div>
+            <!--end of div for closeDate-->
 
             <!-- start table div -->
             <div class="col-lg-12 col-md-12 col-xs-12 scroll-bar" style="margin-bottom: 10px;" *ngIf="itemDetails?.length>0">
-                <table class="table-style">
-                    <thead>
-                        <tr class="th-style">
-                            <td class="hideextra header-style-first">Official Document No</td>
-                            <td class="hideextra header-style">Item Code</td>
-                            <td class="hideextra header-style">Item Description</td>
-                            <td class="hideextra header-style">Official Document Date</td>
-                            <td class="hideextra header-style">Invoice Qty(in Mtrs)</td>
-                            <td class="hideextra header-style bold-font" style="padding-top:9px;">Complaint Qty(in
-                                Mtrs)
-                                <label class="red-asterick">*</label>
-                            </td>
-                            <td class="hideextra header-style">Complaint Type</td>
-                            <td class="hideextra header-style">Nature of Complaint</td>
-                            <td class="hideextra header-style">Detail of Complaint</td>
-                            <td class="hideextra header-style">Project Name</td>
-                            <td class="hideextra header-style-last">Project Location</td>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr class="tr-style" *ngFor="let itemDet of itemDetails">
-                            <td class="td-style-first hideextra">
-                                {{itemDet.invoiceNo}}
-                                <!-- <i class="fa fa-pencil-square text-info" style="cursor: pointer;" (click)="openEditCompTypeModal(itemDet)"></i> -->
-                            </td>
-                            <td class="td-style hideextra">
-                                {{itemDet.itemNo}}
-                            </td>
-                            <td class="td-style hideextra">
-                                {{itemDet.itemName}}
-                            </td>
-                            <td class="td-style hideextra">
-                                {{itemDet.invoiceDate| date: 'dd-MMM-yyyy'}}
-                            </td>
-                            <td class="td-style hideextra">
-                                {{itemDet.invoiceQtyInMtrs}}
-                            </td>
-                            <td class="td-style hideextra">
-                                {{itemDet.complaintQtyInMtrs}}
-                            </td>
-                            <td class="td-style hideextra">
-                                {{itemDet.complaintTypeDesc}}
-                            </td>
-                            <td class="td-style hideextra">
-                                {{itemDet.natureOfComplaintDesc}}
-                            </td>
-                            <td class="td-style hideextra">
-                                {{itemDet.complaintDetails}}
-                            </td>
-                            <td class="td-style hideextra">
-                                {{itemDet.projectName}}
-                            </td>
-                            <td class="td-style-last hideextra">
-                                {{itemDet.projectLocation}}
-                            </td>
-                        </tr>
+                <!-- start item form -->
+                <form [formGroup]="itemListFormGroup">
+                    <table class="table-style">
+                        <thead>
+                            <tr class="th-style">
+                                <td class="hideextra header-style-first">Official Document No</td>
+                                <td class="hideextra header-style">Item Code</td>
+                                <td class="hideextra header-style">Item Description</td>
+                                <td class="hideextra header-style">Official Document Date</td>
+                                <td class="hideextra header-style">Invoice Qty(in Mtrs)</td>
+                                <td class="hideextra header-style">Complaint Qty(in Mtrs)</td>
+                                <td class="hideextra header-style bold-font" style="padding-top:9px;">Compensation Qty
+                                    <label class="red-asterick">*</label>
+                                </td>
+                                <td class="hideextra header-style">Item Rate<label class="red-asterick">*</label></td>
+                                <td class="hideextra header-style">Compensation Amount</td>
+                                <td class="hideextra header-style">Complaint Type</td>
+                                <td class="hideextra header-style">Nature of Complaint</td>
+                                <td class="hideextra header-style">Detail of Complaint</td>
+                                <td class="hideextra header-style">Project Name</td>
+                                <td class="hideextra header-style-last">Project Location</td>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr class="tr-style" *ngFor="let itemDet of itemDetails">
+                                <td class="td-style-first hideextra">
+                                    {{itemDet.invoiceNo}}
+                                    <!-- <i class="fa fa-pencil-square text-info" style="cursor: pointer;" (click)="openEditCompTypeModal(itemDet)"></i> -->
+                                </td>
+                                <td class="td-style hideextra">
+                                    {{itemDet.itemNo}}
+                                </td>
+                                <td class="td-style hideextra">
+                                    {{itemDet.itemName}}
+                                </td>
+                                <td class="td-style hideextra">
+                                    {{itemDet.invoiceDate| date: 'dd-MMM-yyyy'}}
+                                </td>
+                                <td class="td-style hideextra">
+                                    {{itemDet.invoiceQtyInMtrs}}
+                                </td>
+                                <td class="td-style hideextra">
+                                    {{itemDet.complaintQtyInMtrs}}
+                                </td>
+                                <td class="td-style hideextra">
+                                    <input type="number" class="form-control number-align-style" formControlName="{{ itemDet.compensationQtyKey }}" value="{{itemDet.compensationQty}}" />
+                                </td>
+                                <td class="td-style hideextra">
+                                    <input type="number" class="form-control number-align-style" formControlName="{{ itemDet.itemRateKey }}" value="{{itemDet.itemRate}}" />
+                                </td>
+                                <td class="td-style hideextra">
+                                    {{itemDet.compensationAmount}}
+                                </td>
+                                <td class="td-style hideextra">
+                                    {{itemDet.complaintTypeDesc}}
+                                </td>
+                                <td class="td-style hideextra">
+                                    {{itemDet.natureOfComplaintDesc}}
+                                </td>
+                                <td class="td-style hideextra">
+                                    {{itemDet.complaintDetails}}
+                                </td>
+                                <td class="td-style hideextra">
+                                    {{itemDet.projectName}}
+                                </td>
+                                <td class="td-style-last hideextra">
+                                    {{itemDet.projectLocation}}
+                                </td>
+                            </tr>
 
-                        <tr class="tr-style">
-                            <td class="td-style-first hideextra">
-                                Add Item(s)
-                                <i style="font-size:16px;cursor: pointer;" title="Click here" class="fa fa-plus-circle"
-                                    ></i>
-                            </td>
-                            <td class="td-style">
+                            <!-- <tr class="tr-style">
+                                <td class="td-style-first hideextra">
+                                    Add Item(s)
+                                    <i style="font-size:16px;cursor: pointer;" title="Click here" class="fa fa-plus-circle"></i>
+                                </td>
+                                <td class="td-style">
 
-                            </td>
-                            <td class="td-style">
+                                </td>
+                                <td class="td-style">
 
-                            </td>
-                            <td class="td-style">
+                                </td>
+                                <td class="td-style">
 
-                            </td>
-                            <td class="td-style">
+                                </td>
+                                <td class="td-style">
 
-                            </td>
-                            <td class="td-style">
+                                </td>
+                                <td class="td-style">
 
-                            </td>
-                            <td class="td-style">
+                                </td>
+                                <td class="td-style">
 
-                            </td>
-                            <td class="td-style">
+                                </td>
+                                <td class="td-style">
 
-                            </td>
-                            <td class="td-style">
+                                </td>
+                                <td class="td-style">
 
-                            </td>
-                            <td class="td-style">
+                                </td>
+                                <td class="td-style">
 
-                            </td>
-                            <td class="td-style-last">
+                                </td>
+                                <td class="td-style">
 
-                            </td>
-                        </tr>
-                    </tbody>
-                </table>
+                                </td>
+                                <td class="td-style">
+
+                                </td>
+                                <td class="td-style">
+
+                                </td>
+                                <td class="td-style-last">
+
+                                </td>
+                            </tr> -->
+                        </tbody>
+                    </table>
+                </form>
+                <!-- end of form for item list -->
             </div>
             <!--end table div-->
 
