@@ -53,6 +53,12 @@
     background-color: #514E4E;
   }
 
+/* start style to align number right */
+.number-align-style{
+  text-align: right;
+}
+/* end of style to align number right */
+
   /* start table style */
 /*table grid style*/
 .table-style {
