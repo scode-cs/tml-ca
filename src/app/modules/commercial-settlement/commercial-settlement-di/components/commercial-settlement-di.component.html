@@ -64,7 +64,9 @@
                                 <td class="hideextra header-style bold-font" style="padding-top:9px;">Compensation Qty
                                     <label class="red-asterick">*</label>
                                 </td>
-                                <td class="hideextra header-style">Item Rate<label class="red-asterick">*</label></td>
+                                <td class="hideextra header-style bold-font" style="padding-top:9px;">Item Rate
+                                    <label class="red-asterick">*</label>
+                                </td>
                                 <td class="hideextra header-style">Settlement Cost</td>
                                 <td class="hideextra header-style">Complaint Type</td>
                                 <td class="hideextra header-style">Nature of Complaint</td>
@@ -105,7 +107,7 @@
                                         (keyup)="onCompensationAndItemRateChanges(itemDet)" />
                                 </td>
                                 <td class="td-style hideextra">
-                                    {{itemDet.compensationAmount}}
+                                    {{itemDet.settlementCost}}
                                 </td>
                                 <td class="td-style hideextra">
                                     {{itemDet.complaintTypeDesc}}

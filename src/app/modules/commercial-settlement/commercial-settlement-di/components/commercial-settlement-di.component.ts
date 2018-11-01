@@ -19,6 +19,7 @@ export class CommercialSettlementDIComponent implements OnInit {
         complaintReferenceNo: '',//
         complaintStatus: ''
     }
+    private totalCompensationAmount: number = 0;
     public commerCialSettlementFromGroup: FormGroup;
     public errorMsgObj: any = {
         errMsgShowFlag: false,
@@ -142,6 +143,9 @@ export class CommercialSettlementDIComponent implements OnInit {
             if (!itemel.itemRate) {
                 itemel.itemRate = 0;
             }
+            if (!itemel.settlementCost) {
+                itemel.settlementCost = 0;
+            }
             //end of pushing hardcoded compensationQty
             // creating key
             let key = itemel.slNo;
@@ -161,6 +165,17 @@ export class CommercialSettlementDIComponent implements OnInit {
         console.log("ItemArr====", this.itemDetails);
     }//end of the method 
 
+      //to generate total compensation amount
+  private generateTotalCompensationAmount() {
+    this.totalCompensationAmount = 0;    
+    for (let itemel of this.itemDetails) {
+      this.totalCompensationAmount = this.totalCompensationAmount + parseFloat(itemel.settlementCost);
+    }//end of for
+    this.totalCompensationAmount = parseFloat(this.totalCompensationAmount.toFixed(2));
+    this.commerCialSettlementFromGroup.controls['totalCompensationAmount'].setValue(this.totalCompensationAmount);
+
+  }//end of the method
+
     //start method of complaintQtyErrorCorrection
   private compensationQtyItemRateErrorCorrection() {
     for (let itemEl of this.itemDetails) {
@@ -170,7 +185,6 @@ export class CommercialSettlementDIComponent implements OnInit {
       } else if ((itemEl.compensationQtyErrFlag === false || itemEl.compensationQtyErrFlag === undefined) && (itemEl.itemRateErrFlag === false || itemEl.itemRateErrFlag === undefined) ) {
         this.invoiceItemErrFlag = false;
       }
-
     }//end of for
   }//end of the method complaintQtyErrorCorrection   
 
@@ -180,8 +194,6 @@ export class CommercialSettlementDIComponent implements OnInit {
     // let qty: number = 0;
     let compensationQty: number = 0;
     let itemRate: number = 0;
-    // let convUnit: string = "";
-    // let itemDesc: string = "";
     this.itemDetails.forEach(checkItm => {
       if (checkItm.slNo == checkItmParam.slNo) {
 
@@ -241,23 +253,17 @@ export class CommercialSettlementDIComponent implements OnInit {
         //   }//end if
         // }//end if
 
+        if(compensationQty > 0 && itemRate > 0) {
+            checkItm.settlementCost = compensationQty * itemRate;
+        }else{
+            checkItm.settlementCost = 0;
+        }
+
       }//end if of slno check between checkedItemArr element and checked item param element
     });//end of for each loop of checkedItemArr 
 
-
-    // if (qty == 0 && compensationQty >= 0) {
-    //   qty = compensationQty;
-    // }
-    // checkItmParam.itemQuantity = qty;
-    // checkItmParam.uomQuantity = compensationQty;
-    // checkItmParam.itemName = itemDesc;
-    // //calling item amount method
-    // let itemPrice: number = parseFloat(checkItmParam.netPrice);
-    // if (qty >= 0 && convUnit.trim()) {
-    //   checkItmParam.itemValue = itemPrice * qty;
-    //   this.generateTotalInvoiceDeatilsAmount();
-      this.compensationQtyItemRateErrorCorrection();
-    // }
+        this.compensationQtyItemRateErrorCorrection();
+        this.generateTotalCompensationAmount();
 
     console.log(" itemDetails == ", this.itemDetails);
   }//end of the method 17.09.18
