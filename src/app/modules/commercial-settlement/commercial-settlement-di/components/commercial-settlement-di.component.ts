@@ -19,6 +19,7 @@ export class CommercialSettlementDIComponent implements OnInit {
         complaintReferenceNo: '',//
         complaintStatus: ''
     }
+    private totalCompensationAmount: number = 0;
     public commerCialSettlementFromGroup: FormGroup;
     public errorMsgObj: any = {
         errMsgShowFlag: false,
@@ -26,6 +27,7 @@ export class CommercialSettlementDIComponent implements OnInit {
     }
     public itemDetails: any[] = [];// to store item deatils from response
     public busySpinner: boolean = false;//to load n stop the spinner
+    public invoiceItemErrFlag: boolean = false;//to check invoice item have error or not 
     public itemListFormGroup: FormGroup;//to create dynamic formControl for compensation qty n rate
     constructor(
         private datePipe: DatePipe,
@@ -141,11 +143,14 @@ export class CommercialSettlementDIComponent implements OnInit {
             if (!itemel.itemRate) {
                 itemel.itemRate = 0;
             }
+            if (!itemel.settlementCost) {
+                itemel.settlementCost = 0;
+            }
             //end of pushing hardcoded compensationQty
             // creating key
             let key = itemel.slNo;
             let compensationQtyKey = key + "_" + "compensationQty";
-            let itemRateKey = key + "_" + "taxRate";
+            let itemRateKey = key + "_" + "itemRate";
 
             //creating dynamic formcontrol
             itemel.compensationQtyKey = compensationQtyKey;
@@ -159,6 +164,109 @@ export class CommercialSettlementDIComponent implements OnInit {
         });
         console.log("ItemArr====", this.itemDetails);
     }//end of the method 
+
+      //to generate total compensation amount
+  private generateTotalCompensationAmount() {
+    this.totalCompensationAmount = 0;    
+    for (let itemel of this.itemDetails) {
+      this.totalCompensationAmount = this.totalCompensationAmount + parseFloat(itemel.settlementCost);
+    }//end of for
+    this.totalCompensationAmount = parseFloat(this.totalCompensationAmount.toFixed(2));
+    this.commerCialSettlementFromGroup.controls['totalCompensationAmount'].setValue(this.totalCompensationAmount);
+
+  }//end of the method
+
+    //start method of complaintQtyErrorCorrection
+  private compensationQtyItemRateErrorCorrection() {
+    for (let itemEl of this.itemDetails) {
+      if (itemEl.compensationQtyErrFlag || itemEl.itemRateErrFlag) {
+        this.invoiceItemErrFlag = true;
+        break;
+      } else if ((itemEl.compensationQtyErrFlag === false || itemEl.compensationQtyErrFlag === undefined) && (itemEl.itemRateErrFlag === false || itemEl.itemRateErrFlag === undefined) ) {
+        this.invoiceItemErrFlag = false;
+      }
+    }//end of for
+  }//end of the method complaintQtyErrorCorrection   
+
+      // to change unit dropdown value 17.09.18
+  public onCompensationAndItemRateChanges(checkItmParam: any) {
+    console.log(" checkItmParam === ", checkItmParam);
+    // let qty: number = 0;
+    let compensationQty: number = 0;
+    let itemRate: number = 0;
+    this.itemDetails.forEach(checkItm => {
+      if (checkItm.slNo == checkItmParam.slNo) {
+
+        compensationQty = 0;
+        itemRate = 0;
+        for (let itmList in this.itemListFormGroup.value) {
+          let arr: string[] = itmList.split('_');
+          console.log(" arr ==== ", arr);
+          if (arr.length == 2) {
+            if (arr[0] == checkItmParam.slNo) {
+              console.log(" slno mateched ");
+              if (arr[1] == "compensationQty") {
+                compensationQty = this.itemListFormGroup.controls[itmList].value;
+                if (compensationQty == 0 || compensationQty < 0 || compensationQty == null) {
+                  checkItm.compensationQtyErrFlag = true;
+                  if (compensationQty == 0 || compensationQty == null) {
+                    checkItm.compensationQtyErrDesc = 'Compensation Quantity can′t be zero or empty';
+                  } else if (compensationQty < 0) {
+                    checkItm.compensationQtyErrDesc = 'Compensation Quantity can′t be less than or equal to zero';
+                  }//end of else if
+                } else {
+                  checkItm.compensationQtyErrFlag = false;
+                  checkItm.compensationQtyErrDesc = '';
+                }//end of else
+                console.log(" got value compensationQty == ", compensationQty);
+              } else if (arr[1] == "itemRate") {
+                itemRate = this.itemListFormGroup.controls[itmList].value;
+                if (itemRate == 0 || itemRate < 0 || itemRate == null) {
+                  checkItm.itemRateErrFlag = true;
+                  if (itemRate == 0 || itemRate == null) {
+                    checkItm.itemRateErrDesc = 'Item Rate can′t be zero or empty';
+                  } else if (itemRate < 0) {
+                    checkItm.itemRateErrDesc = 'Item Rate can′t be less than or equal to zero';
+                  }//end of else if
+                } else {
+                  checkItm.itemRateErrFlag = false;
+                  checkItm.itemRateErrDesc = '';
+                }//end of else
+                console.log(" got value itemRate == ", itemRate);
+              } 
+            }//end if of slno and controlname 1st element
+          }//end if of length to splited array
+        }//end of  for loop of itemListFormGroup
+
+        // if (qty <= 0) {
+        //   if (compensationQty > 0 && convUnit.trim() && itemDesc.trim()) {
+        //     checkItmParam.conversion.forEach(convElement => {
+        //       if (checkItmParam.itemCode == convElement.itemCode
+        //         && convUnit == convElement.itemUnit
+        //         && convUnit != convElement.baseUnit) {
+        //         qty = (compensationQty * convElement.numerator) / convElement.denominator;
+        //         console.log("qty===== ", qty);
+        //         qty = parseFloat(qty.toFixed(3));
+        //         console.log("qty after ===== ", qty);
+        //       }//end if
+        //     });//end of forEach
+        //   }//end if
+        // }//end if
+
+        if(compensationQty > 0 && itemRate > 0) {
+            checkItm.settlementCost = compensationQty * itemRate;
+        }else{
+            checkItm.settlementCost = 0;
+        }
+
+      }//end if of slno check between checkedItemArr element and checked item param element
+    });//end of for each loop of checkedItemArr 
+
+        this.compensationQtyItemRateErrorCorrection();
+        this.generateTotalCompensationAmount();
+
+    console.log(" itemDetails == ", this.itemDetails);
+  }//end of the method 17.09.18
 
     public onCancel() {
         this.router.navigate([ROUTE_PATHS.RouteViewComplainDIStatus]);
