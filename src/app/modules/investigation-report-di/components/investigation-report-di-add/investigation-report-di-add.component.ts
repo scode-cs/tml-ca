@@ -442,7 +442,10 @@ export class InvestigationReportDiComponent implements OnInit {
             fileJsonBody.userId = this.localStorageService.user.userId;
             fileJsonBody.fileAutoIds = fileAutoIdStr;
             this.fileUploadWSCall(this.plantType, fileJsonBody);//calling the file ws method
-          }//end of file array check
+          }//end of file array check              
+          //new add to send email
+          this.sendEmail(invReportDetailJson,this.plantType,action);//calling the method to send email
+
           this.onOpenModal(res.value, res.msg);//calling the modal to show msg
           let routePath = ROUTE_PATHS.RouteAddRCADI + '/' + invReportDetailJson.complaintReferenceNo + '/' + 50;//rca status is 50
           this.router.navigate([routePath]);//route to rca add page
@@ -503,6 +506,20 @@ export class InvestigationReportDiComponent implements OnInit {
 
     console.log(" SelInvDetails after splice ", this.selectedInvItemDetails);
   }//end of the method deleteSelInvDetFromSelInvDet 
+
+  //method to send email
+  private sendEmail(complainDetailJson: any, plantType: string, action: string){
+    let emailJsonBody: any = {};    
+    emailJsonBody.complaintReferenceNo = complainDetailJson.complaintReferenceNo;    
+    this.complaintDIService.sendEmail(emailJsonBody,plantType,action).
+    subscribe(res=>{
+      if(res.msgType === 'Info'){
+        console.log("mail send successfully");
+      }
+    },err=>{
+    });
+
+  }//end of method
 
   //start method of complaintQtyErrorCorrection
   private complaintQtyErrorCorrection(itemsArr: any[]) {
