@@ -25,7 +25,7 @@ export class CompStatusStructureComponent implements OnInit, OnChanges {
     this.compStatusStructure = new CompStatusStructureModel().compStatusStructureModel;
     // this.compStatus;
     this.compStatusStructureList = this.constructCompStatusStructureFlow();
-    console.log(this.compStatusStructureList);
+    // console.log(this.compStatusStructureList);
   }
 
   
