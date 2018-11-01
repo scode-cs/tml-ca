@@ -444,7 +444,7 @@ export class InvestigationReportDiComponent implements OnInit {
             this.fileUploadWSCall(this.plantType, fileJsonBody);//calling the file ws method
           }//end of file array check              
           //new add to send email
-          this.sendEmail(invReportDetailJson,this.plantType,action);//calling the method to send email
+          this.sendEmail(invReportDetailJson,this.plantType,"investigation");//calling the method to send email
 
           this.onOpenModal(res.value, res.msg);//calling the modal to show msg
           let routePath = ROUTE_PATHS.RouteAddRCADI + '/' + invReportDetailJson.complaintReferenceNo + '/' + 50;//rca status is 50
