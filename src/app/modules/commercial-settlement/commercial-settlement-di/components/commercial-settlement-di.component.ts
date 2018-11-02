@@ -196,7 +196,6 @@ export class CommercialSettlementDIComponent implements OnInit {
     let itemRate: number = 0;
     this.itemDetails.forEach(checkItm => {
       if (checkItm.slNo == checkItmParam.slNo) {
-
         compensationQty = 0;
         itemRate = 0;
         for (let itmList in this.itemListFormGroup.value) {
@@ -215,8 +214,13 @@ export class CommercialSettlementDIComponent implements OnInit {
                     checkItm.compensationQtyErrDesc = 'Compensation Quantity can′t be less than or equal to zero';
                   }//end of else if
                 } else {
-                  checkItm.compensationQtyErrFlag = false;
-                  checkItm.compensationQtyErrDesc = '';
+                    if(compensationQty > checkItm.complaintQtyInMtrs) {
+                        checkItm.compensationQtyErrFlag = true;
+                        checkItm.compensationQtyErrDesc = 'Compensation Quantity can′t be greater than Complaint Qty';
+                    }else{                        
+                        checkItm.compensationQtyErrFlag = false;
+                        checkItm.compensationQtyErrDesc = '';
+                    }
                 }//end of else
                 console.log(" got value compensationQty == ", compensationQty);
               } else if (arr[1] == "itemRate") {
@@ -238,27 +242,11 @@ export class CommercialSettlementDIComponent implements OnInit {
           }//end if of length to splited array
         }//end of  for loop of itemListFormGroup
 
-        // if (qty <= 0) {
-        //   if (compensationQty > 0 && convUnit.trim() && itemDesc.trim()) {
-        //     checkItmParam.conversion.forEach(convElement => {
-        //       if (checkItmParam.itemCode == convElement.itemCode
-        //         && convUnit == convElement.itemUnit
-        //         && convUnit != convElement.baseUnit) {
-        //         qty = (compensationQty * convElement.numerator) / convElement.denominator;
-        //         console.log("qty===== ", qty);
-        //         qty = parseFloat(qty.toFixed(3));
-        //         console.log("qty after ===== ", qty);
-        //       }//end if
-        //     });//end of forEach
-        //   }//end if
-        // }//end if
-
         if(compensationQty > 0 && itemRate > 0) {
             checkItm.settlementCost = compensationQty * itemRate;
         }else{
             checkItm.settlementCost = 0;
         }
-
       }//end if of slno check between checkedItemArr element and checked item param element
     });//end of for each loop of checkedItemArr 
 
