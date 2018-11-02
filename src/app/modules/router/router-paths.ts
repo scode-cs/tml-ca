@@ -56,6 +56,11 @@ const ROUTE_COMP_PI_REG_FULL: string = ROUTE_HOME_FULL + '/' + ROUTE_COMP_PI_REG
 const ROUTE_COMP_PI_VIEW: string = 'complainviewpi';
 const ROUTE_COMP_PI_VIEW_FULL: string = ROUTE_HOME_FULL + '/' + ROUTE_COMP_PI_VIEW;
 
+//for complaint pi details view
+const ROUTE_COMP_PI_REG_DET_VIEW_CONST: string = 'complainviewpi';
+const ROUTE_COMP_PI_REG_DETAILS_VIEW: string = ROUTE_COMP_PI_REG_DET_VIEW_CONST + '/' + ':complaintReferenceNo';
+const ROUTE_COMP_PI_REG_DETAILS_VIEW_FULL: string = ROUTE_HOME_FULL + '/' + ROUTE_COMP_PI_REG_DET_VIEW_CONST;
+
 //view complaint pi according to parameter
 const ROUTE_COMP_PI_VIEW_WITH_PARAMETER: string = ROUTE_COMP_PI_VIEW + '/' + ':activitytype';//for complaint di view
 const ROUTE_COMP_PI_VIEW_WITH_PARAMETER_FULL: string = ROUTE_HOME_FULL + '/' + ROUTE_COMP_PI_VIEW;
@@ -236,6 +241,7 @@ export const ROUTE_PATHS = {
     RouteViewDetailsInvestigationReportDi: ROUTE_VIEW_DETAILS_INVESTIGATION_REPORT_DI_FULL,//preli view details for single view
     RouteComplaintReferenceNoSearch: ROUTE_COMPLAINT_REFERENCE_NO_SEARCH_FULL,//to search comp ref no of investigation reoport
     RouteComplainPIView: ROUTE_COMP_PI_VIEW_FULL,//for complaint pi view
+    RouteComplainPIRegDetailsView: ROUTE_COMP_PI_REG_DETAILS_VIEW_FULL,//comp pi reg det view
     RouteModifyPIComplaint: ROUTE_MODIFY_COMPLAINT_PI_FULL,//for complain pi modify
     RouteAllocateComplaint: ROUTE_ALLOCATE_COMPLAINT_FULL,//allocate complaint full
     RouteAddAllocateComplaint: ROUTE_ADD_ALLOCATE_COMPLAINT_FULL,//allocate complaint add full
@@ -285,6 +291,7 @@ export const ROUTER_PATHS = {
     ModifyComplaintDIRouter: ROUTE_MODIFY_COMPLAINT_REFERENCE_NO,//modify complain di 
     DIViewComplaintWithParameterRouter: ROUTE_COMP_DI_VIEW_WITH_PARAMETER,//DI view comp with parameter from dashboard 
     ComplainPIRegisterRouter: ROUTE_COMP_PI_REG, //complain register pi 09.08.17
+    ComplainPIRegDetailsViewRouter: ROUTE_COMP_PI_REG_DETAILS_VIEW,//comp pi details view
     DashboardRouter: ROUTE_DASHBOARD,
     DashboardBothRouter: ROUTE_DASHBOARD_BOTH,//dashboard both    
     AddUserRouter: ROUTE_ADD_USER,//add user

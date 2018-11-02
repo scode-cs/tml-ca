@@ -397,4 +397,9 @@ export class ComplainPIViewComponent implements OnInit {
     }//end of else if
   }//end of busy spinner method
 
+  public onClickCompRefNo(val){
+    let refNo: string = val.complaintReferenceNo;
+    this.router.navigate([ROUTE_PATHS.RouteComplainPIRegDetailsView,refNo]);
+  }
+
 }//end of class
