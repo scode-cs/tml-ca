@@ -15,7 +15,7 @@ import { ComplaintPIInvoiceSearchComponent } from './components/complain-pi-regi
 //for pi customer search
 import { ComplaintPICustomerSearchComponent } from './components/complain-pi-register/complain-pi-customer-search/complaint-pi-customer-search.component';
 import { InvoiceSearchDetailsModel } from "./models/invoice-search-details.model";
-
+import { ComplaintPIRegisterDetailsViewComponent } from '../complain-pi/components/complain-pi-register-details-view/complaint-pi-register-details-view.component';
 
 @NgModule({
   imports:      [
@@ -28,6 +28,7 @@ import { InvoiceSearchDetailsModel } from "./models/invoice-search-details.model
   declarations: [
     ComplaintPIRegisterComponent,
     ComplainPIViewComponent,
+    ComplaintPIRegisterDetailsViewComponent,
     NgbdComplaintPIRegisterModalComponent,
     ComplaintPIInvoiceSearchComponent,
     ComplaintPICustomerSearchComponent
@@ -36,6 +37,7 @@ import { InvoiceSearchDetailsModel } from "./models/invoice-search-details.model
   exports: [
     ComplaintPIRegisterComponent,
     ComplainPIViewComponent,
+    ComplaintPIRegisterDetailsViewComponent,
     ComplaintPIInvoiceSearchComponent,
     ComplaintPICustomerSearchComponent,
   ],

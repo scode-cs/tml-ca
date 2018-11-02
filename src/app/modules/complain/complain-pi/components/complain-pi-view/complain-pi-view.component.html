@@ -190,7 +190,7 @@
                     <ng-template #elseBlockOfCheckbox>
                       <td class="td-style-first"></td>
                     </ng-template>                    
-                    <td class="td-style">{{complaintViewValue.complaintReferenceNo}}</td>
+                    <td class="td-style"><span class="custom-link" (click)="onClickCompRefNo(complaintViewValue);">{{complaintViewValue.complaintReferenceNo}}</span></td>
                     <td class="td-style">{{complaintViewValue.complaintReferenceDt|date: 'dd-MMM-yyyy'}}</td>
                     <td class="td-style">{{complaintViewValue.customerDetails.customerName}}</td>
                     <td class="td-style">{{complaintViewValue.complaintTypeDesc}}</td>

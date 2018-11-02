@@ -58,6 +58,7 @@ import { CloseComplainDIViewDetailsComponent } from '../close-complain/close-com
 import { ActivityTrackingDIComponent } from '../activity-tracking/activity-tracking-di/components/activity-tracking-di.component';
 import { CommercialSettlementDIComponent } from '../commercial-settlement/commercial-settlement-di/components/commercial-settlement-di.component';
 import { CommercialSettlementPIComponent } from '../commercial-settlement/commercial-settlement-pi/components/commercial-settlement-pi.component';
+import { ComplaintPIRegisterDetailsViewComponent } from '../complain/complain-pi/components/complain-pi-register-details-view/complaint-pi-register-details-view.component';
 
 export const HOME_ROUTES: Routes = [
   {
@@ -121,6 +122,10 @@ export const HOME_ROUTES: Routes = [
       {
         path: ROUTER_PATHS.ComplainPIViewRouter,//complaint pi view
         component: ComplainPIViewComponent
+      },
+      {
+        path: ROUTER_PATHS.ComplainPIRegDetailsViewRouter,//pi reg details view 
+        component: ComplaintPIRegisterDetailsViewComponent 
       },
       {
         path: ROUTER_PATHS.PIViewComplaintWithParameterRouter,

@@ -201,6 +201,17 @@
   
 }
 /*end style for faceted nav*/
+/* start style for custom-link */
+.custom-link{
+  color:#0275d8;
+}
+
+.custom-link:hover{
+  color: white;
+  text-decoration: underline;
+  cursor: pointer;
+}
+/* end of style for custom-link */
 
 /*start style for list item*/
 /* scroll ul style and li style */
