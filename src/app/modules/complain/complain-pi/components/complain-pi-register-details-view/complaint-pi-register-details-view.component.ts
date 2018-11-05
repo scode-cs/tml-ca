@@ -18,7 +18,6 @@ export class ComplaintPIRegisterDetailsViewComponent implements OnInit {
 
     public title: string = "Complaint Register";
     public complaintRegisterFormGroup: FormGroup;
-    public selectedItemDetails: any[] = [];
     //to store  selected items grid row
     public selectedItemsGrid: any[] = [];
     //to store the itemsHeader
@@ -58,62 +57,44 @@ export class ComplaintPIRegisterDetailsViewComponent implements OnInit {
             complaintReferenceNo = params.complaintReferenceNo ? params.complaintReferenceNo : '';
         });
         console.log("complaintReferenceNo for view Complaint pi: ", complaintReferenceNo);
-        this.processFlowData = new PIPolygonModel().validRootCaus;//set the process flow step from model
-
-        // this.toastService.toastElementRef.info('Complaint Register!', 'Info!');
+        this.getComplaintReferenceDetailsWSCall(complaintReferenceNo,10);
+        this.processFlowData = new PIPolygonModel().validRootCaus;//set the process flow step from model            
         this.buildForm();
     }//end of onInit
 
     //a method named buildform for creating the complaintRegisterFormGroup and its formControl
-    private buildForm(): void {
-        this.complaintRegisterFormGroup = this.formBuilder.group({
-            'complaintReferenceNo': [''],
-            'modeId': [''
-            ],
-            'complaintReferenceDt': [''
-            ],
-            'modeReferenceNo': [''
-            ],
-            'invoiceNo': [''
-            ],
-            'contactPersonName': [''
-            ],
-            'contactPersonPhoneNo': [''
-            ],
-            'contactPersonEmailId': [''
-            ],
-            'loggedBy': [''
-            ],
-            'loggedOnDt': [''
-            ],
-            'complaintTypeId': [''
-            ],
-            'natureOfComplaintId': [''
-            ],
-            'severityIndexRating': [''
-            ],
-            'complaintReceivedById': [''
-            ],
-            'departmentNameOther': [''],
-            'complaintReceivedByName': [''
-            ],
-            'complaintReceivedByPhoneNo': [''
-            ],
-            'complaintDetails': [''
-            ],
-            'itemNos': [''
-            ],
-            'repeatedComplaint': [''
-            ],
-            'previousComplaintReferenceNo': [''
-            ],
-            'requiredCommercialSettlementInComplaintRegistration': [''
-            ]
+    private buildForm(): void {       
+        this.complaintRegisterFormGroup = new FormGroup({
+            complaintReferenceNo: new FormControl(''),
+            modeId: new FormControl(''),
+            complaintReferenceDt: new FormControl(''),
+            modeReferenceNo: new FormControl(''),
+            custCode: new FormControl(''),
+            custName: new FormControl(''),
+            salesGroup: new FormControl(''),
+            salesOffice: new FormControl(''),
+            invoiceNo: new FormControl(''),
+            contactPersonName: new FormControl(''),
+            contactPersonPhoneNo: new FormControl(''),
+            contactPersonEmailId: new FormControl(''),
+            loggedBy: new FormControl(''),
+            loggedOnDt: new FormControl(''),
+            complaintTypeId: new FormControl(''),
+            natureOfComplaintId: new FormControl(''),
+            severityIndexRating: new FormControl(''),
+            complaintReceivedById: new FormControl(''),
+            departmentNameOther: new FormControl(''),
+            complaintReceivedByName: new FormControl(''),
+            complaintReceivedByPhoneNo: new FormControl(''),
+            complaintDetails: new FormControl(''),
+            itemNos: new FormControl(''),
+            repeatedComplaint: new FormControl(''),
+            previousComplaintReferenceNo: new FormControl(''),
+            commercialSettlementRadioBtn: new FormControl({disabled:true})            
         });
     }//end of method buildForm
 
-
-    public getComplaintReferenceDetails(complaintReferenceNo: string, fileActivityId: number) {
+    public getComplaintReferenceDetailsWSCall(complaintReferenceNo: string, fileActivityId: number) {
         this.busySpinner = true;
         this.complaintPIRegisterDataService.getComplaintReferenceDetails(complaintReferenceNo, fileActivityId)
             .subscribe(res => {
@@ -124,100 +105,11 @@ export class ComplaintPIRegisterDetailsViewComponent implements OnInit {
                 console.log("comprefdetobj for edit comp: ", this.selectedComplaintReferenceDetails);
                 console.log("this.selectedComplaintReferenceDetails.activityId: ", this.selectedComplaintReferenceDetails.activityId);
                 console.log("this.localStorageService.appSettings.complaintRegistrationActivityId :", this.localStorageService.appSettings.complaintRegistrationActivityId);
-                if (this.selectedComplaintReferenceDetails.activityId == this.localStorageService.appSettings.complaintRegistrationActivityId) {
-                    console.log(" ActivityId is matched");
+                if (res.msgType == 'Info') {
                     let invItems: any[] = this.selectedComplaintReferenceDetails.itemNos.items;
-                    if (invItems.length > 0) {
-                        for (let selItm of invItems) {
-                            this.custCode = selItm.customerCode;
-                            this.custName = selItm.customerName;
-                            this.custSegment = selItm.customerSegment;
-                            this.salesGroup = selItm.salesGroup;
-                            this.salesOffice = selItm.salesOffice;
-                            break;
-                        }//end of for           
-                        for (let selItm of invItems) {
-                            this.selectedItemsGrid.push(selItm);
-                        }
-                    }//end of if
-                    // //calling  method tableGridDataConverterFromRes for creating table grid json array from res and passing the res as parameter
-                    // this.tableGridDataConverterFromRes(invItems);
-                    // this.complaintQtyInTonsError = false;
-                    // this.invoiceSearchDetailsModel.compRefNo = complaintReferenceNo;
-
-                    // this.complaintReceivedById = this.selectedComplaintReferenceDetails.complaintReceivedById;
-                    // if (this.complaintReceivedById == "0") {
-                    //     this.complaintReceivedById = "";
-                    // }
-                    // this.complaintRegisterFormGroup.controls["complaintReceivedById"].setValue(this.complaintReceivedById);
-                    // this.complaintReceivedByName = this.selectedComplaintReferenceDetails.complaintReceivedByName;
-                    // if (this.complaintReceivedByName == " ") {
-                    //     this.complaintReceivedByName = "";
-                    // }
-                    // this.complaintRegisterFormGroup.controls["complaintReceivedByName"].setValue(this.complaintReceivedByName);
-                    // this.complaintReceivedByPhoneNo = this.selectedComplaintReferenceDetails.complaintReceivedByPhoneNo;
-                    // if (this.complaintReceivedByPhoneNo == " ") {
-                    //     this.complaintReceivedByPhoneNo = "";
-                    // }
-                    // this.complaintRegisterFormGroup.controls["complaintReceivedByPhoneNo"].setValue(this.complaintReceivedByPhoneNo);
-                    // this.modeId = this.selectedComplaintReferenceDetails.modeId;
-                    // this.complaintRegisterFormGroup.controls["modeId"].setValue(this.modeId);
-
-                    // this.complaintReferenceDate = this.datePipe.transform(this.selectedComplaintReferenceDetails.complaintReferenceDt, 'yyyy-MM-dd');
-                    // this.complaintRegisterFormGroup.controls["complaintReferenceDt"].setValue(this.complaintReferenceDate);
-                    // this.modeReferenceNoForModify = this.selectedComplaintReferenceDetails.modeReferenceNo;
-                    // if (this.modeReferenceNoForModify == " ") {
-                    //     this.modeReferenceNoForModify = "";
-                    // }
-                    // this.complaintRegisterFormGroup.controls["modeReferenceNo"].setValue(this.modeReferenceNoForModify);
-                    // // this.invoiceDateForModify = this.datePipe.transform(this.selectedComplaintReferenceDetails.invoiceDt, 'dd-MM-yyyy');
-                    // this.contactPersonNameForModify = this.selectedComplaintReferenceDetails.contactPersonName;
-                    // if (this.contactPersonNameForModify == " ") {
-                    //     this.contactPersonNameForModify = "";
-                    // }
-                    // this.complaintRegisterFormGroup.controls["contactPersonName"].setValue(this.contactPersonNameForModify);
-                    // this.contactPersonPhoneNoForModify = this.selectedComplaintReferenceDetails.contactPersonPhoneNo;
-                    // if (this.contactPersonPhoneNoForModify == " ") {
-                    //     this.contactPersonPhoneNoForModify = "";
-                    // }
-                    // this.complaintRegisterFormGroup.controls["contactPersonPhoneNo"].setValue(this.contactPersonPhoneNoForModify);
-                    // this.contactPersonEmailIdForModify = this.selectedComplaintReferenceDetails.contactPersonEmailId;
-                    // if (this.contactPersonEmailIdForModify == " ") {
-                    //     this.contactPersonEmailIdForModify = "";
-                    // }
-                    // this.complaintRegisterFormGroup.controls["contactPersonEmailId"].setValue(this.contactPersonEmailIdForModify);
-                    // this.complaintTypeIdForModify = this.selectedComplaintReferenceDetails.complaintTypeId;
-                    // this.complaintRegisterFormGroup.controls["complaintTypeId"].setValue(this.complaintTypeIdForModify);
-                    // this.natureOfComplaintIdForModify = this.selectedComplaintReferenceDetails.natureOfComplaintId;
-                    // this.onComplaintTypeSelect(this.complaintTypeIdForModify, this.natureOfComplaintIdForModify);
-                    // this.severityIndexRatingForModify = this.selectedComplaintReferenceDetails.severityIndexRating;
-                    // if (this.severityIndexRatingForModify == " ") {
-                    //     this.severityIndexRatingForModify = "";
-                    // }
-                    // this.complaintRegisterFormGroup.controls["severityIndexRating"].setValue(this.severityIndexRatingForModify);
-                    // this.complaintDetailsForModify = this.selectedComplaintReferenceDetails.complaintDetails;
-                    // if (this.complaintDetailsForModify == " ") {
-                    //     this.complaintDetailsForModify = "";
-                    // }
-                    // this.complaintRegisterFormGroup.controls["complaintDetails"].setValue(this.complaintDetailsForModify);
-                    // this.loggedByForModify = this.selectedComplaintReferenceDetails.loggedBy;
-                    // this.complaintRegisterFormGroup.controls["loggedBy"].setValue(this.loggedByForModify);
-                    // this.loggedOnDtForModify = this.datePipe.transform(this.selectedComplaintReferenceDetails.loggedOnDt, 'yyyy-MM-dd');
-                    // this.complaintRegisterFormGroup.controls["loggedOnDt"].setValue(this.loggedOnDtForModify);
-                    // this.repeatedComplaintValue = this.selectedComplaintReferenceDetails.repeatedComplaint;
-                    // this.complaintRegisterFormGroup.controls["repeatedComplaint"].setValue(this.repeatedComplaintValue);
-                    // this.previousComplaintReferenceNoForModify = this.selectedComplaintReferenceDetails.previousComplaintReferenceNo;
-                    // if (this.previousComplaintReferenceNoForModify == " ") {
-                    //     this.previousComplaintReferenceNoForModify = "";
-                    // }
-                    // this.complaintRegisterFormGroup.controls["previousComplaintReferenceNo"].setValue(this.previousComplaintReferenceNoForModify);
-
-                    // this.requiredCommercialSettlementInComplaintRegistrationForModify = this.selectedComplaintReferenceDetails.requiredCommercialSettlementInComplaintRegistration.charAt(0);
-                    // console.log(" requiredCommercialSettlementInComplaintRegistrationForModify===>", this.requiredCommercialSettlementInComplaintRegistrationForModify)
-                    // this.complaintRegisterFormGroup.controls["requiredCommercialSettlementInComplaintRegistration"].setValue(this.requiredCommercialSettlementInComplaintRegistrationForModify);
-
+                    let customerDet: any = this.selectedComplaintReferenceDetails.customerDetails;
+                    this.setFormValueFromRes(invItems,customerDet,this.selectedComplaintReferenceDetails);                   
                 } else {
-                    console.log(" ActivityId isn't matched");
                     this.errorObj.errorMsgShowFlag = true;
                     this.errorObj.errorMsg = res.msg;
                 }
@@ -227,6 +119,38 @@ export class ComplaintPIRegisterDetailsViewComponent implements OnInit {
                     this.busySpinner = false;
                     this.sessionErrorService.routeToLogin(err._body);
                 });
+    }//end of method
+
+    private setFormValueFromRes(invItems:any[],customerDet:any,selectedComplaintReferenceDetails:any) {
+        this.complaintRegisterFormGroup.controls['custCode'].setValue(customerDet.customerCode);
+        this.complaintRegisterFormGroup.controls['custName'].setValue(customerDet.customerName);
+        this.complaintRegisterFormGroup.controls['salesGroup'].setValue(customerDet.salesGroup);
+        this.complaintRegisterFormGroup.controls['salesOffice'].setValue(customerDet.salesOffice);
+        if (invItems.length > 0) {                                  
+            for (let selItm of invItems) {
+                this.selectedItemsGrid.push(selItm);
+            }
+        }//end of if
+        //set all data to form 
+        this.complaintRegisterFormGroup.controls['complaintReferenceNo'].setValue(selectedComplaintReferenceDetails.complaintReferenceNo);
+        this.complaintRegisterFormGroup.controls['complaintReceivedById'].setValue(selectedComplaintReferenceDetails.complaintReceivedByName);
+        this.complaintRegisterFormGroup.controls['departmentNameOther'].setValue(selectedComplaintReferenceDetails.departmentNameOther);
+        this.complaintRegisterFormGroup.controls['complaintReceivedByName'].setValue(selectedComplaintReferenceDetails.complaintReceivedByName);
+        this.complaintRegisterFormGroup.controls['complaintReceivedByPhoneNo'].setValue(selectedComplaintReferenceDetails.complaintReceivedByPhoneNo);
+        this.complaintRegisterFormGroup.controls['complaintReferenceDt'].setValue(this.datePipe.transform(selectedComplaintReferenceDetails.complaintReferenceDt,'yyyy-MMM-dd'));
+        this.complaintRegisterFormGroup.controls['modeId'].setValue(selectedComplaintReferenceDetails.modeDesc);
+        this.complaintRegisterFormGroup.controls['contactPersonName'].setValue(selectedComplaintReferenceDetails.contactPersonName);
+        this.complaintRegisterFormGroup.controls['contactPersonPhoneNo'].setValue(selectedComplaintReferenceDetails.contactPersonPhoneNo);
+        this.complaintRegisterFormGroup.controls['contactPersonEmailId'].setValue(selectedComplaintReferenceDetails.contactPersonEmailId);
+        this.complaintRegisterFormGroup.controls['loggedBy'].setValue(selectedComplaintReferenceDetails.loggedByName);
+        this.complaintRegisterFormGroup.controls['loggedOnDt'].setValue(this.datePipe.transform(selectedComplaintReferenceDetails.loggedOnDt,'yyyy-MMM-dd'));
+        this.complaintRegisterFormGroup.controls['complaintTypeId'].setValue(selectedComplaintReferenceDetails.complaintTypeDesc);
+        this.complaintRegisterFormGroup.controls['natureOfComplaintId'].setValue(selectedComplaintReferenceDetails.natureOfComplaintDesc);
+        this.complaintRegisterFormGroup.controls['complaintDetails'].setValue(selectedComplaintReferenceDetails.complaintDetails);
+        this.complaintRegisterFormGroup.controls['severityIndexRating'].setValue(selectedComplaintReferenceDetails.severityIndexRating);
+        this.complaintRegisterFormGroup.controls['repeatedComplaint'].setValue(selectedComplaintReferenceDetails.repeatedComplaint);
+        this.complaintRegisterFormGroup.controls['previousComplaintReferenceNo'].setValue(selectedComplaintReferenceDetails.previousComplaintReferenceNo);
+        this.complaintRegisterFormGroup.controls['commercialSettlementRadioBtn'].setValue(selectedComplaintReferenceDetails.requiredCommercialSettlementInComplaintRegistration);
     }
     //for clicking cancel button this method will be invoked
     public onCancel(): void {
