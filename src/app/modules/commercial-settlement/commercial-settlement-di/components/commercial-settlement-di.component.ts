@@ -6,7 +6,8 @@ import { Subscription } from 'rxjs/Subscription';//to get route param
 import { ROUTE_PATHS } from '../../../router/router-paths';
 import { ComplaintDIService } from '../../../shared/services/complaint-di.service';
 import { SessionErrorService } from '../../../shared/services/session-error.service';
-
+import { CommercialSettlementDIDataService } from '../services/commercial-settlement-di-data.service';
+import { LocalStorageService } from '../../../shared/services/local-storage.service';
 @Component({
     selector: 'ispl-comm-set',
     templateUrl: './commercial-settlement-di.component.html',
@@ -34,7 +35,9 @@ export class CommercialSettlementDIComponent implements OnInit {
         private router: Router,
         private activatedroute: ActivatedRoute,
         private complaintDIService: ComplaintDIService,
-        private sessionErrorService: SessionErrorService
+        private sessionErrorService: SessionErrorService,
+        private localStorageService: LocalStorageService,
+        private commercialSettlementDIDataService: CommercialSettlementDIDataService
     ) {
         console.log("constructor of CommercialSettlementComponent class");
         this.initForm();//init form
@@ -44,7 +47,7 @@ export class CommercialSettlementDIComponent implements OnInit {
         this.getRouteParam();
         let date = new Date();
         let currentDate: string = this.datePipe.transform(date, 'yyyy-MM-dd');
-        this.commerCialSettlementFromGroup.controls["date"].setValue(currentDate);
+        this.commerCialSettlementFromGroup.controls["date"].setValue(this.datePipe.transform(currentDate,'dd-MMM-yyyy'));
         this.getviewComplainReferenceDetailsWSCall();
     }
 
@@ -256,8 +259,72 @@ export class CommercialSettlementDIComponent implements OnInit {
     console.log(" itemDetails == ", this.itemDetails);
   }//end of the method 17.09.18
 
+  //commercial settlement submit method
+  public commercialSettlementDISubmit() {
+      this.busySpinner = true;//to load spinner
+    let plantType: string = this.localStorageService.user.plantType;
+    let commSetHeaderTableJson: any = {};
+    commSetHeaderTableJson.complaintReferenceNo = this.commerCialSettlementFromGroup.value.complaintReferenceNo,
+    commSetHeaderTableJson.lastActivityId = 10,
+    commSetHeaderTableJson.lastStatus =  "C",
+    commSetHeaderTableJson.userId = this.localStorageService.user.userId;
+
+    let commSettDetailTableJson: any = {};
+    commSettDetailTableJson.complaintReferenceNo = this.commerCialSettlementFromGroup.value.complaintReferenceNo,
+    commSettDetailTableJson.commercialSettlementDt = this.datePipe.transform(this.commerCialSettlementFromGroup.value.date,'yyyy-MM-dd'),
+    commSettDetailTableJson.commercialSettlementTotalAmount = this.commerCialSettlementFromGroup.value.totalCompensationAmount,
+    commSettDetailTableJson.activityId = 10,
+    commSettDetailTableJson.status = "C",
+    commSettDetailTableJson.remarks= this.commerCialSettlementFromGroup.value.remarks,
+    commSettDetailTableJson.userId= this.localStorageService.user.userId;
+
+    this.commercialSettlementHeaderTableWSCall(commSetHeaderTableJson,commSettDetailTableJson,plantType);    
+  }//end of method
+
+  //method to comm sett header table submit
+  commercialSettlementHeaderTableWSCall(commSetHeaderTableJson: any,commSettDetailTableJson: any,plantType: string){
+    this.commercialSettlementDIDataService.putHeader(commSetHeaderTableJson,plantType).
+    subscribe(res=>{
+        if(res.msgType === 'Info'){
+            this.commercialSettlementDetailTableWSCall(commSettDetailTableJson,plantType);
+        }else{
+            this.errorMsgObj.errMsgShowFlag = true;
+            this.errorMsgObj.errorMsg = res.msg;
+            this.busySpinner = false;//to stop spinner
+        }
+    },err=>{
+        this.errorMsgObj.errMsgShowFlag = true;
+        this.errorMsgObj.errorMsg = err.msg;
+        this.busySpinner = false;//to stop spinner
+    });
+  }//end of method
+
+  //method to detail table submit
+  commercialSettlementDetailTableWSCall(commSettDetailTableJson: any,plantType: string){
+    this.commercialSettlementDIDataService.postDetail(commSettDetailTableJson,plantType).
+    subscribe(res=>{
+        if(res.msgType === 'Info'){
+            this.router.navigate([ROUTE_PATHS.RouteViewComplainDIStatus]);
+        }else{
+            this.errorMsgObj.errMsgShowFlag = true;
+            this.errorMsgObj.errorMsg = res.msg;
+            this.busySpinner = false;//to stop spinner
+        }
+    },err=>{
+        this.errorMsgObj.errMsgShowFlag = true;
+            this.errorMsgObj.errorMsg = err.msg;
+            this.busySpinner = false;//to stop spinner
+    });
+  }//end of method
+
     public onCancel() {
         this.router.navigate([ROUTE_PATHS.RouteViewComplainDIStatus]);
+    }//end of method
+
+    //method to delete err msg
+    public deleteResErrorMsgOnClick(){
+        this.errorMsgObj.errMsgShowFlag = false;
+        this.errorMsgObj.errorMsg = '';
     }
 
 }//end of class
