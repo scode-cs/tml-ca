@@ -19,6 +19,7 @@ export class ActivityTrackingDIComponent implements OnInit {
     public activityTrackingFormGroup: FormGroup;
     public gridConfigModel: any = {};//to store the grid model 
     public compDIStatusRes: any[] = [];//to store comp status 
+    public facetedDataModel: any[] = [];//to store faceted data model
     public busySpinner: boolean = false;//spinner
     //pagination var
     pager: any = {};
@@ -45,6 +46,7 @@ export class ActivityTrackingDIComponent implements OnInit {
         console.log("onInit of ActivityTrackingDIComponent..");
         this.busySpinner = true;//to load spinner
         this.gridConfigModel = new  ActiivityTrackingModel().activityTrackingGridConfig;
+        this.facetedDataModel = new ActiivityTrackingModel().facetedDataModel;
         this.headerParams = new ComplaintDIHeaderParamModel();//for pagination
         this.getCompStatusWSCall();
         this.setPagination();

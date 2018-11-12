@@ -33,13 +33,13 @@
             <!--start div for faceted nav-->
             <div class="col-lg-2 col-md-2 col-sm-2 col-xs-12 faceted-nav">
                 <div class="row faceted-header">
-                    <span class="label-faceted-header">faceted header</span>
+                    <span class="label-faceted-header">Status</span>
                 </div>
-                <div>
+                <div *ngFor="let facetedData of facetedDataModel">
                     <div style="padding: 5px;">
                         <input type="checkbox" [checked]=false />
                         <span>
-                            abc
+                            {{facetedData.facetedDisplayName}}
                         </span>
                     </div>
                 </div>
