@@ -88,9 +88,9 @@ export class ComplaintPIRegisterDetailsViewComponent implements OnInit {
             complaintReceivedByPhoneNo: new FormControl(''),
             complaintDetails: new FormControl(''),
             itemNos: new FormControl(''),
-            repeatedComplaint: new FormControl(''),
+            repeatedComplaint: new FormControl({value:'N',disabled:true}),
             previousComplaintReferenceNo: new FormControl(''),
-            commercialSettlementRadioBtn: new FormControl({disabled:true})            
+            commercialSettlementRadioBtn: new FormControl({value:'N',disabled:true})            
         });
     }//end of method buildForm
 
@@ -112,6 +112,7 @@ export class ComplaintPIRegisterDetailsViewComponent implements OnInit {
                 } else {
                     this.errorObj.errorMsgShowFlag = true;
                     this.errorObj.errorMsg = res.msg;
+                    this.busySpinner = false;
                 }
             },
                 err => {
@@ -142,7 +143,11 @@ export class ComplaintPIRegisterDetailsViewComponent implements OnInit {
         this.complaintRegisterFormGroup.controls['contactPersonName'].setValue(selectedComplaintReferenceDetails.contactPersonName);
         this.complaintRegisterFormGroup.controls['contactPersonPhoneNo'].setValue(selectedComplaintReferenceDetails.contactPersonPhoneNo);
         this.complaintRegisterFormGroup.controls['contactPersonEmailId'].setValue(selectedComplaintReferenceDetails.contactPersonEmailId);
-        this.complaintRegisterFormGroup.controls['loggedBy'].setValue(selectedComplaintReferenceDetails.loggedByName);
+        let loggedByName: string =         
+        selectedComplaintReferenceDetails.categoryDesc?
+        selectedComplaintReferenceDetails.loggedByName + '['+selectedComplaintReferenceDetails.categoryDesc+']':
+        selectedComplaintReferenceDetails.loggedByName;
+        this.complaintRegisterFormGroup.controls['loggedBy'].setValue(loggedByName);
         this.complaintRegisterFormGroup.controls['loggedOnDt'].setValue(this.datePipe.transform(selectedComplaintReferenceDetails.loggedOnDt,'yyyy-MMM-dd'));
         this.complaintRegisterFormGroup.controls['complaintTypeId'].setValue(selectedComplaintReferenceDetails.complaintTypeDesc);
         this.complaintRegisterFormGroup.controls['natureOfComplaintId'].setValue(selectedComplaintReferenceDetails.natureOfComplaintDesc);
@@ -150,11 +155,19 @@ export class ComplaintPIRegisterDetailsViewComponent implements OnInit {
         this.complaintRegisterFormGroup.controls['severityIndexRating'].setValue(selectedComplaintReferenceDetails.severityIndexRating);
         this.complaintRegisterFormGroup.controls['repeatedComplaint'].setValue(selectedComplaintReferenceDetails.repeatedComplaint);
         this.complaintRegisterFormGroup.controls['previousComplaintReferenceNo'].setValue(selectedComplaintReferenceDetails.previousComplaintReferenceNo);
-        this.complaintRegisterFormGroup.controls['commercialSettlementRadioBtn'].setValue(selectedComplaintReferenceDetails.requiredCommercialSettlementInComplaintRegistration);
+        let customerRequiredCommsettradioVal: string = selectedComplaintReferenceDetails.requiredCommercialSettlementInComplaintRegistration;
+        this.complaintRegisterFormGroup.controls['commercialSettlementRadioBtn'].setValue(customerRequiredCommsettradioVal.substring(0,1));
+        this.busySpinner = false;//to stop the spinner
     }
     //for clicking cancel button this method will be invoked
     public onCancel(): void {
         this.router.navigate([ROUTE_PATHS.RouteComplainPIView]);
     }// end of onCancel method
+
+    //method to delete error msg by cross click
+    public deleteResErrorMsgOnClick(){
+        this.errorObj.errorMsgShowFlag = false;
+        this.errorObj.errorMsg = '';
+    }//end of method
 
 }//end of class

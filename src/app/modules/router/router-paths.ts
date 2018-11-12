@@ -57,7 +57,7 @@ const ROUTE_COMP_PI_VIEW: string = 'complainviewpi';
 const ROUTE_COMP_PI_VIEW_FULL: string = ROUTE_HOME_FULL + '/' + ROUTE_COMP_PI_VIEW;
 
 //for complaint pi details view
-const ROUTE_COMP_PI_REG_DET_VIEW_CONST: string = 'complainviewpi';
+const ROUTE_COMP_PI_REG_DET_VIEW_CONST: string = 'complaintregpidetview';
 const ROUTE_COMP_PI_REG_DETAILS_VIEW: string = ROUTE_COMP_PI_REG_DET_VIEW_CONST + '/' + ':complaintReferenceNo';
 const ROUTE_COMP_PI_REG_DETAILS_VIEW_FULL: string = ROUTE_HOME_FULL + '/' + ROUTE_COMP_PI_REG_DET_VIEW_CONST;
 

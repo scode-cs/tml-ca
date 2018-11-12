@@ -245,8 +245,9 @@
   }
   /* end of hide horizontal scroll */
 
-  /*start style div for faceted-data-div*/
-.faceted-data-div{
+ 
+/*start style div for faceted-data-div*/
+.selected-data-div{
   border-bottom: 1px solid #dbdada;
   border-top: 1px solid #dbdada;
   border-left: 1px solid #dbdada;
@@ -258,12 +259,9 @@
   padding: 5px 10px;
   border-radius: 10px;
 }
-.faceted-data-div:hover{
-cursor: pointer;
-/*text-decoration: line-through;*/
+/* end of selected data div style */
+/* start style to align number right */
+.number-align-style{
+  text-align: right;
 }
-.faceted-data-div:hover .close {
-opacity: 1;
-color: #000;
-}
-/* end of faceted div style */
+/* end of style to align number right */
