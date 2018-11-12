@@ -21,6 +21,23 @@ export class ActiivityTrackingModel {
         }
     }
 
+    //model for facted data
+    private _facetedDataModel: any[] = [
+        {facetedDesc:'reg', facetedDisplayName:'Registration'},
+        {facetedDesc:'inv', facetedDisplayName:'Investigation Report'},
+        {facetedDesc:'rca', facetedDisplayName:'Root Cause Analysis'},
+        {facetedDesc:'ca', facetedDisplayName:'Corrective Action'},
+        {facetedDesc:'pa', facetedDisplayName:'Preventive Action'},
+        {facetedDesc:'close', facetedDisplayName:'Close'}
+    ];
+
+    get facetedDataModel(): any[]{
+        return this._facetedDataModel;
+    }
+    set facetedDataModel(facetedDataModel: any[]){
+        this._facetedDataModel = facetedDataModel;
+    }
+
     get activityTrackingGridConfig(): any{
         return this._activityTrackingGridConfig;
     }
