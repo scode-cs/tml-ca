@@ -4,6 +4,7 @@ import { BrowserModule } from '@angular/platform-browser';
 import { CommonModule } from '@angular/common';
 import { BusySpinnerModule } from '../../widget/busy-spinner/busy-spinner.module';
 import { CommercialSettlementPIComponent } from '../commercial-settlement-pi/components/commercial-settlement-pi.component';
+import { CommercialSettlementPIDataService } from '../commercial-settlement-pi/services/commercial-settlement-pi-data.service';
 
 @NgModule({
     imports:[
@@ -17,6 +18,9 @@ import { CommercialSettlementPIComponent } from '../commercial-settlement-pi/com
     ],
     exports:[
         CommercialSettlementPIComponent
+    ],
+    providers:[
+        CommercialSettlementPIDataService
     ]
 })
 

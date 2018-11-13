@@ -285,3 +285,8 @@
   height: 120px;
 }
 /* end of textarea style of comment box */
+/* start style to align number right */
+.number-align-style{
+  text-align: right;
+}
+/* end of style to align number right */
