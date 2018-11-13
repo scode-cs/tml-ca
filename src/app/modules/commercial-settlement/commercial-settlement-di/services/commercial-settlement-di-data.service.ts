@@ -54,4 +54,18 @@ export class CommercialSettlementDIDataService {
             .map((res: Response) => { return res.json() })
             .catch((error: Response) => { return Observable.throw(error) });
     }//end of method
+
+     /**
+   * 
+   * @param itemDetail set post data
+   */
+  public postItemDetail(itemDetail: any, plantType: string) {
+    let headers: Headers = this.configService();
+    let actionUrl = AppUrlsConst.COMMERCIAL_SETTLEMENT_ITEM__DETAIL_TABLE_ADD_URL
+        + "?plantType=" + plantType;
+
+    return this.http.post(actionUrl, itemDetail, { headers: headers })
+        .map((res: Response) => { return res.json() })
+        .catch((error: Response) => { return Observable.throw(error) });
+}//end of method
 }

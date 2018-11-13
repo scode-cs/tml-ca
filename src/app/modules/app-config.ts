@@ -172,7 +172,8 @@ export const AppUrlsConst: any = {
     DASHBOARD_DATE_UPDATE_URL: URL_PATH + 'api/user/updatedboard',//dashboard date update url
     //commercial settlement-add url
     COMMERCIAL_SETTLEMENT_HEADER_TABLE_ADD_URL: URL_PATH + 'api/complaint/comstlmntheader',//comm-set add to HEADER TABLE 
-    COMMERCIAL_SETTLEMENT_DETAIL_TABLE_ADD_URL: URL_PATH + 'api/complaint/comstlmntdetail'//comm-set add to detail TABLE 
+    COMMERCIAL_SETTLEMENT_DETAIL_TABLE_ADD_URL: URL_PATH + 'api/complaint/comstlmntdetail',//comm-set add to detail TABLE 
+    COMMERCIAL_SETTLEMENT_ITEM__DETAIL_TABLE_ADD_URL: URL_PATH + 'api/complaint/comstlmntinvdetail'//comm-set item detail table add
 }
 
 export const WebServiceConst: any = {
