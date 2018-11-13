@@ -47,7 +47,7 @@ export class CommercialSettlementDIComponent implements OnInit {
         this.getRouteParam();
         let date = new Date();
         let currentDate: string = this.datePipe.transform(date, 'yyyy-MM-dd');
-        this.commerCialSettlementFromGroup.controls["date"].setValue(this.datePipe.transform(currentDate,'dd-MMM-yyyy'));
+        this.commerCialSettlementFromGroup.controls["date"].setValue(this.datePipe.transform(currentDate, 'dd-MMM-yyyy'));
         this.getviewComplainReferenceDetailsWSCall();
     }
 
@@ -168,161 +168,195 @@ export class CommercialSettlementDIComponent implements OnInit {
         console.log("ItemArr====", this.itemDetails);
     }//end of the method 
 
-      //to generate total compensation amount
-  private generateTotalCompensationAmount() {
-    this.totalCompensationAmount = 0;    
-    for (let itemel of this.itemDetails) {
-      this.totalCompensationAmount = this.totalCompensationAmount + parseFloat(itemel.settlementCost);
-    }//end of for
-    this.totalCompensationAmount = parseFloat(this.totalCompensationAmount.toFixed(2));
-    this.commerCialSettlementFromGroup.controls['totalCompensationAmount'].setValue(this.totalCompensationAmount);
+    //to generate total compensation amount
+    private generateTotalCompensationAmount() {
+        this.totalCompensationAmount = 0;
+        for (let itemel of this.itemDetails) {
+            this.totalCompensationAmount = this.totalCompensationAmount + parseFloat(itemel.settlementCost);
+        }//end of for
+        this.totalCompensationAmount = parseFloat(this.totalCompensationAmount.toFixed(2));
+        this.commerCialSettlementFromGroup.controls['totalCompensationAmount'].setValue(this.totalCompensationAmount);
 
-  }//end of the method
+    }//end of the method
 
     //start method of complaintQtyErrorCorrection
-  private compensationQtyItemRateErrorCorrection() {
-    for (let itemEl of this.itemDetails) {
-      if (itemEl.compensationQtyErrFlag || itemEl.itemRateErrFlag) {
-        this.invoiceItemErrFlag = true;
-        break;
-      } else if ((itemEl.compensationQtyErrFlag === false || itemEl.compensationQtyErrFlag === undefined) && (itemEl.itemRateErrFlag === false || itemEl.itemRateErrFlag === undefined) ) {
-        this.invoiceItemErrFlag = false;
-      }
-    }//end of for
-  }//end of the method complaintQtyErrorCorrection   
+    private compensationQtyItemRateErrorCorrection() {
+        for (let itemEl of this.itemDetails) {
+            if (itemEl.compensationQtyErrFlag || itemEl.itemRateErrFlag) {
+                this.invoiceItemErrFlag = true;
+                break;
+            } else if ((itemEl.compensationQtyErrFlag === false || itemEl.compensationQtyErrFlag === undefined) && (itemEl.itemRateErrFlag === false || itemEl.itemRateErrFlag === undefined)) {
+                this.invoiceItemErrFlag = false;
+            }
+        }//end of for
+    }//end of the method complaintQtyErrorCorrection   
 
-      // to change unit dropdown value 17.09.18
-  public onCompensationAndItemRateChanges(checkItmParam: any) {
-    console.log(" checkItmParam === ", checkItmParam);
-    // let qty: number = 0;
-    let compensationQty: number = 0;
-    let itemRate: number = 0;
-    this.itemDetails.forEach(checkItm => {
-      if (checkItm.slNo == checkItmParam.slNo) {
-        compensationQty = 0;
-        itemRate = 0;
-        for (let itmList in this.itemListFormGroup.value) {
-          let arr: string[] = itmList.split('_');
-          console.log(" arr ==== ", arr);
-          if (arr.length == 2) {
-            if (arr[0] == checkItmParam.slNo) {
-              console.log(" slno mateched ");
-              if (arr[1] == "compensationQty") {
-                compensationQty = this.itemListFormGroup.controls[itmList].value;
-                if (compensationQty == 0 || compensationQty < 0 || compensationQty == null) {
-                  checkItm.compensationQtyErrFlag = true;
-                  if (compensationQty == 0 || compensationQty == null) {
-                    checkItm.compensationQtyErrDesc = 'Compensation Quantity can′t be zero or empty';
-                  } else if (compensationQty < 0) {
-                    checkItm.compensationQtyErrDesc = 'Compensation Quantity can′t be less than or equal to zero';
-                  }//end of else if
-                } else {
-                    if(compensationQty > checkItm.complaintQtyInMtrs) {
-                        checkItm.compensationQtyErrFlag = true;
-                        checkItm.compensationQtyErrDesc = 'Compensation Quantity can′t be greater than Complaint Qty';
-                    }else{                        
-                        checkItm.compensationQtyErrFlag = false;
-                        checkItm.compensationQtyErrDesc = '';
-                    }
-                }//end of else
-                console.log(" got value compensationQty == ", compensationQty);
-              } else if (arr[1] == "itemRate") {
-                itemRate = this.itemListFormGroup.controls[itmList].value;
-                if (itemRate == 0 || itemRate < 0 || itemRate == null) {
-                  checkItm.itemRateErrFlag = true;
-                  if (itemRate == 0 || itemRate == null) {
-                    checkItm.itemRateErrDesc = 'Item Rate can′t be zero or empty';
-                  } else if (itemRate < 0) {
-                    checkItm.itemRateErrDesc = 'Item Rate can′t be less than or equal to zero';
-                  }//end of else if
-                } else {
-                  checkItm.itemRateErrFlag = false;
-                  checkItm.itemRateErrDesc = '';
-                }//end of else
-                console.log(" got value itemRate == ", itemRate);
-              } 
-            }//end if of slno and controlname 1st element
-          }//end if of length to splited array
-        }//end of  for loop of itemListFormGroup
+    // to change unit dropdown value 17.09.18
+    public onCompensationAndItemRateChanges(checkItmParam: any) {
+        console.log(" checkItmParam === ", checkItmParam);
+        // let qty: number = 0;
+        let compensationQty: number = 0;
+        let itemRate: number = 0;
+        this.itemDetails.forEach(checkItm => {
+            if (checkItm.slNo == checkItmParam.slNo) {
+                compensationQty = 0;
+                itemRate = 0;
+                for (let itmList in this.itemListFormGroup.value) {
+                    let arr: string[] = itmList.split('_');
+                    console.log(" arr ==== ", arr);
+                    if (arr.length == 2) {
+                        if (arr[0] == checkItmParam.slNo) {
+                            console.log(" slno mateched ");
+                            if (arr[1] == "compensationQty") {
+                                compensationQty = this.itemListFormGroup.controls[itmList].value;
+                                if (compensationQty == 0 || compensationQty < 0 || compensationQty == null) {
+                                    checkItm.compensationQtyErrFlag = true;
+                                    if (compensationQty == 0 || compensationQty == null) {
+                                        checkItm.compensationQtyErrDesc = 'Compensation Quantity can′t be zero or empty';
+                                    } else if (compensationQty < 0) {
+                                        checkItm.compensationQtyErrDesc = 'Compensation Quantity can′t be less than or equal to zero';
+                                    }//end of else if
+                                } else {
+                                    if (compensationQty > checkItm.complaintQtyInMtrs) {
+                                        checkItm.compensationQtyErrFlag = true;
+                                        checkItm.compensationQtyErrDesc = 'Compensation Quantity can′t be greater than Complaint Qty';
+                                    } else {
+                                        checkItm.compensationQty = compensationQty;
+                                        checkItm.compensationQtyErrFlag = false;
+                                        checkItm.compensationQtyErrDesc = '';
+                                    }
+                                }//end of else
+                                console.log(" got value compensationQty == ", compensationQty);
+                            } else if (arr[1] == "itemRate") {
+                                itemRate = this.itemListFormGroup.controls[itmList].value;
+                                if (itemRate == 0 || itemRate < 0 || itemRate == null) {
+                                    checkItm.itemRateErrFlag = true;
+                                    if (itemRate == 0 || itemRate == null) {
+                                        checkItm.itemRateErrDesc = 'Item Rate can′t be zero or empty';
+                                    } else if (itemRate < 0) {
+                                        checkItm.itemRateErrDesc = 'Item Rate can′t be less than or equal to zero';
+                                    }//end of else if
+                                } else {
+                                    checkItm.itemRate = itemRate;
+                                    checkItm.itemRateErrFlag = false;
+                                    checkItm.itemRateErrDesc = '';
+                                }//end of else
+                                console.log(" got value itemRate == ", itemRate);
+                            }
+                        }//end if of slno and controlname 1st element
+                    }//end if of length to splited array
+                }//end of  for loop of itemListFormGroup
 
-        if(compensationQty > 0 && itemRate > 0) {
-            checkItm.settlementCost = compensationQty * itemRate;
-        }else{
-            checkItm.settlementCost = 0;
-        }
-      }//end if of slno check between checkedItemArr element and checked item param element
-    });//end of for each loop of checkedItemArr 
+                if (compensationQty > 0 && itemRate > 0) {
+                    checkItm.settlementCost = compensationQty * itemRate;
+                } else {
+                    checkItm.settlementCost = 0;
+                }
+            }//end if of slno check between checkedItemArr element and checked item param element
+        });//end of for each loop of checkedItemArr 
 
         this.compensationQtyItemRateErrorCorrection();
         this.generateTotalCompensationAmount();
 
-    console.log(" itemDetails == ", this.itemDetails);
-  }//end of the method 17.09.18
+        console.log(" itemDetails == ", this.itemDetails);
+    }//end of the method 17.09.18
 
-  //commercial settlement submit method
-  public commercialSettlementDISubmit() {
-      this.busySpinner = true;//to load spinner
-    let plantType: string = this.localStorageService.user.plantType;
-    let commSetHeaderTableJson: any = {};
-    commSetHeaderTableJson.complaintReferenceNo = this.commerCialSettlementFromGroup.value.complaintReferenceNo,
-    commSetHeaderTableJson.lastActivityId = 10,
-    commSetHeaderTableJson.lastStatus =  "C",
-    commSetHeaderTableJson.userId = this.localStorageService.user.userId;
+    //commercial settlement submit method
+    public commercialSettlementDISubmit() {
+        this.busySpinner = true;//to load spinner
+        let plantType: string = this.localStorageService.user.plantType;
+        let commSetHeaderTableJson: any = {};
+        commSetHeaderTableJson.complaintReferenceNo = this.commerCialSettlementFromGroup.value.complaintReferenceNo;
+        commSetHeaderTableJson.lastActivityId = 10;
+        commSetHeaderTableJson.lastStatus = "C";
+        commSetHeaderTableJson.userId = this.localStorageService.user.userId;
 
-    let commSettDetailTableJson: any = {};
-    commSettDetailTableJson.complaintReferenceNo = this.commerCialSettlementFromGroup.value.complaintReferenceNo,
-    commSettDetailTableJson.commercialSettlementDt = this.datePipe.transform(this.commerCialSettlementFromGroup.value.date,'yyyy-MM-dd'),
-    commSettDetailTableJson.commercialSettlementTotalAmount = this.commerCialSettlementFromGroup.value.totalCompensationAmount,
-    commSettDetailTableJson.activityId = 10,
-    commSettDetailTableJson.status = "C",
-    commSettDetailTableJson.remarks= this.commerCialSettlementFromGroup.value.remarks,
-    commSettDetailTableJson.userId= this.localStorageService.user.userId;
+        let commSettDetailTableJson: any = {};
+        commSettDetailTableJson.complaintReferenceNo = this.commerCialSettlementFromGroup.value.complaintReferenceNo;
+        commSettDetailTableJson.commercialSettlementDt = this.datePipe.transform(this.commerCialSettlementFromGroup.value.date, 'yyyy-MM-dd');
+        commSettDetailTableJson.commercialSettlementTotalAmount = this.commerCialSettlementFromGroup.value.totalCompensationAmount;
+        commSettDetailTableJson.activityId = 10;
+        commSettDetailTableJson.status = "C";
+        commSettDetailTableJson.remarks = this.commerCialSettlementFromGroup.value.remarks;
+        commSettDetailTableJson.userId = this.localStorageService.user.userId;
 
-    this.commercialSettlementHeaderTableWSCall(commSetHeaderTableJson,commSettDetailTableJson,plantType);    
-  }//end of method
+        this.commercialSettlementHeaderTableWSCall(commSetHeaderTableJson, commSettDetailTableJson, plantType);
+    }//end of method
 
-  //method to comm sett header table submit
-  commercialSettlementHeaderTableWSCall(commSetHeaderTableJson: any,commSettDetailTableJson: any,plantType: string){
-    this.commercialSettlementDIDataService.putHeader(commSetHeaderTableJson,plantType).
-    subscribe(res=>{
-        if(res.msgType === 'Info'){
-            this.commercialSettlementDetailTableWSCall(commSettDetailTableJson,plantType);
-        }else{
-            this.errorMsgObj.errMsgShowFlag = true;
-            this.errorMsgObj.errorMsg = res.msg;
-            this.busySpinner = false;//to stop spinner
-        }
-    },err=>{
-        this.errorMsgObj.errMsgShowFlag = true;
-        this.errorMsgObj.errorMsg = err.msg;
-        this.busySpinner = false;//to stop spinner
-    });
-  }//end of method
+    //method to comm sett header table submit
+    commercialSettlementHeaderTableWSCall(commSetHeaderTableJson: any, commSettDetailTableJson: any, plantType: string) {
+        this.commercialSettlementDIDataService.putHeader(commSetHeaderTableJson, plantType).
+            subscribe(res => {
+                if (res.msgType === 'Info') {
+                    this.commercialSettlementDetailTableWSCall(commSettDetailTableJson, plantType);
+                } else {
+                    this.errorMsgObj.errMsgShowFlag = true;
+                    this.errorMsgObj.errorMsg = res.msg;
+                    this.busySpinner = false;//to stop spinner
+                }
+            }, err => {
+                this.errorMsgObj.errMsgShowFlag = true;
+                this.errorMsgObj.errorMsg = err.msg;
+                this.busySpinner = false;//to stop spinner
+            });
+    }//end of method
 
-  //method to detail table submit
-  commercialSettlementDetailTableWSCall(commSettDetailTableJson: any,plantType: string){
-    this.commercialSettlementDIDataService.postDetail(commSettDetailTableJson,plantType).
-    subscribe(res=>{
-        if(res.msgType === 'Info'){
-            this.router.navigate([ROUTE_PATHS.RouteViewComplainDIStatus]);
-        }else{
-            this.errorMsgObj.errMsgShowFlag = true;
-            this.errorMsgObj.errorMsg = res.msg;
-            this.busySpinner = false;//to stop spinner
-        }
-    },err=>{
-        this.errorMsgObj.errMsgShowFlag = true;
-            this.errorMsgObj.errorMsg = err.msg;
-            this.busySpinner = false;//to stop spinner
-    });
-  }//end of method
+    //method to detail table submit
+    commercialSettlementDetailTableWSCall(commSettDetailTableJson: any, plantType: string) {
+        this.commercialSettlementDIDataService.postDetail(commSettDetailTableJson, plantType).
+            subscribe(res => {
+                if (res.msgType === 'Info') {
+                    let itemDet: any[] = [];//to store item det
+                    let itemJson: any = {};
+                    this.itemDetails.forEach((el) => {
+                        itemJson.complaintReferenceNo = this.commerCialSettlementFromGroup.value.complaintReferenceNo;
+                        itemJson.complaintDetailsAutoId = el.complaintDetailsAutoId;
+                        itemJson.commercialSettlementAutoId = res.valueSub;
+                        itemJson.commercialSettlementQty = el.compensationQty;
+                        itemJson.commercialSettlementItemRate = el.itemRate;
+                        itemJson.commercialSettlementItemAmount = el.settlementCost;
+                        itemJson.userId = this.localStorageService.user.userId;
+
+                        itemDet.push(itemJson);//creating item array
+                    });
+                    this.itemDetailsSubmit(itemDet, plantType);//calling the method to submit item det
+
+                } else {
+                    this.errorMsgObj.errMsgShowFlag = true;
+                    this.errorMsgObj.errorMsg = res.msg;
+                    this.busySpinner = false;//to stop spinner
+                }
+            }, err => {
+                this.errorMsgObj.errMsgShowFlag = true;
+                this.errorMsgObj.errorMsg = err.msg;
+                this.busySpinner = false;//to stop spinner
+            });
+    }//end of method
+
+    //method to submit item det
+    private itemDetailsSubmit(itemDetArr: any[], plantType: string) {
+        this.commercialSettlementDIDataService.postItemDetail(itemDetArr, plantType).
+            subscribe(res => {
+                if (res.msgType == 'Info') {
+                    this.router.navigate([ROUTE_PATHS.RouteViewComplainDIStatus]);
+                } else {
+                    this.errorMsgObj.errMsgShowFlag = true;
+                    this.errorMsgObj.errorMsg = res.msg;
+                    this.busySpinner = false;//to stop spinner
+                }
+            }, err => {
+                this.errorMsgObj.errMsgShowFlag = true;
+                this.errorMsgObj.errorMsg = err.msg;
+                this.busySpinner = false;//to stop spinner
+            })
+    }//end of method
 
     public onCancel() {
         this.router.navigate([ROUTE_PATHS.RouteViewComplainDIStatus]);
     }//end of method
 
     //method to delete err msg
-    public deleteResErrorMsgOnClick(){
+    public deleteResErrorMsgOnClick() {
         this.errorMsgObj.errMsgShowFlag = false;
         this.errorMsgObj.errorMsg = '';
     }
