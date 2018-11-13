@@ -9,8 +9,8 @@
         </ol>
     </div>
     <!--start form for commerCialSettlementFromGroup-->
-    <form [formGroup]="commerCialSettlementFromGroup" autocomplete="off">
-        <!--(ngSubmit)="onComplaintResolutionPISubmit()"-->
+    <form [formGroup]="commerCialSettlementFromGroup" autocomplete="off" (ngSubmit)="commercialSettlementPISubmit()">
+        
         <!-- start div for row complaint-form class-->
         <div class="row form-style">
             <!--start div complaint reference no -->
@@ -29,7 +29,7 @@
             <!--start div closeDate-->
             <div class="form-group col-xs-12 col-sm-6 col-md-6 col-lg-4">
                 <label>Total Compensation Amount</label>
-                <input type="text" class="form-control" formControlName="totalCompensationAmount" readonly="readonly" />
+                <input type="text" class="form-control number-align-style" formControlName="totalCompensationAmount" readonly="readonly" />
             </div>
             <!--end of div for closeDate-->
 
@@ -90,10 +90,10 @@
                                 <td class="td-style hideextra">
                                     {{itemDet.batchNo}}
                                 </td>
-                                <td class="td-style hideextra">
+                                <td class="td-style hideextra number-align-style">
                                     {{itemDet.invoiceQtyInTons}}
                                 </td>
-                                <td class="td-style hideextra">
+                                <td class="td-style hideextra number-align-style">
                                     {{itemDet.complaintQtyInTons}}
                                 </td>
                                 <td class="td-style hideextra">
@@ -106,7 +106,7 @@
                                         value="{{itemDet.itemRate}}" (click)="onCompensationAndItemRateChanges(itemDet)"
                                         (keyup)="onCompensationAndItemRateChanges(itemDet)" />
                                 </td>
-                                <td class="td-style hideextra">
+                                <td class="td-style hideextra number-align-style">
                                     {{itemDet.settlementCost}}
                                 </td>
                                 <td class="td-style hideextra">
