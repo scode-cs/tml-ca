@@ -284,7 +284,7 @@ export class CommercialSettlementPIComponent implements OnInit {
                     let itemJson: any = {};
                     this.itemDetails.forEach((el) => {
                         itemJson.complaintReferenceNo = this.commerCialSettlementFromGroup.value.complaintReferenceNo;
-                        itemJson.complaintDetailsAutoId = el.complaintDetailsAutoId;
+                        itemJson.slNo = el.slNo;
                         itemJson.commercialSettlementAutoId = res.valueSub;
                         itemJson.commercialSettlementQty = el.compensationQty;
                         itemJson.commercialSettlementItemRate = el.itemRate;
@@ -312,7 +312,7 @@ export class CommercialSettlementPIComponent implements OnInit {
         this.commercialSettlementPIDataService.postItemDetail(itemDetArr, plantType).
             subscribe(res => {
                 if (res.msgType == 'Info') {
-                    this.router.navigate([ROUTE_PATHS.RouteViewComplainDIStatus]);
+                    this.router.navigate([ROUTE_PATHS.RouteComplainPIView]);
                 } else {
                     this.errorMsgObj.errMsgShowFlag = true;
                     this.errorMsgObj.errorMsg = res.msg;
@@ -326,7 +326,7 @@ export class CommercialSettlementPIComponent implements OnInit {
     }//end of method
 
     public onCancel() {
-        this.router.navigate([ROUTE_PATHS.RouteHome]);
+        this.router.navigate([ROUTE_PATHS.RouteComplainPIView]);
     }
 
 }//end of class

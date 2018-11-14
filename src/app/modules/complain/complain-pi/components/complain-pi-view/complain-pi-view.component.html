@@ -36,8 +36,7 @@
           </div>
           <div *ngFor="let facetedData of facetedheader.groupFacets">
             <div style="padding: 5px;">
-              <input type="checkbox" [checked]="facetedData.facetChecked" 
-              (click)="onClickFilter(facetedheader.groupName,facetedData.facetName,facetedData.facetChecked)"/>
+              <input type="checkbox" [checked]="facetedData.facetChecked" (click)="onClickFilter(facetedheader.groupName,facetedData.facetName,facetedData.facetChecked)" />
               <span>
                 {{facetedData.facetName}}
               </span>
@@ -59,7 +58,7 @@
           <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" *ngIf="facetedArray.length!=0">
             <div class="faceted-data-div" *ngFor="let fecetedNode of facetedArray" style="display:inline-block;margin: 4px;">
               {{fecetedNode.facetedData}}
-            </div> <br/><br/>
+            </div> <br /><br />
           </div>
 
           <!--end of div for showing faceted data-->
@@ -68,155 +67,171 @@
           <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" style="padding-left: 10px;">
 
             <!-- start div to show dashboard filter -->
-            <div class="col-lg-12 col-md-12 col-xs-12" style="margin-bottom: 1%;" >
-                <span style="color: #292b2c;font-weight: 700;">Effective Date: </span> 
-                <span style="color: #1c2ad4;font-weight: 500;font-size: 14px;">
-                  <ng-container *ngIf="dashboardParameter">
-                    "{{tilesInteractionService.wsFilter?.fromDate}}" to "{{tilesInteractionService.wsFilter?.toDate}}"
-                  </ng-container>
-                  <ng-container *ngIf="dashboardParameter==''">
-                      "01-Jan-2018" to "{{fromDate | date: 'dd-MMM-yyyy'}}"
-                    </ng-container>
-                </span>
-              </div>
-              <!-- end of div for dashboard filter -->
+            <div class="col-lg-12 col-md-12 col-xs-12" style="margin-bottom: 1%;">
+              <span style="color: #292b2c;font-weight: 700;">Effective Date: </span>
+              <span style="color: #1c2ad4;font-weight: 500;font-size: 14px;">
+                <ng-container *ngIf="dashboardParameter">
+                  "{{tilesInteractionService.wsFilter?.fromDate}}" to "{{tilesInteractionService.wsFilter?.toDate}}"
+                </ng-container>
+                <ng-container *ngIf="dashboardParameter==''">
+                  "01-Jan-2018" to "{{fromDate | date: 'dd-MMM-yyyy'}}"
+                </ng-container>
+              </span>
+            </div>
+            <!-- end of div for dashboard filter -->
 
             <!--start div for action button-->
             <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" style="padding-top: 15px;padding-bottom: 0px;">
               <button type="button" class="btn btn-style1 cursor-pointer" (click)="addComplaint();">
-        <i class="fa fa-plus" style="font-size: 13px; color: #FFFFFF"></i> Add
-      </button>
+                <i class="fa fa-plus" style="font-size: 13px; color: #FFFFFF"></i> Add
+              </button>
               <button type="button" class="btn btn-style2 cursor-pointer" (click)="editComplaint()" [disabled]="selectedData.length !== 1">
-        <i class="fa fa-pencil-square-o" style="font-size: 13px; color: #FFFFFF"></i> Edit
-      </button>
+                <i class="fa fa-pencil-square-o" style="font-size: 13px; color: #FFFFFF"></i> Edit
+              </button>
             </div>
             <!--end of div for action button-->
 
             <!-- start table div -->
-            <div class="col-lg-12 col-md-12 col-xs-12" style="margin-bottom: 15px; margin-top: 5px;">
-              <table class="table-style">
-                <thead>
-                  <tr class="th-style">
-                    <td class="header-style-first">
-                      <!--<input type="checkbox" [checked]="checkAll" (click)="selectAllCheck()" />-->
-                    </td>
-
-                    <td class="header-style hideextra" (click)="onClick(complaintPIViewDetails.header.complaintReferenceNo)">
-                      {{complaintPIViewDetails.header?.complaintReferenceNo}}
-                      <i *ngIf="sortSelection.sortData == complaintPIViewDetails.header?.complaintReferenceNo && sortSelection.orderType == 'ASC'"
-                        class="fa fa-sort-asc">
-                      </i>
-                      <i *ngIf="sortSelection.sortData == complaintPIViewDetails.header?.complaintReferenceNo && sortSelection.orderType == 'DESC'"
-                        class="fa fa-sort-desc">
-                      </i>
-                      <i *ngIf="sortSelection.orderType == ''" class="fa fa-sort">
-                      </i>
-                    </td>
-                    <td class="header-style hideextra" (click)="onClick(complaintPIViewDetails.header.complaintReferenceDt)">
-                      {{complaintPIViewDetails.header?.complaintReferenceDt}}
-
-                      <i *ngIf="sortSelection.sortData == complaintPIViewDetails.header?.complaintReferenceDt && sortSelection.orderType == 'ASC'"
-                        class="fa fa-sort-asc">
-                      </i>
-                      <i *ngIf="sortSelection.sortData == complaintPIViewDetails.header?.complaintReferenceDt && sortSelection.orderType == 'DESC'"
-                        class="fa fa-sort-desc">
-                      </i>
-                      <i *ngIf="sortSelection.orderType == ''" class="fa fa-sort">
-                      </i>
-                    </td>
-
-                    <td class="header-style hideextra" (click)="onClick(complaintPIViewDetails.header.customerName)">
-                      {{complaintPIViewDetails.header?.customerName}}
-                      <i *ngIf="sortSelection.sortData == complaintPIViewDetails.header?.customerName && sortSelection.orderType == 'ASC'" class="fa fa-sort-asc">
-                      </i>
-                      <i *ngIf="sortSelection.sortData == complaintPIViewDetails.header?.customerName && sortSelection.orderType == 'DESC'" class="fa fa-sort-desc">
-                      </i>
-                      <i *ngIf="sortSelection.orderType == ''" class="fa fa-sort">
-                      </i>
-                    </td>
-                    <td class="header-style hideextra" (click)="onClick(complaintPIViewDetails.header.complaintTypeDesc)">
-                      {{complaintPIViewDetails.header?.complaintTypeDesc}}
-                      <i *ngIf="sortSelection.sortData == complaintPIViewDetails.header?.complaintTypeDesc && sortSelection.orderType == 'ASC'"
-                        class="fa fa-sort-asc">
-                      </i>
-                      <i *ngIf="sortSelection.sortData == complaintPIViewDetails.header?.complaintTypeDesc && sortSelection.orderType == 'DESC'"
-                        class="fa fa-sort-desc">
-                      </i>
-                      <i *ngIf="sortSelection.orderType == ''" class="fa fa-sort">
-                    </i>
-                    </td>
-
-                    <td class="header-style hideextra" (click)="onClick(complaintPIViewDetails.header.natureOfComplaintDesc)">
-                      {{complaintPIViewDetails.header?.natureOfComplaintDesc}}
-                      <i *ngIf="sortSelection.sortData == complaintPIViewDetails.header?.natureOfComplaintDesc && sortSelection.orderType == 'ASC'"
-                        class="fa fa-sort-asc">
-                      </i>
-                      <i *ngIf="sortSelection.sortData == complaintPIViewDetails.header?.natureOfComplaintDesc && sortSelection.orderType == 'DESC'"
-                        class="fa fa-sort-desc">
-                      </i>
-                      <i *ngIf="sortSelection.orderType == ''" class="fa fa-sort">
-                      </i>
-                    </td>
-                    <td class="header-style hideextra" (click)="onClick(complaintPIViewDetails.header.status)">
-                      {{complaintPIViewDetails.header?.status}}
-                      <i *ngIf="sortSelection.sortData == complaintPIViewDetails.header?.status && sortSelection.orderType == 'ASC'" class="fa fa-sort-asc">
-                      </i>
-                      <i *ngIf="sortSelection.sortData == complaintPIViewDetails.header?.status && sortSelection.orderType == 'DESC'" class="fa fa-sort-desc">
-                      </i>
-                      <i *ngIf="sortSelection.orderType == ''" class="fa fa-sort">
-                      </i>
-                    </td>
-
-                    <td class="header-style-last hideextra" (click)="onClick(complaintPIViewDetails.header.files)">
-                        {{complaintPIViewDetails.header?.files}}
-                        <i *ngIf="sortSelection.sortData == complaintPIViewDetails.header?.files && sortSelection.orderType == 'ASC'" class="fa fa-sort-asc">
-                      </i>
-                        <i *ngIf="sortSelection.sortData == complaintPIViewDetails.header?.files && sortSelection.orderType == 'DESC'" class="fa fa-sort-desc">
-                      </i>
-                        <i *ngIf="sortSelection.orderType == ''" class="fa fa-sort">
-                      </i>
-                    </td>       
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr class="tr-style" *ngFor="let complaintViewValue of complaintPIViewDetails.details
-                  | isplSearch: searchFormGroup.value.gridSearch : complaintPIViewDetails.header;
-                  let odd = odd; let even = even;" [ngClass]="{even: even, odd: odd }">
-                    <ng-container *ngIf="complaintViewValue.activityId==complaintLoggedActivityId then thenBlockOfCheckbox; else elseBlockOfCheckbox"></ng-container>
-                    <ng-template #thenBlockOfCheckbox>
-                      <td class="td-style-first"><input type="checkbox" [checked]="otherCheck" (click)="getComplaintDetailsByCheckbox(complaintViewValue)"
-                      /></td>
-                    </ng-template>
-                    <ng-template #elseBlockOfCheckbox>
-                      <td class="td-style-first"></td>
-                    </ng-template>                    
-                    <td class="td-style"><span class="custom-link" (click)="onClickCompRefNo(complaintViewValue);">{{complaintViewValue.complaintReferenceNo}}</span></td>
-                    <td class="td-style">{{complaintViewValue.complaintReferenceDt|date: 'dd-MMM-yyyy'}}</td>
-                    <td class="td-style">{{complaintViewValue.customerDetails.customerName}}</td>
-                    <td class="td-style">{{complaintViewValue.complaintTypeDesc}}</td>
-                    <td class="td-style">{{complaintViewValue.natureOfComplaintDesc}}</td>
-                    <td class="td-style">{{complaintViewValue.status}}</td>
-                    <ng-container *ngIf="complaintViewValue.files.length==0 then thenBlock; else elseBlock"></ng-container>
-                    <ng-template #thenBlock>
-                      <td class="td-style-last"></td>
-                    </ng-template>
-                    <ng-template #elseBlock>
-                      <td class="td-style-last">
-                        <input id="{{complaintViewValue.complaintReferenceNo}}" class="toggle input-checkbox" type="checkbox">
-                        <label for="{{complaintViewValue.complaintReferenceNo}}">Files</label>
-                        <div id="{{complaintViewValue.complaintReferenceNo}}" class="expand">
-                          <section>
-                            <ng-container *ngFor="let file of complaintViewValue.files">
-                              <a class="file-url" href="{{file.fileUrl}}" target="_blank">{{file.fileName}}</a>
-                              <br/>
-                            </ng-container>
-                          </section>
-                        </div>
+            <div class="col-lg-12 col-md-12 col-xs-12" style="margin-bottom: 15px; margin-top: 5px;">              
+                <table class="table-style">
+                  <thead>
+                    <tr class="th-style">
+                      <td class="header-style-first">
+                        <!--<input type="checkbox" [checked]="checkAll" (click)="selectAllCheck()" />-->
                       </td>
-                    </ng-template>
-                  </tr>
-                </tbody>
-              </table>
+
+                      <td class="header-style hideextra" (click)="onClick(complaintPIViewDetails.header.complaintReferenceNo)">
+                        {{complaintPIViewDetails.header?.complaintReferenceNo}}
+                        <i *ngIf="sortSelection.sortData == complaintPIViewDetails.header?.complaintReferenceNo && sortSelection.orderType == 'ASC'"
+                          class="fa fa-sort-asc">
+                        </i>
+                        <i *ngIf="sortSelection.sortData == complaintPIViewDetails.header?.complaintReferenceNo && sortSelection.orderType == 'DESC'"
+                          class="fa fa-sort-desc">
+                        </i>
+                        <i *ngIf="sortSelection.orderType == ''" class="fa fa-sort">
+                        </i>
+                      </td>
+                      <td class="header-style hideextra" (click)="onClick(complaintPIViewDetails.header.complaintReferenceDt)">
+                        {{complaintPIViewDetails.header?.complaintReferenceDt}}
+
+                        <i *ngIf="sortSelection.sortData == complaintPIViewDetails.header?.complaintReferenceDt && sortSelection.orderType == 'ASC'"
+                          class="fa fa-sort-asc">
+                        </i>
+                        <i *ngIf="sortSelection.sortData == complaintPIViewDetails.header?.complaintReferenceDt && sortSelection.orderType == 'DESC'"
+                          class="fa fa-sort-desc">
+                        </i>
+                        <i *ngIf="sortSelection.orderType == ''" class="fa fa-sort">
+                        </i>
+                      </td>
+
+                      <td class="header-style hideextra" (click)="onClick(complaintPIViewDetails.header.customerName)">
+                        {{complaintPIViewDetails.header?.customerName}}
+                        <i *ngIf="sortSelection.sortData == complaintPIViewDetails.header?.customerName && sortSelection.orderType == 'ASC'"
+                          class="fa fa-sort-asc">
+                        </i>
+                        <i *ngIf="sortSelection.sortData == complaintPIViewDetails.header?.customerName && sortSelection.orderType == 'DESC'"
+                          class="fa fa-sort-desc">
+                        </i>
+                        <i *ngIf="sortSelection.orderType == ''" class="fa fa-sort">
+                        </i>
+                      </td>
+                      <td class="header-style hideextra" (click)="onClick(complaintPIViewDetails.header.complaintTypeDesc)">
+                        {{complaintPIViewDetails.header?.complaintTypeDesc}}
+                        <i *ngIf="sortSelection.sortData == complaintPIViewDetails.header?.complaintTypeDesc && sortSelection.orderType == 'ASC'"
+                          class="fa fa-sort-asc">
+                        </i>
+                        <i *ngIf="sortSelection.sortData == complaintPIViewDetails.header?.complaintTypeDesc && sortSelection.orderType == 'DESC'"
+                          class="fa fa-sort-desc">
+                        </i>
+                        <i *ngIf="sortSelection.orderType == ''" class="fa fa-sort">
+                        </i>
+                      </td>
+
+                      <td class="header-style hideextra" (click)="onClick(complaintPIViewDetails.header.natureOfComplaintDesc)">
+                        {{complaintPIViewDetails.header?.natureOfComplaintDesc}}
+                        <i *ngIf="sortSelection.sortData == complaintPIViewDetails.header?.natureOfComplaintDesc && sortSelection.orderType == 'ASC'"
+                          class="fa fa-sort-asc">
+                        </i>
+                        <i *ngIf="sortSelection.sortData == complaintPIViewDetails.header?.natureOfComplaintDesc && sortSelection.orderType == 'DESC'"
+                          class="fa fa-sort-desc">
+                        </i>
+                        <i *ngIf="sortSelection.orderType == ''" class="fa fa-sort">
+                        </i>
+                      </td>
+                      <td class="header-style hideextra" (click)="onClick(complaintPIViewDetails.header.status)">
+                        {{complaintPIViewDetails.header?.status}}
+                        <i *ngIf="sortSelection.sortData == complaintPIViewDetails.header?.status && sortSelection.orderType == 'ASC'"
+                          class="fa fa-sort-asc">
+                        </i>
+                        <i *ngIf="sortSelection.sortData == complaintPIViewDetails.header?.status && sortSelection.orderType == 'DESC'"
+                          class="fa fa-sort-desc">
+                        </i>
+                        <i *ngIf="sortSelection.orderType == ''" class="fa fa-sort">
+                        </i>
+                      </td>
+
+                      <td class="header-style hideextra" (click)="onClick(complaintPIViewDetails.header.files)">
+                        {{complaintPIViewDetails.header?.files}}
+                        <i *ngIf="sortSelection.sortData == complaintPIViewDetails.header?.files && sortSelection.orderType == 'ASC'"
+                          class="fa fa-sort-asc">
+                        </i>
+                        <i *ngIf="sortSelection.sortData == complaintPIViewDetails.header?.files && sortSelection.orderType == 'DESC'"
+                          class="fa fa-sort-desc">
+                        </i>
+                        <i *ngIf="sortSelection.orderType == ''" class="fa fa-sort">
+                        </i>
+                      </td>
+
+                      <td class="header-style-last hideextra">
+                        Commercial Settlement<!-- {{complaintPIViewDetails.header?.commercialSettlement}} -->
+                      </td>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr class="tr-style" *ngFor="let complaintViewValue of complaintPIViewDetails.details
+                  | isplSearch: searchFormGroup.value.gridSearch : complaintPIViewDetails.header;
+                  let odd = odd; let even = even;"
+                      [ngClass]="{even: even, odd: odd }">
+                      <ng-container *ngIf="complaintViewValue.activityId==complaintLoggedActivityId then thenBlockOfCheckbox; else elseBlockOfCheckbox"></ng-container>
+                      <ng-template #thenBlockOfCheckbox>
+                        <td class="td-style-first"><input type="checkbox" [checked]="otherCheck" (click)="getComplaintDetailsByCheckbox(complaintViewValue)" /></td>
+                      </ng-template>
+                      <ng-template #elseBlockOfCheckbox>
+                        <td class="td-style-first"></td>
+                      </ng-template>
+                      <td class="td-style"><span class="custom-link" (click)="onClickCompRefNo(complaintViewValue);">{{complaintViewValue.complaintReferenceNo}}</span></td>
+                      <td class="td-style">{{complaintViewValue.complaintReferenceDt|date: 'dd-MMM-yyyy'}}</td>
+                      <td class="td-style">{{complaintViewValue.customerDetails.customerName}}</td>
+                      <td class="td-style">{{complaintViewValue.complaintTypeDesc}}</td>
+                      <td class="td-style">{{complaintViewValue.natureOfComplaintDesc}}</td>
+                      <td class="td-style">{{complaintViewValue.status}}</td>
+                      <ng-container *ngIf="complaintViewValue.files.length==0 then thenBlock; else elseBlock"></ng-container>
+                      <ng-template #thenBlock>
+                        <td class="td-style"></td>
+                      </ng-template>
+                      <ng-template #elseBlock>
+                        <td class="td-style">
+                          <input id="{{complaintViewValue.complaintReferenceNo}}" class="toggle input-checkbox" type="checkbox">
+                          <label for="{{complaintViewValue.complaintReferenceNo}}">Files</label>
+                          <div id="{{complaintViewValue.complaintReferenceNo}}" class="expand">
+                            <section>
+                              <ng-container *ngFor="let file of complaintViewValue.files">
+                                <a class="file-url" href="{{file.fileUrl}}" target="_blank">{{file.fileName}}</a>
+                                <br />
+                              </ng-container>
+                            </section>
+                          </div>
+                        </td>
+                      </ng-template>
+                      <!-- new add for commercial settlement -->
+                      <td class="td-style-last">                        
+                        <span *ngIf="complaintViewValue.requiredCommercialSettlementInComplaintRegistration =='Yes'" class="custom-link" (click)="onClickCommSetLinkClick(complaintViewValue)">Details</span>
+                        <span *ngIf="complaintViewValue.requiredCommercialSettlementInComplaintRegistration =='No'">No</span>
+                      </td>
+                      <!-- end of commercial settlement add -->
+                    </tr>
+                  </tbody>
+                </table>
             </div>
             <!-- end of table div -->
 
@@ -237,5 +252,4 @@
 <!-- end of div page-container -->
 
 <ispl-busy-spinner *ngIf="busySpinner.busy">
-<!--<ispl-busy-spinner *ngIf="!complaintPIViewDetails.header && !complaintPIViewDetails.details">-->
 </ispl-busy-spinner>

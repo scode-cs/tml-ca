@@ -69,7 +69,7 @@ export class ComplainPIViewComponent implements OnInit {
     busy: true
   };
   public fromDate: string;
-
+  
   constructor(
     private formBuilder: FormBuilder,
     private localStorageService: LocalStorageService,
@@ -86,7 +86,7 @@ export class ComplainPIViewComponent implements OnInit {
       'gridSearch': ''
     });
     let currentDate = new Date();
-    this.fromDate = this.datePipe.transform(currentDate,'yyyy-MM-dd');
+    this.fromDate = this.datePipe.transform(currentDate,'yyyy-MM-dd');    
   }//end of constructor
 
   ngOnInit(): void {
@@ -400,6 +400,11 @@ export class ComplainPIViewComponent implements OnInit {
   public onClickCompRefNo(val){
     let refNo: string = val.complaintReferenceNo;
     this.router.navigate([ROUTE_PATHS.RouteComplainPIRegDetailsView,refNo]);
-  }
+  }//end of method
+
+  public onClickCommSetLinkClick(complaintSelectedRowVal: any){
+    let compRefNo: string = complaintSelectedRowVal.complaintReferenceNo;
+    this.router.navigate([ROUTE_PATHS.RouteCommercialSettlementPI,compRefNo]);
+  }//end of method
 
 }//end of class

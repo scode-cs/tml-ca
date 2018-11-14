@@ -34,7 +34,7 @@ export class CommercialSettlementDIDataService {
     public putHeader(complainHeader: any, plantType: string) {
         let headers: Headers = this.configService();
         let actionUrl = AppUrlsConst.COMMERCIAL_SETTLEMENT_HEADER_TABLE_ADD_URL
-            + "?plantType=" + plantType;
+            + "/" + plantType;
 
         return this.http.put(actionUrl, complainHeader, { headers: headers })
             .map((res: Response) => { return res.json() })
@@ -48,7 +48,7 @@ export class CommercialSettlementDIDataService {
     public postDetail(complainDetail: any, plantType: string) {
         let headers: Headers = this.configService();
         let actionUrl = AppUrlsConst.COMMERCIAL_SETTLEMENT_DETAIL_TABLE_ADD_URL
-            + "?plantType=" + plantType;
+            + "/" + plantType;
 
         return this.http.post(actionUrl, complainDetail, { headers: headers })
             .map((res: Response) => { return res.json() })
@@ -62,7 +62,7 @@ export class CommercialSettlementDIDataService {
   public postItemDetail(itemDetail: any, plantType: string) {
     let headers: Headers = this.configService();
     let actionUrl = AppUrlsConst.COMMERCIAL_SETTLEMENT_ITEM__DETAIL_TABLE_ADD_URL
-        + "?plantType=" + plantType;
+        + "/" + plantType;
 
     return this.http.post(actionUrl, itemDetail, { headers: headers })
         .map((res: Response) => { return res.json() })
