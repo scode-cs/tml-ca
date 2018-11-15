@@ -60,11 +60,15 @@
                                 <td class="hideextra header-style">Official Document Date</td>
                                 <td class="hideextra header-style">Invoice Qty(in Mtrs)</td>
                                 <td class="hideextra header-style">Complaint Qty(in Mtrs)</td>
-                                <td class="hideextra header-style bold-font" style="padding-top:9px;">Compensation Qty(in Mtrs)
+                                <td *ngIf="commSetlmntLevel == 2" class="hideextra header-style bold-font" style="padding-top:9px;">Compensation Qty(in Mtrs)
                                     <label class="red-asterick">*</label>
                                 </td>
-                                <td class="hideextra header-style bold-font" style="padding-top:9px;">Item Rate
+                                <td *ngIf="commSetlmntLevel != 2" class="hideextra header-style">Compensation Qty(in Mtrs)
+                                </td>
+                                <td *ngIf="commSetlmntLevel == 2" class="hideextra header-style bold-font" style="padding-top:9px;">Item Rate
                                     <label class="red-asterick">*</label>
+                                </td>
+                                <td *ngIf="commSetlmntLevel != 2" class="hideextra header-style">Item Rate
                                 </td>
                                 <td class="hideextra header-style">Settlement Cost</td>
                                 <td class="hideextra header-style">Complaint Type</td>
@@ -95,15 +99,17 @@
                                 <td class="td-style hideextra number-align-style">
                                     {{itemDet.complaintQtyInMtrs}}
                                 </td>
-                                <td class="td-style hideextra">
-                                    <input type="number" class="form-control number-align-style" formControlName="{{ itemDet.compensationQtyKey }}"
+                                <td class="td-style hideextra number-align-style">
+                                    <input type="number" *ngIf="commSetlmntLevel == 2" class="form-control number-align-style" formControlName="{{ itemDet.compensationQtyKey }}"
                                         value="{{itemDet.compensationQty}}" (click)="onCompensationAndItemRateChanges(itemDet)"
                                         (keyup)="onCompensationAndItemRateChanges(itemDet)" />
+                                        <ng-container *ngIf="commSetlmntLevel != 2">{{itemDet.compensationQty}}</ng-container>
                                 </td>
-                                <td class="td-style hideextra">
-                                    <input type="number" class="form-control number-align-style" formControlName="{{ itemDet.itemRateKey }}"
+                                <td class="td-style hideextra number-align-style">
+                                    <input type="number" *ngIf="commSetlmntLevel == 2" class="form-control number-align-style" formControlName="{{ itemDet.itemRateKey }}"
                                         value="{{itemDet.itemRate}}" (click)="onCompensationAndItemRateChanges(itemDet)"
                                         (keyup)="onCompensationAndItemRateChanges(itemDet)" />
+                                        <ng-container *ngIf="commSetlmntLevel != 2">{{itemDet.itemRate}}</ng-container>
                                 </td>
                                 <td class="td-style hideextra number-align-style">
                                     {{itemDet.settlementCost}}
@@ -132,7 +138,7 @@
             <!--end table div-->
 
             <!-- start div for edit required comercial settlement  -->
-            <div class="form-group col-xs-12 col-sm-12 col-md-12 col-lg-12">
+            <div class="form-group col-xs-12 col-sm-12 col-md-12 col-lg-12" *ngIf="commSetlmntLevel == 3 || commSetlmntLevel == 4">
                 <label>Compensation </label>
                 <label class="red-asterick">*</label>
                 <div>

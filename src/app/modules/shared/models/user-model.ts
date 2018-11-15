@@ -11,6 +11,7 @@ export class UserModel {
   //new add for from date n to date
   private _fromDate: string;
   private _toDate: string;
+  private _commSetlmntLevel: number;
 
   get plantTypeForBoth(): string {
     return this._plantTypeForBoth;
@@ -79,6 +80,13 @@ export class UserModel {
   }
   set toDate(toDate:string) {
     this._toDate = toDate;
+  }
+
+  get commSetlmntLevel(): number {
+    return this._commSetlmntLevel;
+  }
+  set commSetlmntLevel(commSetlmntLevel:number){
+    this._commSetlmntLevel = commSetlmntLevel;
   }
   
 }//end of class

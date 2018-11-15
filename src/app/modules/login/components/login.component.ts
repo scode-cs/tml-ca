@@ -100,7 +100,9 @@ export class LoginComponent implements OnInit {
     //new add for dashboard date features- 11.10.18   
     userModel.fromDate = resDetails.userDetails.dashboardSelectedFromDate;
     userModel.toDate = resDetails.userDetails.dashboardSelectedToDate;
-    //end of new add for dashboard date features- 11.10.18               
+    //end of new add for dashboard date features- 11.10.18       
+    // for commercial settlement access  
+    userModel.commSetlmntLevel = 4;      
     this.localStorageService.user = userModel;
 
     let appSettingsModel: AppSettingsModel = new AppSettingsModel();
