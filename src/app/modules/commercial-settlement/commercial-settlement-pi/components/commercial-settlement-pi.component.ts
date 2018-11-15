@@ -31,7 +31,7 @@ export class CommercialSettlementPIComponent implements OnInit {
     }
     public itemDetails: any[] = [];// to store item deatils from response
     public busySpinner: boolean = false;//to load n stop the spinner
-
+    public commSetlmntLevel: number = 0;//taking a var to maintain the user access
     constructor(
         private datePipe: DatePipe,
         private router: Router,
@@ -41,7 +41,11 @@ export class CommercialSettlementPIComponent implements OnInit {
         private sessionErrorService: SessionErrorService,
         private commercialSettlementPIDataService: CommercialSettlementPIDataService
     ) {
+        this.commSetlmntLevel = this.localStorageService.user.commSetlmntLevel;
         this.initForm();//init form
+        if(this.commSetlmntLevel == 3 || this.commSetlmntLevel == 4 ){
+            this.commerCialSettlementFromGroup.controls['compensation'].setValidators(Validators.required);
+        }
     }
     ngOnInit(): void {
         console.log("Oninit of CommercialSettlementComponent class");
