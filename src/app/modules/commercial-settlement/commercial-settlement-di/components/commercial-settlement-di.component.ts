@@ -30,6 +30,8 @@ export class CommercialSettlementDIComponent implements OnInit {
     public busySpinner: boolean = false;//to load n stop the spinner
     public invoiceItemErrFlag: boolean = false;//to check invoice item have error or not 
     public itemListFormGroup: FormGroup;//to create dynamic formControl for compensation qty n rate
+    public commSetlmntLevel: number = 0;//taking a var to maintain the user access
+
     constructor(
         private datePipe: DatePipe,
         private router: Router,
@@ -40,7 +42,12 @@ export class CommercialSettlementDIComponent implements OnInit {
         private commercialSettlementDIDataService: CommercialSettlementDIDataService
     ) {
         console.log("constructor of CommercialSettlementComponent class");
+        this.commSetlmntLevel = this.localStorageService.user.commSetlmntLevel;
         this.initForm();//init form
+        if(this.commSetlmntLevel == 3 || this.commSetlmntLevel == 4 ){
+            this.commerCialSettlementFromGroup.controls['compensation'].setValidators(Validators.required);
+        }
+
     }
     ngOnInit(): void {
         console.log("Oninit of CommercialSettlementComponent class");
