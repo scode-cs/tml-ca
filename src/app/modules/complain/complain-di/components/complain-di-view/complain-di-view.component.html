@@ -222,10 +222,11 @@
                               </span>
                           </ng-template>
                           <ng-template #elseBlokOfCommSett>
-                            <label class="switch" *ngIf="commSetlmntLevel == 2">
+                            <label class="switch" *ngIf="commSetlmntLevel == 2 && complaintViewValue.lastActivityId != '10'">
                               <input type="checkbox" formControlName="commercialCheck" (click)="onCommSetSwitchBtnClick(complaintViewValue.complaintReferenceNo)">
                               <span class="slider round"></span>
                             </label>
+                            <span *ngIf="commSetlmntLevel == 2 && complaintViewValue.lastActivityId == '10'">NA</span>
                             <span *ngIf="commSetlmntLevel != 2" style="color:#FB231C;font-weight:600;">No</span>
                           </ng-template>
                         </ng-container>
