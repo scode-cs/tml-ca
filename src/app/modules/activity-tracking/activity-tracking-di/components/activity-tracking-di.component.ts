@@ -45,7 +45,7 @@ export class ActivityTrackingDIComponent implements OnInit {
     ngOnInit(): void {
         console.log("onInit of ActivityTrackingDIComponent..");
         this.busySpinner = true;//to load spinner
-        this.gridConfigModel = new  ActiivityTrackingModel().activityTrackingGridConfig;
+        this.gridConfigModel = new  ActiivityTrackingModel().activityTrackingGridConfigWithOutCommSet;
         this.facetedDataModel = new ActiivityTrackingModel().facetedDataModel;
         this.headerParams = new ComplaintDIHeaderParamModel();//for pagination
         this.getCompStatusWSCall();

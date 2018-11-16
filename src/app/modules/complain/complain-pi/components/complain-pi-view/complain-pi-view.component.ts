@@ -69,7 +69,7 @@ export class ComplainPIViewComponent implements OnInit {
     busy: true
   };
   public fromDate: string;
-  
+  public commSetlmntLevel: number = 0;//taking a var to maintain the user access
   constructor(
     private formBuilder: FormBuilder,
     private localStorageService: LocalStorageService,
@@ -85,6 +85,7 @@ export class ComplainPIViewComponent implements OnInit {
     this.searchFormGroup = this.formBuilder.group({
       'gridSearch': ''
     });
+    this.commSetlmntLevel = this.localStorageService.user.commSetlmntLevel;//for comm sett
     let currentDate = new Date();
     this.fromDate = this.datePipe.transform(currentDate,'yyyy-MM-dd');    
   }//end of constructor

@@ -151,7 +151,7 @@
             <!-- end of div for edit required commercial settlement -->
 
             <!-- start div for actn details -->
-            <div class="form-group col-xs-12 col-sm-12 col-md-12 col-lg-12">
+            <div class="form-group col-xs-12 col-sm-12 col-md-12 col-lg-12" *ngIf="commSetlmntLevel != 1">
                 <label>Remarks</label>
                 <label class="red-asterick">*</label>
                 <textarea formControlName="remarks" class="form-control hide-horizontal-scroll comment-box-textarea-style"
@@ -165,7 +165,7 @@
             <!-- start div for Submit  and Cancel Button-->
             <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
                 <!-- start div for Submit Button-->
-                <div class="col-xs-12 col-sm-4 col-md-4 col-lg-2 button-holder">
+                <div class="col-xs-12 col-sm-4 col-md-4 col-lg-2 button-holder" *ngIf="commSetlmntLevel != 1">
                     <button type="submit" class="btn btn-primary primary-button-style" [disabled]="!(commerCialSettlementFromGroup.valid && itemListFormGroup.valid && itemDetails.length>0 && invoiceItemErrFlag === false)">Submit
                     </button>
                     <!--[disabled]="!(commerCialSettlementFromGroup.valid)"-->
