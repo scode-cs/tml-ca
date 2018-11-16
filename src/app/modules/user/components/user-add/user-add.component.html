@@ -129,6 +129,20 @@
         </div>
         <!-- end div for report to dropdown -->
 
+         <!--start div for commercial settlement level-->
+         <div class="form-group col-xs-12 col-sm-6 col-md-6 col-lg-4">
+            <label>Commercial Settlement Level</label>
+            <select class="custom-select col-xs-12 col-sm-6 col-md-6 col-lg-4" formControlName="commSettLevel" required>
+              <option *ngFor="let commSettLvl of commercialSettlementLevel" value="{{ commSettLvl.Key }}">{{ commSettLvl.Value}}</option>
+            </select>
+            <!--start div for alert-->
+            <div class="alert alert-danger" *ngIf="userAddFormGroup.get('commSettLevel').hasError('required') && userAddFormGroup.get('commSettLevel').touched">
+              <i class="fa fa-exclamation-circle"></i> Commercial Settlement Level is required!
+            </div>
+            <!--end div for alert-->
+          </div>
+          <!--end of div for add designation Name-->
+
         <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
           <div class="col-xs-12 col-sm-4 col-md-4 col-lg-2 button-holder">
             <button type="submit" class="btn btn-primary primary-button-style" [disabled]="!userAddFormGroup.valid">Submit
