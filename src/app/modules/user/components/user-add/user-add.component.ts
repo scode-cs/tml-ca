@@ -42,7 +42,14 @@ export class AddUserComponent implements OnInit {
   public employeeMobileNoLength: number = this.localStorageService.dbSettings.employeeMobileNo;
   public employeeEmailIdLength: number = this.localStorageService.dbSettings.employeeEmailId;
   
-
+  public commercialSettlementLevel: any[] = [
+    {Key : '', Value: "--Select--"},
+    {Key:0,Value:"Unauthorised Member"},
+    {Key:1,Value:"Viewer"},
+    {Key:2,Value:"Authorised Member"},
+    {Key:3,Value:"COS"},
+    {Key:4,Value:"EVP"}    
+  ];
   //  public userModifyRoleId: string;
   //for error msg
   public resMsgType: string = "Info";
@@ -205,7 +212,12 @@ export class AddUserComponent implements OnInit {
       ],
       //modify employee id
       'employeeIdForModify':[''],
-      'reportToEmployeeId': ['']
+      'reportToEmployeeId': [''],
+      'commSettLevel':[''
+        ,[
+          Validators.required
+        ]
+      ]
 
       // 'newlyRegistered':[''],
       // 'roleIdForModify':['']
@@ -235,6 +247,7 @@ export class AddUserComponent implements OnInit {
     user.plantType = this.userAddFormGroup.value.plantType;
     user.roleId =  this.userAddFormGroup.value.roleId;
     user.reportToEmployeeId = this.userAddFormGroup.value.reportToEmployeeId;
+    user.commSetlementLevel = this.userAddFormGroup.value.commSettLevel;
     // user.employeeId = this.userAddFormGroup.value.employeeId;
 
     // user.isNew = this.employeeId ?   this.userAddFormGroup.value.newlyRegistered : '';
@@ -304,6 +317,9 @@ export class AddUserComponent implements OnInit {
           this.userAddFormGroup.controls["employeeName"].setValue(this.userDetails.employeeName.trim());//set employee id for modify user
           this.userAddFormGroup.controls["designationName"].setValue(this.userDetails.designationId.trim());
           this.userAddFormGroup.controls["departmentName"].setValue(this.userDetails.departmentId.trim());
+          if(this.userDetails.commSetlementLevel){
+            this.userAddFormGroup.controls["commSettLevel"].setValue(this.userDetails.commSetlementLevel.trim());
+          }
           this.userAddFormGroup.controls["mobileNo"].setValue(this.userDetails.employeeMobileNo.trim());
           this.userAddFormGroup.controls["emailId"].setValue(this.userDetails.employeeEmailId.trim());
           this.userAddFormGroup.controls["plantType"].setValue(this.userDetails.plantType);
