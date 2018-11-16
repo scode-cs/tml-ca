@@ -359,7 +359,7 @@ export class CommercialSettlementDIComponent implements OnInit {
     }//end of method
 
     public onCancel() {
-        this.router.navigate([ROUTE_PATHS.RouteViewComplainDIStatus]);
+        this.router.navigate([ROUTE_PATHS.RouteComplainDIView]);
     }//end of method
 
     //method to delete err msg

@@ -34,8 +34,9 @@ export class ComplainDIViewComponent implements OnInit, OnChanges {
   };
   //for local search
   public searchFormGroup: FormGroup;
+  //for comm sett switch button
+  public commSettFormGroup: FormGroup;
   // Page Config
-  public pageConfig: any = {};
   public dashboardParameter: string = '';
 
   public gridHeader: any = {
@@ -43,7 +44,8 @@ export class ComplainDIViewComponent implements OnInit, OnChanges {
     customerName: 'Customer Name',
     complaintTypeDesc: 'Complaint Type',
     natureOfComplaintDesc: 'Nature of Complaint',
-    lastStatus: 'Complaint Status'
+    lastStatus: 'Complaint Status',
+    commercialSettlement: 'Commercial Settlement'
   }
 
   //for busy spinner
@@ -64,6 +66,7 @@ export class ComplainDIViewComponent implements OnInit, OnChanges {
   //server search formgroup
   public serverSearchModalFormGroup: FormGroup;
   public fromDate: string;
+  public commSetlmntLevel: number = 0;//taking a var to maintain the user access
 
   constructor(
     private formBuilder: FormBuilder,
@@ -82,6 +85,12 @@ export class ComplainDIViewComponent implements OnInit, OnChanges {
     this.searchFormGroup = this.formBuilder.group({
       'gridSearch': ''
     });
+    //for commercial switch button
+    this.commSetlmntLevel = this.localStorageService.user.commSetlmntLevel;
+    let formGroup: any = {};
+    formGroup['commercialCheck'] = new FormControl();
+    this.commSettFormGroup = new FormGroup(formGroup);
+    //end of comm sett switch button
     //serverSearchModalFormGroup
     let serverSearchFormGroup: any = {}
     serverSearchFormGroup['anyTypeSearch'] = new FormControl();
@@ -104,7 +113,6 @@ export class ComplainDIViewComponent implements OnInit, OnChanges {
   ngOnInit(): void {
     console.log("OnInit View Complain Class");
     this.busySpinner = true;
-    this.pageConfig = new ComplainDIViewModel().pageConfig;
     this.compHeaderTableColumnNames = new ComplainDIViewModel().compHeaderTableFieldNames;
   
     this.headerparams = new ComplaintDIHeaderParamModel();
@@ -392,8 +400,6 @@ export class ComplainDIViewComponent implements OnInit, OnChanges {
       this.sortSelection.orderType = "ASC";
     }
     this.sortSelection.sortData = sortItem;
-
-
     this.headerparams.sortData = this.sortSelection.sortData ? this.sortSelection.sortData : '';
     this.headerparams.orderBy = this.sortSelection.orderType && this.sortSelection.orderType == 'DESC'
       ? this.sortSelection.orderType : '';
@@ -402,8 +408,6 @@ export class ComplainDIViewComponent implements OnInit, OnChanges {
     this.getcomplaindetails();
 
   }//end of onclick method
-
-
 
   getPager(totalItems: number, currentPage: number = 1, pageSize: number = 10) {
     // calculate total pages
@@ -488,7 +492,57 @@ export class ComplainDIViewComponent implements OnInit, OnChanges {
     }, (err) => {
       console.log(err);
     })
+  }//end of method
+
+  //new add for commercial sett
+  public onClickCommSetLinkClick(activityTrackingSelectedRowVal: any){
+    let compRefNo: string = activityTrackingSelectedRowVal.complaintReferenceNo;
+    let lastActivityId = activityTrackingSelectedRowVal.lastActivityId;
+    this.router.navigate([ROUTE_PATHS.RouteCommercialSettlementDI,compRefNo,lastActivityId]);
+  }//end of method
+
+  //modal------------------------------------>>
+  comSetFlag: boolean = false;
+  private compRefNoOfCommSet: string = '';
+  private toggleCommSettModalBtn(){
+      this.comSetFlag = this.comSetFlag ? false : true;
   }
+  onCommSetSwitchBtnClick(compRefNo: string){
+      this.compRefNoOfCommSet = compRefNo;
+      this.toggleCommSettModalBtn();
+  }
+  cancelModal(){
+      this.commSettFormGroup.controls['commercialCheck'].reset();//to reset the control value
+      this.toggleCommSettModalBtn();
+  }
+  onCommSetModalSubmitClick(btnVal){
+    this.complaintDIViewDetails.forEach((el,index)=>{
+        if(el.complaintReferenceNo == this.compRefNoOfCommSet){
+            if(btnVal === 'Y'){
+                this.busySpinner = true;
+                // this.updateComSetWSCall();
+                let updateComSetBody: any = {};
+                updateComSetBody.complaintReferenceNo = this.compRefNoOfCommSet;
+                updateComSetBody.commercialSett = "Y";
+                this.complaintdIservice.updateComSetFromCompStatusGrid(updateComSetBody).
+                subscribe(res=>{
+                    el.commercialSett = "Y";
+                    this.busySpinner = false;
+                },err=>{
+                    el.commercialSett = "N";
+                    console.log(err);
+                    this.busySpinner = false;
+                })
+            }else if(btnVal === 'N'){
+                el.commercialSett = "N";
+                this.commSettFormGroup.controls['commercialCheck'].setValue(false);
+            }
+        }
+    });
+      this.toggleCommSettModalBtn();  
+  }
+  //end of commercial settlement
+
   //===== server search =====
   //new add for server search modal
   public serverSearchModal: boolean = false;

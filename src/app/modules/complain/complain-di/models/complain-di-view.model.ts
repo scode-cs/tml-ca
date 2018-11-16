@@ -1,24 +1,5 @@
 export class ComplainDIViewModel {
 
-    private _pageConfig: any = {
-        gridColumns: [
-            'complaintRefNo',
-            'complaintRefDate',
-            'customerName',
-            'complaintTypeDescription',
-            'natureOfComplaintDescription',
-            'status'
-        ],
-        searchColumns: [
-            'complaintRefNo',
-            'complaintRefDate',
-            'customerName',
-            'complaintTypeDescription',
-            'natureOfComplaintDescription',
-            'status'
-        ]
-    }
-
     private _compHeaderTableFieldNames: any = {
         complaintNumber: 'CMPLNT_REF_NO',
         customerName: 'CUSTOMER_NAME',
@@ -31,7 +12,5 @@ export class ComplainDIViewModel {
         return this._compHeaderTableFieldNames;
     }
 
-    public get pageConfig() {
-        return this._pageConfig;
-    }
+    
 }
