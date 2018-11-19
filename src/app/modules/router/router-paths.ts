@@ -209,12 +209,12 @@ const ROUTE_MIS_REPORT_VIEW_DETAILS_FULL: string = ROUTE_HOME_FULL + '/' + ROUTE
 
 //commercial settlement di
 const ROUTE_COMM_SET_DI_CONST: string = 'commercialsettlementdi';
-const ROUTE_COMM_SET_DI: string = ROUTE_COMM_SET_DI_CONST + '/' + ':complaintReferenceNo'+ '/' + ':complaintStatus';
+const ROUTE_COMM_SET_DI: string = ROUTE_COMM_SET_DI_CONST + '/' + ':complaintReferenceNo'+ '/' + ':complaintStatus' + '/' + ':commsettcount';
 const ROUTE_COMM_SET_DI_FULL: string = ROUTE_HOME_FULL + '/' + ROUTE_COMM_SET_DI_CONST;//add
 
 //commercial settlement pi
 const ROUTE_COMM_SET_PI_CONST: string = 'commercialsettlementpi';
-const ROUTE_COMM_SET_PI: string = ROUTE_COMM_SET_PI_CONST + '/' + ':complaintReferenceNo';
+const ROUTE_COMM_SET_PI: string = ROUTE_COMM_SET_PI_CONST + '/' + ':complaintReferenceNo' + '/' + ':commsettcount';
 const ROUTE_COMM_SET_PI_FULL: string = ROUTE_HOME_FULL + '/' + ROUTE_COMM_SET_PI_CONST;//add
 
 

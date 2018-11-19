@@ -32,6 +32,9 @@ export class CommercialSettlementPIComponent implements OnInit {
     public itemDetails: any[] = [];// to store item deatils from response
     public busySpinner: boolean = false;//to load n stop the spinner
     public commSetlmntLevel: number = 0;//taking a var to maintain the user access
+
+    public previousCommSettDetArr: any[] = [];//to store previous commercial settlement details
+
     constructor(
         private datePipe: DatePipe,
         private router: Router,
@@ -43,17 +46,14 @@ export class CommercialSettlementPIComponent implements OnInit {
     ) {
         this.commSetlmntLevel = this.localStorageService.user.commSetlmntLevel;
         this.initForm();//init form
-        if(this.commSetlmntLevel == 3 || this.commSetlmntLevel == 4 ){
+        if (this.commSetlmntLevel == 3 || this.commSetlmntLevel == 4) {
             this.commerCialSettlementFromGroup.controls['compensation'].setValidators(Validators.required);
         }
     }
     ngOnInit(): void {
         console.log("Oninit of CommercialSettlementComponent class");
         this.getRouteParam();
-        let date = new Date();
-        let currentDate: string = this.datePipe.transform(date, 'yyyy-MM-dd');
-        this.commerCialSettlementFromGroup.controls["date"].setValue(this.datePipe.transform(currentDate, 'dd-MMM-yyyy'));
-    }
+    }//end of on init
 
     /**
      * @description
@@ -77,10 +77,99 @@ export class CommercialSettlementPIComponent implements OnInit {
         routeSubscription = this.activatedroute.params.subscribe(params => {
             this.routeParam.complaintReferenceNo = params.complaintReferenceNo ? params.complaintReferenceNo : '';
             this.routeParam.complaintStatus = params.complaintStatus ? params.complaintStatus : '';
+            this.routeParam.commsettcount = params.commsettcount ? params.commsettcount : 0;
         });
         this.commerCialSettlementFromGroup.controls["complaintReferenceNo"].setValue(this.routeParam.complaintReferenceNo);
-        this.getInvoiceItemDetailWSCall(this.routeParam.complaintReferenceNo, this.localStorageService.appSettings.complaintRegistrationActivityId);
+
+        if (this.routeParam.commsettcount > 0) {
+            this.getcommSetViewWSCall();
+        } else if (this.routeParam.commsettcount == 0) {
+            let date = new Date();
+            let currentDate = this.generateDate();
+            this.commerCialSettlementFromGroup.controls["date"].setValue(this.datePipe.transform(currentDate, 'dd-MMM-yyyy'));
+            this.getInvoiceItemDetailWSCall(this.routeParam.complaintReferenceNo, this.localStorageService.appSettings.complaintRegistrationActivityId);
+        }
     }//end of method route param
+
+     //method to generate date
+     private generateDate():string {
+        let date = new Date();
+        let currentDate: string = this.datePipe.transform(date, 'yyyy-MM-dd');
+    return currentDate;
+    }//end of method
+
+    //method to get commercial settlement details
+    private getcommSetViewWSCall() {
+        this.busySpinner = true;//to load spinner
+        this.commercialSettlementPIDataService.getCommercialSettlementViewDetails(this.routeParam.complaintReferenceNo, this.routeParam.complaintStatus, "PI").
+            subscribe(res => {
+                if (res.msgType == 'Info') {
+                    let json: any = JSON.parse(res.mapDetails);
+                    console.log("comm sett view det json::::", json);
+                    json.forEach(el => {
+                        let prevCommSettJson: any = {};
+                        prevCommSettJson.remarks = el.remarks;
+                        prevCommSettJson.commercialSettlementDate = this.datePipe.transform(el.commercialSettlementDate, 'dd-MMM-yyyy');
+                        switch (el.status) {
+                            case 'C': {
+                                prevCommSettJson.action = "Requested";
+                                break;
+                            }
+                            case 'A': {
+                                prevCommSettJson.action = "Accept";
+                                break;
+                            }
+                            case 'R': {
+                                prevCommSettJson.action = "Reject";
+                                break;
+                            }
+                            case 'Q': {
+                                prevCommSettJson.action = "Query";
+                                break;
+                            }
+                        }//end of switch 
+                        this.previousCommSettDetArr.push(prevCommSettJson);
+                    });
+                    console.log(this.previousCommSettDetArr);
+                    //taking the date value from array
+                    let commSettDate: string = this.previousCommSettDetArr[0].commercialSettlementDate;
+                    this.commerCialSettlementFromGroup.controls["date"].setValue(this.datePipe.transform(commSettDate, 'dd-MMM-yyyy'));
+                    this.getCommSettInvItemDet(this.routeParam.complaintReferenceNo, "PI");
+                } else {
+                    this.errorMsgObj.errMsgShowFlag = true;
+                    this.errorMsgObj.errorMsg = res.msg;
+                    this.busySpinner = false;//to stop the spinner
+                }
+            }, err => {
+                console.log(err);
+                this.errorMsgObj.errMsgShowFlag = true;
+                this.errorMsgObj.errorMsg = err.msg;
+                this.busySpinner = false;//to stop the spinner
+            });
+    }//end of method
+
+    //method to get comm sett inv item
+    private getCommSettInvItemDet(compRefNo: string, plantType: string) {
+        this.commercialSettlementPIDataService.getInvoiceItemDetail(compRefNo, plantType).
+            subscribe(res => {
+                if (res.msgType == 'Info') {
+                    console.log("Comm Sett Inv Item::", res);
+                    let json: any = JSON.parse(res.mapDetails);
+                    this.itemDetails = json;
+                    this.generateTotalCompensationAmount();//to generate total compensation amount
+                    this.createItemFormgroupForSelectedItem();//creating dynamic formcontrol
+                    this.busySpinner = false;//to stop the spinner
+                } else {
+                    this.errorMsgObj.errMsgShowFlag = true;
+                    this.errorMsgObj.errorMsg = res.msg;
+                    this.busySpinner = false;//to stop the spinner
+                }
+            }, err => {
+                this.errorMsgObj.errMsgShowFlag = true;
+                this.errorMsgObj.errorMsg = err.msg;
+                this.busySpinner = false;//to stop the spinner
+            })
+    }//end of method
 
     //start method getInvoiceItemDetailWSCall to get item details
     private getInvoiceItemDetailWSCall(complaintReferenceNo: string, fileActivityId: number) {
@@ -197,10 +286,10 @@ export class CommercialSettlementPIComponent implements OnInit {
                                     let compensQty: string = this.itemListFormGroup.controls[itmList].value;
                                     compQty = parseFloat(compQty);
                                     compensationQty = parseFloat(compensQty);
-                                    if(compensationQty > compQty) {
+                                    if (compensationQty > compQty) {
                                         checkItm.compensationQtyErrFlag = true;
                                         checkItm.compensationQtyErrDesc = 'Compensation Quantity can′t be greater than Complaint Quantity';
-                                    }else{
+                                    } else {
                                         checkItm.compensationQty = compensationQty;
                                         checkItm.compensationQtyErrFlag = false;
                                         checkItm.compensationQtyErrDesc = '';
@@ -245,20 +334,26 @@ export class CommercialSettlementPIComponent implements OnInit {
         let plantType: string = this.localStorageService.user.plantType;
         let commSetHeaderTableJson: any = {};
         commSetHeaderTableJson.complaintReferenceNo = this.commerCialSettlementFromGroup.value.complaintReferenceNo;
+        commSetHeaderTableJson.commercialSettlementTotalAmount = this.commerCialSettlementFromGroup.value.totalCompensationAmount;
         commSetHeaderTableJson.lastActivityId = 10;
         commSetHeaderTableJson.lastStatus = "C";
         commSetHeaderTableJson.userId = this.localStorageService.user.userId;
 
         let commSettDetailTableJson: any = {};
         commSettDetailTableJson.complaintReferenceNo = this.commerCialSettlementFromGroup.value.complaintReferenceNo;
-        commSettDetailTableJson.commercialSettlementDt = this.datePipe.transform(this.commerCialSettlementFromGroup.value.date, 'yyyy-MM-dd');
-        commSettDetailTableJson.commercialSettlementTotalAmount = this.commerCialSettlementFromGroup.value.totalCompensationAmount;
+        let currentDate = this.generateDate();
+        commSettDetailTableJson.commercialSettlementDt = currentDate;
         commSettDetailTableJson.activityId = 10;
         commSettDetailTableJson.status = "C";
         commSettDetailTableJson.remarks = this.commerCialSettlementFromGroup.value.remarks;
-        commSettDetailTableJson.userId = this.localStorageService.user.userId;
+        commSettDetailTableJson.userId = this.localStorageService.user.userId;        
 
-        this.commercialSettlementHeaderTableWSCall(commSetHeaderTableJson, commSettDetailTableJson, plantType);
+        if(this.localStorageService.user.commSetlmntLevel == 2){//for cam
+            this.commercialSettlementHeaderTableWSCall(commSetHeaderTableJson, commSettDetailTableJson, plantType);
+           } else{//for cos/EVP
+                commSettDetailTableJson.status = this.commerCialSettlementFromGroup.value.compensation;
+                this.commercialSettlementDetailTableWSCall(commSettDetailTableJson, plantType);
+           }
     }//end of method
 
     //method to comm sett header table submit
@@ -284,21 +379,24 @@ export class CommercialSettlementPIComponent implements OnInit {
         this.commercialSettlementPIDataService.postDetail(commSettDetailTableJson, plantType).
             subscribe(res => {
                 if (res.msgType === 'Info') {
-                    let itemDet: any[] = [];//to store item det
-                    let itemJson: any = {};
-                    this.itemDetails.forEach((el) => {
-                        itemJson.complaintReferenceNo = this.commerCialSettlementFromGroup.value.complaintReferenceNo;
-                        itemJson.slNo = el.slNo;
-                        itemJson.commercialSettlementAutoId = res.valueSub;
-                        itemJson.commercialSettlementQty = el.compensationQty;
-                        itemJson.commercialSettlementItemRate = el.itemRate;
-                        itemJson.commercialSettlementItemAmount = el.settlementCost;
-                        itemJson.userId = this.localStorageService.user.userId;
+                    if (this.localStorageService.user.commSetlmntLevel == 2) {//for cam
+                        let itemDet: any[] = [];//to store item det
+                        let itemJson: any = {};
+                        this.itemDetails.forEach((el) => {
+                            itemJson.complaintReferenceNo = this.commerCialSettlementFromGroup.value.complaintReferenceNo;
+                            itemJson.slNo = el.slNo;
+                            itemJson.commercialSettlementAutoId = res.valueSub;
+                            itemJson.commercialSettlementQty = el.compensationQty;
+                            itemJson.commercialSettlementItemRate = el.itemRate;
+                            itemJson.commercialSettlementItemAmount = el.settlementCost;
+                            itemJson.userId = this.localStorageService.user.userId;
 
-                        itemDet.push(itemJson);//creating item array
-                    });
-                    this.itemDetailsSubmit(itemDet, plantType);//calling the method to submit item det
-
+                            itemDet.push(itemJson);//creating item array
+                        });
+                        this.itemDetailsSubmit(itemDet, plantType);//calling the method to submit item det
+                    } else {
+                        this.router.navigate([ROUTE_PATHS.RouteComplainDIView]);
+                    }
                 } else {
                     this.errorMsgObj.errMsgShowFlag = true;
                     this.errorMsgObj.errorMsg = res.msg;
@@ -331,6 +429,12 @@ export class CommercialSettlementPIComponent implements OnInit {
 
     public onCancel() {
         this.router.navigate([ROUTE_PATHS.RouteComplainPIView]);
+    }
+
+    //method to delete err msg
+    public deleteResErrorMsgOnClick() {
+        this.errorMsgObj.errMsgShowFlag = false;
+        this.errorMsgObj.errorMsg = '';
     }
 
 }//end of class

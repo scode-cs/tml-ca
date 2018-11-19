@@ -55,17 +55,44 @@ export class CommercialSettlementDIDataService {
             .catch((error: Response) => { return Observable.throw(error) });
     }//end of method
 
-     /**
-   * 
-   * @param itemDetail set post data
-   */
-  public postItemDetail(itemDetail: any, plantType: string) {
-    let headers: Headers = this.configService();
-    let actionUrl = AppUrlsConst.COMMERCIAL_SETTLEMENT_ITEM__DETAIL_TABLE_ADD_URL
-        + "/" + plantType;
+    /**
+  * 
+  * @param itemDetail set post data
+  */
+    public postItemDetail(itemDetail: any, plantType: string) {
+        let headers: Headers = this.configService();
+        let actionUrl = AppUrlsConst.COMMERCIAL_SETTLEMENT_ITEM__DETAIL_TABLE_ADD_URL
+            + "/" + plantType;
 
-    return this.http.post(actionUrl, itemDetail, { headers: headers })
-        .map((res: Response) => { return res.json() })
-        .catch((error: Response) => { return Observable.throw(error) });
-}//end of method
+        return this.http.post(actionUrl, itemDetail, { headers: headers })
+            .map((res: Response) => { return res.json() })
+            .catch((error: Response) => { return Observable.throw(error) });
+    }//end of method
+
+    //view comm sett ws
+    //method to get commercial settlement details view
+    getCommercialSettlementViewDetails(complaintReferenceNo: string, activityId: number, plantType: string) {
+        let headers: Headers = this.configService();
+        let actionUrl = AppUrlsConst.COMMERCIAL_SETTLEMENT_VIEW_DETAILS;
+        let param = "plantType=" + plantType + "&filter="
+            + this.localStorageService.appSettings.complaintReferenceNoFieldName + "='" + complaintReferenceNo + "'";
+            //  AND " +
+            // this.localStorageService.appSettings.activityIdFieldName + "=" + activityId;
+        //   "&sortData=&orderBy=";
+
+        return this.http.get(actionUrl + '?' + param, { headers: headers })
+            .map((res: Response) => { return res.json() })
+            .catch((error: Response) => { return Observable.throw(error) });
+    }//end of get getCommercialSettlementViewDetails
+
+    //method to get inv item det
+    public getInvoiceItemDetail(compRefNo: string, plantType: string) {//activityId: number, complaintDetailsAutoId: number,
+        let headers: Headers = this.configService();
+        let actionUrl = AppUrlsConst.COMMERCIAL_SETTLEMENT_VIEW_INVOICE_ITEM;
+        let param = "plantType=" + plantType + "&filter=" + this.localStorageService.appSettings.complaintReferenceNoFieldName + "='" + compRefNo +"'";
+
+        return this.http.get((actionUrl + '?' + param), { headers: headers })
+            .map((res: Response) => { return res.json() })
+            .catch((error: Response) => { return Observable.throw(error) });
+    }//end of method
 }

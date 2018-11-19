@@ -18,8 +18,9 @@ export class CommercialSettlementDIComponent implements OnInit {
 
     private routeParam: any = {
         complaintReferenceNo: '',//
-        complaintStatus: ''
-    }
+        complaintStatus: '',
+        commsettcount: 0
+    };
     private totalCompensationAmount: number = 0;
     public commerCialSettlementFromGroup: FormGroup;
     public errorMsgObj: any = {
@@ -31,6 +32,8 @@ export class CommercialSettlementDIComponent implements OnInit {
     public invoiceItemErrFlag: boolean = false;//to check invoice item have error or not 
     public itemListFormGroup: FormGroup;//to create dynamic formControl for compensation qty n rate
     public commSetlmntLevel: number = 0;//taking a var to maintain the user access
+
+    public previousCommSettDetArr: any[] = [];//to store previous commercial settlement details
 
     constructor(
         private datePipe: DatePipe,
@@ -44,19 +47,15 @@ export class CommercialSettlementDIComponent implements OnInit {
         console.log("constructor of CommercialSettlementComponent class");
         this.commSetlmntLevel = this.localStorageService.user.commSetlmntLevel;
         this.initForm();//init form
-        if(this.commSetlmntLevel == 3 || this.commSetlmntLevel == 4 ){
+        if (this.commSetlmntLevel == 3 || this.commSetlmntLevel == 4) {
             this.commerCialSettlementFromGroup.controls['compensation'].setValidators(Validators.required);
         }
+    }//end of constructor
 
-    }
     ngOnInit(): void {
         console.log("Oninit of CommercialSettlementComponent class");
         this.getRouteParam();
-        let date = new Date();
-        let currentDate: string = this.datePipe.transform(date, 'yyyy-MM-dd');
-        this.commerCialSettlementFromGroup.controls["date"].setValue(this.datePipe.transform(currentDate, 'dd-MMM-yyyy'));
-        this.getviewComplainReferenceDetailsWSCall();
-    }
+    }//end of on init
 
     /**
      * @description
@@ -81,9 +80,100 @@ export class CommercialSettlementDIComponent implements OnInit {
         routeSubscription = this.activatedroute.params.subscribe(params => {
             this.routeParam.complaintReferenceNo = params.complaintReferenceNo ? params.complaintReferenceNo : '';
             this.routeParam.complaintStatus = params.complaintStatus ? params.complaintStatus : '';
+            this.routeParam.commsettcount = params.commsettcount ? params.commsettcount : 0;
         });
         this.commerCialSettlementFromGroup.controls["complaintReferenceNo"].setValue(this.routeParam.complaintReferenceNo);
+
+        if (this.routeParam.commsettcount > 0) {
+            this.getcommSetViewWSCall();
+        } else if (this.routeParam.commsettcount == 0) {
+            let currentDate = this.generateDate();
+            this.commerCialSettlementFromGroup.controls["date"].setValue(this.datePipe.transform(currentDate, 'dd-MMM-yyyy'));
+            this.getviewComplainReferenceDetailsWSCall();
+        }
     }//end of method route param
+
+    //method to generate date
+    private generateDate():string {
+        let date = new Date();
+        let currentDate: string = this.datePipe.transform(date, 'yyyy-MM-dd');
+    return currentDate;
+    }//end of method
+
+    //method to get commercial settlement details
+    private getcommSetViewWSCall() {
+        this.busySpinner = true;//to load spinner
+        this.commercialSettlementDIDataService.getCommercialSettlementViewDetails(this.routeParam.complaintReferenceNo, this.routeParam.complaintStatus, "DI").
+            subscribe(res => {
+                if (res.msgType == 'Info') {
+                    let json: any = JSON.parse(res.mapDetails);
+                    console.log("comm sett view det json::::", json);
+                    json.forEach(el => {
+                        let prevCommSettJson: any = {};
+                        prevCommSettJson.remarks = el.remarks;
+                        prevCommSettJson.commercialSettlementDate = this.datePipe.transform(el.commercialSettlementDate, 'dd-MMM-yyyy');
+                        switch (el.status) {
+                            case 'C': {
+                                prevCommSettJson.action = "Requested";
+                                break;
+                            }
+                            case 'A': {
+                                prevCommSettJson.action = "Accept";
+                                break;
+                            }
+                            case 'R': {
+                                prevCommSettJson.action = "Reject";
+                                break;
+                            }
+                            case 'Q': {
+                                prevCommSettJson.action = "Query";
+                                break;
+                            }
+
+                        }
+                        // prevCommSettJson.action = json.status;
+                        this.previousCommSettDetArr.push(prevCommSettJson);
+                    });
+                    console.log(this.previousCommSettDetArr);
+                    //taking the date value from array
+                    let commSettDate: string = this.previousCommSettDetArr[0].commercialSettlementDate;
+                    this.commerCialSettlementFromGroup.controls["date"].setValue(this.datePipe.transform(commSettDate, 'dd-MMM-yyyy'));
+                    this.getCommSettInvItemDet(this.routeParam.complaintReferenceNo, "DI");
+                } else {
+                    this.errorMsgObj.errMsgShowFlag = true;
+                    this.errorMsgObj.errorMsg = res.msg;
+                    this.busySpinner = false;//to stop the spinner
+                }
+            }, err => {
+                console.log(err);
+                this.errorMsgObj.errMsgShowFlag = true;
+                this.errorMsgObj.errorMsg = err.msg;
+                this.busySpinner = false;//to stop the spinner
+            });
+    }//end of method
+
+    //method to get comm sett inv item
+    private getCommSettInvItemDet(compRefNo: string, plantType: string) {
+        this.commercialSettlementDIDataService.getInvoiceItemDetail(compRefNo, plantType).
+            subscribe(res => {
+                if (res.msgType == 'Info') {
+                    console.log("Comm Sett Inv Item::", res);
+                    let json: any = JSON.parse(res.mapDetails);
+                    this.itemDetails = json;
+                    this.generateTotalCompensationAmount();//to generate total compensation amount
+                    this.createItemFormgroupForSelectedItem();//creating dynamic formcontrol
+                    this.busySpinner = false;//to stop the spinner
+                } else {
+                    this.errorMsgObj.errMsgShowFlag = true;
+                    this.errorMsgObj.errorMsg = res.msg;
+                    this.busySpinner = false;//to stop the spinner
+                }
+            }, err => {
+                this.errorMsgObj.errMsgShowFlag = true;
+                this.errorMsgObj.errorMsg = err.msg;
+                this.busySpinner = false;//to stop the spinner
+            })
+    }//end of method
 
     //method to get complain reference details by service 
     private getviewComplainReferenceDetailsWSCall() {
@@ -216,9 +306,9 @@ export class CommercialSettlementDIComponent implements OnInit {
                             console.log(" slno mateched ");
                             if (arr[1] == "compensationQty") {
                                 compensationQty = this.itemListFormGroup.controls[itmList].value;
-                                if (compensationQty == 0 || compensationQty < 0 || compensationQty == null) {
+                                if (compensationQty == 0 || compensationQty < 0 || compensationQty == null || compensationQty == undefined) {
                                     checkItm.compensationQtyErrFlag = true;
-                                    if (compensationQty == 0 || compensationQty == null) {
+                                    if (compensationQty == 0 || compensationQty == null || compensationQty == undefined) {
                                         checkItm.compensationQtyErrDesc = 'Compensation Quantity can′t be zero or empty';
                                     } else if (compensationQty < 0) {
                                         checkItm.compensationQtyErrDesc = 'Compensation Quantity can′t be less than or equal to zero';
@@ -236,9 +326,9 @@ export class CommercialSettlementDIComponent implements OnInit {
                                 console.log(" got value compensationQty == ", compensationQty);
                             } else if (arr[1] == "itemRate") {
                                 itemRate = this.itemListFormGroup.controls[itmList].value;
-                                if (itemRate == 0 || itemRate < 0 || itemRate == null) {
+                                if (itemRate == 0 || itemRate < 0 || itemRate == null || itemRate == undefined) {
                                     checkItm.itemRateErrFlag = true;
-                                    if (itemRate == 0 || itemRate == null) {
+                                    if (itemRate == 0 || itemRate == null || itemRate == undefined) {
                                         checkItm.itemRateErrDesc = 'Item Rate can′t be zero or empty';
                                     } else if (itemRate < 0) {
                                         checkItm.itemRateErrDesc = 'Item Rate can′t be less than or equal to zero';
@@ -274,20 +364,26 @@ export class CommercialSettlementDIComponent implements OnInit {
         let plantType: string = this.localStorageService.user.plantType;
         let commSetHeaderTableJson: any = {};
         commSetHeaderTableJson.complaintReferenceNo = this.commerCialSettlementFromGroup.value.complaintReferenceNo;
+        commSetHeaderTableJson.commercialSettlementTotalAmount = this.commerCialSettlementFromGroup.value.totalCompensationAmount;
         commSetHeaderTableJson.lastActivityId = 10;
         commSetHeaderTableJson.lastStatus = "C";
         commSetHeaderTableJson.userId = this.localStorageService.user.userId;
 
         let commSettDetailTableJson: any = {};
         commSettDetailTableJson.complaintReferenceNo = this.commerCialSettlementFromGroup.value.complaintReferenceNo;
-        commSettDetailTableJson.commercialSettlementDt = this.datePipe.transform(this.commerCialSettlementFromGroup.value.date, 'yyyy-MM-dd');
-        commSettDetailTableJson.commercialSettlementTotalAmount = this.commerCialSettlementFromGroup.value.totalCompensationAmount;
+        let currentDate = this.generateDate();
+        commSettDetailTableJson.commercialSettlementDt = currentDate;
         commSettDetailTableJson.activityId = 10;
         commSettDetailTableJson.status = "C";
         commSettDetailTableJson.remarks = this.commerCialSettlementFromGroup.value.remarks;
         commSettDetailTableJson.userId = this.localStorageService.user.userId;
 
+       if(this.localStorageService.user.commSetlmntLevel == 2){//for cam
         this.commercialSettlementHeaderTableWSCall(commSetHeaderTableJson, commSettDetailTableJson, plantType);
+       } else{//for cos/EVP
+            commSettDetailTableJson.status = this.commerCialSettlementFromGroup.value.compensation;
+            this.commercialSettlementDetailTableWSCall(commSettDetailTableJson, plantType);
+       }
     }//end of method
 
     //method to comm sett header table submit
@@ -313,21 +409,24 @@ export class CommercialSettlementDIComponent implements OnInit {
         this.commercialSettlementDIDataService.postDetail(commSettDetailTableJson, plantType).
             subscribe(res => {
                 if (res.msgType === 'Info') {
-                    let itemDet: any[] = [];//to store item det
-                    let itemJson: any = {};
-                    this.itemDetails.forEach((el) => {
-                        itemJson.complaintReferenceNo = this.commerCialSettlementFromGroup.value.complaintReferenceNo;
-                        itemJson.complaintDetailsAutoId = el.complaintDetailsAutoId;
-                        itemJson.commercialSettlementAutoId = res.valueSub;
-                        itemJson.commercialSettlementQty = el.compensationQty;
-                        itemJson.commercialSettlementItemRate = el.itemRate;
-                        itemJson.commercialSettlementItemAmount = el.settlementCost;
-                        itemJson.userId = this.localStorageService.user.userId;
+                    if(this.localStorageService.user.commSetlmntLevel == 2){//for cam
+                        let itemDet: any[] = [];//to store item det
+                        let itemJson: any = {};
+                        this.itemDetails.forEach((el) => {
+                            itemJson.complaintReferenceNo = this.commerCialSettlementFromGroup.value.complaintReferenceNo;
+                            itemJson.complaintDetailsAutoId = el.complaintDetailsAutoId;
+                            itemJson.commercialSettlementAutoId = res.valueSub;
+                            itemJson.commercialSettlementQty = el.compensationQty;
+                            itemJson.commercialSettlementItemRate = el.itemRate;
+                            itemJson.commercialSettlementItemAmount = el.settlementCost;
+                            itemJson.userId = this.localStorageService.user.userId;
 
-                        itemDet.push(itemJson);//creating item array
-                    });
-                    this.itemDetailsSubmit(itemDet, plantType);//calling the method to submit item det
-
+                            itemDet.push(itemJson);//creating item array
+                        });
+                        this.itemDetailsSubmit(itemDet, plantType);//calling the method to submit item det
+                    }else{
+                        this.router.navigate([ROUTE_PATHS.RouteComplainDIView]);
+                    }
                 } else {
                     this.errorMsgObj.errMsgShowFlag = true;
                     this.errorMsgObj.errorMsg = res.msg;
@@ -345,7 +444,7 @@ export class CommercialSettlementDIComponent implements OnInit {
         this.commercialSettlementDIDataService.postItemDetail(itemDetArr, plantType).
             subscribe(res => {
                 if (res.msgType == 'Info') {
-                    this.router.navigate([ROUTE_PATHS.RouteViewComplainDIStatus]);
+                    this.router.navigate([ROUTE_PATHS.RouteComplainDIView]);
                 } else {
                     this.errorMsgObj.errMsgShowFlag = true;
                     this.errorMsgObj.errorMsg = res.msg;
