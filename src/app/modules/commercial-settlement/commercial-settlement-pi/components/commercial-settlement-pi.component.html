@@ -20,18 +20,28 @@
             </div>
             <!--end of div for complaint reference no-->
 
-            <!--start div closeDate-->
+            <!--start div settlement Request Date-->
             <div class="form-group col-xs-12 col-sm-6 col-md-6 col-lg-4">
-                <label>Date</label>
+                <label>Settlement Request Date</label>
                 <input type="text" class="form-control" formControlName="date" readonly="readonly" />
             </div>
-            <!--end of div for closeDate-->
-            <!--start div closeDate-->
+            <!--end of div for Settlement Request Date-->
+            <!--start div compensation Cost-->
             <div class="form-group col-xs-12 col-sm-6 col-md-6 col-lg-4">
-                <label>Total Compensation Amount</label>
+                <label>Total Compensation Cost</label>
                 <input type="text" class="form-control number-align-style" formControlName="totalCompensationAmount" readonly="readonly" />
             </div>
-            <!--end of div for closeDate-->
+            <!--end of div for compensation cost-->
+
+             <!-- start div to show the previous comm sett data -->
+             <ng-container  *ngIf="previousCommSettDetArr.length > 0">
+                    <div class="alert alert-info col-lg-12 col-sm-12 col-md-12 col-xs-12 " *ngFor="let prevCommSettEl of previousCommSettDetArr">
+                        <span class="info-header-font-style">Action:</span> <span class="info-body-font-style">{{prevCommSettEl.action}}</span>&nbsp;&nbsp;&nbsp;
+                        <span class="info-header-font-style">Date:</span> <span class="info-body-font-style">{{prevCommSettEl.commercialSettlementDate}}</span><br/>
+                        <span class="info-header-font-style">Remarks:</span> <span class="info-body-font-style">{{prevCommSettEl.remarks}}</span>
+                    </div><br/>
+                </ng-container>
+                <!-- end of div to show the previous comm sett data -->
 
             <!-- start div for complaintQty error -->
             <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
@@ -73,8 +83,8 @@
                                 <td *ngIf="commSetlmntLevel != 2" class="hideextra header-style">Item Rate
                                 </td>
                                 <td class="hideextra header-style">Settlement Cost</td>
-                                <td class="hideextra header-style">Sales Order No</td>
-                                <td class="hideextra header-style-last">Truck No</td>
+                                <td class="hideextra header-style">Project Name</td>
+                                <td class="hideextra header-style-last">Project Location</td>
                             </tr>
                         </thead>
                         <tbody>
@@ -107,7 +117,8 @@
                                     <ng-container *ngIf="commSetlmntLevel != 2">{{itemDet.compensationQty}}</ng-container>
                                 </td>
                                 <td class="td-style hideextra number-align-style">
-                                    <input type="number" *ngIf="commSetlmntLevel == 2" class="form-control number-align-style" formControlName="{{ itemDet.itemRateKey }}"
+                                    <input type="number" *ngIf="commSetlmntLevel == 2" class="form-control number-align-style" style="width: 224px;" 
+                                    formControlName="{{ itemDet.itemRateKey }}"
                                         value="{{itemDet.itemRate}}" (click)="onCompensationAndItemRateChanges(itemDet)"
                                         (keyup)="onCompensationAndItemRateChanges(itemDet)" />
                                     <ng-container *ngIf="commSetlmntLevel != 2">{{itemDet.itemRate}}</ng-container>
@@ -116,10 +127,10 @@
                                     {{itemDet.settlementCost}}
                                 </td>
                                 <td class="td-style hideextra">
-                                    {{itemDet.soNo}}
+                                    {{itemDet.projectName}}
                                 </td>
                                 <td class="td-style-last hideextra">
-                                    {{itemDet.truckNo}}
+                                    {{itemDet.projectLocation}}
                                 </td>
                             </tr>
                         </tbody>

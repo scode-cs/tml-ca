@@ -173,7 +173,12 @@ export const AppUrlsConst: any = {
     //commercial settlement-add url
     COMMERCIAL_SETTLEMENT_HEADER_TABLE_ADD_URL: URL_PATH + 'api/complaint/comstlmntheader',//comm-set add to HEADER TABLE 
     COMMERCIAL_SETTLEMENT_DETAIL_TABLE_ADD_URL: URL_PATH + 'api/complaint/comstlmntdetail',//comm-set add to detail TABLE 
-    COMMERCIAL_SETTLEMENT_ITEM__DETAIL_TABLE_ADD_URL: URL_PATH + 'api/complaint/comstlmntinvdetail'//comm-set item detail table add
+    COMMERCIAL_SETTLEMENT_ITEM__DETAIL_TABLE_ADD_URL: URL_PATH + 'api/complaint/comstlmntinvdetail',//comm-set item detail table add
+    //comm-sett view url add
+    COMMERCIAL_SETTLEMENT_VIEW_HEADER: URL_PATH + 'api/compsetlmntview/viewcomrcmsetlmntheader',//comm-sett view from header table
+    COMMERCIAL_SETTLEMENT_VIEW_DETAILS: URL_PATH + 'api/compsetlmntview/viewcomrcmsetlmntdetail',//comm-sett view from detail table
+    COMMERCIAL_SETTLEMENT_VIEW_INVOICE_ITEM: URL_PATH + 'api/compsetlmntview/viewcomrcmsetlmntinvoicedetail'//comm-sett view from invoice item table
+    
 }
 
 export const WebServiceConst: any = {

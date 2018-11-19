@@ -495,10 +495,11 @@ export class ComplainDIViewComponent implements OnInit, OnChanges {
   }//end of method
 
   //new add for commercial sett
-  public onClickCommSetLinkClick(activityTrackingSelectedRowVal: any){
-    let compRefNo: string = activityTrackingSelectedRowVal.complaintReferenceNo;
-    let lastActivityId = activityTrackingSelectedRowVal.lastActivityId;
-    this.router.navigate([ROUTE_PATHS.RouteCommercialSettlementDI,compRefNo,lastActivityId]);
+  public onClickCommSetLinkClick(complaintSelectedRowVal: any){
+    let compRefNo: string = complaintSelectedRowVal.complaintReferenceNo;
+    let lastActivityId = complaintSelectedRowVal.lastActivityId;
+    let commSettCount: number = complaintSelectedRowVal.commercialSettCount;
+    this.router.navigate([ROUTE_PATHS.RouteCommercialSettlementDI,compRefNo,lastActivityId, commSettCount]);
   }//end of method
 
   //modal------------------------------------>>

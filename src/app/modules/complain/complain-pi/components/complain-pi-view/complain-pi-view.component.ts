@@ -405,7 +405,8 @@ export class ComplainPIViewComponent implements OnInit {
 
   public onClickCommSetLinkClick(complaintSelectedRowVal: any){
     let compRefNo: string = complaintSelectedRowVal.complaintReferenceNo;
-    this.router.navigate([ROUTE_PATHS.RouteCommercialSettlementPI,compRefNo]);
+    let commSettCount: number = complaintSelectedRowVal.commercialSettCount;
+    this.router.navigate([ROUTE_PATHS.RouteCommercialSettlementPI,compRefNo, commSettCount]);
   }//end of method
 
 }//end of class
