@@ -381,10 +381,13 @@ export class CommercialSettlementPIComponent implements OnInit {
                 if (res.msgType === 'Info') {
                     if (this.localStorageService.user.commSetlmntLevel == 2) {//for cam
                         let itemDet: any[] = [];//to store item det
-                        let itemJson: any = {};
                         this.itemDetails.forEach((el) => {
+                            let itemJson: any = {};
                             itemJson.complaintReferenceNo = this.commerCialSettlementFromGroup.value.complaintReferenceNo;
                             itemJson.slNo = el.slNo;
+                            itemJson.invoiceNo = el.invoiceNo;
+                            itemJson.itemNo = el.itemCode;
+                            itemJson.batchNo = el.batchNo;
                             itemJson.commercialSettlementAutoId = res.valueSub;
                             itemJson.commercialSettlementQty = el.compensationQty;
                             itemJson.commercialSettlementItemRate = el.itemRate;
@@ -392,7 +395,7 @@ export class CommercialSettlementPIComponent implements OnInit {
                             itemJson.userId = this.localStorageService.user.userId;
 
                             itemDet.push(itemJson);//creating item array
-                        });
+                        });                        
                         this.itemDetailsSubmit(itemDet, plantType);//calling the method to submit item det
                     } else {
                         this.router.navigate([ROUTE_PATHS.RouteComplainDIView]);

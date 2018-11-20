@@ -411,9 +411,11 @@ export class CommercialSettlementDIComponent implements OnInit {
                 if (res.msgType === 'Info') {
                     if(this.localStorageService.user.commSetlmntLevel == 2){//for cam
                         let itemDet: any[] = [];//to store item det
-                        let itemJson: any = {};
                         this.itemDetails.forEach((el) => {
+                            let itemJson: any = {};
                             itemJson.complaintReferenceNo = this.commerCialSettlementFromGroup.value.complaintReferenceNo;
+                            itemJson.invoiceNo = el.invoiceNo;
+                            itemJson.itemNo = el.itemNo;                            
                             itemJson.complaintDetailsAutoId = el.complaintDetailsAutoId;
                             itemJson.commercialSettlementAutoId = res.valueSub;
                             itemJson.commercialSettlementQty = el.compensationQty;
