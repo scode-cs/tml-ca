@@ -2,7 +2,7 @@
 const URL_IP: string =
     'http://45.114.142.125';
 // // for production
-const URL_PORT: string = '91';
+const URL_PORT: string = '90';
 const URL_PATH: string = URL_IP + ':' + URL_PORT + '/';
 
 export const AppUrlsConst: any = {

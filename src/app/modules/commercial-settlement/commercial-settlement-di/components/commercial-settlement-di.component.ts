@@ -65,6 +65,10 @@ export class CommercialSettlementDIComponent implements OnInit {
             complaintReferenceNo: new FormControl(''),
             date: new FormControl(''),
             totalCompensationAmount: new FormControl(''),
+            customerCode: new FormControl(''),
+            customerName: new FormControl(''),
+            salesGroup: new FormControl(''),
+            salesOffice: new FormControl(''),
             compensation: new FormControl(''),
             remarks: new FormControl('', Validators.required)
         });
@@ -103,6 +107,20 @@ export class CommercialSettlementDIComponent implements OnInit {
     //method to get commercial settlement details
     private getcommSetViewWSCall() {
         this.busySpinner = true;//to load spinner
+        this.commercialSettlementDIDataService.getCommercialSettlementHeaderDetails(this.routeParam.complaintReferenceNo, "DI").
+        subscribe(res=>{
+            if(res.msgType == 'Info'){
+                let json: any = JSON.parse(res.mapDetails);
+                console.log("comm sett header det json::::", json);
+                let lastIndex: number = json ? json.length - 1 : 0;
+                this.commerCialSettlementFromGroup.controls['customerCode'].setValue(json[lastIndex].customerCode);
+                this.commerCialSettlementFromGroup.controls['customerName'].setValue(json[lastIndex].customerName);
+                this.commerCialSettlementFromGroup.controls['salesGroup'].setValue(json[lastIndex].salesGroup);
+                this.commerCialSettlementFromGroup.controls['salesOffice'].setValue(json[lastIndex].salesOffice);
+            }
+        },err=>{
+            console.log(err);
+        });
         this.commercialSettlementDIDataService.getCommercialSettlementViewDetails(this.routeParam.complaintReferenceNo, this.routeParam.complaintStatus, "DI").
             subscribe(res => {
                 if (res.msgType == 'Info') {
@@ -112,24 +130,28 @@ export class CommercialSettlementDIComponent implements OnInit {
                         let prevCommSettJson: any = {};
                         prevCommSettJson.remarks = el.remarks;
                         prevCommSettJson.commercialSettlementDate = this.datePipe.transform(el.commercialSettlementDate, 'dd-MMM-yyyy');
+                        prevCommSettJson.makerName = el.makerName;
                         switch (el.status) {
                             case 'C': {
                                 prevCommSettJson.action = "Requested";
+                                prevCommSettJson.makerLabelName = "Requested By: ";
                                 break;
                             }
                             case 'A': {
                                 prevCommSettJson.action = "Accept";
+                                prevCommSettJson.makerLabelName = "Accepted By: ";
                                 break;
                             }
                             case 'R': {
                                 prevCommSettJson.action = "Reject";
+                                prevCommSettJson.makerLabelName = "Rejected By: ";
                                 break;
                             }
                             case 'Q': {
                                 prevCommSettJson.action = "Query";
+                                prevCommSettJson.makerLabelName = "Query raised By: ";
                                 break;
                             }
-
                         }
                         // prevCommSettJson.action = json.status;
                         this.previousCommSettDetArr.push(prevCommSettJson);
@@ -186,6 +208,10 @@ export class CommercialSettlementDIComponent implements OnInit {
                     let json: any = JSON.parse(res.mapDetails);
                     console.log("json::::", json);
                     let lastIndex = json ? json.length - 1 : 0;
+                    this.commerCialSettlementFromGroup.controls['customerCode'].setValue(json[lastIndex].customerCode);
+                    this.commerCialSettlementFromGroup.controls['customerName'].setValue(json[lastIndex].customerName);
+                    this.commerCialSettlementFromGroup.controls['salesGroup'].setValue(json[lastIndex].salesGroup);
+                    this.commerCialSettlementFromGroup.controls['salesOffice'].setValue(json[lastIndex].salesOffice);
                     let complainDetailsAutoId: number = json[lastIndex].complaintDetailsAutoId;
                     this.getInvoiceItemDetailWSCall(this.routeParam.complaintReferenceNo, compStatus, complainDetailsAutoId);//inv item details
 
@@ -365,7 +391,7 @@ export class CommercialSettlementDIComponent implements OnInit {
         let commSetHeaderTableJson: any = {};
         commSetHeaderTableJson.complaintReferenceNo = this.commerCialSettlementFromGroup.value.complaintReferenceNo;
         commSetHeaderTableJson.commercialSettlementTotalAmount = this.commerCialSettlementFromGroup.value.totalCompensationAmount;
-        commSetHeaderTableJson.lastActivityId = 10;
+        commSetHeaderTableJson.lastActivityId = 40;
         commSetHeaderTableJson.lastStatus = "C";
         commSetHeaderTableJson.userId = this.localStorageService.user.userId;
 
@@ -373,7 +399,7 @@ export class CommercialSettlementDIComponent implements OnInit {
         commSettDetailTableJson.complaintReferenceNo = this.commerCialSettlementFromGroup.value.complaintReferenceNo;
         let currentDate = this.generateDate();
         commSettDetailTableJson.commercialSettlementDt = currentDate;
-        commSettDetailTableJson.activityId = 10;
+        commSettDetailTableJson.activityId = 40;
         commSettDetailTableJson.status = "C";
         commSettDetailTableJson.remarks = this.commerCialSettlementFromGroup.value.remarks;
         commSettDetailTableJson.userId = this.localStorageService.user.userId;

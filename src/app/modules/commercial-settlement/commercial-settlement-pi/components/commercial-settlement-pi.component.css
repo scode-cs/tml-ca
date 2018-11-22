@@ -291,3 +291,15 @@
 }
 /* end of style to align number right */
 
+/* start info-heading-style */
+.info-header-font-style{
+  font-size: 13px;
+  font-weight: 600;
+  color: darkblue;
+}
+.info-body-font-style{
+  font-size: 13px;
+  /* font-weight: 600;
+  color: darkblue; */
+}
+/* end of info-heading-style */
