@@ -70,6 +70,17 @@ export class CommercialSettlementPIDataService {
     }//end of method
 
     //view comm sett ws
+    //method to comm-sett header ws call
+    getCommercialSettlementHeaderDetails(complaintReferenceNo: string, plantType: string) {
+        let headers: Headers = this.configService();
+        let actionUrl = AppUrlsConst.COMMERCIAL_SETTLEMENT_VIEW_HEADER;
+        let param = "plantType=" + plantType + "&filter="
+            + this.localStorageService.appSettings.complaintReferenceNoFieldName + "='" + complaintReferenceNo + "'";
+        return this.http.get(actionUrl + '?' + param, { headers: headers })
+            .map((res: Response) => { return res.json() })
+            .catch((error: Response) => { return Observable.throw(error) });
+    }//end of get header ws call
+    
     //method to get commercial settlement details view
     getCommercialSettlementViewDetails(complaintReferenceNo: string, activityId: number, plantType: string) {
         let headers: Headers = this.configService();

@@ -63,6 +63,10 @@ export class CommercialSettlementPIComponent implements OnInit {
             complaintReferenceNo: new FormControl(''),
             date: new FormControl(''),
             totalCompensationAmount: new FormControl(''),
+            customerCode: new FormControl(''),
+            customerName: new FormControl(''),
+            salesGroup: new FormControl(''),
+            salesOffice: new FormControl(''),
             compensation: new FormControl(''),
             remarks: new FormControl('', Validators.required)
         });
@@ -101,6 +105,20 @@ export class CommercialSettlementPIComponent implements OnInit {
     //method to get commercial settlement details
     private getcommSetViewWSCall() {
         this.busySpinner = true;//to load spinner
+        this.commercialSettlementPIDataService.getCommercialSettlementHeaderDetails(this.routeParam.complaintReferenceNo, "PI").
+        subscribe(res=>{
+            if(res.msgType == 'Info'){
+                let json: any = JSON.parse(res.mapDetails);
+                console.log("comm sett header det json::::", json);
+                let lastIndex: number = json ? json.length - 1 : 0;
+                this.commerCialSettlementFromGroup.controls['customerCode'].setValue(json[lastIndex].customerCode);
+                this.commerCialSettlementFromGroup.controls['customerName'].setValue(json[lastIndex].customerName);
+                this.commerCialSettlementFromGroup.controls['salesGroup'].setValue(json[lastIndex].salesGroup);
+                this.commerCialSettlementFromGroup.controls['salesOffice'].setValue(json[lastIndex].salesOffice);
+            }
+        },err=>{
+            console.log(err);
+        });
         this.commercialSettlementPIDataService.getCommercialSettlementViewDetails(this.routeParam.complaintReferenceNo, this.routeParam.complaintStatus, "PI").
             subscribe(res => {
                 if (res.msgType == 'Info') {
@@ -110,21 +128,26 @@ export class CommercialSettlementPIComponent implements OnInit {
                         let prevCommSettJson: any = {};
                         prevCommSettJson.remarks = el.remarks;
                         prevCommSettJson.commercialSettlementDate = this.datePipe.transform(el.commercialSettlementDate, 'dd-MMM-yyyy');
+                        prevCommSettJson.makerName = el.makerName;                        
                         switch (el.status) {
                             case 'C': {
                                 prevCommSettJson.action = "Requested";
+                                prevCommSettJson.makerLabelName = "Requested By: ";
                                 break;
                             }
                             case 'A': {
                                 prevCommSettJson.action = "Accept";
+                                prevCommSettJson.makerLabelName = "Accepted By: ";
                                 break;
                             }
                             case 'R': {
                                 prevCommSettJson.action = "Reject";
+                                prevCommSettJson.makerLabelName = "Rejected By: ";
                                 break;
                             }
                             case 'Q': {
                                 prevCommSettJson.action = "Query";
+                                prevCommSettJson.makerLabelName = "Query raised By: ";
                                 break;
                             }
                         }//end of switch 
@@ -177,6 +200,10 @@ export class CommercialSettlementPIComponent implements OnInit {
         this.complaintPIRegisterDataService.getComplaintReferenceDetails(complaintReferenceNo, fileActivityId)
             .subscribe(res => {
                 if (res.msgType === "Info") {
+                    this.commerCialSettlementFromGroup.controls['customerCode'].setValue(res.customerCode);
+                    this.commerCialSettlementFromGroup.controls['customerName'].setValue(res.customerName);
+                    this.commerCialSettlementFromGroup.controls['salesGroup'].setValue(res.salesGroup);
+                    this.commerCialSettlementFromGroup.controls['salesOffice'].setValue(res.salesOffice);
                     let itemNos: any = res.details[0].itemNos;
                     this.itemDetails = itemNos.items;
                     this.busySpinner = false;

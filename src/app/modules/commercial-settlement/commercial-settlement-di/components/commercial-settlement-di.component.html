@@ -31,12 +31,37 @@
                 <input type="text" class="form-control number-align-style" formControlName="totalCompensationAmount" readonly="readonly" />
             </div>
             <!--end of div for Total Compensation Cost-->
+             <!--start div Customer Code-->
+             <div class="form-group col-xs-12 col-sm-6 col-md-6 col-lg-4">
+                <label>Customer Code</label>
+                <input type="text" class="form-control" formControlName="customerCode" readonly="readonly" />
+            </div>
+            <!--end of div for Customer Code-->
+             <!--start div Customer Name-->
+             <div class="form-group col-xs-12 col-sm-6 col-md-6 col-lg-4">
+                <label>Customer Name</label>
+                <input type="text" class="form-control" formControlName="customerName" readonly="readonly" />
+            </div>
+            <!--end of div for Customer Name-->
+             <!--start div Sales Group-->
+             <div class="form-group col-xs-12 col-sm-6 col-md-6 col-lg-4">
+                <label>Sales Group</label>
+                <input type="text" class="form-control" formControlName="salesGroup" readonly="readonly" />
+            </div>
+            <!--end of div for Sales Group-->
+             <!--start div Sales Office-->
+             <div class="form-group col-xs-12 col-sm-6 col-md-6 col-lg-4">
+                <label>Sales Office</label>
+                <input type="text" class="form-control" formControlName="salesOffice" readonly="readonly" />
+            </div>
+            <!--end of div for Sales Office-->
 
             <!-- start div to show the previous comm sett data -->
             <ng-container  *ngIf="previousCommSettDetArr.length > 0">
                 <div class="alert alert-info col-lg-12 col-sm-12 col-md-12 col-xs-12 " *ngFor="let prevCommSettEl of previousCommSettDetArr">
                     <span class="info-header-font-style">Action:</span> <span class="info-body-font-style">{{prevCommSettEl.action}}</span>&nbsp;&nbsp;&nbsp;
-                    <span class="info-header-font-style">Date:</span> <span class="info-body-font-style">{{prevCommSettEl.commercialSettlementDate}}</span><br/>
+                    <span class="info-header-font-style">Date:</span> <span class="info-body-font-style">{{prevCommSettEl.commercialSettlementDate}}</span>&nbsp;&nbsp;&nbsp;
+                    <span class="info-header-font-style">{{prevCommSettEl.makerLabelName}}</span> <span class="info-body-font-style">{{prevCommSettEl.makerName}}</span><br/>
                     <span class="info-header-font-style">Remarks:</span> <span class="info-body-font-style">{{prevCommSettEl.remarks}}</span>
                 </div><br/>
             </ng-container>
