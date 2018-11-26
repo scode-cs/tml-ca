@@ -95,30 +95,30 @@ export class CommercialSettlementPIComponent implements OnInit {
         }
     }//end of method route param
 
-     //method to generate date
-     private generateDate():string {
+    //method to generate date
+    private generateDate(): string {
         let date = new Date();
         let currentDate: string = this.datePipe.transform(date, 'yyyy-MM-dd');
-    return currentDate;
+        return currentDate;
     }//end of method
 
     //method to get commercial settlement details
     private getcommSetViewWSCall() {
         this.busySpinner = true;//to load spinner
         this.commercialSettlementPIDataService.getCommercialSettlementHeaderDetails(this.routeParam.complaintReferenceNo, "PI").
-        subscribe(res=>{
-            if(res.msgType == 'Info'){
-                let json: any = JSON.parse(res.mapDetails);
-                console.log("comm sett header det json::::", json);
-                let lastIndex: number = json ? json.length - 1 : 0;
-                this.commerCialSettlementFromGroup.controls['customerCode'].setValue(json[lastIndex].customerCode);
-                this.commerCialSettlementFromGroup.controls['customerName'].setValue(json[lastIndex].customerName);
-                this.commerCialSettlementFromGroup.controls['salesGroup'].setValue(json[lastIndex].salesGroup);
-                this.commerCialSettlementFromGroup.controls['salesOffice'].setValue(json[lastIndex].salesOffice);
-            }
-        },err=>{
-            console.log(err);
-        });
+            subscribe(res => {
+                if (res.msgType == 'Info') {
+                    let json: any = JSON.parse(res.mapDetails);
+                    console.log("comm sett header det json::::", json);
+                    let lastIndex: number = json ? json.length - 1 : 0;
+                    this.commerCialSettlementFromGroup.controls['customerCode'].setValue(json[lastIndex].customerCode);
+                    this.commerCialSettlementFromGroup.controls['customerName'].setValue(json[lastIndex].customerName);
+                    this.commerCialSettlementFromGroup.controls['salesGroup'].setValue(json[lastIndex].salesGroup);
+                    this.commerCialSettlementFromGroup.controls['salesOffice'].setValue(json[lastIndex].salesOffice);
+                }
+            }, err => {
+                console.log(err);
+            });
         this.commercialSettlementPIDataService.getCommercialSettlementViewDetails(this.routeParam.complaintReferenceNo, this.routeParam.complaintStatus, "PI").
             subscribe(res => {
                 if (res.msgType == 'Info') {
@@ -128,7 +128,7 @@ export class CommercialSettlementPIComponent implements OnInit {
                         let prevCommSettJson: any = {};
                         prevCommSettJson.remarks = el.remarks;
                         prevCommSettJson.commercialSettlementDate = this.datePipe.transform(el.commercialSettlementDate, 'dd-MMM-yyyy');
-                        prevCommSettJson.makerName = el.makerName;                        
+                        prevCommSettJson.makerName = el.makerName;
                         switch (el.status) {
                             case 'C': {
                                 prevCommSettJson.action = "Requested";
@@ -260,6 +260,103 @@ export class CommercialSettlementPIComponent implements OnInit {
         console.log("ItemArr====", this.itemDetails);
     }//end of the method
 
+    //method to send email ws call
+    private sendEmailWSCall() {
+        let mailJsonBody: any = {};
+        mailJsonBody.complaintReferenceNo = this.commerCialSettlementFromGroup.value.complaintReferenceNo;
+        mailJsonBody.commercialSettlementDt = this.generateDate();
+        mailJsonBody.status = this.commerCialSettlementFromGroup.value.compensation ? this.commerCialSettlementFromGroup.value.compensation : 'C';
+        mailJsonBody.remarks = this.commerCialSettlementFromGroup.value.remarks;
+        mailJsonBody.userId = this.localStorageService.user.userId;
+        mailJsonBody.commSetlementLevel = this.localStorageService.user.commSetlmntLevel;
+        mailJsonBody.customerCode = this.commerCialSettlementFromGroup.value.customerCode;
+        mailJsonBody.customerName = this.commerCialSettlementFromGroup.value.customerName;
+        mailJsonBody.salesGroup = this.commerCialSettlementFromGroup.value.salesGroup;
+        mailJsonBody.salesOffice = this.commerCialSettlementFromGroup.value.salesOffice;
+        mailJsonBody.commercialSettlementTotalAmount = this.commerCialSettlementFromGroup.value.totalCompensationAmount;
+        mailJsonBody.loggedOn = this.datePipe.transform(this.commerCialSettlementFromGroup.value.date, 'MM/dd/yyyy');
+
+        this.commercialSettlementPIDataService.sendEmail(mailJsonBody).subscribe(res => {
+        }, err => {
+        });
+    }//end of method
+
+    //method to comm sett header table submit
+    private commercialSettlementHeaderTableWSCall(commSetHeaderTableJson: any, commSettDetailTableJson: any, plantType: string) {
+        this.commercialSettlementPIDataService.putHeader(commSetHeaderTableJson, plantType).
+            subscribe(res => {
+                if (res.msgType === 'Info') {
+                    this.commercialSettlementDetailTableWSCall(commSettDetailTableJson, plantType);
+                } else {
+                    this.errorMsgObj.errMsgShowFlag = true;
+                    this.errorMsgObj.errorMsg = res.msg;
+                    this.busySpinner = false;//to stop spinner
+                }
+            }, err => {
+                this.errorMsgObj.errMsgShowFlag = true;
+                this.errorMsgObj.errorMsg = err.msg;
+                this.busySpinner = false;//to stop spinner
+            });
+    }//end of method
+
+    //method to detail table submit
+    private commercialSettlementDetailTableWSCall(commSettDetailTableJson: any, plantType: string) {
+        this.commercialSettlementPIDataService.postDetail(commSettDetailTableJson, plantType).
+            subscribe(res => {
+                if (res.msgType === 'Info') {
+                    if (this.localStorageService.user.commSetlmntLevel == 2) {//for cam
+                        let itemDet: any[] = [];//to store item det
+                        this.itemDetails.forEach((el) => {
+                            let itemJson: any = {};
+                            itemJson.complaintReferenceNo = this.commerCialSettlementFromGroup.value.complaintReferenceNo;
+                            itemJson.slNo = el.slNo;
+                            itemJson.invoiceNo = el.invoiceNo;
+                            itemJson.itemNo = el.itemCode;
+                            itemJson.batchNo = el.batchNo;
+                            itemJson.commercialSettlementAutoId = res.valueSub;
+                            itemJson.commercialSettlementQty = el.compensationQty;
+                            itemJson.commercialSettlementItemRate = el.itemRate;
+                            itemJson.commercialSettlementItemAmount = el.settlementCost;
+                            itemJson.userId = this.localStorageService.user.userId;
+
+                            itemDet.push(itemJson);//creating item array
+                        });
+                        this.itemDetailsSubmit(itemDet, plantType);//calling the method to submit item det
+                    } else {
+                        this.sendEmailWSCall();
+                        this.router.navigate([ROUTE_PATHS.RouteComplainDIView]);
+                    }
+                } else {
+                    this.errorMsgObj.errMsgShowFlag = true;
+                    this.errorMsgObj.errorMsg = res.msg;
+                    this.busySpinner = false;//to stop spinner
+                }
+            }, err => {
+                this.errorMsgObj.errMsgShowFlag = true;
+                this.errorMsgObj.errorMsg = err.msg;
+                this.busySpinner = false;//to stop spinner
+            });
+    }//end of method
+
+    //method to submit item det
+    private itemDetailsSubmit(itemDetArr: any[], plantType: string) {
+        this.commercialSettlementPIDataService.postItemDetail(itemDetArr, plantType).
+            subscribe(res => {
+                if (res.msgType == 'Info') {
+                    this.sendEmailWSCall();
+                    this.router.navigate([ROUTE_PATHS.RouteComplainPIView]);
+                } else {
+                    this.errorMsgObj.errMsgShowFlag = true;
+                    this.errorMsgObj.errorMsg = res.msg;
+                    this.busySpinner = false;//to stop spinner
+                }
+            }, err => {
+                this.errorMsgObj.errMsgShowFlag = true;
+                this.errorMsgObj.errorMsg = err.msg;
+                this.busySpinner = false;//to stop spinner
+            })
+    }//end of method
+
     //to generate total compensation amount
     private generateTotalCompensationAmount() {
         this.totalCompensationAmount = 0;
@@ -268,7 +365,6 @@ export class CommercialSettlementPIComponent implements OnInit {
         }//end of for
         // this.totalCompensationAmount = parseFloat(this.totalCompensationAmount.toFixed(2));
         this.commerCialSettlementFromGroup.controls['totalCompensationAmount'].setValue(this.totalCompensationAmount);
-
     }//end of the method
 
     //start method of complaintQtyErrorCorrection
@@ -373,88 +469,14 @@ export class CommercialSettlementPIComponent implements OnInit {
         commSettDetailTableJson.activityId = 10;
         commSettDetailTableJson.status = "C";
         commSettDetailTableJson.remarks = this.commerCialSettlementFromGroup.value.remarks;
-        commSettDetailTableJson.userId = this.localStorageService.user.userId;        
+        commSettDetailTableJson.userId = this.localStorageService.user.userId;
 
-        if(this.localStorageService.user.commSetlmntLevel == 2){//for cam
+        if (this.localStorageService.user.commSetlmntLevel == 2) {//for cam
             this.commercialSettlementHeaderTableWSCall(commSetHeaderTableJson, commSettDetailTableJson, plantType);
-           } else{//for cos/EVP
-                commSettDetailTableJson.status = this.commerCialSettlementFromGroup.value.compensation;
-                this.commercialSettlementDetailTableWSCall(commSettDetailTableJson, plantType);
-           }
-    }//end of method
-
-    //method to comm sett header table submit
-    commercialSettlementHeaderTableWSCall(commSetHeaderTableJson: any, commSettDetailTableJson: any, plantType: string) {
-        this.commercialSettlementPIDataService.putHeader(commSetHeaderTableJson, plantType).
-            subscribe(res => {
-                if (res.msgType === 'Info') {
-                    this.commercialSettlementDetailTableWSCall(commSettDetailTableJson, plantType);
-                } else {
-                    this.errorMsgObj.errMsgShowFlag = true;
-                    this.errorMsgObj.errorMsg = res.msg;
-                    this.busySpinner = false;//to stop spinner
-                }
-            }, err => {
-                this.errorMsgObj.errMsgShowFlag = true;
-                this.errorMsgObj.errorMsg = err.msg;
-                this.busySpinner = false;//to stop spinner
-            });
-    }//end of method
-
-    //method to detail table submit
-    commercialSettlementDetailTableWSCall(commSettDetailTableJson: any, plantType: string) {
-        this.commercialSettlementPIDataService.postDetail(commSettDetailTableJson, plantType).
-            subscribe(res => {
-                if (res.msgType === 'Info') {
-                    if (this.localStorageService.user.commSetlmntLevel == 2) {//for cam
-                        let itemDet: any[] = [];//to store item det
-                        this.itemDetails.forEach((el) => {
-                            let itemJson: any = {};
-                            itemJson.complaintReferenceNo = this.commerCialSettlementFromGroup.value.complaintReferenceNo;
-                            itemJson.slNo = el.slNo;
-                            itemJson.invoiceNo = el.invoiceNo;
-                            itemJson.itemNo = el.itemCode;
-                            itemJson.batchNo = el.batchNo;
-                            itemJson.commercialSettlementAutoId = res.valueSub;
-                            itemJson.commercialSettlementQty = el.compensationQty;
-                            itemJson.commercialSettlementItemRate = el.itemRate;
-                            itemJson.commercialSettlementItemAmount = el.settlementCost;
-                            itemJson.userId = this.localStorageService.user.userId;
-
-                            itemDet.push(itemJson);//creating item array
-                        });                        
-                        this.itemDetailsSubmit(itemDet, plantType);//calling the method to submit item det
-                    } else {
-                        this.router.navigate([ROUTE_PATHS.RouteComplainDIView]);
-                    }
-                } else {
-                    this.errorMsgObj.errMsgShowFlag = true;
-                    this.errorMsgObj.errorMsg = res.msg;
-                    this.busySpinner = false;//to stop spinner
-                }
-            }, err => {
-                this.errorMsgObj.errMsgShowFlag = true;
-                this.errorMsgObj.errorMsg = err.msg;
-                this.busySpinner = false;//to stop spinner
-            });
-    }//end of method
-
-    //method to submit item det
-    private itemDetailsSubmit(itemDetArr: any[], plantType: string) {
-        this.commercialSettlementPIDataService.postItemDetail(itemDetArr, plantType).
-            subscribe(res => {
-                if (res.msgType == 'Info') {
-                    this.router.navigate([ROUTE_PATHS.RouteComplainPIView]);
-                } else {
-                    this.errorMsgObj.errMsgShowFlag = true;
-                    this.errorMsgObj.errorMsg = res.msg;
-                    this.busySpinner = false;//to stop spinner
-                }
-            }, err => {
-                this.errorMsgObj.errMsgShowFlag = true;
-                this.errorMsgObj.errorMsg = err.msg;
-                this.busySpinner = false;//to stop spinner
-            })
+        } else {//for cos/EVP
+            commSettDetailTableJson.status = this.commerCialSettlementFromGroup.value.compensation;
+            this.commercialSettlementDetailTableWSCall(commSettDetailTableJson, plantType);
+        }
     }//end of method
 
     public onCancel() {
