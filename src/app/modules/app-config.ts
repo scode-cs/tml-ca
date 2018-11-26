@@ -177,8 +177,9 @@ export const AppUrlsConst: any = {
     //comm-sett view url add
     COMMERCIAL_SETTLEMENT_VIEW_HEADER: URL_PATH + 'api/compsetlmntview/viewcomrcmsetlmntheader',//comm-sett view from header table
     COMMERCIAL_SETTLEMENT_VIEW_DETAILS: URL_PATH + 'api/compsetlmntview/viewcomrcmsetlmntdetail',//comm-sett view from detail table
-    COMMERCIAL_SETTLEMENT_VIEW_INVOICE_ITEM: URL_PATH + 'api/compsetlmntview/viewcomrcmsetlmntinvoicedetail'//comm-sett view from invoice item table
-    
+    COMMERCIAL_SETTLEMENT_VIEW_INVOICE_ITEM: URL_PATH + 'api/compsetlmntview/viewcomrcmsetlmntinvoicedetail',//comm-sett view from invoice item table
+    //commercial settlement mail url
+    COMMERCIAL_SETTLEMENT_SEND_EMAIL_URL: URL_PATH + 'api/admin/sendemail'
 }
 
 export const WebServiceConst: any = {

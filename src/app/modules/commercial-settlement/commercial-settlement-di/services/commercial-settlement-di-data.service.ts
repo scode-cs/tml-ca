@@ -69,6 +69,19 @@ export class CommercialSettlementDIDataService {
             .catch((error: Response) => { return Observable.throw(error) });
     }//end of method
 
+    /**
+ * 
+ * @param emailObj send email
+ */
+    public sendEmail(emailObj: any) {
+        let headers: Headers = this.configService();
+        let actionUrl = AppUrlsConst.COMMERCIAL_SETTLEMENT_SEND_EMAIL_URL + "di" ;
+
+        return this.http.post(actionUrl, emailObj, { headers: headers })
+            .map((res: Response) => { return res.json() })
+            .catch((error: Response) => { return Observable.throw(error) });
+    }
+
     //view comm sett ws
     //method to comm-sett header ws call
     getCommercialSettlementHeaderDetails(complaintReferenceNo: string, plantType: string) {
@@ -87,10 +100,7 @@ export class CommercialSettlementDIDataService {
         let actionUrl = AppUrlsConst.COMMERCIAL_SETTLEMENT_VIEW_DETAILS;
         let param = "plantType=" + plantType + "&filter="
             + this.localStorageService.appSettings.complaintReferenceNoFieldName + "='" + complaintReferenceNo + "'";
-            //  AND " +
-            // this.localStorageService.appSettings.activityIdFieldName + "=" + activityId;
-        //   "&sortData=&orderBy=";
-
+        
         return this.http.get(actionUrl + '?' + param, { headers: headers })
             .map((res: Response) => { return res.json() })
             .catch((error: Response) => { return Observable.throw(error) });
@@ -100,8 +110,8 @@ export class CommercialSettlementDIDataService {
     public getInvoiceItemDetail(compRefNo: string, plantType: string) {//activityId: number, complaintDetailsAutoId: number,
         let headers: Headers = this.configService();
         let actionUrl = AppUrlsConst.COMMERCIAL_SETTLEMENT_VIEW_INVOICE_ITEM;
-        let param = "plantType=" + plantType + "&filter=" + this.localStorageService.appSettings.complaintReferenceNoFieldName + "='" + compRefNo +"'";
-        
+        let param = "plantType=" + plantType + "&filter=" + this.localStorageService.appSettings.complaintReferenceNoFieldName + "='" + compRefNo + "'";
+
         return this.http.get((actionUrl + '?' + param), { headers: headers })
             .map((res: Response) => { return res.json() })
             .catch((error: Response) => { return Observable.throw(error) });

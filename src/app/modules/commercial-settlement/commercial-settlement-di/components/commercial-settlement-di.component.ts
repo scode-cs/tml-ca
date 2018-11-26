@@ -453,6 +453,7 @@ export class CommercialSettlementDIComponent implements OnInit {
                         });
                         this.itemDetailsSubmit(itemDet, plantType);//calling the method to submit item det
                     }else{
+                        this.sendEmailWSCall();
                         this.router.navigate([ROUTE_PATHS.RouteComplainDIView]);
                     }
                 } else {
@@ -472,6 +473,7 @@ export class CommercialSettlementDIComponent implements OnInit {
         this.commercialSettlementDIDataService.postItemDetail(itemDetArr, plantType).
             subscribe(res => {
                 if (res.msgType == 'Info') {
+                    this.sendEmailWSCall();
                     this.router.navigate([ROUTE_PATHS.RouteComplainDIView]);
                 } else {
                     this.errorMsgObj.errMsgShowFlag = true;
@@ -483,6 +485,27 @@ export class CommercialSettlementDIComponent implements OnInit {
                 this.errorMsgObj.errorMsg = err.msg;
                 this.busySpinner = false;//to stop spinner
             })
+    }//end of method
+
+    //method to send email ws call
+    private sendEmailWSCall() {
+        let mailJsonBody: any = {};
+        mailJsonBody.complaintReferenceNo = this.commerCialSettlementFromGroup.value.complaintReferenceNo;
+        mailJsonBody.commercialSettlementDt = this.generateDate();   
+        mailJsonBody.status = this.commerCialSettlementFromGroup.value.compensation ? this.commerCialSettlementFromGroup.value.compensation : 'C';      
+        mailJsonBody.remarks = this.commerCialSettlementFromGroup.value.remarks;      
+        mailJsonBody.userId = this.localStorageService.user.userId;      
+        mailJsonBody.commSetlementLevel = this.localStorageService.user.commSetlmntLevel;      
+        mailJsonBody.customerCode = this.commerCialSettlementFromGroup.value.customerCode;      
+        mailJsonBody.customerName = this.commerCialSettlementFromGroup.value.customerName;      
+        mailJsonBody.salesGroup = this.commerCialSettlementFromGroup.value.salesGroup;      
+        mailJsonBody.salesOffice = this.commerCialSettlementFromGroup.value.salesOffice;      
+        mailJsonBody.commercialSettlementTotalAmount = this.commerCialSettlementFromGroup.value.totalCompensationAmount;      
+        mailJsonBody.loggedOn = this.datePipe.transform(this.commerCialSettlementFromGroup.value.date,  'MM/dd/yyyy');
+
+        this.commercialSettlementDIDataService.sendEmail(mailJsonBody).subscribe(res=>{            
+        },err=>{
+        });
     }//end of method
 
     public onCancel() {
