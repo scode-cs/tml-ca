@@ -110,6 +110,20 @@ export class RCADIAddEditComponent implements OnInit {
     modalRef.componentInstance.modalMessage = msgBody;
   }//end of method onOpenModal
 
+  //method to send email
+  private sendEmail(complainDetailJson: any, plantType: string){
+    let action: string = "rca_add";
+    let emailJsonBody: any = {};    
+    emailJsonBody.complaintReferenceNo = complainDetailJson.complaintReferenceNo;    
+    this.complaintDIService.sendEmail(emailJsonBody,plantType,action).
+    subscribe(res=>{
+      if(res.msgType === 'Info'){
+        console.log("mail send successfully");
+      }
+    },err=>{
+    });
+  }//end of method
+
   //method to file upload
   private fileUploadWSCall(plantType: string,fileJsonBody: any) {
     this.complaintDIService.postFile(plantType,fileJsonBody).
@@ -141,6 +155,7 @@ export class RCADIAddEditComponent implements OnInit {
           fileJsonBody.fileAutoIds = fileAutoIdStr;
           this.fileUploadWSCall(plantType,fileJsonBody);//calling the file ws method
         }//end of file array check
+        this.sendEmail(complainDetailJson,plantType);
         this.onOpenModal(this.routeParam.complaintReferenceNo,res.msg);//open modal to show the msg
         let routePath = ROUTE_PATHS.RouteAddCADI + '/' + this.routeParam.complaintReferenceNo + '/' + 60;//ca status
         this.router.navigate([routePath]);//route
