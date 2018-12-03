@@ -83,7 +83,7 @@ export class ComplaintPIRegisterDetailsViewComponent implements OnInit {
             natureOfComplaintId: new FormControl(''),
             severityIndexRating: new FormControl(''),
             complaintReceivedById: new FormControl(''),
-            departmentNameOther: new FormControl(''),
+            // departmentNameOther: new FormControl(''),
             complaintReceivedByName: new FormControl(''),
             complaintReceivedByPhoneNo: new FormControl(''),
             complaintDetails: new FormControl(''),
@@ -134,8 +134,8 @@ export class ComplaintPIRegisterDetailsViewComponent implements OnInit {
         }//end of if
         //set all data to form 
         this.complaintRegisterFormGroup.controls['complaintReferenceNo'].setValue(selectedComplaintReferenceDetails.complaintReferenceNo);
-        this.complaintRegisterFormGroup.controls['complaintReceivedById'].setValue(selectedComplaintReferenceDetails.complaintReceivedByName);
-        this.complaintRegisterFormGroup.controls['departmentNameOther'].setValue(selectedComplaintReferenceDetails.departmentNameOther);
+        this.complaintRegisterFormGroup.controls['complaintReceivedById'].setValue(selectedComplaintReferenceDetails.complaintReceivedBy);
+        // this.complaintRegisterFormGroup.controls['departmentNameOther'].setValue(selectedComplaintReferenceDetails.departmentNameOther);
         this.complaintRegisterFormGroup.controls['complaintReceivedByName'].setValue(selectedComplaintReferenceDetails.complaintReceivedByName);
         this.complaintRegisterFormGroup.controls['complaintReceivedByPhoneNo'].setValue(selectedComplaintReferenceDetails.complaintReceivedByPhoneNo);
         this.complaintRegisterFormGroup.controls['complaintReferenceDt'].setValue(this.datePipe.transform(selectedComplaintReferenceDetails.complaintReferenceDt,'yyyy-MMM-dd'));
@@ -152,7 +152,7 @@ export class ComplaintPIRegisterDetailsViewComponent implements OnInit {
         this.complaintRegisterFormGroup.controls['complaintTypeId'].setValue(selectedComplaintReferenceDetails.complaintTypeDesc);
         this.complaintRegisterFormGroup.controls['natureOfComplaintId'].setValue(selectedComplaintReferenceDetails.natureOfComplaintDesc);
         this.complaintRegisterFormGroup.controls['complaintDetails'].setValue(selectedComplaintReferenceDetails.complaintDetails);
-        this.complaintRegisterFormGroup.controls['severityIndexRating'].setValue(selectedComplaintReferenceDetails.severityIndexRating);
+        this.complaintRegisterFormGroup.controls['severityIndexRating'].setValue(selectedComplaintReferenceDetails.severityIndexRatingDesc);
         this.complaintRegisterFormGroup.controls['repeatedComplaint'].setValue(selectedComplaintReferenceDetails.repeatedComplaint);
         this.complaintRegisterFormGroup.controls['previousComplaintReferenceNo'].setValue(selectedComplaintReferenceDetails.previousComplaintReferenceNo);
         let customerRequiredCommsettradioVal: string = selectedComplaintReferenceDetails.requiredCommercialSettlementInComplaintRegistration;
