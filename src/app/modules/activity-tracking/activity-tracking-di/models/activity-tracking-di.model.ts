@@ -23,12 +23,12 @@ export class ActiivityTrackingModel {
 
     //model for facted data
     private _facetedDataModel: any[] = [
-        {facetedDesc:'reg', facetedDisplayName:'Registration'},
-        {facetedDesc:'inv', facetedDisplayName:'Investigation Report'},
-        {facetedDesc:'rca', facetedDisplayName:'Root Cause Analysis'},
-        {facetedDesc:'ca', facetedDisplayName:'Corrective Action'},
-        {facetedDesc:'pa', facetedDisplayName:'Preventive Action'},
-        {facetedDesc:'close', facetedDisplayName:'Close'}
+        {facetedDesc:'reg', facetedDisplayName:'Registration',activityId: 10},
+        {facetedDesc:'inv', facetedDisplayName:'Investigation Report',activityId: 40},
+        {facetedDesc:'rca', facetedDisplayName:'Root Cause Analysis',activityId: 50},
+        {facetedDesc:'ca', facetedDisplayName:'Corrective Action',activityId: 60},
+        {facetedDesc:'pa', facetedDisplayName:'Preventive Action',activityId: 70},
+        {facetedDesc:'close', facetedDisplayName:'Close',activityId: 80}
     ];
 
     get facetedDataModel(): any[]{
