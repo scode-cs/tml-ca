@@ -39,6 +39,7 @@ export class ActivityTrackingDIService {
     let actionUrl = AppUrlsConst.VIEW_COMP_STATUS_WITH_COM_SET_URL;// + '?plantType=DI&pageNo=0&perPage=0'; //+ this.localStorageService.user.plantType;
 
     let param: string = '';
+    param += complainHeaderParam && complainHeaderParam.filter ? "filter="+complainHeaderParam.filter+"&" : "filter=&";
     param += complainHeaderParam && complainHeaderParam.perPage ? "perPage="+complainHeaderParam.perPage+"&" : "perPage=&";
     param += complainHeaderParam && complainHeaderParam.pageNo ? "pageNo="+complainHeaderParam.pageNo+"" : "pageNo=";
 

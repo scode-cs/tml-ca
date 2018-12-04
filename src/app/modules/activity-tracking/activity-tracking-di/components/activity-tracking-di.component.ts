@@ -17,6 +17,7 @@ export class ActivityTrackingDIComponent implements OnInit {
     private headerParams: ComplaintDIHeaderParamModel;//model
 
     public activityTrackingFormGroup: FormGroup;
+    public facetedFormGroup: FormGroup;
     public gridConfigModel: any = {};//to store the grid model 
     public compDIStatusRes: any[] = [];//to store comp status 
     public facetedDataModel: any[] = [];//to store faceted data model
@@ -40,18 +41,42 @@ export class ActivityTrackingDIComponent implements OnInit {
         let formGroup: any = {};
         formGroup['commercialCheck'] = new FormControl();
         this.activityTrackingFormGroup = new FormGroup(formGroup);
+        this.facetedDataModel = new ActiivityTrackingModel().facetedDataModel;
+        this.buildFormForFaceted();
     }
 
     ngOnInit(): void {
         console.log("onInit of ActivityTrackingDIComponent..");
-        this.busySpinner = true;//to load spinner
+        // this.busySpinner = true;//to load spinner
         this.gridConfigModel = new  ActiivityTrackingModel().activityTrackingGridConfigWithOutCommSet;
-        this.facetedDataModel = new ActiivityTrackingModel().facetedDataModel;
+        
         this.headerParams = new ComplaintDIHeaderParamModel();//for pagination
-        this.getCompStatusWSCall();
+        // this.getCompStatusWSCall();
         this.setPagination();
     }//end of on init
 
+    //method to build formcontrol
+    private buildFormForFaceted() {
+      let formGroup: any = {};
+      this.facetedDataModel.forEach((el)=>{
+        formGroup[el.activityId] = new FormControl(false);
+        this.facetedFormGroup = new FormGroup(formGroup);
+      });
+      this.facetedFormGroup.valueChanges.subscribe(()=> this.facetValueChanges());
+    }//end of method
+
+    //method to faceted value changes
+    private facetValueChanges() {
+      let facetedData: string = '';
+      for(let facetVal in this.facetedFormGroup.value){
+       if(this.facetedFormGroup.controls[facetVal].value){
+         facetedData = facetedData? facetedData + "," + facetVal : facetVal;
+        }       
+      }
+      let filterParam: string = facetedData? "LAST_ACTIVITY_ID IN ("+ facetedData + ")": '';
+      this.headerParams.filter = filterParam;
+      this.setPagination();
+    }//end of method
 
     //method to get comp-status details by ws call
     private getCompStatusWSCall(){
@@ -137,6 +162,7 @@ export class ActivityTrackingDIComponent implements OnInit {
       }
     
       setPagination() {
+        this.busySpinner = true;
         // let header: ComplaintDIHeaderParamModel;
         // header.filter = '';
         this.complaintDIService.getHeadercount(this.headerParams, 'DI').subscribe((res) => {

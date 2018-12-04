@@ -33,12 +33,14 @@
                     <span class="label-faceted-header">Status</span>
                 </div>
                 <div *ngFor="let facetedData of facetedDataModel">
-                    <div style="padding: 5px;">
-                        <input type="checkbox" [checked]=false />
-                        <span>
-                            {{facetedData.facetedDisplayName}}
-                        </span>
-                    </div>
+                    <form [formGroup]="facetedFormGroup">
+                        <div style="padding: 5px;">
+                            <input type="checkbox" formControlName="{{facetedData.activityId}}" [checked]=false />
+                            <span>
+                                {{facetedData.facetedDisplayName}}
+                            </span>
+                        </div>
+                    </form>
                 </div>
             </div>
             <!-- end of div for faceted -->
