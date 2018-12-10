@@ -363,6 +363,9 @@
             <div class="alert alert-danger" *ngIf="complaintRegisterFormGroup.get('complaintDetails').touched && complaintDetailsEnable==true">
               <i class="fa fa-exclamation-circle"></i> Detail of Complaint is required!
             </div>
+            <div class="alert alert-danger" *ngIf="singleinvertedProhibitedFlag">
+              <i class="fa fa-exclamation-circle"></i> Detail of Complaint does not support single inverted!
+            </div>
           </div>
           <!--end div for Detail of Complaint-->
 
@@ -450,7 +453,7 @@
 
             <!-- start div for Submit Button-->
             <div class="col-xs-12 col-sm-4 col-md-4 col-lg-2 button-holder">
-              <button type="submit" class="btn btn-primary primary-button-style">Submit
+              <button type="submit" class="btn btn-primary primary-button-style" [disabled]="singleinvertedProhibitedFlag">Submit
                 <!-- [disabled]="!(complaintRegisterFormGroup.valid && submitButtonEnable && complaintDetailsEnable===false && selectedItemDetails.length > 0 && complaintQtyInMtrsError == false)">Submit -->
               </button>
             </div>
