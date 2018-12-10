@@ -86,6 +86,7 @@ export class ComplaintDIRegisterComponent implements OnInit {
   //to store the itemsHeader
   public itemsHeader: any = {};
   public complaintDetailsEnable: boolean = false;
+  public singleinvertedProhibitedFlag: boolean = false;
   //for complaint qty error
   public complaintQtyInMtrsError: boolean = true;
   //to store  selected items grid row
@@ -1014,6 +1015,12 @@ export class ComplaintDIRegisterComponent implements OnInit {
 
   // start method comDetsOnkeyup
   public comDetsOnkeyup(complaintDetails) {
+    if(this.complaintRegisterFormGroup.get('complaintDetails').value.includes("'")){
+      this.singleinvertedProhibitedFlag = true;
+      console.log(" single inverted prohibited..........................");
+    }else{
+      this.singleinvertedProhibitedFlag = false;
+    }
     this.complaintDetailsEnable = false;
     console.log(" complaintDetails ", complaintDetails);
     if ((complaintDetails == "" || complaintDetails == " ") && this.complaintTypeName == "Others(CAT C)") {
