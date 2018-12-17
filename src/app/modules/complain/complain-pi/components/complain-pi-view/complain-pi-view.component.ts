@@ -363,7 +363,8 @@ export class ComplainPIViewComponent implements OnInit {
       if(this.tilesInteractionService.wsFilter.filter == ''){
         this.sortSelection.filter = this.filterOption;
       }else{
-        this.sortSelection.filter = this.sortSelection.filter + " AND " +  this.filterOption;
+        let dashboardFilter: string = this.dashboardResetFilter.filter;
+        this.sortSelection.filter = dashboardFilter + " AND " +  this.filterOption;
       }
     }else{
     this.sortSelection.filter = this.filterOption;
