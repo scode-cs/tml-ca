@@ -397,12 +397,12 @@ export class CommercialSettlementPIComponent implements OnInit {
                             console.log(" slno mateched ");
                             if (arr[1] == "compensationQty") {
                                 compensationQty = this.itemListFormGroup.controls[itmList].value;
-                                if (compensationQty == 0 || compensationQty < 0 || compensationQty == null) {
+                                if (compensationQty < 0 || compensationQty == null || compensationQty == undefined) {//compensationQty == 0 ||
                                     checkItm.compensationQtyErrFlag = true;
-                                    if (compensationQty == 0 || compensationQty == null) {
-                                        checkItm.compensationQtyErrDesc = 'Compensation Quantity can′t be zero or empty';
+                                    if (compensationQty == null || compensationQty == undefined) {//compensationQty == 0 || 
+                                        checkItm.compensationQtyErrDesc = 'Compensation Quantity can′t be empty';
                                     } else if (compensationQty < 0) {
-                                        checkItm.compensationQtyErrDesc = 'Compensation Quantity can′t be less than or equal to zero';
+                                        checkItm.compensationQtyErrDesc = 'Compensation Quantity can′t be less than zero';
                                     }//end of else if
                                 } else {
                                     let compQty = checkItmParam.complaintQtyInTons;
@@ -421,12 +421,12 @@ export class CommercialSettlementPIComponent implements OnInit {
                                 console.log(" got value compensationQty == ", compensationQty);
                             } else if (arr[1] == "itemRate") {
                                 itemRate = this.itemListFormGroup.controls[itmList].value;
-                                if (itemRate == 0 || itemRate < 0 || itemRate == null) {
+                                if ( itemRate < 0 || itemRate == null || itemRate == undefined) {//itemRate == 0 ||
                                     checkItm.itemRateErrFlag = true;
-                                    if (itemRate == 0 || itemRate == null) {
-                                        checkItm.itemRateErrDesc = 'Item Rate can′t be zero or empty';
-                                    } else if (itemRate < 0) {
-                                        checkItm.itemRateErrDesc = 'Item Rate can′t be less than or equal to zero';
+                                    if ( itemRate == null || itemRate == undefined) {//itemRate == 0 ||
+                                        checkItm.itemRateErrDesc = 'Item Rate can′t be empty';
+                                    } else if (itemRate < 0 ) {
+                                        checkItm.itemRateErrDesc = 'Item Rate can′t be less than zero';
                                     }//end of else if
                                 } else {
                                     checkItm.itemRate = itemRate;
