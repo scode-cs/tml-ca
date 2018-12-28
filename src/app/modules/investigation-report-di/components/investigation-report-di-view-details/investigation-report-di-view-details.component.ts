@@ -90,6 +90,7 @@ export class InvestigationReportDiViewDetailsComponent implements OnInit {
       sampleCollectedDate: new FormControl(''),
       investigationReportFromDate: new FormControl(''),
       investigationReportToDate: new FormControl(''),
+      complaintAccepted: new FormControl({ value: 'N', disabled: true }),
       invReportRemarks: new FormControl('')
     });
   }//end of initform
@@ -195,6 +196,7 @@ export class InvestigationReportDiViewDetailsComponent implements OnInit {
     let jointingType: string = "[" + formData.jointingType + "]";
     let jointingTypeKey: any[] = JSON.parse(jointingType);
     this.selectedIvtReportDataList.jointingTypeDesc = this.getSelectedCheckedItemVal(this.ivtReportDataList.jointingTypeList, jointingTypeKey);
+    this.invReportFormGroup.controls['complaintAccepted'].setValue(formData.complaintAccepted);
     if (formData.investigationReportCancelRemarks) {
       this.invRejectReason = formData.investigationReportCancelRemarks;//set the reject reason
     } else {
