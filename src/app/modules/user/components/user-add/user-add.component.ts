@@ -48,7 +48,8 @@ export class AddUserComponent implements OnInit {
     {Key:1,Value:"Viewer"},
     {Key:2,Value:"CAM"},
     {Key:3,Value:"COS"},
-    {Key:4,Value:"EVP"}    
+    {Key:4,Value:"EVP"},
+    {Key:5,Value:"FICO"}    
   ];
   //  public userModifyRoleId: string;
   //for error msg
