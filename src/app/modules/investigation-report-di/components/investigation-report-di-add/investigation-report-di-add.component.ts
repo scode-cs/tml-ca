@@ -134,6 +134,7 @@ export class InvestigationReportDiComponent implements OnInit {
       investigationReportToDate: new FormControl('', Validators.required),//to date
       customerCode: new FormControl(''),
       customerName: new FormControl(''),
+      complaintAccepted: new FormControl('',Validators.required),
       invReportRemarks: new FormControl('')
     });
   }//end of method
@@ -325,6 +326,9 @@ export class InvestigationReportDiComponent implements OnInit {
     }
     if (formData.customerName) {
       this.invReportFormGroup.controls['customerName'].setValue(formData.customerName);
+    }
+    if(formData.complaintAccepted) {
+      this.invReportFormGroup.controls['complaintAccepted'].setValue(formData.complaintAccepted);
     }
     if(formData.investigationReportRemarks) {
       this.invReportFormGroup.controls['invReportRemarks'].setValue(formData.investigationReportRemarks);
@@ -698,6 +702,7 @@ export class InvestigationReportDiComponent implements OnInit {
       if(this.invReportFormGroup.value.siteVisitMade == 'Y') {
         invReportDetailJson.siteVisitMadeDate = this.invReportFormGroup.value.siteVisitDt;
       }
+      invReportDetailJson.complaintAccepted = this.invReportFormGroup.value.complaintAccepted;
       invReportDetailJson.investigationReportRemarks = this.invReportFormGroup.value.invReportRemarks ? this.invReportFormGroup.value.invReportRemarks : '';
 
       let unloadingEquipment: string = "";
