@@ -195,7 +195,7 @@
             <!-- end of div for edit required commercial settlement -->
 
             <!--start fle upload div-->
-            <div class="form-group col-xs-12 col-sm-6 col-md-6 col-lg-4">
+            <div class="form-group col-xs-12 col-sm-6 col-md-6 col-lg-4" *ngIf="commSetlmntLevel == 2">
                 <label for="imageFile">File(s) Upload</label>
                 <label class="red-coloured-label">(max size 100 mb)</label>
                 <input type="file" #fileInput (change)="fileChange($event)" />
