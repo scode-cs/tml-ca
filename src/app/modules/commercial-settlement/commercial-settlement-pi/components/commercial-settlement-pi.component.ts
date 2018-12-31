@@ -32,6 +32,8 @@ export class CommercialSettlementPIComponent implements OnInit {
      private fileData: FormData;
      public fileList: FileList;
      public fileArr: any[] = [];//to store file details from file upload response
+
+     public prevFileArr: any[] = [];//to store prev file from comm sett
  
     private totalCompensationAmount: number = 0;
     public invoiceItemErrFlag: boolean = false;//to check invoice item have error or not
@@ -154,6 +156,7 @@ export class CommercialSettlementPIComponent implements OnInit {
                         prevCommSettJson.remarks = el.remarks;
                         prevCommSettJson.commercialSettlementDate = this.datePipe.transform(el.commercialSettlementDate, 'dd-MMM-yyyy');
                         prevCommSettJson.makerName = el.makerName;
+                        prevCommSettJson.commercialSettlementAutoId = el.commercialSettlementAutoId;
                         switch (el.status) {
                             case 'C': {
                                 prevCommSettJson.action = "Request";
@@ -210,6 +213,7 @@ export class CommercialSettlementPIComponent implements OnInit {
                     this.itemDetails = json;
                     this.generateTotalCompensationAmount();//to generate total compensation amount
                     this.createItemFormgroupForSelectedItem();//creating dynamic formcontrol
+                    this.getPrevCommSettFileDet(this.routeParam.complaintReferenceNo,0);
                     this.busySpinner = false;//to stop the spinner
                 } else {
                     this.errorMsgObj.errMsgShowFlag = true;
@@ -221,6 +225,30 @@ export class CommercialSettlementPIComponent implements OnInit {
                 this.errorMsgObj.errorMsg = err.msg;
                 this.busySpinner = false;//to stop the spinner
             })
+    }//end of method
+
+    //method to get prev file det
+    private getPrevCommSettFileDet(complaintReferenceNo: string, complainDetailsAutoId: number) {
+        this.commercialSettlementPIDataService.viewFile(complaintReferenceNo, complainDetailsAutoId,"PI").
+        subscribe(res => {
+          console.log("res of file det::::", res);
+          if (res.msgType === 'Info') {
+            let json: any = JSON.parse(res.mapDetails);
+            console.log("json::::", json);
+            this.prevFileArr = json;
+            console.log("File details::::", this.prevFileArr);
+            this.busySpinner = false;
+          } else {
+            this.busySpinner = false;
+            this.prevFileArr = [];
+          }
+        },
+          err => {
+            console.log(err);
+            this.prevFileArr = [];
+            this.busySpinner = false;
+            this.sessionErrorService.routeToLogin(err._body);
+          });
     }//end of method
 
     //start method getInvoiceItemDetailWSCall to get item details
