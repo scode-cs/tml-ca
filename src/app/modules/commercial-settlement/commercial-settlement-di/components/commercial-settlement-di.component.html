@@ -194,6 +194,25 @@
             </div>
             <!-- end of div for edit required commercial settlement -->
 
+            <!--start fle upload div-->
+            <div class="form-group col-xs-12 col-sm-6 col-md-6 col-lg-4">
+                <label for="imageFile">File(s) Upload</label>
+                <label class="red-coloured-label">(max size 100 mb)</label>
+                <input type="file" #fileInput (change)="fileChange($event)" />
+            </div>
+            <!--end of file upload div-->
+
+            <!--files-->
+                <!--start div for show files-->
+                <div class="form-group col-xs-12 col-sm-6 col-md-6 col-lg-4" *ngIf="fileArr?.length!=0">
+                    <label>Uploaded file(s)</label>
+                    <div *ngFor="let file of fileArr">
+                        <a href="{{file.fileUrl}}" target="_blank">{{file.fileName}}</a>
+                        <br/>
+                    </div>
+                </div>
+                <!--end div for show files-->
+
             <!-- start div for actn details -->
             <div class="form-group col-xs-12 col-sm-12 col-md-12 col-lg-12" *ngIf="commSetlmntLevel != 1">
                 <label>Remarks</label>

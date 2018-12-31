@@ -69,6 +69,21 @@ export class CommercialSettlementPIDataService {
             .catch((error: Response) => { return Observable.throw(error) });
     }//end of method
 
+     /**
+ * 
+ * @param plantType 
+ */
+//start method of postFile to upolad a file
+public postFile(plantType: string,fileDet: any){
+    let headers: Headers = this.configService();
+    let actionUrl = AppUrlsConst.COMMERCIAL_SETTLEMENT_FILE_UPLOAD_URL+"pi";
+    let param = "plantType="+plantType;
+    return this.http.post(actionUrl+'?'+param,fileDet,{ headers: headers })
+        .map((res: Response) => { return res.json() })
+        .catch((error: Response) => { return Observable.throw(error) });
+  }//end method of postFile
+
+
     /**
     
  * @param emailObj send email

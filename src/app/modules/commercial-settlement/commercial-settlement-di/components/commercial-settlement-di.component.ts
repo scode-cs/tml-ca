@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { FormGroup, FormControl, Validator, Validators } from '@angular/forms';
 import { DatePipe } from '@angular/common';
 import { Router, ActivatedRoute } from '@angular/router';
@@ -21,6 +21,17 @@ export class CommercialSettlementDIComponent implements OnInit {
         complaintStatus: '',
         commsettcount: 0
     };
+
+    // form data for file upload
+    @ViewChild('fileInput')
+    fileInputVariable: any;
+    private formData: FormData = new FormData();
+    private totalFileSize: number = 0;//file upload error
+    private fileSizeLimit: number = 104857600;
+    private fileData: FormData;
+    public fileList: FileList;
+    public fileArr: any[] = [];//to store file details from file upload response
+
     private totalCompensationAmount: number = 0;
     public commerCialSettlementFromGroup: FormGroup;
     public errorMsgObj: any = {
@@ -98,29 +109,41 @@ export class CommercialSettlementDIComponent implements OnInit {
     }//end of method route param
 
     //method to generate date
-    private generateDate():string {
+    private generateDate(): string {
         let date = new Date();
         let currentDate: string = this.datePipe.transform(date, 'yyyy-MM-dd');
-    return currentDate;
+        return currentDate;
+    }//end of method
+
+    //method to file upload
+    private fileUploadWSCall(plantType: string, fileJsonBody: any) {
+        this.commercialSettlementDIDataService.postFile(plantType, fileJsonBody).
+            subscribe(res => {
+                if (res.msgType === 'Info') {
+                    console.log("files uploaded successfully");
+                }
+            }, err => {
+                console.log(err);
+            });
     }//end of method
 
     //method to get commercial settlement details
     private getcommSetViewWSCall() {
         this.busySpinner = true;//to load spinner
         this.commercialSettlementDIDataService.getCommercialSettlementHeaderDetails(this.routeParam.complaintReferenceNo, "DI").
-        subscribe(res=>{
-            if(res.msgType == 'Info'){
-                let json: any = JSON.parse(res.mapDetails);
-                console.log("comm sett header det json::::", json);
-                let lastIndex: number = json ? json.length - 1 : 0;
-                this.commerCialSettlementFromGroup.controls['customerCode'].setValue(json[lastIndex].customerCode);
-                this.commerCialSettlementFromGroup.controls['customerName'].setValue(json[lastIndex].customerName);
-                this.commerCialSettlementFromGroup.controls['salesGroup'].setValue(json[lastIndex].salesGroup);
-                this.commerCialSettlementFromGroup.controls['salesOffice'].setValue(json[lastIndex].salesOffice);
-            }
-        },err=>{
-            console.log(err);
-        });
+            subscribe(res => {
+                if (res.msgType == 'Info') {
+                    let json: any = JSON.parse(res.mapDetails);
+                    console.log("comm sett header det json::::", json);
+                    let lastIndex: number = json ? json.length - 1 : 0;
+                    this.commerCialSettlementFromGroup.controls['customerCode'].setValue(json[lastIndex].customerCode);
+                    this.commerCialSettlementFromGroup.controls['customerName'].setValue(json[lastIndex].customerName);
+                    this.commerCialSettlementFromGroup.controls['salesGroup'].setValue(json[lastIndex].salesGroup);
+                    this.commerCialSettlementFromGroup.controls['salesOffice'].setValue(json[lastIndex].salesOffice);
+                }
+            }, err => {
+                console.log(err);
+            });
         this.commercialSettlementDIDataService.getCommercialSettlementViewDetails(this.routeParam.complaintReferenceNo, this.routeParam.complaintStatus, "DI").
             subscribe(res => {
                 if (res.msgType == 'Info') {
@@ -373,7 +396,7 @@ export class CommercialSettlementDIComponent implements OnInit {
                 if (compensationQty > 0 && itemRate > 0) {
                     checkItm.settlementCost = compensationQty * itemRate;
                 } else {
-                    checkItm.settlementCost = 0;                   
+                    checkItm.settlementCost = 0;
                 }
             }//end if of slno check between checkedItemArr element and checked item param element
         });//end of for each loop of checkedItemArr 
@@ -384,13 +407,74 @@ export class CommercialSettlementDIComponent implements OnInit {
         console.log(" itemDetails == ", this.itemDetails);
     }//end of the method 17.09.18
 
+    //file upload event  
+    public fileChange(event) {
+        let plantType: string = this.localStorageService.user.plantType;
+        this.fileData = new FormData();
+        this.totalFileSize = 0;
+        this.fileList = event.target.files;
+        // console.log("this.fileList.length::",this.fileList.length);
+        if (this.fileList.length > 0) {
+            this.busySpinner = true;
+            for (let i: number = 0; i < this.fileList.length; i++) {
+                let file: File = this.fileList[i];
+                this.fileData.append('uploadFile', file, file.name);
+                this.totalFileSize = this.totalFileSize + file.size;
+                console.log("this.totalFileSize:::::::::::", this.totalFileSize);
+            }//end of for
+            if (this.totalFileSize > this.fileSizeLimit) {
+                this.errorMsgObj.errMsgShowFlag = true;
+                this.errorMsgObj.errorMsg = "File size should be within 100 mb !";
+                this.busySpinner = false;
+            } else {
+                if (this.fileData != undefined) {
+                    for (let i: number = 0; i < this.fileList.length; i++) {
+                        console.log(" file upload", this.fileData.get('uploadFile'));
+                        if (this.fileData.get('uploadFile') != null) {
+                            this.formData.append('uploadFile', this.fileData.get('uploadFile'));
+                        }
+                    }//end of for
+                }//end of if fileData is !undefined
+                this.formData.append('Accept', 'application/json');
+                this.formData.append('accessToken', 'bearer ' + this.localStorageService.user.accessToken);
+                this.formData.append('menuId', 'DEFAULT1');
+                this.formData.append('userId', this.localStorageService.user.userId);
+                // let formDataObj: any = {};
+                // formDataObj = this.formData;
+                this.complaintDIService.postFileInTempTable(plantType, this.formData).
+                    subscribe(res => {
+                        if (res.msgType === 'Info') {
+                            this.busySpinner = false;
+                            console.log("file uploaded successfully..");
+                            this.fileArr.push({ fileAutoId: res.valueAdv, fileName: res.value, fileUrl: res.valueSub });
+                            console.log("this.fileArr:: ", this.fileArr);
+                            this.fileInputVariable.nativeElement.value = "";//reset file
+                            this.formData = new FormData();
+                        } else {
+                            this.errorMsgObj.errMsgShowFlag = true;
+                            this.errorMsgObj.errorMsg = res.msg;
+                            this.formData = new FormData();
+                            this.busySpinner = false;
+                        }
+                    }, err => {
+                        console.log(err);
+                        this.formData = new FormData();
+                        this.errorMsgObj.errMsgShowFlag = true;
+                        this.errorMsgObj.errorMsg = err.msg;
+                        this.busySpinner = false;
+                        this.sessionErrorService.routeToLogin(err._body);
+                    });
+            }
+        }//end of if
+    }//end of filechange method
+
     //commercial settlement submit method
     public commercialSettlementDISubmit() {
         this.busySpinner = true;//to load spinner
         let plantType: string = this.localStorageService.user.plantType;
         let commSetHeaderTableJson: any = {};
         commSetHeaderTableJson.complaintReferenceNo = this.commerCialSettlementFromGroup.value.complaintReferenceNo;
-        commSetHeaderTableJson.commercialSettlementTotalAmount = this.commerCialSettlementFromGroup.value.totalCompensationAmount;
+        commSetHeaderTableJson.commercialSettlementTotalAmount = this.commerCialSettlementFromGroup.value.totalCompensationAmount? this.commerCialSettlementFromGroup.value.totalCompensationAmount: 0;
         commSetHeaderTableJson.lastActivityId = 40;
         commSetHeaderTableJson.lastStatus = "C";
         commSetHeaderTableJson.userId = this.localStorageService.user.userId;
@@ -404,12 +488,12 @@ export class CommercialSettlementDIComponent implements OnInit {
         commSettDetailTableJson.remarks = this.commerCialSettlementFromGroup.value.remarks;
         commSettDetailTableJson.userId = this.localStorageService.user.userId;
 
-       if(this.localStorageService.user.commSetlmntLevel == 2){//for cam
-        this.commercialSettlementHeaderTableWSCall(commSetHeaderTableJson, commSettDetailTableJson, plantType);
-       } else{//for cos/EVP
+        if (this.localStorageService.user.commSetlmntLevel == 2) {//for cam
+            this.commercialSettlementHeaderTableWSCall(commSetHeaderTableJson, commSettDetailTableJson, plantType);
+        } else {//for cos/EVP
             commSettDetailTableJson.status = this.commerCialSettlementFromGroup.value.compensation;
             this.commercialSettlementDetailTableWSCall(commSettDetailTableJson, plantType);
-       }
+        }
     }//end of method
 
     //method to comm sett header table submit
@@ -435,13 +519,13 @@ export class CommercialSettlementDIComponent implements OnInit {
         this.commercialSettlementDIDataService.postDetail(commSettDetailTableJson, plantType).
             subscribe(res => {
                 if (res.msgType === 'Info') {
-                    if(this.localStorageService.user.commSetlmntLevel == 2){//for cam
+                    if (this.localStorageService.user.commSetlmntLevel == 2) {//for cam
                         let itemDet: any[] = [];//to store item det
                         this.itemDetails.forEach((el) => {
                             let itemJson: any = {};
                             itemJson.complaintReferenceNo = this.commerCialSettlementFromGroup.value.complaintReferenceNo;
                             itemJson.invoiceNo = el.invoiceNo;
-                            itemJson.itemNo = el.itemNo;                            
+                            itemJson.itemNo = el.itemNo;
                             itemJson.complaintDetailsAutoId = el.complaintDetailsAutoId;
                             itemJson.commercialSettlementAutoId = res.valueSub;
                             itemJson.commercialSettlementQty = el.compensationQty;
@@ -452,7 +536,9 @@ export class CommercialSettlementDIComponent implements OnInit {
                             itemDet.push(itemJson);//creating item array
                         });
                         this.itemDetailsSubmit(itemDet, plantType);//calling the method to submit item det
-                    }else{
+                        this.fileDetailsSubmit(commSettDetailTableJson, res, plantType);
+                    } else {
+                        this.fileDetailsSubmit(commSettDetailTableJson, res, plantType);
                         this.sendEmailWSCall();
                         this.router.navigate([ROUTE_PATHS.RouteComplainDIView]);
                     }
@@ -467,6 +553,29 @@ export class CommercialSettlementDIComponent implements OnInit {
                 this.busySpinner = false;//to stop spinner
             });
     }//end of method
+
+    //method to submit file
+    private fileDetailsSubmit(complainDetailJson: any, res: any, plantType: string) {
+        if (this.fileArr.length > 0) {
+            let fileAutoIdStr: string = '';//taking a var to store files autoId
+            this.fileArr.forEach(fileEl => {
+                fileAutoIdStr = fileAutoIdStr ? (fileAutoIdStr + ',' + fileEl.fileAutoId) : fileEl.fileAutoId;
+            });
+            let complaintDetailsAutoId: string;
+            for (let itemEl of this.itemDetails) {
+                complaintDetailsAutoId = itemEl.complaintDetailsAutoId;
+                break;
+            };
+            let fileJsonBody: any = {};
+            fileJsonBody.complaintReferenceNo = complainDetailJson.complaintReferenceNo;
+            fileJsonBody.complaintDetailsAutoId = parseInt(complaintDetailsAutoId);
+            fileJsonBody.commercialSettlementAutoId = parseInt(res.valueSub);
+            fileJsonBody.commSetlementLevel = this.localStorageService.user.commSetlmntLevel;
+            fileJsonBody.userId = this.localStorageService.user.userId;
+            fileJsonBody.fileAutoIds = fileAutoIdStr;
+            this.fileUploadWSCall(plantType, fileJsonBody);//calling the file ws method
+        }//end of file array check
+    }
 
     //method to submit item det
     private itemDetailsSubmit(itemDetArr: any[], plantType: string) {
@@ -491,20 +600,20 @@ export class CommercialSettlementDIComponent implements OnInit {
     private sendEmailWSCall() {
         let mailJsonBody: any = {};
         mailJsonBody.complaintReferenceNo = this.commerCialSettlementFromGroup.value.complaintReferenceNo;
-        mailJsonBody.commercialSettlementDt = this.generateDate();   
-        mailJsonBody.status = this.commerCialSettlementFromGroup.value.compensation ? this.commerCialSettlementFromGroup.value.compensation : 'C';      
-        mailJsonBody.remarks = this.commerCialSettlementFromGroup.value.remarks;      
-        mailJsonBody.userId = this.localStorageService.user.userId;      
-        mailJsonBody.commSetlementLevel = this.localStorageService.user.commSetlmntLevel;      
-        mailJsonBody.customerCode = this.commerCialSettlementFromGroup.value.customerCode;      
-        mailJsonBody.customerName = this.commerCialSettlementFromGroup.value.customerName;      
-        mailJsonBody.salesGroup = this.commerCialSettlementFromGroup.value.salesGroup;      
-        mailJsonBody.salesOffice = this.commerCialSettlementFromGroup.value.salesOffice;      
-        mailJsonBody.commercialSettlementTotalAmount = this.commerCialSettlementFromGroup.value.totalCompensationAmount;      
-        mailJsonBody.loggedOn = this.datePipe.transform(this.commerCialSettlementFromGroup.value.date,  'MM/dd/yyyy');
+        mailJsonBody.commercialSettlementDt = this.generateDate();
+        mailJsonBody.status = this.commerCialSettlementFromGroup.value.compensation ? this.commerCialSettlementFromGroup.value.compensation : 'C';
+        mailJsonBody.remarks = this.commerCialSettlementFromGroup.value.remarks;
+        mailJsonBody.userId = this.localStorageService.user.userId;
+        mailJsonBody.commSetlementLevel = this.localStorageService.user.commSetlmntLevel;
+        mailJsonBody.customerCode = this.commerCialSettlementFromGroup.value.customerCode;
+        mailJsonBody.customerName = this.commerCialSettlementFromGroup.value.customerName;
+        mailJsonBody.salesGroup = this.commerCialSettlementFromGroup.value.salesGroup;
+        mailJsonBody.salesOffice = this.commerCialSettlementFromGroup.value.salesOffice;
+        mailJsonBody.commercialSettlementTotalAmount = this.commerCialSettlementFromGroup.value.totalCompensationAmount? this.commerCialSettlementFromGroup.value.totalCompensationAmount: 0;
+        mailJsonBody.loggedOn = this.datePipe.transform(this.commerCialSettlementFromGroup.value.date, 'MM/dd/yyyy');
 
-        this.commercialSettlementDIDataService.sendEmail(mailJsonBody).subscribe(res=>{            
-        },err=>{
+        this.commercialSettlementDIDataService.sendEmail(mailJsonBody).subscribe(res => {
+        }, err => {
         });
     }//end of method
 
