@@ -63,6 +63,14 @@
                     <span class="info-header-font-style">Date:</span> <span class="info-body-font-style">{{prevCommSettEl.commercialSettlementDate}}</span>&nbsp;&nbsp;&nbsp;
                     <span class="info-header-font-style">{{prevCommSettEl.makerLabelName}}</span> <span class="info-body-font-style">{{prevCommSettEl.makerName}}</span><br/>
                     <span class="info-header-font-style">Remarks:</span> <span class="info-body-font-style">{{prevCommSettEl.remarks}}</span>
+                    <br/><span class="info-header-font-style">Uploaded File(s):</span>
+                    <span class="info-body-font-style">
+                        <div *ngFor="let prevFile of prevFileArr">
+                            <ng-container *ngIf="prevCommSettEl.commercialSettlementAutoId == prevFile.commercialSettlementAutoId">
+                                <a href="{{prevFile.fileUrl}}" target="_blank">{{prevFile.fileName}} </a>
+                            </ng-container>
+                        </div>
+                    </span>
                 </div><br/>
             </ng-container>
             <!-- end of div to show the previous comm sett data -->
@@ -205,7 +213,7 @@
             <!--files-->
                 <!--start div for show files-->
                 <div class="form-group col-xs-12 col-sm-6 col-md-6 col-lg-4" *ngIf="fileArr?.length!=0">
-                    <label>Uploaded file(s)</label>
+                    <label>Uploaded file(s)</label>                    
                     <div *ngFor="let file of fileArr">
                         <a href="{{file.fileUrl}}" target="_blank">{{file.fileName}}</a>
                         <br/>

@@ -32,6 +32,8 @@ export class CommercialSettlementDIComponent implements OnInit {
     public fileList: FileList;
     public fileArr: any[] = [];//to store file details from file upload response
 
+    public prevFileArr: any[] = [];//to store prev file from comm sett
+
     private totalCompensationAmount: number = 0;
     public commerCialSettlementFromGroup: FormGroup;
     public errorMsgObj: any = {
@@ -154,6 +156,7 @@ export class CommercialSettlementDIComponent implements OnInit {
                         prevCommSettJson.remarks = el.remarks;
                         prevCommSettJson.commercialSettlementDate = this.datePipe.transform(el.commercialSettlementDate, 'dd-MMM-yyyy');
                         prevCommSettJson.makerName = el.makerName;
+                        prevCommSettJson.commercialSettlementAutoId = el.commercialSettlementAutoId;
                         switch (el.status) {
                             case 'C': {
                                 prevCommSettJson.action = "Request";
@@ -188,6 +191,7 @@ export class CommercialSettlementDIComponent implements OnInit {
                     let commSettDate: string = this.previousCommSettDetArr[0].commercialSettlementDate;
                     this.commerCialSettlementFromGroup.controls["date"].setValue(this.datePipe.transform(commSettDate, 'dd-MMM-yyyy'));
                     this.getCommSettInvItemDet(this.routeParam.complaintReferenceNo, "DI");
+                    
                 } else {
                     this.errorMsgObj.errMsgShowFlag = true;
                     this.errorMsgObj.errorMsg = res.msg;
@@ -201,6 +205,30 @@ export class CommercialSettlementDIComponent implements OnInit {
             });
     }//end of method
 
+    //method to get prev file det
+    private getPrevCommSettFileDet(complaintReferenceNo: string, complainDetailsAutoId: number) {
+        this.commercialSettlementDIDataService.viewFile(complaintReferenceNo, complainDetailsAutoId,"DI").
+        subscribe(res => {
+          console.log("res of file det::::", res);
+          if (res.msgType === 'Info') {
+            let json: any = JSON.parse(res.mapDetails);
+            console.log("json::::", json);
+            this.prevFileArr = json;
+            console.log("File details::::", this.prevFileArr);
+            this.busySpinner = false;
+          } else {
+            this.busySpinner = false;
+            this.prevFileArr = [];
+          }
+        },
+          err => {
+            console.log(err);
+            this.prevFileArr = [];
+            this.busySpinner = false;
+            this.sessionErrorService.routeToLogin(err._body);
+          });
+    }//end of method
+
     //method to get comm sett inv item
     private getCommSettInvItemDet(compRefNo: string, plantType: string) {
         this.commercialSettlementDIDataService.getInvoiceItemDetail(compRefNo, plantType).
@@ -211,6 +239,7 @@ export class CommercialSettlementDIComponent implements OnInit {
                     this.itemDetails = json;
                     this.generateTotalCompensationAmount();//to generate total compensation amount
                     this.createItemFormgroupForSelectedItem();//creating dynamic formcontrol
+                    this.getPrevCommSettFileDet(this.routeParam.complaintReferenceNo,this.itemDetails[0].complaintDetailsAutoId);
                     this.busySpinner = false;//to stop the spinner
                 } else {
                     this.errorMsgObj.errMsgShowFlag = true;
