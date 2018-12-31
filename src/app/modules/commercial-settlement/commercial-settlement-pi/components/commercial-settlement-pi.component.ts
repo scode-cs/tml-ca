@@ -156,7 +156,7 @@ export class CommercialSettlementPIComponent implements OnInit {
                         prevCommSettJson.makerName = el.makerName;
                         switch (el.status) {
                             case 'C': {
-                                prevCommSettJson.action = "Requested";
+                                prevCommSettJson.action = "Request";
                                 prevCommSettJson.makerLabelName = "Requested By: ";
                                 break;
                             }
@@ -174,6 +174,10 @@ export class CommercialSettlementPIComponent implements OnInit {
                                 prevCommSettJson.action = "Query";
                                 prevCommSettJson.makerLabelName = "Query raised By: ";
                                 break;
+                            }
+                            case 'M': {
+                                prevCommSettJson.action = "Comment";
+                                prevCommSettJson.makerLabelName = "Comment given By: "
                             }
                         }//end of switch 
                         this.previousCommSettDetArr.push(prevCommSettJson);
@@ -353,7 +357,7 @@ export class CommercialSettlementPIComponent implements OnInit {
                     } else {
                         this.fileDetailsSubmit(commSettDetailTableJson,res,plantType);
                         this.sendEmailWSCall();
-                        this.router.navigate([ROUTE_PATHS.RouteComplainDIView]);
+                        this.router.navigate([ROUTE_PATHS.RouteComplainPIView]);
                     }
                 } else {
                     this.errorMsgObj.errMsgShowFlag = true;
@@ -522,8 +526,12 @@ export class CommercialSettlementPIComponent implements OnInit {
 
         if (this.localStorageService.user.commSetlmntLevel == 2) {//for cam
             this.commercialSettlementHeaderTableWSCall(commSetHeaderTableJson, commSettDetailTableJson, plantType);
-        } else {//for cos/EVP
-            commSettDetailTableJson.status = this.commerCialSettlementFromGroup.value.compensation;
+        } else {//for cso/EVP/FICO
+            if (this.localStorageService.user.commSetlmntLevel == 5) {
+                commSettDetailTableJson.status = "M";
+            }else{
+                commSettDetailTableJson.status = this.commerCialSettlementFromGroup.value.compensation;                
+            }
             this.commercialSettlementDetailTableWSCall(commSettDetailTableJson, plantType);
         }
     }//end of method
