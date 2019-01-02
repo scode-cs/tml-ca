@@ -60,6 +60,35 @@
                     </div>
                 </div>
                 <!--end div for show files-->
+
+                <!-- start div for technical closer at tml end -->
+            <div class="form-group col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                    <b>Technical closer at TML end</b>
+                </div>
+                <div class="row" class="tech-closer-alert">
+                    <div class="form-group col-xs-12 col-sm-6 col-md-6 col-lg-4" style="padding-left: 0px;">
+                        <label><h4 style="color: #1895de">Technical Closer Date</h4></label>
+                        <input type="date" class="form-control" formControlName="techCloserDate" (change)="dateValidation()">
+                        <div class="alert alert-danger" *ngIf="paDIAddEditFormGroup.get('techCloserDate').touched && paDIAddEditFormGroup.get('techCloserDate').hasError('required')">
+                            <i class="fa fa-exclamation-circle"></i> Technical Closer Date is required!
+                        </div>
+                        <div class="alert alert-danger" *ngIf="dateErrorFlag.futureDateErrFlag">
+                            <i class="fa fa-exclamation-circle"></i> Technical Closer Date cannot be a future date!
+                        </div>
+                        <div class="alert alert-danger" *ngIf="dateErrorFlag.rcaDateErrFlag">
+                            <i class="fa fa-exclamation-circle"></i> Technical Closer Date cannot be a greater than Root Cause Analysis date!
+                        </div>
+                    </div>
+                    <h4 style="color: #1895de">Remarks</h4>
+                    <div>
+                        <textarea class="tech-closer-alert-textarea" formControlName="closerremarks"></textarea>
+                        <div class="alert alert-danger" style="width: 98%;" *ngIf="paDIAddEditFormGroup.get('closerremarks').hasError('required') && paDIAddEditFormGroup.get('closerremarks').touched">
+                            <i class="fa fa-exclamation-circle"></i>Remarks is required!
+                        </div>
+                    </div>
+                </div>
+                <!-- end of div for technical closer at tml end -->
+
                 <!-- start div for Submit  and Cancel Button-->
                 <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
                     <!-- start div for Submit Button-->
