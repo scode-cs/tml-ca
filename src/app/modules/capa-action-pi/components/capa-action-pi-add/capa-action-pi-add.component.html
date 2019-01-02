@@ -18,8 +18,8 @@
             <!--start div complaint reference no -->
             <div *ngIf="complaintReferenceNo" class="form-group col-xs-12 col-sm-6 col-md-6 col-lg-4">
                 <label for="complaintReferenceNo">Complaint Reference No</label>
-                <input type="text" class="form-control" formControlName="complaintReferenceNo" [value]="complaintReferenceNo" readonly="readonly"
-                />
+                <input type="text" class="form-control" formControlName="complaintReferenceNo" [value]="complaintReferenceNo"
+                    readonly="readonly" />
             </div>
             <!--end of div for complaint reference no-->
             <!-- start div to add Corrective and Preventive actn -->
@@ -67,7 +67,8 @@
                         <label>Corrective/Preventive Action</label>
                         <label class="red-asterick">*</label>
                         <label class="control control--radio">Corrective
-                            <input type="radio" name="cpAction" formControlName="cpAction" (click)="onCAPARadioClick('C')" *ngIf="actionTypeTakenAtPlantInShort != 'P'" />
+                            <input type="radio" name="cpAction" formControlName="cpAction" (click)="onCAPARadioClick('C')"
+                                *ngIf="actionTypeTakenAtPlantInShort != 'P'" />
                             <div class="control__indicator"></div>
                         </label>
                     </div>
@@ -84,10 +85,11 @@
             <div class="form-group col-xs-12 col-sm-6 col-md-6 col-lg-4" *ngIf="actnDetails!=undefined">
                 <label for="detailOfComplaint">Action Details</label>
                 <label class="red-asterick">*</label>
-                <textarea rows="5" formControlName="actionDet" [maxlength]="actionTakenAtPlantLength" [value]="actnDetails" class="form-control hide-horizontal-scroll" required></textarea>
-                 <div class="alert alert-danger" *ngIf="capaActionPIAddFormGroup.get('actionDet').hasError('required') && capaActionPIAddFormGroup.get('actionDet').touched">
+                <textarea rows="5" formControlName="actionDet" [maxlength]="actionTakenAtPlantLength" [value]="actnDetails"
+                    class="form-control hide-horizontal-scroll" required></textarea>
+                <div class="alert alert-danger" *ngIf="capaActionPIAddFormGroup.get('actionDet').hasError('required') && capaActionPIAddFormGroup.get('actionDet').touched">
                     <i class="fa fa-exclamation-circle"></i>Action Details is required!
-                </div> 
+                </div>
             </div>
             <!-- end of div for actn details -->
 
@@ -103,15 +105,15 @@
                         <label>Customer may require commercial settlement</label>
                         <label class="red-asterick">*</label>
                         <label class="control control--radio">Yes
-                            <input type="radio" name="commercialSettlement" formControlName="commercialSettlement" (click)="onCommercialSettlementRadioClick('Y')"
-                            />
+                            <input type="radio" name="commercialSettlement" formControlName="commercialSettlement"
+                                (click)="onCommercialSettlementRadioClick('Y')" />
                             <div class="control__indicator"></div>
                         </label>
                     </div>
                     <div style="display:inline-block;">
                         <label class="control control--radio">No
-                            <input type="radio" name="commercialSettlement" formControlName="commercialSettlement" (click)="onCommercialSettlementRadioClick('N')"
-                            />
+                            <input type="radio" name="commercialSettlement" formControlName="commercialSettlement"
+                                (click)="onCommercialSettlementRadioClick('N')" />
                             <div class="control__indicator"></div>
                         </label>
                     </div>
@@ -121,15 +123,15 @@
                         <label>Customer may require commercial settlement</label>
                         <label class="red-asterick">*</label>
                         <label class="control control--radio">Yes
-                            <input type="radio" name="commercialSettlement" formControlName="commercialSettlement" [checked]=true (click)="onCommercialSettlementRadioClick('Y')"
-                            />
+                            <input type="radio" name="commercialSettlement" formControlName="commercialSettlement"
+                                [checked]=true (click)="onCommercialSettlementRadioClick('Y')" />
                             <div class="control__indicator"></div>
                         </label>
                     </div>
                     <div style="display:inline-block;">
                         <label class="control control--radio">No
-                            <input type="radio" name="commercialSettlement" formControlName="commercialSettlement" (click)="onCommercialSettlementRadioClick('N')"
-                            />
+                            <input type="radio" name="commercialSettlement" formControlName="commercialSettlement"
+                                (click)="onCommercialSettlementRadioClick('N')" />
                             <div class="control__indicator"></div>
                         </label>
                     </div>
@@ -139,15 +141,15 @@
                         <label>Customer may require commercial settlement</label>
                         <label class="red-asterick">*</label>
                         <label class="control control--radio">Yes
-                            <input type="radio" name="commercialSettlement" formControlName="commercialSettlement" (click)="onCommercialSettlementRadioClick('Y')"
-                            />
+                            <input type="radio" name="commercialSettlement" formControlName="commercialSettlement"
+                                (click)="onCommercialSettlementRadioClick('Y')" />
                             <div class="control__indicator"></div>
                         </label>
                     </div>
                     <div style="display:inline-block;">
                         <label class="control control--radio">No
-                            <input type="radio" name="commercialSettlement" formControlName="commercialSettlement" [checked]=true (click)="onCommercialSettlementRadioClick('N')"
-                            />
+                            <input type="radio" name="commercialSettlement" formControlName="commercialSettlement"
+                                [checked]=true (click)="onCommercialSettlementRadioClick('N')" />
                             <div class="control__indicator"></div>
                         </label>
                     </div>
@@ -160,7 +162,7 @@
                 <label>Uploaded file(s)</label>
                 <div *ngFor="let file of selectedComplaintReferenceDetails.files">
                     <a href="{{file.fileUrl}}" target="_blank">{{file.fileName}}</a>
-                    <br/>
+                    <br />
                 </div>
             </div>
             <!--end div for show files-->
@@ -170,10 +172,39 @@
                 <div class="form-group col-xs-12 col-sm-12 col-md-12 col-lg-12" style="padding-left: 0px;">
                     <label for="imageFile">File(s) Upload</label>
                     <label class="red-coloured-label">(max size 100 mb)</label>
-                    <input type="file" (change)="fileChange($event)" multiple/>
+                    <input type="file" (change)="fileChange($event)" multiple />
                 </div>
             </div>
             <!--end of file upload div-->
+
+            <!-- start div for technical closer at tml end -->
+            <div class="form-group col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                <b>Technical closer at TML end</b>
+            </div>
+            <div class="row" class="tech-closer-alert">
+                <div class="form-group col-xs-12 col-sm-6 col-md-6 col-lg-4" style="padding-left: 0px;">
+                    <label><h4 style="color: #1895de">Technical Closer Date</h4></label>
+                    <input type="date" class="form-control" formControlName="techCloserDate" (change)="dateValidation()">
+                    <div class="alert alert-danger" *ngIf="capaActionPIAddFormGroup.get('techCloserDate').touched && capaActionPIAddFormGroup.get('techCloserDate').hasError('required')">
+                        <i class="fa fa-exclamation-circle"></i> Technical Closer Date is required!
+                    </div>
+                    <div class="alert alert-danger" *ngIf="dateErrorFlag.futureDateErrFlag">
+                        <i class="fa fa-exclamation-circle"></i> Technical Closer Date cannot be a future date!
+                    </div>
+                    <div class="alert alert-danger" *ngIf="dateErrorFlag.rcaDateErrFlag">
+                        <i class="fa fa-exclamation-circle"></i> Technical Closer Date cannot be a greater than Root Cause Analysis date!
+                    </div>
+                </div>
+                <h4 style="color: #1895de">Remarks</h4>
+                <div>
+                    <textarea class="tech-closer-alert-textarea" formControlName="closerremarks"></textarea>
+                    <div class="alert alert-danger" style="width: 98%;" *ngIf="capaActionPIAddFormGroup.get('closerremarks').hasError('required') && capaActionPIAddFormGroup.get('closerremarks').touched">
+                        <i class="fa fa-exclamation-circle"></i>Remarks is required!
+                    </div>
+                </div>
+            </div>
+            <!-- end of div for technical closer at tml end -->
+
             <!-- start div for Submit  and Cancel Button-->
             <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
                 <!-- start div for Submit Button-->
@@ -198,11 +229,11 @@
             <div class="alert alert-danger">
                 {{resErrorMsg}}&nbsp;
                 <button aria-label="Close" class="close" type="button" (click)="deleteResErrorMsgOnClick(resMsgType)">
-            <span aria-hidden="true">×</span>
-          </button>
+                    <span aria-hidden="true">×</span>
+                </button>
             </div>
-            <br/>
-            <br/>
+            <br />
+            <br />
         </div>
         <!-- end of error msg div -->
     </form>
