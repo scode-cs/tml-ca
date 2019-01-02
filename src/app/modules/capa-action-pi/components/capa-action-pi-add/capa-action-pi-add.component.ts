@@ -26,6 +26,11 @@ export class CAPAActionPIAddComponent {
   public fileList: FileList;
 
   public title: string = "CAPA Modify";
+  public rcaDate: string = "";
+  public dateErrorFlag: any = {
+    futureDateErrFlag: false,
+    rcaDateErrFlag: false
+  }
 
   public capaActionPIAddFormGroup: FormGroup;
   public complaintReferenceNo: string;//to get complaint reference no from route param
@@ -74,7 +79,6 @@ export class CAPAActionPIAddComponent {
     console.log("complaintReferenceNo for CAPA Action PI add: ", this.complaintReferenceNo);
 
     if (this.complaintReferenceNo == '') {
-      // this.getComplaintReferenceNoDropdownVal();
     } else {
       this.getComplaintReferenceDetails(this.complaintReferenceNo, this.fileActivityId);
     }
@@ -105,8 +109,17 @@ export class CAPAActionPIAddComponent {
         // , [
         //   Validators.required,
         // ]
+      ],
+      'techCloserDate': ['',
+        [
+          Validators.required
+        ]
+      ],
+      'closerremarks': ['',
+        [
+          Validators.required
+        ]
       ]
-
     });
 
   }//end of method buildForm
@@ -166,6 +179,9 @@ export class CAPAActionPIAddComponent {
           this.plantType = this.selectedComplaintReferenceDetails.plantType;
           this.correctiveAction = this.selectedComplaintReferenceDetails.correctiveAction.trim();
           this.actionTypeTakenAtPlantInShort = this.selectedComplaintReferenceDetails.actionTypeTakenAtPlantInShort.trim();
+          this.capaActionPIAddFormGroup.controls['techCloserDate'].setValue(this.selectedComplaintReferenceDetails.closeDateAtTmlEnd);
+          this.capaActionPIAddFormGroup.controls['closerremarks'].setValue(this.selectedComplaintReferenceDetails.closeRemarksAtTmlEnd);
+          this.rcaDate = this.selectedComplaintReferenceDetails.rootCauseAnanysisDate;
         } else {
           // show error msg on html page
           this.resMsgType = this.errorConst;
@@ -182,6 +198,26 @@ export class CAPAActionPIAddComponent {
       });
   }//end of method to get complaint ref details and set the values to the html page 
 
+  //method to validate closer date
+  public dateValidation(){
+    let date = new Date();
+    let dateControlName = new Date(this.capaActionPIAddFormGroup.controls['techCloserDate'].value);
+    let rcaDate = new Date(this.rcaDate);
+
+    //let siteVisitDate: string = this.datePipe.transform(this.invReportFormGroup.controls['siteVisitDt'].value, 'dd-MM-yyyy');
+    // if (rcaDate < dateControlName) {
+    //   this.dateErrorFlag.futureDateErrFlag = false;
+    //   this.dateErrorFlag.rcaDateErrFlag = true;
+    // }else 
+    if(date < dateControlName) {
+      this.dateErrorFlag.futureDateErrFlag = true;
+      this.dateErrorFlag.rcaDateErrFlag = false;
+    } else {
+      this.dateErrorFlag.futureDateErrFlag = false;
+      this.dateErrorFlag.rcaDateErrFlag = false;
+    }
+  }
+
   //method of submit modify allocate complaint
   public onCAPAActionPISubmit() {
     console.log("form value of CAPA PI add/modify submit : ", this.capaActionPIAddFormGroup.value);
@@ -191,6 +227,8 @@ export class CAPAActionPIAddComponent {
     cAPAActionPIDet.actionTakenAtPlant = this.capaActionPIAddFormGroup.value.actionDet;//actn det
     cAPAActionPIDet.requiredCommercialSettlementInCapa = this.requiredCommercialSettlement;//commercial settlement
     cAPAActionPIDet.plantType = this.plantType;
+    cAPAActionPIDet.closeDateAtTmlEnd = this.capaActionPIAddFormGroup.value.techCloserDate;
+    cAPAActionPIDet.closeRemarksAtTmlEnd = this.capaActionPIAddFormGroup.value.closerremarks;
     console.log("onCAPAActionPISubmit: ", cAPAActionPIDet);
     console.log("this.totalFileSize on submit method:::::::::::", this.totalFileSize);
     if (this.totalFileSize > this.fileSizeLimit) {
