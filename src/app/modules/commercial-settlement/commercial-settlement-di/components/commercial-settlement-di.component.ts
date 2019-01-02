@@ -638,7 +638,11 @@ export class CommercialSettlementDIComponent implements OnInit {
         let mailJsonBody: any = {};
         mailJsonBody.complaintReferenceNo = this.commerCialSettlementFromGroup.value.complaintReferenceNo;
         mailJsonBody.commercialSettlementDt = this.generateDate();
-        mailJsonBody.status = this.commerCialSettlementFromGroup.value.compensation ? this.commerCialSettlementFromGroup.value.compensation : 'C';
+        if(this.localStorageService.user.commSetlmntLevel == 5){
+            mailJsonBody.status = "M";
+        }else{
+            mailJsonBody.status = this.commerCialSettlementFromGroup.value.compensation ? this.commerCialSettlementFromGroup.value.compensation : 'C';
+        }
         mailJsonBody.remarks = this.commerCialSettlementFromGroup.value.remarks;
         mailJsonBody.userId = this.localStorageService.user.userId;
         mailJsonBody.commSetlementLevel = this.localStorageService.user.commSetlmntLevel;
