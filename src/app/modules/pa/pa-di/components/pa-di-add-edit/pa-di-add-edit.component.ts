@@ -36,6 +36,13 @@ export class PADIAddEditComponent implements OnInit {
     errMsgShowFlag: false
   };
   public fileArr: any[] = [];//to store file details from file upload response
+
+  public rcaDate: string = "";
+  public dateErrorFlag: any = {
+    futureDateErrFlag: false,
+    rcaDateErrFlag: false
+  }
+
   constructor(
     private formBuilder: FormBuilder,
     private router: Router,
@@ -68,6 +75,16 @@ export class PADIAddEditComponent implements OnInit {
       'paAddEditDetails': [''
         , [
           Validators.required,
+        ]
+      ],
+      'techCloserDate': ['',
+        [
+          Validators.required
+        ]
+      ],
+      'closerremarks': ['',
+        [
+          Validators.required
         ]
       ]
     });
@@ -191,6 +208,8 @@ export class PADIAddEditComponent implements OnInit {
     paJsonForDetTable.preventiveAction = this.paDIAddEditFormGroup.value.paAddEditDetails;
     paJsonForDetTable.preventiveActionDate = this.paDIAddEditFormGroup.value.paAddEditDate;
     paJsonForDetTable.userId = this.localStorageService.user.userId;
+    paJsonForDetTable.closeDateAtTmlEnd = this.paDIAddEditFormGroup.value.techCloserDate;
+    paJsonForDetTable.closeRemarksAtTmlEnd = this.paDIAddEditFormGroup.value.closerremarks;
     console.log("pa json for Det table::", paJsonForDetTable);
     this.complaintDIService.putHeader(paJsonForHeaderTable, paWsInfo.plantType, paWsInfo.action).
       subscribe(res => {
@@ -277,6 +296,26 @@ export class PADIAddEditComponent implements OnInit {
     this.errorMsgObj.errMsgShowFlag = false;
     this.errorMsgObj.errorMsg = "";
   }//end of method delete error msg
+
+   //method to validate closer date
+   public dateValidation(){
+    let date = new Date();
+    let dateControlName = new Date(this.paDIAddEditFormGroup.controls['techCloserDate'].value);
+    let rcaDate = new Date(this.rcaDate);
+
+    //let siteVisitDate: string = this.datePipe.transform(this.invReportFormGroup.controls['siteVisitDt'].value, 'dd-MM-yyyy');
+    // if (rcaDate < dateControlName) {
+    //   this.dateErrorFlag.futureDateErrFlag = false;
+    //   this.dateErrorFlag.rcaDateErrFlag = true;
+    // }else 
+    if(date < dateControlName) {
+      this.dateErrorFlag.futureDateErrFlag = true;
+      this.dateErrorFlag.rcaDateErrFlag = false;
+    } else {
+      this.dateErrorFlag.futureDateErrFlag = false;
+      this.dateErrorFlag.rcaDateErrFlag = false;
+    }
+  }
 
 
 }//end of class

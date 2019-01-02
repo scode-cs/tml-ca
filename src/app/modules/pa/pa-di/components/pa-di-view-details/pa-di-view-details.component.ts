@@ -81,6 +81,8 @@ export class PADIViewDetailsComponent implements OnInit {
       complaintReferenceNo: new FormControl(''),
       paAddEditDate: new FormControl(''),
       paAddEditDetails: new FormControl(''),
+      techCloserDate: new FormControl(''),
+      closerremarks: new FormControl(''),
       paARejectDetails: new FormControl('')
     });
   }//end of init form

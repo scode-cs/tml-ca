@@ -88,6 +88,22 @@
                     </div>
                     <!--end div for show files-->
 
+                     <!-- start div for technical closer at tml end -->
+            <div class="form-group col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                    <b>Technical closer at TML end</b>
+                </div>
+                <div class="row" class="tech-closer-alert">
+                    <div class="form-group col-xs-12 col-sm-6 col-md-6 col-lg-4" style="padding-left: 0px;">
+                        <label><h4 style="color: #1895de">Technical Closer Date</h4></label>
+                        <input type="date" class="form-control" formControlName="techCloserDate">
+                    </div>
+                    <h4 style="color: #1895de">Remarks</h4>
+                    <div>
+                        <textarea class="tech-closer-alert-textarea" formControlName="closerremarks"></textarea>                        
+                    </div>
+                </div>
+                <!-- end of div for technical closer at tml end -->
+
                     <div class="row" *ngIf="rejectFlag" class="reject-alert">
                         <h4 style="color: #aa6708">{{rejectLabelJson.paMsgForRejectLabel}}</h4>
                         <div>
