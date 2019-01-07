@@ -137,7 +137,8 @@ export class CADIAddEditComponent implements OnInit {
         console.log(err);
       });
   }//end of method
-  private detCompSubmitFlag: boolean = true;//comp det submit flag
+
+  // private detCompSubmitFlag: boolean = true;//comp det submit flag
   //method of complaint details submit service call
   private complaintDetailsSubmitWSCall(complainDetailJson: any, plantType: string, action: string) {
     this.complaintDIService.postDetail(complainDetailJson, plantType, action).
@@ -163,18 +164,22 @@ export class CADIAddEditComponent implements OnInit {
           this.router.navigate([routePath]);//route
         } else {
           // this.busySpinner = false;//to stop spinner
-          if(this.detCompSubmitFlag){
-            this.complaintDetailsSubmitWSCall(complainDetailJson, plantType, action);
-            this.detCompSubmitFlag = false;//set it false
-          }//end of if   
+          // if(this.detCompSubmitFlag){
+          //   this.complaintDetailsSubmitWSCall(complainDetailJson, plantType, action);
+          //   this.detCompSubmitFlag = false;//set it false
+          // }//end of if   
+          this.errorMsgObj.errMsgShowFlag = true;
+          this.errorMsgObj.errorMsg = res.msg;
+          this.busySpinner = false;//to stop spinner
         }
       },
         err => {
           console.log(err);
-          if(this.detCompSubmitFlag){
-            this.complaintDetailsSubmitWSCall(complainDetailJson, plantType, action);
-            this.detCompSubmitFlag = false;//set it false
-          }//end of if   
+          this.wsErrorCall(err);
+          // if(this.detCompSubmitFlag){
+          //   this.complaintDetailsSubmitWSCall(complainDetailJson, plantType, action);
+          //   this.detCompSubmitFlag = false;//set it false
+          // }//end of if   
         });
   }
   //method of submit modify allocate complaint

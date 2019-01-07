@@ -163,12 +163,19 @@ export class CloseComplainDIAddEditComponent {
           this.onOpenModal(this.routeParam.complaintReferenceNo, res.msg);//open modal to show the msg
           this.router.navigate([ROUTE_PATHS.RouteComplainDIView]);
         } else {
-          this.complaintDetailsSubmitWSCall(complainDetailJson, plantType, action);
+          // this.complaintDetailsSubmitWSCall(complainDetailJson, plantType, action);
+          this.errorMsgObj.errMsgShowFlag = true;
+          this.errorMsgObj.errorMsg = res.msg;
+          this.busySpinner = false;//to stop spinner
         }
       },
         err => {
           console.log(err);
-          this.complaintDetailsSubmitWSCall(complainDetailJson, plantType, action);
+          // this.complaintDetailsSubmitWSCall(complainDetailJson, plantType, action);
+          this.errorMsgObj.errMsgShowFlag = true;
+          this.errorMsgObj.errorMsg = err.msg;
+          this.busySpinner = false;
+          this.sessionErrorService.routeToLogin(err._body);
         });
   }//end of method
 
