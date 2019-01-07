@@ -179,8 +179,10 @@ export class CAPAActionPIAddComponent {
           this.plantType = this.selectedComplaintReferenceDetails.plantType;
           this.correctiveAction = this.selectedComplaintReferenceDetails.correctiveAction.trim();
           this.actionTypeTakenAtPlantInShort = this.selectedComplaintReferenceDetails.actionTypeTakenAtPlantInShort.trim();
-          this.capaActionPIAddFormGroup.controls['techCloserDate'].setValue(this.selectedComplaintReferenceDetails.closeDateAtTmlEnd);
-          this.capaActionPIAddFormGroup.controls['closerremarks'].setValue(this.selectedComplaintReferenceDetails.closeRemarksAtTmlEnd);
+          if(this.actionTypeTakenAtPlantInShort == 'P'){
+            this.capaActionPIAddFormGroup.controls['techCloserDate'].setValue(this.selectedComplaintReferenceDetails.closeDateAtTmlEnd);
+            this.capaActionPIAddFormGroup.controls['closerremarks'].setValue(this.selectedComplaintReferenceDetails.closeRemarksAtTmlEnd);
+          }
           this.rcaDate = this.selectedComplaintReferenceDetails.rootCauseAnanysisDate;
         } else {
           // show error msg on html page
@@ -265,7 +267,7 @@ export class CAPAActionPIAddComponent {
             this.router.navigate([ROUTE_PATHS.RouteCAPAActionPI]);//route to the previous page
           } else {
             this.resMsgType = this.errorConst;
-            this.resErrorMsg = "Netowrk/Server Problem. Please try again.";
+            this.resErrorMsg = res.msgType;
             this.formData = new FormData();//new instance create of formdata
           }
         },
@@ -280,7 +282,7 @@ export class CAPAActionPIAddComponent {
           this.formData = new FormData();//new instance create of formdata
           this.sessionErrorService.routeToLogin(err._body);
         });
-    }//end of else
+    }//end of else 
   } //end of method submit modify capa actn pi
   //file upload event  
   public fileChange(event) {
