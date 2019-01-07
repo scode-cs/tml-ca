@@ -122,6 +122,9 @@ private setResValToForm() {
   this.paDIAddEditFormGroup.controls['complaintReferenceNo'].setValue(paFormData.complaintReferenceNo);
   this.paDIAddEditFormGroup.controls['paAddEditDate'].setValue(this.datePipe.transform(paFormData.preventiveActionDate, 'dd-MMM-yyyy'));
   this.paDIAddEditFormGroup.controls['paAddEditDetails'].setValue(paFormData.preventiveAction);
+  this.paDIAddEditFormGroup.controls['techCloserDate'].setValue(this.datePipe.transform(paFormData.closeDateAtTmlEnd, 'dd-MMM-yyyy'));
+  this.paDIAddEditFormGroup.controls['closerremarks'].setValue(paFormData.closeRemarksAtTmlEnd);
+  
   if (paFormData.paCancelRemarks) {
     this.paRejectReason = paFormData.paCancelRemarks;//set the reject reason
   } else {
