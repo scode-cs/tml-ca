@@ -686,7 +686,7 @@ export class ComplaintDIRegisterComponent implements OnInit {
     console.log("invoiceItemArr::::", invoiceItemArr);
     return invoiceItemArr;
   }//end of method
-  private detCompSubmitFlag: boolean = true;//comp det submit flag
+  // private detCompSubmitFlag: boolean = true;//comp det submit flag
   //method of complaint details submit service call
   private complaintDetailsSubmitWSCall(complainDetailJson: any, plantType: string, action: string) {
     this.complaintDIService.postDetail(complainDetailJson, plantType, action).
@@ -729,18 +729,22 @@ export class ComplaintDIRegisterComponent implements OnInit {
           this.complaintRegisterFormGroup.controls["loggedBy"].setValue(this.empInfo.empName);//set emp name to control
           this.busySpinner = false;//to stop the spinner
         } else {
-          if(this.detCompSubmitFlag){
-            this.complaintDetailsSubmitWSCall(complainDetailJson, plantType, action);
-            this.detCompSubmitFlag = false;//set it false
-          }//end of if
+          // if(this.detCompSubmitFlag){
+          //   this.complaintDetailsSubmitWSCall(complainDetailJson, plantType, action);
+          //   this.detCompSubmitFlag = false;//set it false
+          // }//end of if
+          this.errorMsgObj.errMsgShowFlag = true;
+          this.errorMsgObj.errorMsg = res.msg;
+          this.busySpinner = false;//to stop spinner
         }//end of else of msgType 'Info'
       },
         err => {
           console.log(err);
-          if(this.detCompSubmitFlag){
-            this.complaintDetailsSubmitWSCall(complainDetailJson, plantType, action);
-            this.detCompSubmitFlag = false;//set it false
-          }//end of if
+          // if(this.detCompSubmitFlag){
+          //   this.complaintDetailsSubmitWSCall(complainDetailJson, plantType, action);
+          //   this.detCompSubmitFlag = false;//set it false
+          // }//end of if
+          this.wsErrorCall(err);
         });
   }//end of method
 

@@ -423,7 +423,7 @@ export class InvestigationReportDiComponent implements OnInit {
     this.postInvoiceItemDetailWsCall(totalItems);
   }//end of the method uploadInvoiceItemDetails
 
-  private detCompSubmitFlag: boolean = true;//comp det submit flag
+  // private detCompSubmitFlag: boolean = true;//comp det submit flag
   // start method of submitInvReportDIDetDetailWSCall to detail submit webservice calll
   private submitInvReportDIDetDetailWSCall(invReportDetailJson: any, action: string) {
     let totalItems: any[] = [];
@@ -454,18 +454,22 @@ export class InvestigationReportDiComponent implements OnInit {
           let routePath = ROUTE_PATHS.RouteAddRCADI + '/' + invReportDetailJson.complaintReferenceNo + '/' + 50;//rca status is 50
           this.router.navigate([routePath]);//route to rca add page
         } else {
-          if(this.detCompSubmitFlag){
-            this.submitInvReportDIDetDetailWSCall(invReportDetailJson, action);
-            this.detCompSubmitFlag = false;//set it false
-          }//end of if
+          // if(this.detCompSubmitFlag){
+          //   this.submitInvReportDIDetDetailWSCall(invReportDetailJson, action);
+          //   this.detCompSubmitFlag = false;//set it false
+          // }//end of if
+          this.errorMsgObj.errMsgShowFlag = true;
+          this.errorMsgObj.errorMsg = res.msg;
+          this.busySpinner = false;//to stop spinner
         }//end of else
       },
         err => {
           console.log(err);
-          if(this.detCompSubmitFlag){
-            this.submitInvReportDIDetDetailWSCall(invReportDetailJson, action);
-            this.detCompSubmitFlag = false;//set it false
-          }
+          // if(this.detCompSubmitFlag){
+          //   this.submitInvReportDIDetDetailWSCall(invReportDetailJson, action);
+          //   this.detCompSubmitFlag = false;//set it false
+          // }
+          this.wsErrorCall(err);
         });
   }//end of submitInvReportDIDetDetailWSCall method
 
