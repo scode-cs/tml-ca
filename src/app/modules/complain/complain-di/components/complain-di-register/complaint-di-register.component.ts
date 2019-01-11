@@ -686,20 +686,47 @@ export class ComplaintDIRegisterComponent implements OnInit {
     console.log("invoiceItemArr::::", invoiceItemArr);
     return invoiceItemArr;
   }//end of method
-  private detCompSubmitFlag: boolean = true;//comp det submit flag
+  // private detCompSubmitFlag: boolean = true;//comp det submit flag
   //method of complaint details submit service call
   private complaintDetailsSubmitWSCall(complainDetailJson: any, plantType: string, action: string) {
     this.complaintDIService.postDetail(complainDetailJson, plantType, action).
       subscribe(res => {
         if (res.msgType === 'Info') {
           console.log(" complain submitted successfully");
-          if (this.selectedItemDetails.length > 0) {
-            let invArr: any = this.setInvoiceItemArrForSubmit(complainDetailJson.complaintReferenceNo, this.activityId, res.valueSub, complainDetailJson.natureOfComplaintId, complainDetailJson.complaintDetails);//calling the method to set item grid array
-            console.log("selectedItem grid invArr::", invArr);
-            let invItem: any = {};
-            invItem.items = invArr;
-            this.invoiceItemDetailSubmitWSCall(invItem, plantType);
-          }//end of if item det check
+          let invArr: any = this.setInvoiceItemArrForSubmit(complainDetailJson.complaintReferenceNo, this.activityId, res.valueSub, complainDetailJson.natureOfComplaintId, complainDetailJson.complaintDetails);//calling the method to set item grid array
+          console.log("selectedItem grid invArr::", invArr);
+          let invItem: any = {};
+          invItem.items = invArr;
+          this.invoiceItemDetailSubmitWSCall(complainDetailJson,invItem, plantType,action);
+          
+          
+        } else {
+          // if(this.detCompSubmitFlag){
+          //   this.complaintDetailsSubmitWSCall(complainDetailJson, plantType, action);
+          //   this.detCompSubmitFlag = false;//set it false
+          // }//end of if
+          this.errorMsgObj.errMsgShowFlag = true;
+          this.errorMsgObj.errorMsg = res.msg;
+          this.busySpinner = false;//to stop spinner
+        }//end of else of msgType 'Info'
+      },
+        err => {
+          console.log(err);
+          // if(this.detCompSubmitFlag){
+          //   this.complaintDetailsSubmitWSCall(complainDetailJson, plantType, action);
+          //   this.detCompSubmitFlag = false;//set it false
+          // }//end of if
+          this.wsErrorCall(err);
+        });
+  }//end of method
+
+  //method to item submit
+  private invoiceItemDetailSubmitWSCall(complainDetailJson:any,items: any, plantType: string,action:string) {
+    this.complaintDIService.postInvoiceItemDetail(items, plantType,action).
+      subscribe(res => {
+        if (res.msgType === 'Info') {
+          console.log("Invoice items uploaded successfully");
+
           if (this.fileArr.length > 0) {
             let fileAutoIdStr: string = '';//taking a var to store files autoId
             this.fileArr.forEach(fileEl => {
@@ -728,31 +755,14 @@ export class ComplaintDIRegisterComponent implements OnInit {
           this.getSystemDate();//to get system date and set it to date type control
           this.complaintRegisterFormGroup.controls["loggedBy"].setValue(this.empInfo.empName);//set emp name to control
           this.busySpinner = false;//to stop the spinner
-        } else {
-          if(this.detCompSubmitFlag){
-            this.complaintDetailsSubmitWSCall(complainDetailJson, plantType, action);
-            this.detCompSubmitFlag = false;//set it false
-          }//end of if
-        }//end of else of msgType 'Info'
-      },
-        err => {
-          console.log(err);
-          if(this.detCompSubmitFlag){
-            this.complaintDetailsSubmitWSCall(complainDetailJson, plantType, action);
-            this.detCompSubmitFlag = false;//set it false
-          }//end of if
-        });
-  }//end of method
-
-  //method to item submit
-  private invoiceItemDetailSubmitWSCall(items: any, plantType: string) {
-    this.complaintDIService.postInvoiceItemDetail(items, plantType).
-      subscribe(res => {
-        if (res.msgType === 'Info') {
-          console.log("Invoice items uploaded successfully");
-        } 
+        }else{
+          this.errorMsgObj.errMsgShowFlag = true;
+          this.errorMsgObj.errorMsg = res.msg;
+          this.busySpinner = false;//to stop spinner
+        }
       }, err => {
         console.log(err);
+        this.wsErrorCall(err);
       });
   }//end of method
 

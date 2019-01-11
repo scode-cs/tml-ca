@@ -135,7 +135,7 @@ export class RCADIAddEditComponent implements OnInit {
       console.log(err);
     });
   }//end of method
-  private detCompSubmitFlag: boolean = true;//comp det submit flag
+  // private detCompSubmitFlag: boolean = true;//comp det submit flag
   //method of complaint details submit service call
   private complaintDetailsSubmitWSCall(complainDetailJson: any, plantType: string, action: string) {
     this.complaintDIService.postDetail(complainDetailJson, plantType, action).
@@ -160,19 +160,22 @@ export class RCADIAddEditComponent implements OnInit {
         let routePath = ROUTE_PATHS.RouteAddCADI + '/' + this.routeParam.complaintReferenceNo + '/' + 60;//ca status
         this.router.navigate([routePath]);//route
       } else { 
-        if(this.detCompSubmitFlag){
-          this.complaintDetailsSubmitWSCall(complainDetailJson, plantType, action);
-          this.detCompSubmitFlag = false;//set it false
-        }//end of if       
-        // this.busySpinner = false;//to stop spinner
+        // if(this.detCompSubmitFlag){
+        //   this.complaintDetailsSubmitWSCall(complainDetailJson, plantType, action);
+        //   this.detCompSubmitFlag = false;//set it false
+        // }//end of if       
+        this.errorMsgObj.errMsgShowFlag = true;
+        this.errorMsgObj.errorMsg = res.msg;
+        this.busySpinner = false;//to stop spinner
       }
     },
       err => {
         console.log(err);
-        if(this.detCompSubmitFlag){
-          this.complaintDetailsSubmitWSCall(complainDetailJson, plantType, action);
-          this.detCompSubmitFlag = false;//set it false
-        }//end of if   
+        this.wsErrorCall(err);
+        // if(this.detCompSubmitFlag){
+        //   this.complaintDetailsSubmitWSCall(complainDetailJson, plantType, action);
+        //   this.detCompSubmitFlag = false;//set it false
+        // }//end of if   
       });
   }//end of method
 

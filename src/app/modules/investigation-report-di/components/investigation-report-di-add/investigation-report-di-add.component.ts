@@ -390,51 +390,15 @@ export class InvestigationReportDiComponent implements OnInit {
   }//end of the method of getTotalItemDet
 
   //start method postInvoiceItemDetailWsCall to post item details
-  private postInvoiceItemDetailWsCall(items: any[]) {
+  private postInvoiceItemDetailWsCall(items: any[],action: string,invReportDetailJson) {
     this.busySpinner = true;
     let invItem: any = {};
     invItem.items = items;
-    this.complaintDIService.postInvoiceItemDetail(invItem, this.plantType).
+    this.complaintDIService.postInvoiceItemDetail(invItem, this.plantType,action).
       subscribe(res => {
         if (res.msgType === 'Info') {
           console.log("submit item msg====", res.msg);
-        }//end of if
-      },
-        err => {
-          console.log(err);
-        });
-  }//end of the method of postInvoiceItemDetailWsCall
-
-  //method to file upload
-  private fileUploadWSCall(plantType: string, fileJsonBody: any) {
-    this.complaintDIService.postFile(plantType, fileJsonBody).
-      subscribe(res => {
-        if (res.msgType === 'Info') {
-          console.log("files uploaded successfully");
-        }//end of if
-      }, err => {
-        console.log(err);
-      });
-  }//end of method
-
-  //start method uploadInvoiceItemDetails
-  private uploadInvoiceItemDetails(totalItems: any[]) {
-    //this.deleteInvoiceItemDetailWSCall();
-    this.postInvoiceItemDetailWsCall(totalItems);
-  }//end of the method uploadInvoiceItemDetails
-
-  private detCompSubmitFlag: boolean = true;//comp det submit flag
-  // start method of submitInvReportDIDetDetailWSCall to detail submit webservice calll
-  private submitInvReportDIDetDetailWSCall(invReportDetailJson: any, action: string) {
-    let totalItems: any[] = [];
-    this.complaintDIService.postDetail(invReportDetailJson, this.plantType, action).
-      subscribe(res => {
-        if (res.msgType === 'Info') {
-          console.log(" complain submitted successfully");
-          totalItems = this.getTotalItemDet(res.valueSub);
-          if (totalItems.length > 0) {
-            this.uploadInvoiceItemDetails(totalItems);
-          } if (this.fileArr.length > 0) {
+          if (this.fileArr.length > 0) {
             let fileAutoIdStr: string = '';//taking a var to store files autoId
             this.fileArr.forEach(fileEl => {
               fileAutoIdStr = fileAutoIdStr ? (fileAutoIdStr + ',' + fileEl.fileAutoId) : fileEl.fileAutoId;
@@ -453,19 +417,66 @@ export class InvestigationReportDiComponent implements OnInit {
           this.onOpenModal(res.value, res.msg);//calling the modal to show msg
           let routePath = ROUTE_PATHS.RouteAddRCADI + '/' + invReportDetailJson.complaintReferenceNo + '/' + 50;//rca status is 50
           this.router.navigate([routePath]);//route to rca add page
+        }else{
+          this.errorMsgObj.errMsgShowFlag = true;
+          this.errorMsgObj.errorMsg = res.msg;
+          this.busySpinner = false;
+        }
+      },
+        err => {
+          console.log(err);
+          this.wsErrorCall(err);
+        });
+  }//end of the method of postInvoiceItemDetailWsCall
+
+  //method to file upload
+  private fileUploadWSCall(plantType: string, fileJsonBody: any) {
+    this.complaintDIService.postFile(plantType, fileJsonBody).
+      subscribe(res => {
+        if (res.msgType === 'Info') {
+          console.log("files uploaded successfully");
+        }//end of if
+      }, err => {
+        console.log(err);
+      });
+  }//end of method
+
+  //start method uploadInvoiceItemDetails
+  private uploadInvoiceItemDetails(totalItems: any[], action: string,invReportDetailJson:any) {
+    //this.deleteInvoiceItemDetailWSCall();
+    this.postInvoiceItemDetailWsCall(totalItems,action,invReportDetailJson);
+  }//end of the method uploadInvoiceItemDetails
+
+  // private detCompSubmitFlag: boolean = true;//comp det submit flag
+  // start method of submitInvReportDIDetDetailWSCall to detail submit webservice calll
+  private submitInvReportDIDetDetailWSCall(invReportDetailJson: any, action: string) {
+    let totalItems: any[] = [];
+    this.complaintDIService.postDetail(invReportDetailJson, this.plantType, action).
+      subscribe(res => {
+        if (res.msgType === 'Info') {
+          console.log(" complain submitted successfully");
+          totalItems = this.getTotalItemDet(res.valueSub);
+          if (totalItems.length > 0) {
+            action = "investigation";
+            this.uploadInvoiceItemDetails(totalItems,action,invReportDetailJson);
+          }
         } else {
-          if(this.detCompSubmitFlag){
-            this.submitInvReportDIDetDetailWSCall(invReportDetailJson, action);
-            this.detCompSubmitFlag = false;//set it false
-          }//end of if
+          // if(this.detCompSubmitFlag){
+          //   this.submitInvReportDIDetDetailWSCall(invReportDetailJson, action);
+          //   this.detCompSubmitFlag = false;//set it false
+          // }//end of if
+          this.errorMsgObj.errMsgShowFlag = true;
+          this.errorMsgObj.errorMsg = res.msg;
+          this.busySpinner = false;//to stop spinner
         }//end of else
       },
         err => {
           console.log(err);
-          if(this.detCompSubmitFlag){
-            this.submitInvReportDIDetDetailWSCall(invReportDetailJson, action);
-            this.detCompSubmitFlag = false;//set it false
-          }
+          // if(this.detCompSubmitFlag){
+          //   this.submitInvReportDIDetDetailWSCall(invReportDetailJson, action);
+          //   this.detCompSubmitFlag = false;//set it false
+          // }
+          this.wsErrorCall(err);
         });
   }//end of submitInvReportDIDetDetailWSCall method
 

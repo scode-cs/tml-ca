@@ -117,10 +117,11 @@ export class ComplaintDIService {
  * 
  * @param items 
  */
-public postInvoiceItemDetail(items: any,plantType: string) {
+public postInvoiceItemDetail(items: any,plantType: string,action:string) {
   let headers: Headers = this.configService();
+  let actionName: string = action? action : '';
   let actionUrl = AppUrlsConst.COMPLAIN_INVOICE_ITEM_DETAIL_ADD_URL
-  +"?plantType="+plantType;
+  +"?plantType="+plantType+"&action="+action;
   return this.http.post(actionUrl, items, { headers: headers })
       .map((res: Response) => { return res.json() })
       .catch((error: Response) => { return Observable.throw(error) });
