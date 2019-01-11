@@ -722,7 +722,7 @@ export class ComplaintDIRegisterComponent implements OnInit {
 
   //method to item submit
   private invoiceItemDetailSubmitWSCall(complainDetailJson:any,items: any, plantType: string,action:string) {
-    this.complaintDIService.postInvoiceItemDetail(items, plantType).
+    this.complaintDIService.postInvoiceItemDetail(items, plantType,action).
       subscribe(res => {
         if (res.msgType === 'Info') {
           console.log("Invoice items uploaded successfully");
