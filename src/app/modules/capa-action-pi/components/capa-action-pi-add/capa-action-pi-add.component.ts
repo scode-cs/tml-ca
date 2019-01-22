@@ -58,9 +58,9 @@ export class CAPAActionPIAddComponent {
   public resMsgType: string = "Info";
   public resErrorMsg: string;
   public errorConst: string = "Error";
-  public submitButtonEnable: boolean = true;//to disable submit button
+  // public submitButtonEnable: boolean = true;//to disable submit button
   public correctiveAction: string;
-  public actionTypeTakenAtPlantInShort : string;
+  public actionTypeTakenAtPlantInShort: string;
 
   constructor(
     private activatedroute: ActivatedRoute,
@@ -91,9 +91,9 @@ export class CAPAActionPIAddComponent {
       'complaintReferenceNo': [''
       ],
       'commercialSettlement': [''
-        // , [
-        //     Validators.required,
-        // ]
+        , [
+          Validators.required,
+        ]
       ],
       'cpAction': [''
         // , [
@@ -127,7 +127,7 @@ export class CAPAActionPIAddComponent {
   private updateBusySpinner() {
     if (this.busySpinner.compRefDetBusy || this.busySpinner.submitBusy) {
       this.busySpinner.busy = true;
-    } else if(this.busySpinner.compRefDetBusy == false && this.busySpinner.submitBusy == false) {
+    } else if (this.busySpinner.compRefDetBusy == false && this.busySpinner.submitBusy == false) {
       this.busySpinner.busy = false;
     }
   }//end of busy spinner method
@@ -137,18 +137,30 @@ export class CAPAActionPIAddComponent {
   public onCAPARadioClick(capaRadioValue) {
     console.log("capaRadioValue:: ", capaRadioValue);
     this.actionType = capaRadioValue;
-    if(this.previousActionType && this.previousActnDetails){
-      if(this.previousActionType == this.actionType){
+    this.capaActionPIAddFormGroup.controls['cpAction'].setValue(capaRadioValue);
+    if (this.previousActionType && this.previousActnDetails) {
+      if (this.previousActionType == this.actionType) {
         this.actnDetails = this.previousActnDetails;
-      }else{
+      } else {
         this.actnDetails = '';
       }
+    }
+    // new add for tech closer validation
+    if (capaRadioValue === 'C') {
+      this.capaActionPIAddFormGroup.get('techCloserDate').setValidators(null);
+      this.capaActionPIAddFormGroup.get('techCloserDate').updateValueAndValidity();
+      this.capaActionPIAddFormGroup.get('closerremarks').setValidators(null);
+      this.capaActionPIAddFormGroup.get('closerremarks').updateValueAndValidity();
+    } else {
+      this.capaActionPIAddFormGroup.controls['techCloserDate'].setValidators(Validators.required);
+      this.capaActionPIAddFormGroup.controls['closerremarks'].setValidators(Validators.required);
     }
 
   }//end of method onCAPARadioClick
 
   //start method onCommercialSettlementRadioClick
   public onCommercialSettlementRadioClick(commercialSettlementRadioValue) {
+    this.capaActionPIAddFormGroup.controls['commercialSettlement'].setValue(commercialSettlementRadioValue);
     console.log("commercialSettlementRadioValue:: ", commercialSettlementRadioValue);
     this.requiredCommercialSettlement = commercialSettlementRadioValue;
   }//end of method onCommercialSettlementRadioClick
@@ -176,12 +188,19 @@ export class CAPAActionPIAddComponent {
           this.capaActionPIAddFormGroup.controls["actionDet"].setValue(this.actnDetails);
           let requiredCommercialSettlementFromRes: string = this.selectedComplaintReferenceDetails.requiredCommercialSettlementInCapa;
           this.requiredCommercialSettlement = requiredCommercialSettlementFromRes.substring(0, 1);
+          this.capaActionPIAddFormGroup.controls['commercialSettlement'].setValue(this.requiredCommercialSettlement);
           this.plantType = this.selectedComplaintReferenceDetails.plantType;
           this.correctiveAction = this.selectedComplaintReferenceDetails.correctiveAction.trim();
           this.actionTypeTakenAtPlantInShort = this.selectedComplaintReferenceDetails.actionTypeTakenAtPlantInShort.trim();
-          if(this.actionTypeTakenAtPlantInShort == 'P'){
+          this.capaActionPIAddFormGroup.controls['cpAction'].setValue(this.actionTypeTakenAtPlantInShort);
+          if (this.actionTypeTakenAtPlantInShort == 'P') {
             this.capaActionPIAddFormGroup.controls['techCloserDate'].setValue(this.selectedComplaintReferenceDetails.closeDateAtTmlEnd);
             this.capaActionPIAddFormGroup.controls['closerremarks'].setValue(this.selectedComplaintReferenceDetails.closeRemarksAtTmlEnd);
+          } else {
+            this.capaActionPIAddFormGroup.get('techCloserDate').setValidators(null);
+            this.capaActionPIAddFormGroup.get('techCloserDate').updateValueAndValidity();
+            this.capaActionPIAddFormGroup.get('closerremarks').setValidators(null);
+            this.capaActionPIAddFormGroup.get('closerremarks').updateValueAndValidity();
           }
           this.rcaDate = this.selectedComplaintReferenceDetails.rootCauseAnanysisDate;
         } else {
@@ -192,16 +211,16 @@ export class CAPAActionPIAddComponent {
         this.busySpinner.compRefDetBusy = false;//busy spinner
         this.updateBusySpinner();//method for busy spinner
       },
-      err => {
-        console.log(err);
-        this.busySpinner.compRefDetBusy = false;//busy spinner
-        this.updateBusySpinner();//method for busy spinner
-        this.sessionErrorService.routeToLogin(err._body);
-      });
+        err => {
+          console.log(err);
+          this.busySpinner.compRefDetBusy = false;//busy spinner
+          this.updateBusySpinner();//method for busy spinner
+          this.sessionErrorService.routeToLogin(err._body);
+        });
   }//end of method to get complaint ref details and set the values to the html page 
 
   //method to validate closer date
-  public dateValidation(){
+  public dateValidation() {
     let date = new Date();
     let dateControlName = new Date(this.capaActionPIAddFormGroup.controls['techCloserDate'].value);
     let rcaDate = new Date(this.rcaDate);
@@ -211,7 +230,7 @@ export class CAPAActionPIAddComponent {
     //   this.dateErrorFlag.futureDateErrFlag = false;
     //   this.dateErrorFlag.rcaDateErrFlag = true;
     // }else 
-    if(date < dateControlName) {
+    if (date < dateControlName) {
       this.dateErrorFlag.futureDateErrFlag = true;
       this.dateErrorFlag.rcaDateErrFlag = false;
     } else {
@@ -271,17 +290,17 @@ export class CAPAActionPIAddComponent {
             this.formData = new FormData();//new instance create of formdata
           }
         },
-        err => {
-          this.busySpinner.submitBusy = false;
-          this.updateBusySpinner();
-          if (err.status == 401) {
-            this.resErrorMsg = "Sorry! Unable to save data. Please try again.";
-          } else {
-            this.resErrorMsg = "Netowrk/Server Problem";
-          }
-          this.formData = new FormData();//new instance create of formdata
-          this.sessionErrorService.routeToLogin(err._body);
-        });
+          err => {
+            this.busySpinner.submitBusy = false;
+            this.updateBusySpinner();
+            if (err.status == 401) {
+              this.resErrorMsg = "Sorry! Unable to save data. Please try again.";
+            } else {
+              this.resErrorMsg = "Netowrk/Server Problem";
+            }
+            this.formData = new FormData();//new instance create of formdata
+            this.sessionErrorService.routeToLogin(err._body);
+          });
     }//end of else 
   } //end of method submit modify capa actn pi
   //file upload event  
