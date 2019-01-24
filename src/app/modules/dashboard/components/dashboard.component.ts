@@ -118,8 +118,8 @@ export class DashboardComponent implements OnInit {
       sortData: '',
       orderType: '',
        //filter: "CMPLNT_LOGD_ON BETWEEN \'" + this.fromDate + " 00:00:00\' AND \'" + this.toDate + " 23:59:59\'",
-       filter: "CMPLNT_LOGD_ON BETWEEN \'" + this.datePipe.transform(this.fromDate, 'MM/dd/yyyy')
-       + " 00:00:00\' AND \'" + this.datePipe.transform(this.toDate, 'MM/dd/yyyy') + " 23:59:59\'",
+       filter: "CMPLNT_LOGD_ON BETWEEN CONVERT(datetime,\'" + this.datePipe.transform(this.fromDate, 'dd/MM/yyyy')
+       + " 00:00:00\',103) AND CONVERT(datetime,\'" + this.datePipe.transform(this.toDate, 'dd/MM/yyyy') + " 23:59:59\',103)",
 
       fromDate: this.fromDate,
       toDate: this.toDate,
@@ -128,8 +128,8 @@ export class DashboardComponent implements OnInit {
     //set filter to get di total complaint  
     let diTilesFilter: any = {
       //filter: "CMPLNT_LOGD_ON BETWEEN \'" + this.fromDate + " 00:00:00\' AND \'" + this.toDate + " 23:59:59\'",
-      filter: "CMPLNT_LOGD_ON_ACTUAL BETWEEN \'" + this.datePipe.transform(this.fromDate, 'MM/dd/yyyy')
-      + " 00:00:00\' AND \'" + this.datePipe.transform(this.toDate, 'MM/dd/yyyy') + " 23:59:59\'",
+      filter: "CMPLNT_LOGD_ON BETWEEN CONVERT(datetime,\'" + this.datePipe.transform(this.fromDate, 'dd/MM/yyyy')
+      + " 00:00:00\',103) AND CONVERT(datetime,\'" + this.datePipe.transform(this.toDate, 'dd/MM/yyyy') + " 23:59:59\',103)",
       
       fromDate: this.fromDate,
       toDate: this.toDate
@@ -185,8 +185,8 @@ export class DashboardComponent implements OnInit {
     tilesFilter.filter = this.localStorageService.appSettings.activityIdFieldName + " = "
       + this.localStorageService.appSettings.closeComplaintActivityId
       //+ " AND CMPLNT_LOGD_ON BETWEEN '" + this.fromDate + " 00:00:00' AND '" + this.toDate + " 23:59:59'"
-      + " AND CMPLNT_LOGD_ON BETWEEN '" + this.datePipe.transform(this.fromDate, 'MM/dd/yyyy')
-      + " 00:00:00' AND '" + this.datePipe.transform(this.toDate, 'MM/dd/yyyy') + " 23:59:59'";
+      + " AND CMPLNT_LOGD_ON BETWEEN CONVERT(datetime,\'" + this.datePipe.transform(this.fromDate, 'dd/MM/yyyy')
+      + " 00:00:00\',103) AND CONVERT(datetime,\'" + this.datePipe.transform(this.toDate, 'dd/MM/yyyy') + " 23:59:59\',103)";
 
     tilesFilter.fileActivityId = this.localStorageService.appSettings.closeComplaintActivityId;
 
@@ -194,8 +194,8 @@ export class DashboardComponent implements OnInit {
     let diTilesFilter: any = {
       filter: this.localStorageService.appSettings.lastActivityIdFieldName + '=' + 80//close activity id
         //+ " AND CMPLNT_LOGD_ON BETWEEN '" + this.fromDate + " 00:00:00' AND '" + this.toDate + " 23:59:59'",
-        + " AND CMPLNT_LOGD_ON_ACTUAL BETWEEN '" + this.datePipe.transform(this.fromDate, 'MM/dd/yyyy')
-        + " 00:00:00' AND '" + this.datePipe.transform(this.toDate, 'MM/dd/yyyy') + " 23:59:59'",
+        + " AND CMPLNT_LOGD_ON BETWEEN CONVERT(datetime,\'" + this.datePipe.transform(this.fromDate, 'dd/MM/yyyy')
+        + " 00:00:00\',103) AND CONVERT(datetime,\'" + this.datePipe.transform(this.toDate, 'dd/MM/yyyy') + " 23:59:59\',103)",
       fromDate: this.fromDate,
       toDate: this.toDate
     };
@@ -248,8 +248,8 @@ export class DashboardComponent implements OnInit {
       + " AND " + this.localStorageService.appSettings.activityIdFieldName + " < "
       + this.localStorageService.appSettings.closeComplaintActivityId
       //+ " AND CMPLNT_LOGD_ON BETWEEN \'" + this.fromDate + " 00:00:00\' AND \'" + this.toDate + " 23:59:59\'";
-      + " AND CMPLNT_LOGD_ON BETWEEN \'" + this.datePipe.transform(this.fromDate, 'MM/dd/yyyy')
-      + " 00:00:00\' AND \'" + this.datePipe.transform(this.toDate, 'MM/dd/yyyy') + " 23:59:59\'";
+      + " AND CMPLNT_LOGD_ON BETWEEN CONVERT(datetime,\'" + this.datePipe.transform(this.fromDate, 'dd/MM/yyyy')
+      + " 00:00:00\',103) AND CONVERT(datetime,\'" + this.datePipe.transform(this.toDate, 'dd/MM/yyyy') + " 23:59:59\',103)";
 
     tilesFilter.fileActivityId = this.localStorageService.appSettings.pendingComplaintActivityId;
 
@@ -257,8 +257,8 @@ export class DashboardComponent implements OnInit {
     let diTilesFilter: any = {
       filter: this.localStorageService.appSettings.lastActivityIdFieldName + '=' + 10
         //+ " AND CMPLNT_LOGD_ON BETWEEN \'" + this.fromDate + " 00:00:00\' AND \'" + this.toDate + " 23:59:59\'",
-        + " AND CMPLNT_LOGD_ON_ACTUAL BETWEEN \'" + this.datePipe.transform(this.fromDate, 'MM/dd/yyyy')
-              + " 00:00:00\' AND \'" + this.datePipe.transform(this.toDate, 'MM/dd/yyyy') + " 23:59:59\'",
+        + " AND CMPLNT_LOGD_ON_ACTUAL BETWEEN CONVERT(datetime,\'" + this.datePipe.transform(this.fromDate, 'dd/MM/yyyy')
+              + " 00:00:00\',103) AND CONVERT(datetime,\'" + this.datePipe.transform(this.toDate, 'dd/MM/yyyy') + " 23:59:59\',103)",
       fromDate: this.fromDate,
       toDate: this.toDate
     };
