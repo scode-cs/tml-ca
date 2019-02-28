@@ -118,7 +118,7 @@ export class DashboardComponent implements OnInit {
       sortData: '',
       orderType: '',
        //filter: "CMPLNT_LOGD_ON BETWEEN \'" + this.fromDate + " 00:00:00\' AND \'" + this.toDate + " 23:59:59\'",
-       filter: "CMPLNT_LOGD_ON_ACTUAL BETWEEN CONVERT(datetime,\'" + this.datePipe.transform(this.fromDate, 'dd/MM/yyyy')
+       filter: "CMPLNT_LOGD_ON BETWEEN CONVERT(datetime,\'" + this.datePipe.transform(this.fromDate, 'dd/MM/yyyy')
        + " 00:00:00\',103) AND CONVERT(datetime,\'" + this.datePipe.transform(this.toDate, 'dd/MM/yyyy') + " 23:59:59\',103)",
 
       fromDate: this.fromDate,
@@ -185,7 +185,7 @@ export class DashboardComponent implements OnInit {
     tilesFilter.filter = this.localStorageService.appSettings.activityIdFieldName + " = "
       + this.localStorageService.appSettings.closeComplaintActivityId
       //+ " AND CMPLNT_LOGD_ON BETWEEN '" + this.fromDate + " 00:00:00' AND '" + this.toDate + " 23:59:59'"
-      + " AND CMPLNT_LOGD_ON_ACTUAL BETWEEN CONVERT(datetime,\'" + this.datePipe.transform(this.fromDate, 'dd/MM/yyyy')
+      + " AND CMPLNT_LOGD_ON BETWEEN CONVERT(datetime,\'" + this.datePipe.transform(this.fromDate, 'dd/MM/yyyy')
       + " 00:00:00\',103) AND CONVERT(datetime,\'" + this.datePipe.transform(this.toDate, 'dd/MM/yyyy') + " 23:59:59\',103)";
 
     tilesFilter.fileActivityId = this.localStorageService.appSettings.closeComplaintActivityId;
@@ -248,7 +248,7 @@ export class DashboardComponent implements OnInit {
       + " AND " + this.localStorageService.appSettings.activityIdFieldName + " < "
       + this.localStorageService.appSettings.closeComplaintActivityId
       //+ " AND CMPLNT_LOGD_ON BETWEEN \'" + this.fromDate + " 00:00:00\' AND \'" + this.toDate + " 23:59:59\'";
-      + " AND CMPLNT_LOGD_ON_ACTUAL BETWEEN CONVERT(datetime,\'" + this.datePipe.transform(this.fromDate, 'dd/MM/yyyy')
+      + " AND CMPLNT_LOGD_ON BETWEEN CONVERT(datetime,\'" + this.datePipe.transform(this.fromDate, 'dd/MM/yyyy')
       + " 00:00:00\',103) AND CONVERT(datetime,\'" + this.datePipe.transform(this.toDate, 'dd/MM/yyyy') + " 23:59:59\',103)";
 
     tilesFilter.fileActivityId = this.localStorageService.appSettings.pendingComplaintActivityId;
